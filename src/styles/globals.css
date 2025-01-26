@@ -1,0 +1,22 @@
+@keyframes slide {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+ /* Adiciona transições para a bolinha e fundo */
+.switch {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Caso você queira que o `Switch` tenha uma animação de slide (bola movendo-se) */
+.switch input:checked {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+  
+  .animate-slide {
+    animation: slide 2s linear infinite;
+  }

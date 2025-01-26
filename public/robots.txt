@@ -1,0 +1,19 @@
+# Bloqueia todos os robôs de acessar áreas administrativas e sensíveis
+User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+
+
+
+# Permite o acesso a todas as outras áreas públicas para rastreamento
+Allow: /
+
+# Bloqueia URLs de parâmetros dinâmicos que podem gerar conteúdo duplicado
+Disallow: /*?*
+
+# Especifica os tempos de rastreamento para evitar sobrecarga no servidor (opcional)
+Crawl-delay: 10
+
+# Referencia o Sitemap para facilitar a indexação
+Sitemap: https://www.xgirl.pt/sitemap.xml

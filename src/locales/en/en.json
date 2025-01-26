@@ -1,0 +1,417 @@
+{
+    "home": "Home",
+    "escortHeader": "Escorts",
+    "stories": "Stories",
+    "filters": "Filters",
+    "search": "Search...",
+    "searchBar": "Search...",
+    "login": "Login",
+    "register": "Sign Up",
+    "myAccount": "Myeeeee Account",
+    "settings": "Settings",
+    "logout": "Log out",
+    "FR":"French",
+    "EN":"English",
+    "user": {
+      "myAccount": "My Account",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "Footer": {
+      "services_description": "Discover the best escort services in the main regions of France.",
+      "quick_links_title": "QUICK LINKS",
+      "escort_paris": "Escort in Paris",
+      "escort_lyon": "Escort in Lyon",
+      "escort_marseille": "Escort in Marseille",
+      "escort_lille": "Escort in Lille",
+      "escort_toulouse": "Escort in Toulouse",
+      "top_categories_title": "TOP CATEGORIES",
+      "vip_escorts": "VIP Escorts",
+      "bdsm": "BDSM",
+      "salons": "Salons",
+      "stories": "Stories",
+      "erotic_massage": "Erotic Massage",
+      "about_title": "ABOUT",
+      "faq": "FAQ",
+      "dmca": "DMCA",
+      "report": "Report",
+      "terms_conditions": "Terms and Conditions",
+      "privacy_policy": "Privacy Policy",
+      "xgirl_history": "The Story of XGirl",
+      "contact": "Contact",
+      "join_us": "Join Us",
+      "disclaimer": "This website is an advertising and informational resource and, as such, has no connection or responsibility with the sites or individuals mentioned here. We only sell advertising spaces, we are not an escort agency and are in no way involved in escort or prostitution activities. We assume no responsibility for the content or actions of third-party websites or individuals that you may access through links, emails, or phone contacts on this portal.",
+      "copyright": "© {year} XGirl. All rights reserved."
+    },
+    
+    "dashboard": {
+      "escort_title_en": "Escort Girls and Erotic Masseuses in France",
+      "meta_description": "Discover the best escort girls and erotic masseuses in France. Explore our featured ads and news.",
+      "meta_keywords": "escort girls, erotic masseuses, ads, France, services",
+      "meta_og_description": "Find the best escort girls and erotic masseuses in France. Check out our ads and updates.",
+      "featured_ads": "Featured Ads",
+      "search_area": "Search in Your Area",
+      "news": "News"
+    },
+
+    "escort": {
+    "title": "Luxury Escorts and Erotic Masseuses in Portugal",
+    "subtitle": "Discover the best professionals from all over the country",
+    "search_title": "Search for an Escort",
+    "select_district": "District",
+    "search_placeholder": "Search by name or tag...",
+    "previous_page": "Previous",
+    "next_page": "Next",
+    "current_page": "Page {{currentPage}} of {{totalPages}}"
+
+  },
+
+ "storyPage": {
+    "titleStory": "Escort Girls, Erotic Masseuses and Luxury Companions in France",
+    "latest_stories": "Latest Stories"
+  },
+
+
+  "profile": {
+    "previous": "Previous",
+    "next": "Next",
+    "tariffs_starting_from": "Tariffs starting from {{tarifa}} €",
+    "call_to": "Call {{nome}}",
+    "share_profile_of": "Share the Profile of {{nome}}",
+    "share_by_email": "Share by Email",
+    "copy_link": "Copy Link",
+    "link_copied": "Link copied!",
+    "certified_profile": "Certified Profile",
+    "certified": "Certified",
+    "certified_description_1": "A certified profile means the photos were validated by a moderator from the {{team}} team and match reality.",
+    "certified_description_2": "Beyond human moderation, an automatic system analyzes all photos from certified profiles to ensure they do not belong to someone else on the internet.",
+    "certified_satisfaction": "Certified profile = 100% satisfied encounter.",
+    "time_elapsed": {
+      "more_than_48_hours": "More than 48 hours ago",
+      "minutes_ago": "{{minutes}} minute{{plural}} ago",
+      "hours_and_minutes_ago": "{{hours}} hour{{hoursPlural}} {{minutes}} minute{{minutesPlural}} ago",
+      "indeterminate": "Time indeterminate"
+    },
+    "call_me": "Call me",
+    "share_profile": "Share the Profile",
+    "stories_of": "Stories of {{name}}",
+    "description": "Description",
+    "photos_of": "Photos of {{name}}",
+    "loading": "Loading...",
+    "not_certified": "Not Certified",
+    "video_not_supported": "Your browser does not support the video element.",
+    "about": "About {{name}}",
+      "rates": "Rates:",
+   
+    "services_provided": "Services Provided",
+    "languages": "Languages",
+    "accepts": "Accepts:",
+    "no_payment_methods_selected": "No payment methods selected.",
+    "comments": "Comments",
+    "no_comments_yet": "No comments yet.",
+    "anonymous": "Anonymous",
+    "leave_comment": "Leave your comment",
+    "write_comment_placeholder": "Write your comment here...",
+    "send_comment": "Send Comment",
+    
+    "linguas": {
+      "portuguese": "Português",
+      "english": "Inglês",
+      "french": "Francês",
+      "spanish": "Espanhol",
+      "german": "Alemão",
+      "italian": "Italiano",
+      "russian": "Russo",
+      "arabic": "Árabe"
+    },
+    "servico":{
+      "69": "69",
+      "Anulingus Activo": "Active Anulingus",
+      "Anulingus Passivo": "Passive Anulingus",
+      "Champagne Dourado Activo": "Golden Champagne Active",
+      "Champagne Dourado Passivo": "Golden Champagne Passive",
+      "Atende Casais": "Accepts Couples",
+      "Dedos Anal": "Anal Fingers",
+      "Dedos Vagina": "Vagina Fingers",
+      "Dominacao soft": "Soft Domination",
+      "Dupla Penetracao": "Double Penetration",
+      "Duo": "Duo",
+      "Ejaculacao Corporal": "Body Ejaculation",
+      "Ejacular na Facial": "Ejaculate on Face",
+      "Multipla Ejeculacao": "Multiple Ejaculations",
+      "Face Sitting": "Face Sitting",
+      "Fetichismo": "Fetishism",
+      "Beijo Frances": "French Kiss",
+      "Garganta Profunda": "Deep Throat",
+      "Jogos Eroticos": "Erotic Games",
+      "Lingerie": "Lingerie",
+      "Massagem Erotica": "Erotic Massage",
+      "Masturbacao": "Masturbation",
+      "Experiencia Porn Star": "Porn Star Experience",
+      "Servico VIP": "VIP Service",
+      "Sexo em Grupo": "Group Sex (Orgies)",
+      "Sex Toys": "Sex Toys",
+      "Sodomia Activa": "Active Sodomy",
+      "Sodomia Passiva": "Passive Sodomy",
+      "Striptease": "Striptease"
+    
+    } 
+    
+     
+  },
+
+
+  "loginPage": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "email_placeholder": "Enter your email", 
+    "password_placeholder": "Enter your password", 
+    "login_button": "Login",
+    "register_link": "Don't have an account? Register here",
+    "description": "Login to X-Girl to discover unique and confidential experiences."
+  },
+  "RegisterPage": {
+      "title": "XGirl.fr is the reference for exclusive escort listings in France",
+      "description_1": "Discover thousands of escorts on XGirl.fr",
+      "description_2": "The registration process is simple and quick.",
+      "description_3": "Increase your income significantly! Attract between 30 and 450 clients every month.",
+      "description_4": "Enjoy featured listings every month at no additional cost.",
+      "advantages_link": "Click here to see all the benefits", 
+      "create_account_title": "Create a New Account",
+      "email_label": "Email*",
+      "email_placeholder": "Enter your email",
+      "password_label": "Password*",
+      "password_placeholder": "Enter your password",
+      "confirm_password_label": "Confirm your password*",
+      "confirm_password_placeholder": "Confirm your password",
+      "register_button": "Create your account"
+    },
+    "contact": {
+        "title": "Contact",
+      "subtitle": "Have a question? Send us a message, and we will respond within 24 hours.",
+      "email_label": "Your email",
+      "email_placeholder": "youremail@example.com",
+      "subject_label": "Subject",
+      "subject_placeholder": "How can we help you?",
+      "message_label": "Your message",
+      "message_placeholder": "Leave your message...",
+      "send_button": "Send Message",
+      "thank_you_message": "Thank you for reaching out to XGirl.pt!"
+    },
+    "MyProfileBar": {
+    "info": "Information",
+    "other_info": "Other Info",
+    "change_photos": "Change Photos",
+    "my_stories": "My Stories",
+    "settings": "Settings",
+    "view_profile": "View Profile"
+},
+
+
+
+
+"filter": {
+  "age": "Age",
+  "select_age": "Select age",
+
+  "height": "Height",
+    "select_height": "Select height",
+
+
+    "hair_color": "Hair Color",
+    "select_hair_color": "Select hair color",
+    "black": "Black",
+    "blonde": "Blonde",
+    "brown": "Brown",
+    "red": "Red",
+    "other": "Other",
+ 
+    
+    "body": "Body",
+    "select_body": "Select body type",
+
+    "normal": "Normal",
+    "athletic": "Athletic",
+    "slim": "Slim",
+    "curvy": "Curvy",
+    "xxl": "XXL",
+    
+      "filter": {
+        "eye_color": "Eye Color",
+        "select_eye_color": "Select eye color"
+      },
+      "eyes": {
+        "brown": "Brown",
+        "black": "Black",
+        "blue": "Blue",
+        "green": "Green"
+      }
+    },
+
+    "filterB": {
+    "breasts": "Breasts",
+    "select_breasts": "Select breast type",
+    "breast_size": "Breast Size",
+    "select_breast_size": "Select a size"
+  },
+  "breasts": {
+    "natural": "Natural",
+    "silicone": "Silicone"
+  },
+  "breast_size": {
+    "small": "Small Breasts (A-B)",
+    "large": "Large Breasts (C-D)",
+    "xxl": "XXL Breasts (E+)"
+  
+  }   ,
+
+  "filterP": {
+    "hair_removal": "Body Hair",
+    "select_hair_removal": "Select hair preference"
+  },
+  "hair_removal": {
+    "smooth": "Smooth",
+    "partially_smooth": "Partially Smooth",
+    "natural": "Natural"
+  },
+
+  "filterT": {
+    "tattoos": "Tattoos",
+    "select_tattoos": "Select tattoo preference"
+  },
+  "tattoos": {
+    "with_tattoos": "With Tattoos",
+    "without_tattoos": "Without Tattoos"
+  },
+
+  "filterS": {
+    "zodiac": "Zodiac Sign",
+    "select_zodiac": "Select a Zodiac Sign"
+  },
+  "zodiac": {
+    "aries": "Aries",
+    "taurus": "Taurus",
+    "gemini": "Gemini",
+    "cancer": "Cancer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Scorpio",
+    "sagittarius": "Sagittarius",
+    "capricorn": "Capricorn",
+    "aquarius": "Aquarius",
+    "pisces": "Pisces"
+  },
+
+  "filterTa": {
+    "tarifa": "Rate",
+    "select_tarifa": "Select a rate"
+  },
+  "tarifa": {
+    "50": "Starting from 50€",
+    "100": "Starting from 100€",
+    "200": "Starting from 200€",
+    "500": "Starting from 500€",
+    "more_than_500": "+ 500€"
+  },
+
+
+
+  "profileR2": {
+    "createTitle": "Create Your Profile",
+    "createSubtitle": "Complete the information to start on"
+  },
+  "input": {
+    "name": "Name*",
+    "namePlaceholder": "Enter your name",
+    "age": "Age",
+    "agePlaceholder": "Your age",
+    "phone": "Phone Number*",
+    "phonePlaceholder": "Your phone",
+    "chooseOption": "Choose an option",
+    "useFullAddress": "Use Full Address",
+    "fullAddress": "Full Address",
+    "fullAddressPlaceholder": "Enter full address",
+    "city": "City",
+    "cityPlaceholder": "Enter your city",
+    "district": "District",
+    "districtPlaceholder": "Enter your district"
+  },
+  "button": {
+    "back": "Back",
+    "createAccount": "Create Account"
+  },
+  "contactData": {
+    "title": "General Data",
+    "subtitle": "Update your data anytime"
+  },
+  "paymentMethods": {
+    "title": "Payment Methods"
+  },
+  "languages": {
+    "title": "Languages"
+  },
+  "services": {
+    "title": "Services"
+  },
+  "description": {
+    "title": "Description",
+    "placeholder": "Write the description here..."
+  },
+  "button2": {
+    "back": "Back",
+    "continue": "Continue"
+  },
+
+
+"buttonHG": {
+    "previous": "Previous",
+    "next": "Next"
+  }, 
+
+
+  "terms": {
+    "title": "Terms and Conditions of Use",
+    "section1": {
+      "title": "1. Purpose",
+      "paragraph1": "This legal notice regulates the use of the XGirl.fr website, owned by XGirl, LDA.",
+      "paragraph2": "Accessing and browsing the site automatically assigns the condition of USER and implies full acceptance of all conditions published in this legal notice.",
+      "paragraph3": "The OWNER OF THE SITE may modify these conditions without prior notice.",
+      "paragraph4": "It is recommended that the USER carefully read this content before using the services and information provided by the site.",
+      "paragraph5": "The USER agrees to use the site in accordance with the law and this legal notice."
+    },
+    "section2": {
+      "title": "2. Identification",
+      "paragraph1": "Legal name: XGirl.pt, LDA.",
+      "paragraph2": "Tax ID: 123456789",
+      "paragraph3": "Address: Rua da Liberdade, 123, 1st floor, Lisbon, Portugal.",
+      "paragraph4": "Contact email: info@xgirl.fr"
+    },
+    "section3": {
+      "title": "3. Communications",
+      "paragraph1": "Contact methods include:",
+      "paragraph2": "Phone: +351 910253456",
+      "paragraph3": "Email: info@xgirl.fr"
+    },
+    "section4": {
+      "title": "4. Terms of Access and Use",
+      "paragraph1": "Access to the site and its services is free of charge.",
+      "paragraph2": "The USER declares that all information provided is true and authentic.",
+      "paragraph3": "The USER agrees to use the contents and services of the site properly.",
+      "listItem1": "Distributing illegal or discriminatory content.",
+      "listItem2": "Introducing viruses or harmful programs.",
+      "listItem3": "Attempting to access restricted areas of the site or third-party systems and extracting unauthorized data.",
+      "listItem4": "Violating intellectual or industrial property rights.",
+      "listItem5": "Impersonating other users.",
+      "listItem6": "Distributing, reproducing, or modifying content without express authorization."
+    }
+  }
+
+
+}
+
+
+
+  
+  

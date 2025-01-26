@@ -1,0 +1,1 @@
+@keyframes a{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}.animate-slide{animation:a 2s linear infinite}

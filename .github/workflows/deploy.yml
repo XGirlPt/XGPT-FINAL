@@ -1,0 +1,95 @@
+name: Xgirl Next.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Étape 1 : Récupération du code source
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Étape 2 : Configuration de Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # Étape 3 : Installation des dépendances
+    - name: Install dependencies
+      run: npm ci
+
+    # Étape 4 : Build de l'application
+    - name: Build the application
+      run: npm run build
+
+    # Étape 5 : Build et sauvegarde de l'image Docker
+    - name: Build Docker image
+      run: |
+        docker build -t xgirl-app:latest .
+        docker save xgirl-app:latest -o xgirl-app.tar.gz
+
+    # Étape 6 : Configuration de l'accès SSH
+    - name: Configure SSH Access
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keygen -p -P "$SSH_PASSPHRASE" -N "" -f ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+        echo -e "Host vps-host\n  HostName ${{ secrets.VPS_HOST }}\n  User ${{ secrets.VPS_USER }}\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no" > ~/.ssh/config
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+
+    # Étape 7 : Vérification de la connexion SSH
+    - name: Test SSH Connection
+      run: ssh vps-host "echo 'SSH connection successful!'"
+
+    # Étape 8 : Déploiement sur le VPS
+    - name: Deploy to VPS
+      run: |
+        # Créer le dossier cible et le fichier .env s'il n'existent pas
+        ssh -o ServerAliveInterval=60 vps-host "mkdir -p /opt/xgirl && touch /opt/xgirl/.env"
+
+        # Copier l'image Docker vers le VPS
+        scp -o ServerAliveInterval=60 xgirl-app.tar.gz vps-host:/opt/xgirl/xgirl-app.tar.gz
+
+        # Exécuter les étapes sur le VPS
+        ssh -o ServerAliveInterval=60 vps-host << 'EOF'
+          set -e
+
+          # Naviguer vers le répertoire cible
+          cd /opt/xgirl
+
+          # Charger l'image Docker
+          docker load < xgirl-app.tar.gz
+
+          # Arrêter et supprimer les anciens conteneurs
+          docker stop xgirl-app || true
+          docker rm xgirl-app || true
+
+          # Vérifier que le fichier .env est présent
+          if [ ! -f /opt/xgirl/.env ]; then
+            echo "Erreur : Le fichier .env est manquant dans /opt/xgirl/"
+            exit 1
+          fi
+
+          # Lancer un nouveau conteneur avec les variables d'environnement
+          docker run -d --restart unless-stopped --name xgirl-app --env-file /opt/xgirl/.env -p 127.0.0.1:3001:3000 xgirl-app:latest
+
+
+          # Supprimer les fichiers temporaires
+          rm xgirl-app.tar.gz
+        EOF
+
+    # Étape 9 : Nettoyage de la configuration SSH
+    - name: Cleanup SSH Configuration
+      run: rm -rf ~/.ssh

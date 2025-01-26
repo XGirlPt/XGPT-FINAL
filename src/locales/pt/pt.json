@@ -1,0 +1,36 @@
+{
+    "home": "Início",
+    "acompanhantes": "Acompanhantes",
+    "stories": "Histórias",
+    "filters": "Filtros",
+    "search": "Pesquisar...",
+    "login": "Entrar",
+    "register": "Cadastrar",
+    "myAccount": "Minha Conta",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "footer": {
+      "discover_services": "Descubra os melhores serviços de escort nas principais regiões de Portugal.",
+      "quick_links": "Links Rápidos",
+      "escorts_in_lisboa": "Escort em Lisboa",
+      "escorts_in_porto": "Escort no Porto",
+      "escorts_in_faro": "Escort em Faro",
+      "escorts_in_madeira": "Escort na Madeira",
+      "escorts_in_acores": "Escort nos Açores",
+      "useful_information": "Informações Úteis",
+      "terms_and_conditions": "Termos e Condições",
+      "privacy_policy": "Política de Privacidade",
+      "help": "Ajuda",
+      "contact": "Contacto",
+      "blog": "Blog",
+      "payment_methods": "Métodos de Pagamento",
+      "all_rights_reserved": "&copy; {{year}} XGirl. Todos os direitos reservados."
+    },
+    "dashboard": {
+      "escort_title": "Escort Girls e Massagistas eróticas em Portugal",
+      "featured_ads": "Anúncios em Destaque",
+      "search_area": "Procura na tua Área",
+      "news": "Novidades"
+    }
+  }
+  
