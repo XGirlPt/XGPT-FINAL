@@ -129,3 +129,5 @@ Mobile
 - [] pt lingua principal
 - [] resolver login
 - [] resolver registo
+- [] marca de agua fotos
+- [] marca de agua stories

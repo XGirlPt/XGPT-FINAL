@@ -119,7 +119,7 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
               {/* Premium Badge */}
               <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center  shadow-md">
                 <FaCrown className="text-white mr-1" />
-                <span className=" text-xs">Premiddddddum</span>
+                <span className=" text-xs">Premium</span>
               </div>
               {/* Badges na imagem */}
               {profile.live && (
