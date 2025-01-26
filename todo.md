@@ -111,3 +111,19 @@ Mobile
 - [] story badge
 - [] modificar tautagens nao esta a funcionar
 - [] linguas sem imagem do pais
+
+
+
+-------
+- [x] transferir novo github, e novo vercel
+- [] fazer nova base de dados
+- [] alterar passwords
+- [] criar ficheiro para todas as password
+- [] google analitics e google console
+- [] email a funcionar
+- [] xgirl.pt a funcionar com vercel
+- [] captcha email
+- [] header 
+- [] tradutir todo o SEO para portugues 
+- [] adicionar lingua PT
+- [] pt lingua principal

@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   };
 
   return (
-    <header className="bg-red-500">
+    <header className="">
       {/* <div className='w-full bg-black  h-16 flex justify-center items-center shadow-md'>
 			<Link href='/' aria-label='Ir para a página inicial'>
 	 			<Image src='/logo.webp' alt='Logo' width={200} height={200} priority style={{objectFit: "contain"}} />
