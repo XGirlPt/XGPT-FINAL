@@ -1,4 +1,4 @@
-import { supabase } from "@/utils/supabase";
+import supabase from "@/database/supabase";
 import { createPaymentLink } from "@/lib/verotel";
 import { NextRequest, NextResponse } from "next/server";
 
