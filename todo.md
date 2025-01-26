@@ -119,15 +119,16 @@ Mobile
 - [] fazer nova base de dados
 - [] alterar passwords
 - [] criar ficheiro para todas as password
-- [] google analitics e google console
+- [X] google analitics e google console
 - [X] contacto email a funcionar
 - [] xgirl.pt a funcionar com vercel
 - [] captcha email
 - [X] header 
-- [] tradutir todo o SEO para portugues 
+- [X] tradutir todo o SEO para portugues 
 - [] adicionar lingua PT
 - [] pt lingua principal
-- [] resolver login
+- [X] resolver login
 - [] resolver registo
 - [] marca de agua fotos
 - [] marca de agua stories
+- [] rever todas as traducoes

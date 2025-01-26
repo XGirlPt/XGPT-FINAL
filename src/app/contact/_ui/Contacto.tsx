@@ -14,22 +14,22 @@ function Contacto() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-//   const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
 
-//   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-//   const handleRecaptchaChange = (value) => {
-//     setRecaptchaValue(value); // Atualiza o estado do reCAPTCHA
-//   };
+  const handleRecaptchaChange = (value) => {
+    setRecaptchaValue(value); // Atualiza o estado do reCAPTCHA
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Previne o envio padrão do formulário
 
     // Validação do reCAPTCHA
-    // if (!recaptchaValue) {
-    //   toast.error("Por favor, complete o reCAPTCHA antes de enviar.");
-    //   return;
-    // }
+    if (!recaptchaValue) {
+      toast.error("Por favor, complete o reCAPTCHA antes de enviar.");
+      return;
+    }
 
     const templateParams = {
       from_email: email, // Certifique-se que o nome da variável no template do EmailJS é o mesmo
@@ -53,10 +53,10 @@ function Contacto() {
         setSubject("");
         setMessage("");
 
-        // setRecaptchaValue(null);
-        // if (recaptchaRef.current) {
-        //   recaptchaRef.current.reset(); // Reseta a aparência do reCAPTCHA
-        // }
+        setRecaptchaValue(null);
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset(); // Reseta a aparência do reCAPTCHA
+        }
       })
       .catch((err) => {
         console.error("FAILED...", err);
@@ -127,13 +127,12 @@ function Contacto() {
           </Button>
         </form>
 
-		{/* <ReCAPTCHA
-  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        <ReCAPTCHA
+  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || 'defaultSiteKey'}
   onChange={handleRecaptchaChange}
   ref={recaptchaRef}
   className="mt-4"
-/> */}
-
+/>
         <ToastContainer />
 
         <p className="mt-6 text-center text-gray-400 text-sm">
