@@ -63,7 +63,7 @@ const Registre2: React.FC = () => {
 								},
 							]);
 
-							router.push(`/RegistoEntrada?email=${email}&userUID=${data.user?.id}`);
+							router.push(`/registo/registo-entrada?email=${email}&userUID=${data.user?.id}`);
 							break;
 
 						case 2:

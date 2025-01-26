@@ -106,77 +106,92 @@ const RegistoEntrada = () => {
 	};
 
 	const handleSelectAddress = useCallback((address: string, lat: number, lng: number) => {
-		setAdress(address);
+		setAdress(address); // Definindo o valor do endereço corretamente
 		setLatitude(lat);
 		setLongitude(lng);
-		dispatch(updateAdress(address));
+		dispatch(updateAdress(address)); // Atualizando no Redux
 		dispatch(updateLatitude(lat));
 		dispatch(updateLongitude(lng));
-	}, [dispatch])
+	}, [dispatch]);
 
 	// Carregamento dinâmico do script do Google
 	useEffect(() => {
 		const loadGoogleAPI = () => {
 		  if (typeof window !== "undefined" && !window.google) {
-			const script = document.createElement("script");
-			script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC9gd59nW47Bg63ksUnNd2HmigKDUDGA7E&libraries=places`;
-			script.async = true;
-			script.onload = () => setGoogleLoaded(true);
-			document.body.appendChild(script);
-		  } else {
-			setGoogleLoaded(true);
+			const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+			if (!existingScript) {
+			  const script = document.createElement("script");
+			  script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
+			  script.async = true;
+			  script.onload = () => {
+				console.log('Google Maps API carregada com sucesso!');
+				setGoogleLoaded(true);
+			  };
+			  script.onerror = (error) => {
+				console.error("Erro ao carregar o script da API do Google Maps:", error);
+			  };
+			  document.body.appendChild(script);
+			} else {
+			  setGoogleLoaded(true);
+			}
 		  }
 		};
 	
-		loadGoogleAPI();
-	  }, []); 
-
-	  
+		// Carregar a API se ainda não estiver carregada
+		if (!googleLoaded) {
+		  loadGoogleAPI();
+		}
+	
+		return () => {
+		  const scripts = document.querySelectorAll('script[src*="maps.googleapis.com"]');
+		  scripts.forEach((script) => script.remove());
+		};
+	  }, [googleLoaded]);
+	
 	  useEffect(() => {
 		if (googleLoaded && useAdress && window.google && !autocompleteRef.current) {
-			const input = document.getElementById("adress-input") as HTMLInputElement;
-
-			if (input && !autocompleteRef.current) {
-				if (window.google && window.google.maps && window.google.maps.places) {
-					autocompleteRef.current = new window.google.maps.places.Autocomplete(input, {
-						types: ["geocode"],
-						componentRestrictions: { country: "pt" },
-					});
-
-					autocompleteRef.current.addListener("place_changed", () => {
-						const place = autocompleteRef.current.getPlace();
-						if (place?.formatted_address) {
-							const lat = place.geometry.location.lat();
-							const lng = place.geometry.location.lng();
-							// Call handleSelectAddress with the correct lat/lng values
-							handleSelectAddress(place.formatted_address, lat, lng); 
-						}
-					});
-				} else {
-					console.error("Google Maps não foi carregado corretamente.");
+		  const input = document.getElementById("adress-input") as HTMLInputElement;
+	
+		  if (input) {
+			if (window.google && window.google.maps && window.google.maps.places) {
+			  autocompleteRef.current = new window.google.maps.places.Autocomplete(input, {
+				types: ["geocode"], // Limitar a busca a endereços
+				componentRestrictions: { country: "pt" }, // Restringir a busca para Portugal
+			  });
+	
+			  autocompleteRef.current.addListener("place_changed", () => {
+				const place = autocompleteRef.current.getPlace();
+				if (place?.formatted_address) {
+				  const lat = place.geometry.location.lat();
+				  const lng = place.geometry.location.lng();
+				  handleSelectAddress(place.formatted_address, lat, lng);
 				}
-			}
-		}
-
-		return () => {
-			if (autocompleteRef.current) {
-				autocompleteRef.current.unbindAll();
-				autocompleteRef.current = null;
-			}
-		};
-	}, [googleLoaded, useAdress, handleSelectAddress]);
-
-	useEffect(() => {
-		const getSession = async () => {
-			const {data, error} = await supabase.auth.getSession();
-			if (error || !data.session) {
-				console.log("Erro ao verificar sessão:", error);
+			  });
 			} else {
-				console.log("Sessão iniciada:", data.session);
+			  console.error("Google Maps não foi carregado corretamente.");
 			}
+		  }
+		}
+	
+		return () => {
+		  if (autocompleteRef.current) {
+			autocompleteRef.current.unbindAll();
+			autocompleteRef.current = null;
+		  }
+		};
+	  }, [googleLoaded, useAdress, handleSelectAddress]);
+	
+	  useEffect(() => {
+		const getSession = async () => {
+		  const { data, error } = await supabase.auth.getSession();
+		  if (error || !data.session) {
+			console.log("Erro ao verificar sessão:", error);
+		  } else {
+			console.log("Sessão iniciada:", data.session);
+		  }
 		};
 		getSession();
-	}, []);
+	  }, []);
 
 	return (
 		<Dialog open onClose={() => {}} fullWidth>
@@ -225,13 +240,16 @@ const RegistoEntrada = () => {
 
     {useAdress ? (
       <div className='mt-6'>
-        <CommonInput
-                label={t('input.fullAddress')}
-				id='adress-input'
-          value={adress}
-          onChange={(e: string) => setAdress(e)}
-		  placeholder={t('input.fullAddressPlaceholder')}
-		  />
+     <input
+  label={t('input.fullAddress')}
+  id="adress-input"
+  value={adress}
+  onChange={(e: ChangeEvent<HTMLInputElement>) => setAdress(e.target.value)} // Corrigindo o tipo de evento
+  placeholder={t('input.fullAddressPlaceholder')}
+/>
+
+
+
       </div>
     ) : (
 		<div className=' mt-4 grid grid-cols-1 md:grid-cols-2 gap-6'>

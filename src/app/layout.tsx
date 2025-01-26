@@ -15,55 +15,57 @@ const inter = Inter({subsets: ["latin"]});
 
 // Métadonnées pour SEO
 export const metadata: Metadata = {
-	title: "XGirl - Annonces Érotiques, Escortes et Accompagnatrices de Luxe en France",
+	title: "XGirl - Anúncios Eróticos, Acompanhantes e Escorts de Luxo em Portugal",
 	description:
-		"Découvrez les meilleures annonces érotiques en France avec XGirl. Explorez une large gamme de services érotiques et trouvez les meilleures escortes et accompagnatrices de luxe en France.",
-	authors: [{name: "XGirl"}],
-	keywords: "Annonces érotiques France, accompagnatrices, Escortes, services érotiques, annonces adultes, X-Girl",
+		"Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal.",
+	authors: [{ name: "XGirl" }],
+	keywords: "Anúncios eróticos Portugal, acompanhantes, Escorts, serviços eróticos, anúncios adultos, X-Girl",
 	openGraph: {
 		type: "website",
-		locale: "fr_FR",
+		locale: "pt_PT",
 		siteName: "XGirl",
-		title: "XGirl - Annonces Érotiques, Escortes et Accompagnatrices en France",
+		title: "XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal",
 		description:
-			"Bienvenue sur XGirl, votre principale source pour les meilleures annonces érotiques, escortes et accompagnatrices en France. Explorez une large gamme de services érotiques et trouvez les meilleures accompagnatrices et escortes de luxe en France.",
+			"Bem-vindo ao XGirl, a sua principal fonte para os melhores anúncios eróticos, escorts e acompanhantes em Portugal. Explore uma ampla gama de serviços eróticos e encontre as melhores acompanhantes e escorts de luxo em Portugal.",
 		images: [
 			{
 				url: "/logoxg.png",
 				alt: "Logo XGirl",
 			},
 		],
-		url: "https://www.xgirl.fr/",
+		url: "https://www.xgirl.pt/",
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "XGirl - Annonces Érotiques, Escortes et Accompagnatrices en France",
+		title: "XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal",
 		description:
-			"Découvrez les meilleures annonces érotiques en France avec XGirl. Explorez une large gamme de services érotiques et trouvez les meilleures escortes et accompagnatrices de luxe en France.",
+			"Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal.",
 		images: ["/logoxg.png"],
 	},
-	metadataBase: new URL("https://www.xgirl.fr/"), // Base URL
+	metadataBase: new URL("https://www.xgirl.pt/"), // URL base
 };
+
 
 // Composant racine
 export default function RootLayout({children}: {children: React.ReactNode}) {
 	return (
-		<html lang='fr'>
+		<html lang='pt'>
 			<head>
-				<title>XGirl - Annonces Érotiques, Escortes et Accompagnatrices de Luxe en France</title>
+				<title>XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal</title>
 				<meta
 					name='description'
-					content='Découvrez les meilleures annonces érotiques en France avec XGirl. Explorez une large gamme de services érotiques et trouvez les meilleures escortes et accompagnatrices de luxe en France.'
-				/>
+					content=
+					"Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal."
+					/>
 				<meta name='author' content='XGirl' />
-				<meta name='keywords' content='Annonces érotiques France, accompagnatrices, Escortes, services érotiques, annonces adultes, X-Girl' />
+				<meta name='keywords' content='Anúncios Eróticos, Escorts e Acompanhantes em Portugal, Acompanhantes Luxo em Portugal, Classificados Eróticos, escort portugal,  anuncios adultos, X-Girl.pt, xgirl' />
 				<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-				<meta name='language' content='French' />
+				<meta name='language' content='portuguese' />
 				<meta name='robots' content='index, follow' />
 				<meta name='copyright' content='Copyright © 2024 X-Girl' />
 				<meta name='distribution' content='global' />
-				<meta name='geo.region' content='FR' />
-				<meta name='geo.placename' content='France' />
+				<meta name='geo.region' content='PT' />
+				<meta name='geo.placename' content='Portugal' />
 				<link rel='icon' href='/logoxg.png' />
 				<link rel='apple-touch-icon' sizes='180x180' href='/logoxg.png' />
 				<link rel='icon' type='image/png' sizes='32x32' href='/logoxg.png' />
@@ -73,6 +75,17 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 				<meta property='og:image' content='/logoxg.png' />
 				<meta property='og:image:alt' content='Logo XGirl' />
 				<meta property='twitter:card' content='summary_large_image' />
+				<script async src="https://www.googletagmanager.com/gtag/js?id=G-FGCZWRX0E3"></script>
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-FGCZWRX0E3');
+      `,
+    }}
+  />
 			</head>
 			<body className={`${inter.className}  bg-gray-200 dark:bg-gray-900`}>
         <ReduxProvider>
