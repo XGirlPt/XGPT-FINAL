@@ -147,7 +147,7 @@ export async function fetchProfileFromDatabase(userUID: string) {
     const { data: commentsData, error: commentsError } = await supabase
       .from("comments")
       .select("*")
-      .eq("userUID", userUID);
+      .eq("profileuid", userUID);
 
     if (commentsError) {
       throw new Error("Erro ao buscar comentários do perfil");

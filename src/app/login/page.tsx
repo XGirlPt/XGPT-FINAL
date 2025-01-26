@@ -73,46 +73,75 @@ const Login = () => {
 
 	const fetchProfileData = async (userUID: string) => {
 		try {
-			const data = await fetchProfileFromDatabase(userUID);
+			// Verifique se o userUID está correto
+			console.log("Fetching profile data for userUID:", userUID);
+	
+			const data = await fetchProfileFromDatabase(userUID);  // Verifique esta função
+			console.log("Profile data fetched:", data);
+	
+			if (!data) {
+				throw new Error("Nenhum dado de perfil encontrado.");
+			}
+	
 			dispatch(addProfileData(data));
 		} catch (error: any) {
-			console.error("Erreur lors de la récupération des données du profil :", error.message);
+			console.error("Erro ao buscar dados do perfil:", error.message);
+			setErrorMessage("Erro ao buscar dados do perfil.");
 		}
 	};
+	
+
+
+
 
 	const handleLogin = async () => {
-		setErrorMessage(""); // Efface le message d'erreur lors de la tentative de connexion
-		const {data: user, error} = await supabase.auth.signInWithPassword({
+		setErrorMessage(""); // Limpa a mensagem de erro na tentativa de login
+		const { data: user, error } = await supabase.auth.signInWithPassword({
 			email,
 			password,
 		});
-
+	
 		if (error) {
-			console.error("Erreur lors de la connexion :", error.message);
-			setErrorMessage("Email ou mot de passe incorrect. Veuillez réessayer."); // Met à jour le message d'erreur
+			console.error("Erro ao fazer login:", error.message);
+			setErrorMessage("Email ou senha incorretos. Por favor, tente novamente.");
 			dispatch(loginFailure(error));
 		} else {
 			if (user) {
 				const userUID = user.user.id;
-				fetchProfileData(userUID);
-
-				dispatch(
-					loginSuccess({
-						email: user.user.email,
-						userUID: user.user.id,
-					})
-				);
-
+	
+				// Verificar se o userUID está presente
+				if (!userUID) {
+					setErrorMessage("Erro: não foi possível recuperar os dados do usuário.");
+					return;
+				}
+	
+				// Buscar dados do perfil
+				try {
+					const profileData = await fetchProfileData(userUID);
+					dispatch(addProfileData(profileData));
+				} catch (fetchError) {
+					console.error("Erro ao buscar dados do perfil:", fetchError);
+					setErrorMessage("Erro ao carregar dados do perfil.");
+					return;
+				}
+	
+				// Processar login com sucesso
+				dispatch(loginSuccess({
+					email: user.user.email,
+					userUID: userUID,
+				}));
+	
 				const tokenID = user.session.refresh_token;
 				localStorage.setItem("userToken", tokenID);
 				localStorage.setItem("email", email);
-
+	
 				router.push("/escort");
 			} else {
-				console.log("L'objet utilisateur retourné est vide ou indéfini.");
+				setErrorMessage("Erro ao processar o login. Tente novamente.");
 			}
 		}
 	};
+	
 
 	return (
 		<>

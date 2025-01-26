@@ -120,10 +120,12 @@ Mobile
 - [] alterar passwords
 - [] criar ficheiro para todas as password
 - [] google analitics e google console
-- [] email a funcionar
+- [X] contacto email a funcionar
 - [] xgirl.pt a funcionar com vercel
 - [] captcha email
-- [] header 
+- [X] header 
 - [] tradutir todo o SEO para portugues 
 - [] adicionar lingua PT
 - [] pt lingua principal
+- [] resolver login
+- [] resolver registo
