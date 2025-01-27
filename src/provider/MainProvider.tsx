@@ -14,7 +14,7 @@ export function MainProvider(props: MainProviderProps) {
 	return (
 		<>
 			{/* Header visível apenas em telas médias ou maiores */}
-			<div className=' top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm'>
+			<div className=' top-0   z-100 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm'>
 				<Header />
 			</div>
 			<div className='block md:hidden '>

@@ -1,6 +1,7 @@
 {
+  "Header":{
     "home": "Home",
-    "escortHeader": "Escorts",
+    "escort": "Escorts",
     "stories": "Stories",
     "filters": "Filters",
     "search": "Search...",
@@ -16,15 +17,16 @@
       "myAccount": "My Account",
       "settings": "Settings",
       "logout": "Logout"
-    },
+    }
+  },
     "Footer": {
       "services_description": "Discover the best escort services in the main regions of France.",
       "quick_links_title": "QUICK LINKS",
-      "escort_paris": "Escort in Paris",
-      "escort_lyon": "Escort in Lyon",
-      "escort_marseille": "Escort in Marseille",
-      "escort_lille": "Escort in Lille",
-      "escort_toulouse": "Escort in Toulouse",
+      "escort_lisboa": "Escort in Lisbon",
+      "escort_porto": "Escort in Oporto",
+      "escort_braga": "Escort in Braga",
+      "escort_faro": "Escort in Faro",
+      "escort_madeira": "Escort in Madeira",
       "top_categories_title": "TOP CATEGORIES",
       "vip_escorts": "VIP Escorts",
       "bdsm": "BDSM",

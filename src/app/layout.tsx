@@ -58,7 +58,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 					"Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal."
 					/>
 				<meta name='author' content='XGirl' />
-				<meta name='keywords' content='Anúncios Eróticos, Escorts e Acompanhantes em Portugal, Acompanhantes Luxo em Portugal, Classificados Eróticos, escort portugal,  anuncios adultos, X-Girl.pt, xgirl' />
+				<meta name='keywords' content='Acompanhantes, Acompanhantes Portugal, Acompanhantes Lisboa, Acompanhantes Porto, Acompanhantes Faro, Acompanhantes Madeira,  Acompanhantes Luxo, Escort,  Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos , Massagem Eróticas, anúncios, Portugal, ' />
 				<meta name='viewport' content='width=device-width, initial-scale=1.0' />
 				<meta name='language' content='portuguese' />
 				<meta name='robots' content='index, follow' />

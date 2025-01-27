@@ -31,6 +31,8 @@ const AccountSettings: React.FC = () => {
 		}
 	};
 
+	
+
 	const toggleStatus = async () => {
 		try {
 			const newStatus = !status;

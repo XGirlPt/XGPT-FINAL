@@ -28,7 +28,7 @@ Admin:
 
 Perfil: 
 - [X] Preco a funcionar .. no registo e A minha conta
-- [] tempo menos de 10minutos .. Agora mesmo
+- [x] tempo menos de 10minutos .. Agora mesmo
 - [X] Liga com flags
 - [X] certificado melhorar 
 - [X] toogle link copiado
@@ -84,7 +84,7 @@ Varios
 - [X] melhorar login page sm
 - [X] comentario a funcionar
 - [] rever todos os filtros
-- [] live cam ok  com registo, e base de dados
+- [] live cam ok com registo, e base de dados
 - [] google maps
 - [] api google .env
 - [X] Filtros apenas 1 componente
@@ -111,24 +111,35 @@ Mobile
 - [] story badge
 - [] modificar tautagens nao esta a funcionar
 - [] linguas sem imagem do pais
+- [] water mark
+
 
 
 
 -------
 - [x] transferir novo github, e novo vercel
 - [] fazer nova base de dados
+
 - [] alterar passwords
 - [] criar ficheiro para todas as password
+
 - [X] google analitics e google console
 - [X] contacto email a funcionar
 - [] xgirl.pt a funcionar com vercel
 - [] captcha email
 - [X] header 
 - [X] tradutir todo o SEO para portugues 
-- [] adicionar lingua PT
-- [] pt lingua principal
+- [X] adicionar lingua PT
+- [X] pt lingua principal
 - [X] resolver login
 - [] resolver registo
 - [] marca de agua fotos
 - [] marca de agua stories
-- [] rever todas as traducoes
+- []  rever todas as traducoes
+- []  pagina perfil renderizar foto grande
+- [X] eliminar perfil
+- [X] alterar passoword
+- []  recuperar password
+- []  email confirmacao
+- [X] suspender perfil
+- [] perguntas e respostas 

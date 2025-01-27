@@ -9,17 +9,12 @@ import "../styles/globals.min.css";
 // import {useTranslation} from "react-i18next";
 import {useLanguage} from "../context/LanguageContext"; // Importe o contexto de idioma
 import {useTranslation} from "react-i18next";
-import MainCard from "@/components/ui/main-card";
 
-import LastAnnounce from "@/app/_ui/last-announce";
-import CarouselG from "@/app/_ui/carosel-g";
-import InfoCard from "@/components/ui/info-card";
 
-// Chargement dynamique des composants lourds
-// const CaroselG = dynamic(() => import("@/components/CaroselG"), {ssr: false});
-// const InfoCard = dynamic(() => import("@/components/InfoCard"), {ssr: false});
-// const LastAnnounce = dynamic(() => import("@/components/LastAnnounce"), {ssr: false});
-// const MainCard = dynamic(() => import("@/components/MainCard"), {ssr: false});
+const CarouselG = dynamic(() => import("@/app/_ui/carosel"), {ssr: false});
+const InfoCard = dynamic(() => import("@/components/ui/info-card"), {ssr: false});
+const LastAnnounce = dynamic(() => import("@/app/_ui/last-announce"), {ssr: false});
+const MainCard = dynamic(() => import("@/components/ui/main-card"), {ssr: false});
 
 interface Profile {
 	nom: string;
@@ -114,22 +109,22 @@ const Dashboard: React.FC = () => {
 	return (
 		<div className='text-gray-600 w-full overflow-x-hidden'>
 			<Head>
-				<title>{t("dashboard.escort_title_en")}</title>
-				<meta
-					name='description'
-					content='Découvrez les meilleures escort girls et masseuses érotiques en France. Explorez nos annonces en vedette et nos nouveautés.'
-				/>
-				<meta name='keywords' content='escort girls, masseuses érotiques, annonces, France, services' />
-				<meta name='author' content='Xgirl' />
-				<meta property='og:title' content='Escort Girls et Masseuses Érotiques en France' />
-				<meta
-					property='og:description'
-					content='Trouvez les meilleures escort girls et masseuses érotiques en France. Consultez nos annonces et nos nouveautés.'
-				/>
-				<meta property='og:type' content='website' />
-				<meta property='og:url' content='https://xgirl.fr' />
-				<meta property='og:image' content='/public/photos/logo.webp' />
-			</Head>
+  <title>{t("dashboard.escort_title_pt")}</title>
+  <meta
+    name='description'
+    content='Descubra as melhores acompanhantes e massagistas eróticas em Portugal. Explore os nossos anúncios em destaque e as novidades.'
+  />
+  <meta name='keywords' content='Acompanhantes, Acompanhantes Luxo, Escort, Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos , massagistas Eróticas, anúncios, Portugal, serviços' />
+  <meta name='author' content='Xgirl' />
+  <meta property='og:title' content='Acompanhantes de luxo e Escort Eróticas em Portugal' />
+  <meta
+    property='og:description'
+    content='Encontre as melhores acompanhantes e massagistas eróticas em Portugal. Consulte os nossos anúncios e as novidades.'
+  />
+  <meta property='og:type' content='website' />
+  <meta property='og:url' content='https://xgirl.pt' />
+  <meta property='og:image' content='/public/photos/logo.webp' />
+</Head>
 
 			<div className='w-full'>{profiles && profiles.length > 0 && <CarouselG profiles={profiles} />}</div>
 

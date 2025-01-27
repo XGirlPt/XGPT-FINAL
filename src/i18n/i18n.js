@@ -14,8 +14,8 @@ i18n
       pt: { translation: pt },
       fr: { translation: fr },
     },
-    lng: 'fr', // Idioma padrão
-    fallbackLng: 'fr', // Idioma de fallback caso o idioma não esteja disponível
+    lng: 'pt', // Idioma padrão
+    fallbackLng: 'pt', // Idioma de fallback caso o idioma não esteja disponível
     interpolation: {
       escapeValue: false, // Não precisamos escapar valores no React
     },

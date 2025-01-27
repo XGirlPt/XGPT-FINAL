@@ -1,6 +1,8 @@
 {
+   
+  "Header":{
     "home": "Accueil",
-    "acompanhantes": "Escort",
+    "escort": "Escort",
     "stories": "Histoires",
     "filters": "Filtres",
     "search": "Rechercher...",
@@ -16,16 +18,18 @@
         "settings": "Paramètres",
         "logout": "Déconnexion"
       
-    },
+    }
+  },
+    
 
     "Footer": {
       "services_description": "Découvrez les meilleurs services d'escort dans les principales régions de France.",
       "quick_links_title": "LIENS RAPIDES",
-      "escort_paris": "Escort à Paris",
-      "escort_lyon": "Escort à Lyon",
-      "escort_marseille": "Escort à Marseille",
-      "escort_lille": "Escort à Lille",
-      "escort_toulouse": "Escort à Toulouse",
+      "escort_lisboa": "Escort à Lisbonne",
+      "escort_porto": "Escort à Oporto",
+      "escort_braga": "Escort à Braga",
+      "escort_faro": "Escort à Faro",
+      "escort_madeira": "Escort à Madeira",
       "top_categories_title": "TOP CATÉGORIE",
       "vip_escorts": "Escortes VIP",
       "bdsm": "BDSM",

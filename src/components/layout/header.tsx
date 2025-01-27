@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState<boolean>(false); // Novo estado para o menu de idiomas
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("FR"); // Idioma padrão
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("PT"); // Idioma padrão
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const dropdownRef = useRef<HTMLUListElement>(null);
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   };
 
   return (
-    <header className="">
+    <header className="z-100">
       {/* <div className='w-full bg-black  h-16 flex justify-center items-center shadow-md'>
 			<Link href='/' aria-label='Ir para a página inicial'>
 	 			<Image src='/logo.webp' alt='Logo' width={200} height={200} priority style={{objectFit: "contain"}} />
@@ -146,10 +146,10 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
             <nav className="hidden md:flex items-center space-x-6 text-sm font-semibold">
               {[
-                { href: "/", label: "Home" },
-                { href: "/escort", label: "Escort" },
-                { href: "/stories", label: "Stories" },
-                { href: "/Filters", label: "Filters" },
+               { href: "/", label: t("Header.home") },
+               { href: "/escort", label: t("Header.escort") },
+               { href: "/stories", label: t("Header.stories") },
+               { href: "/filters", label: t("Header.filters") },
               ].map((item) => (
                 <Link
                   key={item.href}
@@ -183,7 +183,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               {/* Input de busca */}
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder= {t("Header.search")}
                 className="flex-1 bg-transparent text-white text-sm placeholder-gray-400 focus:outline-none"
                 onClick={() => setModalOpen(true)}
               />
@@ -217,6 +217,12 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                   >
                     {t("FR")}
                   </li>
+                  <li
+                    onClick={() => handleLanguageChange("pt")}
+                    className="px-4 py-2 text-sm  hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition duration-200"
+                  >
+                    {t("PT")}
+                  </li>
                 </ul>
               )}
             </div>
@@ -228,7 +234,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                     href="/login"
                     className="px-4 py-2 text-xs font-semibold rounded-full border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors"
                   >
-                    {t("login")}
+                    {t("Header.login")}
                   </Link>
 
                   <Link
@@ -239,7 +245,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                         : "hover:bg-pink-600"
                     } transition duration-200`}
                   >
-                    {t("register")}
+                    {t("Header.register")}
                   </Link>
                 </>
               ) : (
@@ -282,7 +288,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                           className="flex items-center px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer transition duration-200"
                         >
                           <FaUser className="mr-2 text-pink-500" />
-                          {t("user.myAccount")}
+                          {t("Header.user.myAccount")}
                         </li>
                         <li
                           onClick={() => {
@@ -292,14 +298,14 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                           className="flex items-center px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer transition duration-200"
                         >
                           <FaCog className="mr-2  text-pink-500" />
-                          {t("user.settings")}
+                          {t("Header.user.settings")}
                         </li>
                         <li
                           onClick={handleLogout}
                           className="flex items-center px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer transition duration-200"
                         >
                           <FaSignOutAlt className="mr-2  text-pink-500" />
-                          {t("user.logout")}
+                          {t("Header.user.logout")}
                         </li>
                       </ul>
                     )}
