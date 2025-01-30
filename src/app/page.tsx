@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
   <meta property='og:image' content='/public/photos/logo.webp' />
 </Head>
 
-			<div className='w-full'>{profiles && profiles.length > 0 && <CarouselG profiles={profiles} />}</div>
+			<div className='w-full pt-[100px]'>{profiles && profiles.length > 0 && <CarouselG profiles={profiles} />}</div>
 
 			
 			<div className='w-full px-4 sm:px-8 md:px-36 lg:px-36 xl:px-36 max-w-full'>
