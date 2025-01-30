@@ -1,10 +1,10 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-	// Middleware simplificado para permitir acesso a todas as rotas
-	return NextResponse.next();
+  // Middleware simplificado para permitir acesso a todas as rotas
+  return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/admin/:path*", "/escort/:path*"],
+  matcher: ['/admin/:path*', '/escort/:path*'],
 };

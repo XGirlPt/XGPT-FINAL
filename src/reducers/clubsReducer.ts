@@ -5,7 +5,7 @@ import {
   UPDATE_CLUBS_UID,
   UPDATE_CLUBS_EMAIL,
   LOGOUT_CLUBS,
-} from "../actions/ClubsActions";
+} from '../actions/ClubsActions';
 
 // Define the state type
 interface ClubsState {
@@ -57,10 +57,10 @@ type ClubsActionTypes =
 
 // Define the initial state
 const initialState: ClubsState = {
-  nome: "",
-  numero: "",
-  email: "",
-  telefone: "",
+  nome: '',
+  numero: '',
+  email: '',
+  telefone: '',
   userUID: null,
 };
 
@@ -104,11 +104,11 @@ const clubsReducer = (
       return {
         ...state,
         userUID: null,
-        email: "",
+        email: '',
         // Clear other club-related states
-        nome: "",
-        numero: "",
-        telefone: "",
+        nome: '',
+        numero: '',
+        telefone: '',
       };
 
     default:

@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateSigno } from "../../actions/ProfileActions";
-import CommonFilter from "./common-filter";
-import { useTranslation } from "react-i18next";
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSigno } from '../../actions/ProfileActions';
+import CommonFilter from './common-filter';
+import { useTranslation } from 'react-i18next';
 
 const FiltroSigno: React.FC = () => {
   const { t } = useTranslation();

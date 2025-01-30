@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
-import { ImCross } from "react-icons/im";
+import React, { useState } from 'react';
+import { ImCross } from 'react-icons/im';
 
 interface Profile {
   storyURL: string[];
@@ -20,7 +20,7 @@ const StoryBig: React.FC<StoryBigProps> = ({
 }) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(currentIndex);
   const totalStories = selectedProfile?.storyURL.length || 0;
-  console.log("totalStories", totalStories);
+  console.log('totalStories', totalStories);
 
   const nextStory = () => {
     setCurrentStoryIndex((currentStoryIndex + 1) % totalStories);
@@ -36,7 +36,7 @@ const StoryBig: React.FC<StoryBigProps> = ({
   };
 
   const currentStoryURL = selectedProfile?.storyURL[currentStoryIndex];
-  console.log("currentStoryURL", currentStoryURL);
+  console.log('currentStoryURL', currentStoryURL);
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 z-50 backdrop-blur-md">
@@ -47,8 +47,8 @@ const StoryBig: React.FC<StoryBigProps> = ({
           autoPlay
           muted
           crossOrigin="anonymous"
-          onLoadedData={() => console.log("Video loaded successfully")}
-          onError={(e) => console.log("Error loading video", e)}
+          onLoadedData={() => console.log('Video loaded successfully')}
+          onError={(e) => console.log('Error loading video', e)}
           className="max-w-[80vw] max-h-[80vh] transition-opacity duration-900 ease-in-out rounded-2xl"
         />
       </div>

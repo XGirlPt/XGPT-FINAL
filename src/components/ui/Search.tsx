@@ -1,4 +1,4 @@
-import { MdOutlineSearch } from "react-icons/md";
+import { MdOutlineSearch } from 'react-icons/md';
 
 function Search() {
   return (

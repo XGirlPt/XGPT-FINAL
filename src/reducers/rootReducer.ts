@@ -1,8 +1,8 @@
 // rootReducer.ts
-import { combineReducers } from "redux";
-import profileReducer from "./profileReducer";
-import clubsReducer from "./clubsReducer";
-import userAndClubReducer from "./userAndClubReducer";
+import { combineReducers } from 'redux';
+import profileReducer from './profileReducer';
+import clubsReducer from './clubsReducer';
+import userAndClubReducer from './userAndClubReducer';
 
 const rootReducer = combineReducers({
   profile: profileReducer,

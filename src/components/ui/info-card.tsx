@@ -26,9 +26,6 @@
 // // 	);
 // // };
 
-
-
-
 // const InfoCard = () => {
 //   const stats = [
 //     {
@@ -92,41 +89,40 @@
 // 	// 		</div>
 // 	// 	</div>
 
-
 // 	);
 // };
 
 // export default InfoCard;
 
-
-
-"use client";
-import React from "react";
-import Link from "next/link";
-import { Users, Wallet, BarChart } from "lucide-react";
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { Users, Wallet, BarChart } from 'lucide-react';
 
 const InfoCard = () => {
   const stats = [
     {
       icon: <Users className="h-8 w-8 text-pink-500" />,
-      value: "100K+",
-      label: "Active Users",
+      value: '100K+',
+      label: 'Active Users',
     },
     {
       icon: <Wallet className="h-8 w-8 text-pink-500" />,
-      value: "50K+",
-      label: "NFTs Created",
+      value: '50K+',
+      label: 'NFTs Created',
     },
     {
       icon: <BarChart className="h-8 w-8 text-pink-500" />,
-      value: "$10M+",
-      label: "Trading Volume",
+      value: '$10M+',
+      label: 'Trading Volume',
     },
   ];
 
   return (
     <div className="mb-12">
-      <h2 className="text-3xl font-bold mb-6 dark:text-white">Platform Statistics</h2>
+      <h2 className="text-3xl font-bold mb-6 dark:text-white">
+        Platform Statistics
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <div
@@ -134,7 +130,9 @@ const InfoCard = () => {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center transition-transform transform hover:scale-105"
           >
             <div className="flex justify-center mb-4">{stat.icon}</div>
-            <div className="text-3xl font-bold mb-2 dark:text-white">{stat.value}</div>
+            <div className="text-3xl font-bold mb-2 dark:text-white">
+              {stat.value}
+            </div>
             <div className="text-gray-600 dark:text-gray-400">{stat.label}</div>
           </div>
         ))}

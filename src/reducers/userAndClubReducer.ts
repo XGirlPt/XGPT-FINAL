@@ -2,7 +2,7 @@ import {
   FETCH_USER_AND_CLUB_DATA,
   SET_USER_AND_CLUB_DATA,
   SET_USER_AND_CLUB_ERROR,
-} from "../actions/userAndClubActions";
+} from '../actions/userAndClubActions';
 
 // Define the state type
 interface UserAndClubState {

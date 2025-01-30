@@ -14,7 +14,10 @@ export async function DELETE(req: Request) {
 
     // Verificar se o userId foi fornecido e se é uma string válida
     if (!userId || typeof userId !== 'string') {
-      return NextResponse.json({ error: 'userId é necessário para excluir a conta' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'userId é necessário para excluir a conta' },
+        { status: 400 }
+      );
     }
 
     // Chamar a função RPC do Supabase para excluir o usuário
@@ -26,9 +29,15 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ message: 'Conta eliminada com sucesso' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Conta eliminada com sucesso' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Erro ao eliminar conta:', error);
-    return NextResponse.json({ error: 'Erro ao eliminar conta' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Erro ao eliminar conta' },
+      { status: 500 }
+    );
   }
 }

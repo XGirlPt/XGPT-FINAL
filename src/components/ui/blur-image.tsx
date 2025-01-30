@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import Image from "next/image";
+import Image from 'next/image';
 
 export interface BlurImageProps
   extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -9,7 +9,6 @@ export interface BlurImageProps
   className: string;
   isBlur?: boolean;
 }
-
 
 export function BlurImage(props: BlurImageProps) {
   const { src, alt, className, isBlur = false, ...rest } = props;
@@ -20,7 +19,7 @@ export function BlurImage(props: BlurImageProps) {
       alt={alt}
       width={150}
       height={150}
-      className={`${className} ${isBlur ? "blur-xl" : ""}`}
+      className={`${className} ${isBlur ? 'blur-xl' : ''}`}
       {...rest}
     />
   );

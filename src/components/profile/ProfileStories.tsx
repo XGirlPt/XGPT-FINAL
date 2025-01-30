@@ -3,16 +3,12 @@
 // import { Profile } from "@/types";
 // import { useTranslation } from "react-i18next";
 
-
-
 // interface ProfileStoriesProps {
 //   selectedProfile: any; // Certifique-se de que o tipo correto seja passado
 //   storyURLs: string[];
 //   thumbnails: string[];
 //   onStoryClick: (index: number) => void;
 // }
-
-
 
 // const ProfileStories: React.FC<ProfileStoriesProps> = ({selectedProfile, storyURLs, thumbnails, onStoryClick}) => {
 //   // Verifique se o storyURLs tem conteúdo
@@ -26,7 +22,6 @@
 //     setShowLargeStory(true);
 //     setStoryIndex(index);
 //   };
-
 
 //   return (
 //     <div className="flex md:grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-2">

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "turbo": "next dev --turbo",
-    "minify-css": "npx cssnano-cli ./src/styles/globals.css -o ./src/styles/globals.min.css"
+    "minify-css": "npx cssnano-cli ./src/styles/globals.css -o ./src/styles/globals.min.css",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
@@ -96,6 +97,7 @@
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.0.3",
     "postcss": "^8",
+    "prettier": "3.4.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "unused-files-webpack-plugin": "^3.4.0"

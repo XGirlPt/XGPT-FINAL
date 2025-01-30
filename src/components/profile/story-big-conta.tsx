@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { ImCross } from "react-icons/im";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ImCross } from 'react-icons/im';
 
 interface StoryBigProps {
   onClose: () => void;
@@ -11,13 +11,14 @@ interface StoryBigProps {
 const StoryBig: React.FC<StoryBigProps> = ({ onClose, currentIndex }) => {
   // Acessar o estado de stories no Redux
   const storyURLsRedux = useSelector(
-    (state: any) => state.profile?.profile.stories);
-  console.log("stories redux from storybifConta", storyURLsRedux);  
-  
+    (state: any) => state.profile?.profile.stories
+  );
+  console.log('stories redux from storybifConta', storyURLsRedux);
+
   const [currentStoryIndex, setCurrentStoryIndex] = useState(currentIndex);
 
   const totalStories = storyURLsRedux?.length || 0;
-  console.log("totalStories", totalStories);
+  console.log('totalStories', totalStories);
 
   const nextStory = () => {
     setCurrentStoryIndex((currentStoryIndex + 1) % totalStories);
@@ -33,22 +34,22 @@ const StoryBig: React.FC<StoryBigProps> = ({ onClose, currentIndex }) => {
   };
 
   const currentStoryURL = storyURLsRedux?.[currentStoryIndex];
-  console.log("currentStoryURL", currentStoryURL);
+  console.log('currentStoryURL', currentStoryURL);
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 z-50 backdrop-blur-md">
       <div className="relative">
-      <video
-  src={currentStoryURL}
-  controls
-  autoPlay
-  muted
-  crossOrigin="anonymous"
-  onLoadedData={() => console.log("Video loaded successfully")}
-  onError={(e) => console.log("Error loading video", e)}
-  className="max-w-[80vw] max-h-[80vh] transition-opacity duration-900 ease-in-out rounded-2xl"
-/>
-</div>
+        <video
+          src={currentStoryURL}
+          controls
+          autoPlay
+          muted
+          crossOrigin="anonymous"
+          onLoadedData={() => console.log('Video loaded successfully')}
+          onError={(e) => console.log('Error loading video', e)}
+          className="max-w-[80vw] max-h-[80vh] transition-opacity duration-900 ease-in-out rounded-2xl"
+        />
+      </div>
       <button className="text-bold font-bold" onClick={onClose}>
         <ImCross
           size={16}

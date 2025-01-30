@@ -1,40 +1,38 @@
-import { useState, useEffect , useMemo} from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { pink } from "@mui/material/colors";
-import { useDispatch, useSelector } from "react-redux";
-import { updateLingua } from "../../actions/ProfileActions";
+import { useState, useEffect, useMemo } from 'react';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { pink } from '@mui/material/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateLingua } from '../../actions/ProfileActions';
 import { useTranslation } from 'react-i18next'; // Importar o hook useTranslation
 
 interface State {
   [key: string]: boolean;
 }
 
-
-
 const CheckLinguas: React.FC = () => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
 
-
   const linguaRedux = useSelector(
     (state: any) => state.profile?.profile?.lingua
   );
-  console.log("linguaRedux", linguaRedux);
+  console.log('linguaRedux', linguaRedux);
 
-  const initialState: State = useMemo(() => ({
-    [t('portuguese')]: false,
-    [t('english')]: false,
-    [t('french')]: false,
-    [t('spanish')]: false,
-    [t('german')]: false,
-    [t('italian')]: false,
-    [t('russian')]: false,
-    [t('arabic')]: false,
-  }), [t]);
-
-
+  const initialState: State = useMemo(
+    () => ({
+      [t('portuguese')]: false,
+      [t('english')]: false,
+      [t('french')]: false,
+      [t('spanish')]: false,
+      [t('german')]: false,
+      [t('italian')]: false,
+      [t('russian')]: false,
+      [t('arabic')]: false,
+    }),
+    [t]
+  );
 
   const [checkboxes, setCheckboxes] = useState<State>(
     initialState || linguaRedux
@@ -63,7 +61,6 @@ const CheckLinguas: React.FC = () => {
     setSelectedLingua(updatedLingua);
   };
 
-
   return (
     <div>
       <FormGroup className="text-xs  items-bottom gap-0">
@@ -75,8 +72,8 @@ const CheckLinguas: React.FC = () => {
                   <Checkbox
                     size="small"
                     sx={{
-                      color: "white",
-                      "&.Mui-checked": { color: pink[800] },
+                      color: 'white',
+                      '&.Mui-checked': { color: pink[800] },
                     }}
                     onChange={handleCheckChange}
                     name={key}
@@ -84,7 +81,9 @@ const CheckLinguas: React.FC = () => {
                   />
                 }
                 label={
-                  <div className="flex items-center text-white">{t(`profile.linguas.${key}`)}</div>
+                  <div className="flex items-center text-white">
+                    {t(`profile.linguas.${key}`)}
+                  </div>
                 }
                 className="text-white mr-4"
               />

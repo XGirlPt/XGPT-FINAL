@@ -1,4 +1,3 @@
-
 // import { useState } from "react";
 // import { Listbox } from "@headlessui/react";
 // import { MdKeyboardArrowDown } from "react-icons/md";
@@ -19,7 +18,7 @@
 //     setSelectedContinent(selectedContinent);
 //     handleContinentChange(selectedContinent); // Chama a função do componente pai
 //   };
-  
+
 //     return (
 //         <div>
 //       <Listbox value={selectedContinent} onChange={handleLocalContinentChange}>
@@ -27,7 +26,7 @@
 // >
 //     {selectedContinent.name}
 //     <MdKeyboardArrowDown size={18}/>
-//   </Listbox.Button>          
+//   </Listbox.Button>
 //   <Listbox.Options className={`absolute z-10 mt-2 py-4 px-4 w-44 bg-zinc-800 text-white text-xs border rounded-sm shadow-md cursor-pointer ${darkMode ? 'text-white dark:bg-[#2b3945]' : 'text-gray-600 bg-white'}`}>
 //             {continent.map((continent) => (
 //               <Listbox.Option
@@ -36,9 +35,9 @@
 //                 value={continent}
 //                 disabled={continent.unavailable}
 //               >
-            
+
 //                 {continent.name}
-                
+
 //               </Listbox.Option>
 //             ))}
 //           </Listbox.Options>
@@ -47,5 +46,4 @@
 //     );
 //   }
 
-  
 //   export default ListFiltros;

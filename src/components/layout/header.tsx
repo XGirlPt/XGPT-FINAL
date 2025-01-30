@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import { IoIosOptions, IoIosArrowDown } from "react-icons/io";
-import { BiSolidMoviePlay } from "react-icons/bi";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../actions/ProfileActions";
-import { logoutClubs } from "../../actions/ClubsActions";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useState, useEffect, useRef } from 'react';
+import { IoIosOptions, IoIosArrowDown } from 'react-icons/io';
+import { BiSolidMoviePlay } from 'react-icons/bi';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../actions/ProfileActions';
+import { logoutClubs } from '../../actions/ClubsActions';
+import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   FaUser,
   FaCog,
@@ -13,25 +13,45 @@ import {
   FaTimes,
   FaGlobe,
   FaSearch,
-} from "react-icons/fa";
-import Image from "next/image";
+} from 'react-icons/fa';
+import Image from 'next/image';
 
-import { useTranslation } from "react-i18next";
-import { useLanguage } from "../../context/LanguageContext"; // Importer le contexte du langage
-import SearchModal from "../ui/search-modal";
-import Filtro from "./filtro";
-import { Switch } from "@nextui-org/react"; // Alternador visual
-import { useTheme } from "next-themes";
-import { FaMoon, FaSun } from "react-icons/fa";
-import ThemeSwitcher from "@/components/ThemeSwitcher"; // Importe o ThemeSwitcher
-import { Moon, Sun, Search, Globe, Menu, FilterIcon, SlidersHorizontal, ChevronDown } from "lucide-react";
-import { PiSlidersHorizontal } from "react-icons/pi";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
-import { Input } from "../ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ThemeToggle } from "../theme-toggle";
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext'; // Importer le contexte du langage
+import SearchModal from '../ui/search-modal';
+import Filtro from './filtro';
+import { Switch } from '@nextui-org/react'; // Alternador visual
+import { useTheme } from 'next-themes';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import ThemeSwitcher from '@/components/ThemeSwitcher'; // Importe o ThemeSwitcher
+import {
+  Moon,
+  Sun,
+  Search,
+  Globe,
+  Menu,
+  FilterIcon,
+  SlidersHorizontal,
+  ChevronDown,
+} from 'lucide-react';
+import { PiSlidersHorizontal } from 'react-icons/pi';
+import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet';
+import { Input } from '../ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { ThemeToggle } from '../theme-toggle';
 
 interface HeaderProps {
   blur?: boolean;
@@ -42,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   const { language, changeLanguage } = useLanguage(); // Use o contexto de idioma
 
   const dispatch = useDispatch();
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
 
   const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
   const emailReduxProfile = useSelector(
@@ -60,8 +80,8 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState<boolean>(false); // Novo estado para o menu de idiomas
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("PT"); // Idioma padrão
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('PT'); // Idioma padrão
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const dropdownRef = useRef<HTMLUListElement>(null);
   const languageRef = useRef<HTMLUListElement>(null); // Ref para o menu de idiomas
@@ -76,17 +96,20 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   };
 
   const handleClickOutsideLang = (event: MouseEvent) => {
-    if (languageRef.current && !languageRef.current.contains(event.target as Node)) {
+    if (
+      languageRef.current &&
+      !languageRef.current.contains(event.target as Node)
+    ) {
       setLanguageMenuOpen(false);
     }
   };
 
   useEffect(() => {
     // Add event listener to close dropdown when clicking outside
-    document.addEventListener("mousedown", handleClickOutsideLang);
+    document.addEventListener('mousedown', handleClickOutsideLang);
     return () => {
       // Cleanup event listener
-      document.removeEventListener("mousedown", handleClickOutsideLang);
+      document.removeEventListener('mousedown', handleClickOutsideLang);
     };
   }, []);
 
@@ -102,15 +125,15 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
   useEffect(() => {
     // Add event listener to close dropdown when clicking outside
-    document.addEventListener("mousedown", handleClickOutsideLang);
+    document.addEventListener('mousedown', handleClickOutsideLang);
     return () => {
       // Cleanup event listener
-      document.removeEventListener("mousedown", handleClickOutsideLang);
+      document.removeEventListener('mousedown', handleClickOutsideLang);
     };
   }, []);
 
   useEffect(() => {
-    setEmail(emailReduxProfile || "");
+    setEmail(emailReduxProfile || '');
   }, [emailReduxProfile]);
 
   const toggleFiltro = () => {
@@ -123,10 +146,10 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     } else if (emailReduxClubs) {
       dispatch(logoutClubs());
     }
-    localStorage.removeItem("email");
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userUID");
-    router.push("/");
+    localStorage.removeItem('email');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userUID');
+    router.push('/');
   };
 
   const { theme } = useTheme();
@@ -153,31 +176,31 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   const navigationLinks = [
     {
       href: '/',
-      label: t("Header.home"),
+      label: t('Header.home'),
       darkIcon: '/icons/home-dark.png',
       lightIcon: '/icons/home.png',
     },
     {
       href: '/escort',
-      label: t("Header.escort"),
+      label: t('Header.escort'),
       darkIcon: '/icons/escort-dark.png',
       lightIcon: '/icons/escort.png',
     },
     {
       href: '/stories',
-      label: t("Header.stories"),
+      label: t('Header.stories'),
       darkIcon: '/icons/stories-dark.png',
       lightIcon: '/icons/stories.png',
     },
     {
       href: '/stories-2',
-      label: t("Header.stories"),
+      label: t('Header.stories'),
       darkIcon: '/icons/stories-dark.png',
       lightIcon: '/icons/stories.png',
     },
     {
       href: '/ads',
-      label: t("Header.ads"),
+      label: t('Header.ads'),
       darkIcon: '/icons/ads-dark.png',
       lightIcon: '/icons/ads.png',
     },
@@ -233,7 +256,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     //       </div>
 
     //       <div className="flex items-center space-x-4">
-        
+
     //         <div className="relative flex items-center rounded-full bg-gray-800 dark:bg-gray-700 p-2 py-2 pr-2">
     //           <Search className="text-gray-400 h-4 w-4 mr-1" />
     //           <input
@@ -259,7 +282,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     //               ref={languageRef}
     //               className="absolute right-0 w-32 bg-white text-sm dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg rounded-lg hover:rounded-md"
     //             >
-               
+
     //               <li
     //                 onClick={() => handleLanguageChange("en")}
     //                 className="px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition duration-200"
@@ -378,7 +401,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     //     />
     //   </div>
     // </header>
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div
         className={cn(
           'container mx-auto py-2 relative',
@@ -397,7 +420,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-             {/* <ThemeSwitcher /> */}
+            {/* <ThemeSwitcher /> */}
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -406,7 +429,9 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
-                  <SheetTitle className="text-left">{t("Header.menu")}</SheetTitle>
+                  <SheetTitle className="text-left">
+                    {t('Header.menu')}
+                  </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col space-y-4 mt-4">
                   {navigationLinks.map((link) => (
@@ -425,14 +450,18 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                     </Link>
                   ))}
                   <div className="pt-4 border-t">
-                    <Button className="w-full mb-2 rounded-full bg-darkpink hover:bg-darkpinkhover"
-                      onClick={() => router.push("/registo/regista2")}
+                    <Button
+                      className="w-full mb-2 rounded-full bg-darkpink hover:bg-darkpinkhover"
+                      onClick={() => router.push('/registo/regista2')}
                     >
-                      {t("Header.register")}
+                      {t('Header.register')}
                     </Button>
-                    <Button variant="outline" className="w-full rounded-full"
-                      onClick={() => router.push("/login")}>
-                      {t("Header.login")}
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-full"
+                      onClick={() => router.push('/login')}
+                    >
+                      {t('Header.login')}
                     </Button>
                   </div>
                 </div>
@@ -465,7 +494,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             />
             <Input
               type="search"
-              placeholder={t("Header.search")}
+              placeholder={t('Header.search')}
               className={cn(
                 'pl-10 py-5 text-base rounded-full border',
                 theme === 'dark'
@@ -486,15 +515,15 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => router.push("/registo/regista2")}
+              onClick={() => router.push('/registo/regista2')}
               className={cn(
                 'rounded-full !px-6 bg-darkpink hover:bg-darkpinkhover dark:text-white font-body'
               )}
             >
-              {t("Header.register")}
+              {t('Header.register')}
             </Button>
             <Button
-              onClick={() => router.push("/login")}
+              onClick={() => router.push('/login')}
               variant="outline"
               className={cn(
                 'rounded-full !px-6 font-body',
@@ -503,7 +532,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                   : 'border-gray-200 hover:bg-gray-100'
               )}
             >
-              {t("Header.login")}
+              {t('Header.login')}
             </Button>
           </div>
         </div>
@@ -514,7 +543,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <Input
               type="search"
-              placeholder={t("Header.search")}
+              placeholder={t('Header.search')}
               className="w-full pl-10 pr-12 py-4 text-base rounded-full border"
             />
             <Button
@@ -571,15 +600,20 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                   className="flex items-center gap-1"
                 >
                   <Globe className="w-4 h-4 text-darkpink" />
-                 {selectedLanguage}
+                  {selectedLanguage}
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => handleLanguageChange("en")}>{t("EN")}</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleLanguageChange("fr")}>{t("FR")}</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleLanguageChange("pt")}>{t("PT")}</DropdownMenuItem>
-
+                <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                  {t('EN')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
+                  {t('FR')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLanguageChange('pt')}>
+                  {t('PT')}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -588,12 +622,12 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           </div>
         </div>
       </div>
-          <SearchModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+      <SearchModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
     </div>
   );
 };

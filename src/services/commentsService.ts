@@ -13,8 +13,6 @@
 // 		}
 // 	}
 
-	
-
 // 	static async createComment(commentData: {userUID: string; authorName: string; rating: number; comment: string}): Promise<Comment | null> {
 // 		try {
 // 			const {data, error} = await supabase.from("comments").insert([commentData]);
@@ -38,35 +36,3 @@
 // }
 
 // export const commentsService = new CommentsService();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

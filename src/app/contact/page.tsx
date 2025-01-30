@@ -1,16 +1,11 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
-
-import Contacto from "./_ui/Contacto";
-
-
-
-
+import Contacto from './_ui/Contacto';
 
 export const metadata: Metadata = {
-  title: "XGirl - Acompanhantes",
+  title: 'XGirl - Acompanhantes',
   description:
-    "Bem-vindo a XGirl, o melhor site de classificados eróticos, Acompanhantes e Escort em Portugal.",
+    'Bem-vindo a XGirl, o melhor site de classificados eróticos, Acompanhantes e Escort em Portugal.',
 };
 
 export interface PagePageProps {}
