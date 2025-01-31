@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
-import Image from "next/image";
-
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 interface Profile {
   lingua: string[];
@@ -24,29 +23,26 @@ const Linguas: React.FC<LinguasProps> = ({ selectedProfile }) => {
   // console.log("Lingua Checkboxes", linguaCheckboxes);
   const { t, i18n } = useTranslation();
 
-
-
-
   const obterBandeira = (lingua: string): string => {
     switch (lingua) {
-      case t("language.russian"):
-        return "/Flags/ru.svg";
-      case t("language.german"):
-        return "/Flags/ale.svg";
-      case t("language.portuguese"):
-        return "/Flags/pt.svg";
-      case t("language.french"):
-        return "/Flags/fr.svg";
-      case t("language.english"):
-        return "/Flags/ing.svg";
-      case t("language.italian"):
-        return "/Flags/it.svg";
-      case t("language.spanish"):
-        return "/Flags/es.svg";
-      case t("language.arabic"):
-        return "/Flags/ar.png";
+      case t('language.russian'):
+        return '/Flags/ru.svg';
+      case t('language.german'):
+        return '/Flags/ale.svg';
+      case t('language.portuguese'):
+        return '/Flags/pt.svg';
+      case t('language.french'):
+        return '/Flags/fr.svg';
+      case t('language.english'):
+        return '/Flags/ing.svg';
+      case t('language.italian'):
+        return '/Flags/it.svg';
+      case t('language.spanish'):
+        return '/Flags/es.svg';
+      case t('language.arabic'):
+        return '/Flags/ar.png';
       default:
-        return ""; // Bandeira padrão, se necessário
+        return ''; // Bandeira padrão, se necessário
     }
   };
 
@@ -54,11 +50,9 @@ const Linguas: React.FC<LinguasProps> = ({ selectedProfile }) => {
     (state: any) => state.profile?.profile?.lingua
   );
 
-
   return (
     <div className="bg-white dark:bg-gray-800 pl-12 pt-10 pb-10 mb-8 md:mb-0 w-full  rounded-xl">
-      <h1 className="text-pink-500 text-2xl">  {t("profile.languages")}
-      </h1>
+      <h1 className="text-pink-500 text-2xl"> {t('profile.languages')}</h1>
       <div className="grid grid-cols-2 gap-x-4 gap-y-4 mt-4">
         {linguaRedux &&
           linguaRedux.map((lingua: string, index: number) => (

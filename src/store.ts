@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 import {
   FLUSH,
   PAUSE,
@@ -7,14 +7,14 @@ import {
   REGISTER,
   REHYDRATE,
   persistReducer,
-} from "redux-persist";
-import storage from "./storage";
-import rootReducer from "./reducers/rootReducer";
+} from 'redux-persist';
+import storage from './storage';
+import rootReducer from './reducers/rootReducer';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  blacklist: ["tracking"],
+  blacklist: ['tracking'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer as any);
@@ -22,7 +22,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer as any);
 export const makeStore = () => {
   return configureStore({
     reducer: persistedReducer,
-    devTools: process.env.NODE_ENV !== "production",
+    devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
@@ -32,5 +32,5 @@ export const makeStore = () => {
   });
 };
 export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = AppStore["dispatch"];
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];

@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { IoPersonAdd } from "react-icons/io5";
-import { IoIosSettings } from "react-icons/io";
+import Link from 'next/link';
+import { IoIosArrowRoundForward } from 'react-icons/io';
+import { IoPersonAdd } from 'react-icons/io5';
+import { IoIosSettings } from 'react-icons/io';
 
 function HeaderLoged() {
   return (

@@ -1,8 +1,8 @@
-import React from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { pink } from "@mui/material/colors";
+import React from 'react';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { pink } from '@mui/material/colors';
 
 const CheckDeslocacoes: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const CheckDeslocacoes: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "white", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'white', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={<div className="flex items-center">Recebo</div>}
@@ -26,7 +26,7 @@ const CheckDeslocacoes: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "white", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'white', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={

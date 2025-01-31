@@ -1,6 +1,6 @@
-import { useState, Fragment } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useState, Fragment } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 export interface FilterOption {
   id: number;
@@ -12,7 +12,7 @@ export interface FilterListProps {
   options: FilterOption[];
   defaultText: string;
   onChange: (option: FilterOption) => void;
-  variant?: "default" | "pink" | "yellow";
+  variant?: 'default' | 'pink' | 'yellow';
   darkMode?: boolean;
   label?: string;
 }
@@ -21,7 +21,7 @@ const FilterList: React.FC<FilterListProps> = ({
   options,
   defaultText,
   onChange,
-  variant = "default",
+  variant = 'default',
   darkMode = true,
   label,
 }) => {
@@ -71,8 +71,8 @@ const FilterList: React.FC<FilterListProps> = ({
                       className={({ active }) =>
                         `relative py-2.5 pl-3 pr-9 cursor-pointer select-none ${
                           active
-                            ? "bg-pink-500 text-white"
-                            : "text-gray-200 hover:bg-[#2D3748]"
+                            ? 'bg-pink-500 text-white'
+                            : 'text-gray-200 hover:bg-[#2D3748]'
                         }`
                       }
                       value={option}
@@ -82,7 +82,7 @@ const FilterList: React.FC<FilterListProps> = ({
                         <>
                           <span
                             className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
+                              selected ? 'font-medium' : 'font-normal'
                             }`}
                           >
                             {option.name}
@@ -90,7 +90,7 @@ const FilterList: React.FC<FilterListProps> = ({
                           {selected && (
                             <span
                               className={`absolute inset-y-0 right-0 flex items-center pr-3 ${
-                                active ? "text-white" : "text-[#E84393]"
+                                active ? 'text-white' : 'text-[#E84393]'
                               }`}
                             >
                               <CheckIcon

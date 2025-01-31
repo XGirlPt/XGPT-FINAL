@@ -1,109 +1,112 @@
 A minha conta :
-- [X] adicionar fotos e enviar para base de dados
-- [X] eliminar fotos do componente e no storage 
+
+- [x] adicionar fotos e enviar para base de dados
+- [x] eliminar fotos do componente e no storage
 - [] refazer layout constante em todos os componentes
-- [X] adicionar "stories"
-- [X] alterar status a funcionar 
-- [X] toaster em guardar fotos
-- [X] fazer definicoes
-- [X] tag a funcionar e actualizar
-- [X] barra pendente, certificado e nao certificado
+- [x] adicionar "stories"
+- [x] alterar status a funcionar
+- [x] toaster em guardar fotos
+- [x] fazer definicoes
+- [x] tag a funcionar e actualizar
+- [x] barra pendente, certificado e nao certificado
 - [] retirar todos os fetch. limpar codigo
-- [X] toaster em guardar tag
-- [X] Barra de pendente funcionar correctamente
+- [x] toaster em guardar tag
+- [x] Barra de pendente funcionar correctamente
 
+Admin:
 
-Admin: 
-- [X]  toaster rejeitar perfis pendentes
-- [X] Perfis aprovados toaster em rejeitar
-- [X] Perfis Rejeitados toaster em aprovar
-- [X] Perfis Certificados - alteracao na base de dados
-- [X] Perfis Certificados - toaster em rejeitar
-- [X] Perfis Nao certificados - alteracao na base de dados
-- [X] Perfis Nao certificados -  toaster em aprovar
+- [x] toaster rejeitar perfis pendentes
+- [x] Perfis aprovados toaster em rejeitar
+- [x] Perfis Rejeitados toaster em aprovar
+- [x] Perfis Certificados - alteracao na base de dados
+- [x] Perfis Certificados - toaster em rejeitar
+- [x] Perfis Nao certificados - alteracao na base de dados
+- [x] Perfis Nao certificados - toaster em aprovar
 - [ ] Adicionar butao perfil
 - [ ] adicionar butao foto de verificacao
-- [X] bloquear login apenas para emails autorizados
-- [X] implementar .env para admin
+- [x] bloquear login apenas para emails autorizados
+- [x] implementar .env para admin
 
-Perfil: 
-- [X] Preco a funcionar .. no registo e A minha conta
+Perfil:
+
+- [x] Preco a funcionar .. no registo e A minha conta
 - [x] tempo menos de 10minutos .. Agora mesmo
-- [X] Liga com flags
-- [X] certificado melhorar 
-- [X] toogle link copiado
-- [X] se nao houver story nao deve aparecer o titulo.
-- [X] adicionar seccao comentarios
-- [X] versao movel
+- [x] Liga com flags
+- [x] certificado melhorar
+- [x] toogle link copiado
+- [x] se nao houver story nao deve aparecer o titulo.
+- [x] adicionar seccao comentarios
+- [x] versao movel
 
+Stories:
 
-Stories: 
 - [] colocar filigrana
-- [X] previsualizacao no componente A minha conta
-- [X] inserir os stories na pagina "Stories"
-- [X] alinhar no componente page acompanhantes
-- [] stories com  butao para perfil
-- [X] objecto cover 
-- [X] se certificado aparecer o certificado
-- [X] story big foto perfil canto sup esq
-- [X] adicionar foto na card avatar
-
+- [x] previsualizacao no componente A minha conta
+- [x] inserir os stories na pagina "Stories"
+- [x] alinhar no componente page acompanhantes
+- [] stories com butao para perfil
+- [x] objecto cover
+- [x] se certificado aparecer o certificado
+- [x] story big foto perfil canto sup esq
+- [x] adicionar foto na card avatar
 
 Header:
-- [X] hover na pagina actual
-- [X] foto de perfil
-- [X] menu a funcionar com dropof
-- [X] dropmenu z-index 100
-- [X]  barra search
+
+- [x] hover na pagina actual
+- [x] foto de perfil
+- [x] menu a funcionar com dropof
+- [x] dropmenu z-index 100
+- [x] barra search
 
 Definicoes:
-- [X] delete account e pefil 
-- [X] suspender perfil
-- [X] toaste sucesso eliminar perfil
-- [X] toaste erro eliminar perfil
-- [X] toaste sucesso suspender perfil
-- [X] confirma palavra passe
-- [] alteracao de email 
-- [X] fazer componentes
+
+- [x] delete account e pefil
+- [x] suspender perfil
+- [x] toaste sucesso eliminar perfil
+- [x] toaste erro eliminar perfil
+- [x] toaste sucesso suspender perfil
+- [x] confirma palavra passe
+- [] alteracao de email
+- [x] fazer componentes
 
 Varios
-- [X] Barra de Search
+
+- [x] Barra de Search
 - [] Filtros
 - [] Link header a funcionar e filtrar correctamente
-- [X] melhorar certificado 
+- [x] melhorar certificado
 - [] login supabase e google
-- [X] Footer
+- [x] Footer
 - [] shuffle cards
 - [] url link de registo tirar email e uid
-- [X] foto loading profile
-- [X] login auto
-- [X] Retirar Froala
-- [X] adicionar "stories icon" nas cards dos perfis que teem stories
-- [] email de confirmacao ao login 
-- [X] login page screen full em md
-- [X] melhorar login page sm
-- [X] comentario a funcionar
+- [x] foto loading profile
+- [x] login auto
+- [x] Retirar Froala
+- [x] adicionar "stories icon" nas cards dos perfis que teem stories
+- [] email de confirmacao ao login
+- [x] login page screen full em md
+- [x] melhorar login page sm
+- [x] comentario a funcionar
 - [] rever todos os filtros
 - [] live cam ok com registo, e base de dados
 - [] google maps
 - [] api google .env
-- [X] Filtros apenas 1 componente
+- [x] Filtros apenas 1 componente
 
 Paginas
-- [X] Termos e Condicoes
-- [X] Politica e Privacidade
-- [X] Contacto
+
+- [x] Termos e Condicoes
+- [x] Politica e Privacidade
+- [x] Contacto
 
 Mobile
+
 - [] Definicoes
 - [] refazer menu login/logout
 
+---
 
-
-
------------
-
-- [X] solve comments issue
+- [x] solve comments issue
 - [] solve change profile features issue
 - [] rendering profiles only if they have Tag
 - [] Tarifs not working
@@ -113,33 +116,31 @@ Mobile
 - [] linguas sem imagem do pais
 - [] water mark
 
+---
 
-
-
--------
 - [x] transferir novo github, e novo vercel
 - [] fazer nova base de dados
 
 - [] alterar passwords
 - [] criar ficheiro para todas as password
 
-- [X] google analitics e google console
-- [X] contacto email a funcionar
+- [x] google analitics e google console
+- [x] contacto email a funcionar
 - [] xgirl.pt a funcionar com vercel
 - [] captcha email
-- [X] header 
-- [X] tradutir todo o SEO para portugues 
-- [X] adicionar lingua PT
-- [X] pt lingua principal
-- [X] resolver login
+- [x] header
+- [x] tradutir todo o SEO para portugues
+- [x] adicionar lingua PT
+- [x] pt lingua principal
+- [x] resolver login
 - [] resolver registo
 - [] marca de agua fotos
 - [] marca de agua stories
-- []  rever todas as traducoes
-- []  pagina perfil renderizar foto grande
-- [X] eliminar perfil
-- [X] alterar passoword
-- []  recuperar password
-- []  email confirmacao
-- [X] suspender perfil
-- [] perguntas e respostas 
+- [] rever todas as traducoes
+- [] pagina perfil renderizar foto grande
+- [x] eliminar perfil
+- [x] alterar passoword
+- [] recuperar password
+- [] email confirmacao
+- [x] suspender perfil
+- [] perguntas e respostas

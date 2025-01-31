@@ -1,7 +1,7 @@
-import React from "react";
-import { FaCheckCircle, FaClipboardList } from "react-icons/fa";
-import { useTranslation } from "react-i18next";
-import { Card, CardBody } from "@nextui-org/react";
+import React from 'react';
+import { FaCheckCircle, FaClipboardList } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { Card, CardBody } from '@nextui-org/react';
 
 interface ServicosPrestadosProps {
   selectedProfile: { servico?: string[] } | null;
@@ -24,7 +24,7 @@ const ServicosPrestados: React.FC<ServicosPrestadosProps> = ({
           <div className="flex items-center gap-3 mb-4">
             <FaClipboardList className="text-pink-500 text-2xl" />
             <p className="text-pink-500 text-2xl font-semibold">
-              {t("profile.services_provided")}
+              {t('profile.services_provided')}
             </p>
           </div>
 
@@ -43,7 +43,7 @@ const ServicosPrestados: React.FC<ServicosPrestadosProps> = ({
             </div>
           ) : (
             <div className="flex flex-col items-center text-gray-400 text-base mt-4">
-              <p>{t("profile.no_services")}</p>
+              <p>{t('profile.no_services')}</p>
             </div>
           )}
         </div>

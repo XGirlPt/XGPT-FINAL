@@ -1,6 +1,5 @@
 {
-   
-  "Header":{
+  "Header": {
     "home": "Accueil",
     "escort": "Escort",
     "stories": "Histoires",
@@ -10,55 +9,53 @@
     "searchBar": "Chercher...",
     "register": "S'inscrire",
     "myAccount": "Mon compte",
-    "FR":"Francais",
-    "EN":"Anglais",
-    
-      "user": {
-        "myAccount": "Mon compte",
-        "settings": "Paramètres",
-        "logout": "Déconnexion"
-      
+    "FR": "Francais",
+    "EN": "Anglais",
+
+    "user": {
+      "myAccount": "Mon compte",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
     }
   },
-    
 
-    "Footer": {
-      "services_description": "Découvrez les meilleurs services d'escort dans les principales régions de France.",
-      "quick_links_title": "LIENS RAPIDES",
-      "escort_lisboa": "Escort à Lisbonne",
-      "escort_porto": "Escort à Oporto",
-      "escort_braga": "Escort à Braga",
-      "escort_faro": "Escort à Faro",
-      "escort_madeira": "Escort à Madeira",
-      "top_categories_title": "TOP CATÉGORIE",
-      "vip_escorts": "Escortes VIP",
-      "bdsm": "BDSM",
-      "salons": "Salons",
-      "stories": "Stories",
-      "erotic_massage": "Massage érotique",
-      "about_title": "À PROPOS",
-      "faq": "FAQ",
-      "dmca": "DMCA",
-      "report": "Report",
-      "terms_conditions": "Termes et Conditions",
-      "privacy_policy": "Politique de Confidentialité",
-      "xgirl_history": "L'histoire de XGIRL",
-      "contact": "Contact",
-      "join_us": "Nous rejoindre",
-      "disclaimer": "Ce site web est une ressource publicitaire et d'information et, à ce titre, n'a aucun lien ni aucune responsabilité avec les sites ou individus mentionnés ici. Nous vendons UNIQUEMENT des espaces publicitaires, nous ne sommes pas une agence d'escorte et nous ne sommes en aucun cas impliqués dans des activités d'escorte ou de prostitution. Nous n'assumons aucune responsabilité pour le contenu ou les actions des sites web des tiers ou des individus auxquels vous pouvez accéder en suivant les liens, les e-mails ou les contacts téléphoniques de ce portail.",
-      "copyright": "© {year} XGirl. Tous droits réservés."
-    },
+  "Footer": {
+    "services_description": "Découvrez les meilleurs services d'escort dans les principales régions de France.",
+    "quick_links_title": "LIENS RAPIDES",
+    "escort_lisboa": "Escort à Lisbonne",
+    "escort_porto": "Escort à Oporto",
+    "escort_braga": "Escort à Braga",
+    "escort_faro": "Escort à Faro",
+    "escort_madeira": "Escort à Madeira",
+    "top_categories_title": "TOP CATÉGORIE",
+    "vip_escorts": "Escortes VIP",
+    "bdsm": "BDSM",
+    "salons": "Salons",
+    "stories": "Stories",
+    "erotic_massage": "Massage érotique",
+    "about_title": "À PROPOS",
+    "faq": "FAQ",
+    "dmca": "DMCA",
+    "report": "Report",
+    "terms_conditions": "Termes et Conditions",
+    "privacy_policy": "Politique de Confidentialité",
+    "xgirl_history": "L'histoire de XGIRL",
+    "contact": "Contact",
+    "join_us": "Nous rejoindre",
+    "disclaimer": "Ce site web est une ressource publicitaire et d'information et, à ce titre, n'a aucun lien ni aucune responsabilité avec les sites ou individus mentionnés ici. Nous vendons UNIQUEMENT des espaces publicitaires, nous ne sommes pas une agence d'escorte et nous ne sommes en aucun cas impliqués dans des activités d'escorte ou de prostitution. Nous n'assumons aucune responsabilité pour le contenu ou les actions des sites web des tiers ou des individus auxquels vous pouvez accéder en suivant les liens, les e-mails ou les contacts téléphoniques de ce portail.",
+    "copyright": "© {year} XGirl. Tous droits réservés."
+  },
 
-    "dashboard": {
-      "escort_title_en": "Escort Girls et Masseuses Érotiques en France",
-      "meta_description": "Découvrez les meilleures escort girls et masseuses érotiques en France. Explorez nos annonces en vedette et nos nouveautés.",
-      "meta_keywords": "escort girls, masseuses érotiques, annonces, France, services",
-      "meta_og_description": "Trouvez les meilleures escort girls et masseuses érotiques en France. Consultez nos annonces et nos nouveautés.",
-      "featured_ads": "Annonces en Vedette",
-      "search_area": "Recherche dans ta Région",
-      "news": "Nouveautés"
-    },
-    "escort": {
+  "dashboard": {
+    "escort_title_en": "Escort Girls et Masseuses Érotiques en France",
+    "meta_description": "Découvrez les meilleures escort girls et masseuses érotiques en France. Explorez nos annonces en vedette et nos nouveautés.",
+    "meta_keywords": "escort girls, masseuses érotiques, annonces, France, services",
+    "meta_og_description": "Trouvez les meilleures escort girls et masseuses érotiques en France. Consultez nos annonces et nos nouveautés.",
+    "featured_ads": "Annonces en Vedette",
+    "search_area": "Recherche dans ta Région",
+    "news": "Nouveautés"
+  },
+  "escort": {
     "title": "Accompagnatrices de Luxe et Masseuses Érotiques au Portugal",
     "subtitle": "Découvrez les meilleures professionnelles de tout le pays",
     "search_title": "Rechercher une Escort",
@@ -68,7 +65,7 @@
     "next_page": "Suivant",
     "current_page": "Page {{currentPage}} de {{totalPages}}"
   },
- 
+
   "storyPage": {
     "titleStory": "Escort Girls, Masseuses érotiques et Accompagnatrices de luxe en France",
     "latest_stories": "Derniers Stories"
@@ -95,7 +92,8 @@
       "indeterminate": "Temps indéterminé"
     },
     "call_me": "Appelez-moi",
-    "share_profile": "Partager le Profil", "stories_of": "Histoires de {{name}}",
+    "share_profile": "Partager le Profil",
+    "stories_of": "Histoires de {{name}}",
     "description": "Description",
     "photos_of": "Photos de {{name}}",
     "loading": "Chargement...",
@@ -106,7 +104,7 @@
     "languages": "Langues",
     "accepts": "Accepte :",
     "no_payment_methods_selected": "Aucune méthode de paiement sélectionnée.",
-     "rates": "Tarifs :",
+    "rates": "Tarifs :",
     "comments": "Commentaires",
     "no_comments_yet": "Pas encore de commentaires.",
     "anonymous": "Anonyme",
@@ -115,63 +113,59 @@
     "send_comment": "Envoyer le commentaire",
 
     "linguas": {
-    "russian": "Russe",
-    "german": "Allemand",
-    "portuguese": "Portugais",
-    "french": "Français",
-    "english": "Anglais",
-    "italian": "Italien",
-    "spanish": "Espagnol",
-    "arabic": "Arabe"
+      "russian": "Russe",
+      "german": "Allemand",
+      "portuguese": "Portugais",
+      "french": "Français",
+      "english": "Anglais",
+      "italian": "Italien",
+      "spanish": "Espagnol",
+      "arabic": "Arabe"
+    },
+    "servico": {
+      "69": "69",
+      "AnulingusActivo": "Anulingus (Actif)",
+      "AnulingusPassivo": "Anulingus (Passif)",
+      "Champagne Dourado Activo": "Champagne Doré Actif",
+      "Champagne Dourado Passivo": "Champagne Doré Passif",
+      "Atende Casais": "Accepte Couples",
+      "Dedos Anal": "Doigts Anals",
+      "Dedos Vagina": "Doigts Vaginale",
+      "Dominacao soft": "Domination Douce",
+      "Dupla Penetracao": "Double Pénétration",
+      "Duo": "Duo",
+      "Ejaculacao Corporal": "Éjaculation Corporelle",
+      "Ejacular na Facial": "Éjaculer sur le Visage",
+      "Multipla Ejeculacao": "Éjaculation Multiple",
+      "Face Sitting": "Face Sitting",
+      "Fetichismo": "Fétichisme",
+      "BeijoFrances": "Baiser Français",
+      "Garganta Profunda": "Gorge Profonde",
+      "Jogos Eroticos": "Jeux Érotiques",
+      "Lingerie": "Lingerie",
+      "Massagem Erotica": "Massage Érotique",
+      "Masturbacao": "Masturbation",
+      "Experiencia Porn Star": "Expérience Porn Star",
+      "Servico VIP": "Service VIP",
+      "Sexo em Grupo": "Sexe en Groupe (Orgie)",
+      "Sex Toys": "Sex Toys",
+      "Sodomia Activa": "Sodomie Active",
+      "Sodomia Passiva": "Sodomie Passive",
+      "Striptease": "Striptease"
+    }
   },
-  "servico": {
-    "69": "69",
-    "AnulingusActivo": "Anulingus (Actif)",
-    "AnulingusPassivo": "Anulingus (Passif)",
-    "Champagne Dourado Activo": "Champagne Doré Actif",
-    "Champagne Dourado Passivo": "Champagne Doré Passif",
-    "Atende Casais": "Accepte Couples",
-    "Dedos Anal": "Doigts Anals",
-    "Dedos Vagina": "Doigts Vaginale",
-    "Dominacao soft": "Domination Douce",
-    "Dupla Penetracao": "Double Pénétration",
-    "Duo": "Duo",
-    "Ejaculacao Corporal": "Éjaculation Corporelle",
-    "Ejacular na Facial": "Éjaculer sur le Visage",
-    "Multipla Ejeculacao": "Éjaculation Multiple",
-    "Face Sitting": "Face Sitting",
-    "Fetichismo": "Fétichisme",
-    "BeijoFrances": "Baiser Français",
-    "Garganta Profunda": "Gorge Profonde",
-    "Jogos Eroticos": "Jeux Érotiques",
-    "Lingerie": "Lingerie",
-    "Massagem Erotica": "Massage Érotique",
-    "Masturbacao": "Masturbation",
-    "Experiencia Porn Star": "Expérience Porn Star",
-    "Servico VIP": "Service VIP",
-    "Sexo em Grupo": "Sexe en Groupe (Orgie)",
-    "Sex Toys": "Sex Toys",
-    "Sodomia Activa": "Sodomie Active",
-    "Sodomia Passiva": "Sodomie Passive",
-    "Striptease": "Striptease"
-  }
-
-
- 
-  },
- "loginPage": {
+  "loginPage": {
     "title": "Connexion",
     "email": "Email",
     "password": "Mot de passe",
-    "email_placeholder": "Entrez votre email", 
-    "password_placeholder": "Entrez votre mot de passe", 
+    "email_placeholder": "Entrez votre email",
+    "password_placeholder": "Entrez votre mot de passe",
     "login_button": "Se connecter",
     "register_link": "Vous n'avez pas de compte ? Inscrivez-vous ici",
     "description": "Connectez-vous à X-Girl pour découvrir des expériences uniques et confidentielles."
   },
 
-
-    "RegisterPage": {
+  "RegisterPage": {
     "title": "XGirl.fr est la référence pour les annonces descort exclusives en France",
     "description_1": "Découvrez des milliers descorts sur XGirl.fr",
     "description_2": "Le processus dinscription est simple et rapide.",
@@ -186,7 +180,6 @@
     "confirm_password_label": "Confirmez votre mot de passe*",
     "confirm_password_placeholder": "Confirmez votre mot de passe",
     "register_button": "Créez votre compte"
-    
   },
   "contact": {
     "title": "Contact",
@@ -199,75 +192,69 @@
     "message_placeholder": "Laissez votre message...",
     "send_button": "Envoyer le message",
     "thank_you_message": "Merci de nous avoir contactés sur XGirl.pt !"
-},
-"MyProfileBar": {
+  },
+  "MyProfileBar": {
     "info": "Informations",
     "other_info": "Autres Infos",
     "change_photos": "Changer les Photos",
     "my_stories": "Mes Stories",
     "settings": "Paramètres",
     "view_profile": "Voir le Profil"
-},
-"filter": {
-  "age": "Âge",
-  "select_age": "Sélectionner l'âge",
+  },
+  "filter": {
+    "age": "Âge",
+    "select_age": "Sélectionner l'âge",
 
-
-   "height": "Taille",
+    "height": "Taille",
     "select_height": "Sélectionnez la taille",
-
 
     "hair_color": "Couleur des cheveux",
     "select_hair_color": "Sélectionnez la couleur des cheveux",
- 
+
     "black": "Noir",
     "blonde": "Blond",
     "brown": "Brun",
     "red": "Rouge",
     "other": "Autre",
 
+    "body": "Corps",
+    "select_body": "Sélectionnez le type de corps",
 
-      "body": "Corps",
-      "select_body": "Sélectionnez le type de corps",
-    
-      "normal": "Normal",
-      "athletic": "Athlétique",
-      "slim": "Mince",
-      "curvy": "Ronde",
-      "xxl": "XXL",
+    "normal": "Normal",
+    "athletic": "Athlétique",
+    "slim": "Mince",
+    "curvy": "Ronde",
+    "xxl": "XXL",
 
-
-
-
-      "filter": {
-        "eye_color": "Couleur des yeux",
-        "select_eye_color": "Sélectionnez la couleur des yeux"
-      },
-      "eyes": {
-        "brown": "Marron",
-        "black": "Noir",
-        "blue": "Bleu",
-        "green": "Vert"
-      }
+    "filter": {
+      "eye_color": "Couleur des yeux",
+      "select_eye_color": "Sélectionnez la couleur des yeux"
     },
+    "eyes": {
+      "brown": "Marron",
+      "black": "Noir",
+      "blue": "Bleu",
+      "green": "Vert"
+    }
+  },
 
-    "filterB": {
-      "breasts": "Poitrine",
-      "select_breasts": "Sélectionnez le type de poitrine",
-      "breast_size": "Taille de poitrine",
-      "select_breast_size": "Sélectionnez une taille"
-    },
-    "breasts": {
-      "natural": "Naturelle",
-      "silicone": "Silicone"
-    },
-    "breast_size": {
-      "small": "Petites Seins (A-B)",
-      "large": "Grands Seins (C-D)",
-      "xxl": "Seins XXL (E+)"
-    },
-    
-      "filterP": {
+  "filterB": {
+    "breasts": "Poitrine",
+    "select_breasts": "Sélectionnez le type de poitrine",
+    "breast_size": "Taille de poitrine",
+    "select_breast_size": "Sélectionnez une taille"
+  },
+  "breasts": {
+    "natural": "Naturelle",
+    "silicone": "Silicone"
+  },
+  "breast_size": {
+    "small": "Petites Seins (A-B)",
+    "large": "Grands Seins (C-D)",
+    "xxl": "Seins XXL (E+)"
+  },
+
+  "filterP": {
     "hair_removal": "Pilosité",
     "select_hair_removal": "Sélectionnez une préférence"
   },
@@ -316,7 +303,6 @@
     "more_than_500": "+ 500€"
   },
 
-
   "profileR2": {
     "createTitle": "Créez votre profil",
     "createSubtitle": "Complétez les informations pour commencer sur"
@@ -362,12 +348,12 @@
   "button2": {
     "back": "Retour",
     "continue": "Continuer"
-  }, 
+  },
 
   "buttonHG": {
     "previous": "Précédent",
     "next": "Suivant"
-  }, 
+  },
 
   "terms": {
     "title": "Termes et Conditions d'Utilisation",
@@ -405,11 +391,4 @@
       "listItem6": "Distribuer, reproduire ou modifier des contenus sans autorisation expresse."
     }
   }
-
-
-    
-  
 }
-  
-
-  

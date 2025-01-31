@@ -1,73 +1,72 @@
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAILURE = "LOGIN_FAILURE";
-export const LOGOUT = "LOGOUT";
-export const REGISTER_USER = "REGISTER_USER";
-export const ADD_PROFILE_DATA = "ADD_PROFILE_DATA";
-export const UPDATE_NOME = "UPDATE_NOME";
-export const UPDATE_USER_ID = "UPDATE_USER_ID";
-export const UPDATE_IDADE = "UPDATE_IDADE";
-export const UPDATE_ALTURA = "UPDATE_ALTURA";
-export const UPDATE_CABELO = "UPDATE_CABELO";
-export const UPDATE_CORPO = "UPDATE_CORPO";
-export const UPDATE_MAMAS = "UPDATE_MAMAS";
-export const UPDATE_OLHOS = "UPDATE_OLHOS";
-export const UPDATE_ORIGEM = "UPDATE_ORIGEM";
-export const UPDATE_SEIOS = "UPDATE_SEIOS";
-export const UPDATE_TATUAGEM = "UPDATE_TATUAGEM";
-export const UPDATE_TELEFONE = "UPDATE_TELEFONE";
-export const UPDATE_PELOS = "UPDATE_PELOS";
-export const UPDATE_DISTRITO = "UPDATE_DISTRITO";
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT = 'LOGOUT';
+export const REGISTER_USER = 'REGISTER_USER';
+export const ADD_PROFILE_DATA = 'ADD_PROFILE_DATA';
+export const UPDATE_NOME = 'UPDATE_NOME';
+export const UPDATE_USER_ID = 'UPDATE_USER_ID';
+export const UPDATE_IDADE = 'UPDATE_IDADE';
+export const UPDATE_ALTURA = 'UPDATE_ALTURA';
+export const UPDATE_CABELO = 'UPDATE_CABELO';
+export const UPDATE_CORPO = 'UPDATE_CORPO';
+export const UPDATE_MAMAS = 'UPDATE_MAMAS';
+export const UPDATE_OLHOS = 'UPDATE_OLHOS';
+export const UPDATE_ORIGEM = 'UPDATE_ORIGEM';
+export const UPDATE_SEIOS = 'UPDATE_SEIOS';
+export const UPDATE_TATUAGEM = 'UPDATE_TATUAGEM';
+export const UPDATE_TELEFONE = 'UPDATE_TELEFONE';
+export const UPDATE_PELOS = 'UPDATE_PELOS';
+export const UPDATE_DISTRITO = 'UPDATE_DISTRITO';
 
-export const UPDATE_PHOTOS = "UPDATE_PHOTOS";
-export const UPDATE_VPHOTOS = "UPDATE_VPHOTOS";
+export const UPDATE_PHOTOS = 'UPDATE_PHOTOS';
+export const UPDATE_VPHOTOS = 'UPDATE_VPHOTOS';
 
-export const UPDATE_STORIES = "UPDATE_STORIES";
+export const UPDATE_STORIES = 'UPDATE_STORIES';
 
+export const UPDATE_TARIFA = 'UPDATE_TARIFA';
+export const SET_USER_ID = 'SET_USER_ID';
+export const UPDATE_PAGAMENTO = 'UPDATE_PAGAMENTO';
+export const UPDATE_SERVICO = 'UPDATE_SERVICO';
+export const UPDATE_LINGUA = 'UPDATE_LINGUA';
 
-export const UPDATE_TARIFA = "UPDATE_TARIFA";
-export const SET_USER_ID = "SET_USER_ID";
-export const UPDATE_PAGAMENTO = "UPDATE_PAGAMENTO";
-export const UPDATE_SERVICO = "UPDATE_SERVICO";
-export const UPDATE_LINGUA = "UPDATE_LINGUA";
+export const UPDATE_CIDADE = 'UPDATE_CIDADE';
+export const UPDATE_ADRESS = 'UPDATE_ADRESS';
+export const UPDATE_LATITUDE = 'UPDATE_LATITUDE';
+export const UPDATE_LONGITUDE = 'UPDATE_LONGITUDE';
 
-export const UPDATE_CIDADE = "UPDATE_CIDADE";
-export const UPDATE_ADRESS = "UPDATE_ADRESS";
-export const UPDATE_LATITUDE = "UPDATE_LATITUDE";
-export const UPDATE_LONGITUDE = "UPDATE_LONGITUDE";
+export const UPDATE_TAG = 'UPDATE_TAG';
+export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION';
 
+export const SET_PHOTO_URL = 'SET_PHOTO_URL';
+export const SET_VPHOTO_URL = 'SET_VPHOTO_URL';
+export const SET_STORY_URL = 'SET_STORY_URL';
 
-export const UPDATE_TAG = "UPDATE_TAG"
-export const UPDATE_DESCRIPTION = "UPDATE_DESCRIPTION";
+export const UPDATE_SIGNO = 'UPDATE_SIGNO';
+export const UPDATE_PROFILES = 'UPDATE_PROFILES';
+export const SET_SELECTED_PROFILE = 'SET_SELECTED_PROFILE';
 
-
-export const SET_PHOTO_URL = "SET_PHOTO_URL";
-export const SET_VPHOTO_URL = "SET_VPHOTO_URL";
-export const SET_STORY_URL = "SET_STORY_URL";
-
-
-export const UPDATE_SIGNO = "UPDATE_SIGNO";
-export const UPDATE_PROFILES = "UPDATE_PROFILES";
-export const SET_SELECTED_PROFILE = "SET_SELECTED_PROFILE";
-
-
-export const loginSuccess = (userData: { email: string; token: string; user: any }) => {
+export const loginSuccess = (userData: {
+  email: string;
+  token: string;
+  user: any;
+}) => {
   if (!userData || !userData.token || !userData.email) {
-    console.error("Dados de login incompletos:", userData);
+    console.error('Dados de login incompletos:', userData);
     return {
       type: LOGIN_FAILURE,
-      payload: "Dados de login incompletos",
+      payload: 'Dados de login incompletos',
     };
   }
 
   return {
     type: LOGIN_SUCCESS,
-    payload: userData
+    payload: userData,
   };
 };
 
 export const loginFailure = (error: any) => ({
   type: LOGIN_FAILURE,
-  payload: error
+  payload: error,
 });
 
 export const logout = () => {
@@ -77,7 +76,6 @@ export const logout = () => {
     type: LOGOUT,
   };
 };
-
 
 export const registerUser = (userUID: string, email: string) => ({
   type: REGISTER_USER,
@@ -177,7 +175,6 @@ export const updateVPhotos = (vphotos: any) => ({
   payload: vphotos,
 });
 
-
 export const updateStories = (stories: any) => ({
   type: UPDATE_STORIES,
   payload: stories,
@@ -227,7 +224,6 @@ export const updateLongitude = (longitude: any) => ({
   payload: longitude,
 });
 
-
 export const updateTag = (tag: any) => ({
   type: UPDATE_TAG,
   payload: tag,
@@ -254,14 +250,13 @@ export const setStoryURL = (url: any) => ({
 });
 
 export const updateProfiles = (profiles: any) => {
-  console.log("Atualizando perfis com:", profiles);
+  console.log('Atualizando perfis com:', profiles);
   // Adicione uma verificação para garantir que cada perfil tem um campo photos definido para testes
   const enhancedProfiles = profiles.map((profile: any) => ({
     ...profile,
     photoURL: profile.photoURL,
     storyURL: profile.storyURL,
-    vphotoURL: profile.vphotoURL
-    
+    vphotoURL: profile.vphotoURL,
   }));
   return {
     type: UPDATE_PROFILES,
@@ -273,6 +268,3 @@ export const setSelectedProfile = (profile: any) => ({
   type: SET_SELECTED_PROFILE, // Este tipo precisa ser tratado em seu reducer
   payload: profile,
 });
-
-
-

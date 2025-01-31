@@ -1,13 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CommonFilter from "./common-filter";
-import { updateOlhos } from "../../actions/ProfileActions";
-import {useTranslation} from "react-i18next";
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommonFilter from './common-filter';
+import { updateOlhos } from '../../actions/ProfileActions';
+import { useTranslation } from 'react-i18next';
 
 const FiltroOlhos: React.FC = () => {
-      const {t, i18n} = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const dispatch = useDispatch();
   const olhosRedux = useSelector(
     (state: any) => state.profile?.profile?.olhos || null
@@ -16,7 +15,6 @@ const FiltroOlhos: React.FC = () => {
   const handleOlhosChange = (newValue: string) => {
     dispatch(updateOlhos(newValue));
   };
-
 
   const olhosOptions = [
     { id: 1, name: t('filter.eyes.brown'), unavailable: false },
@@ -27,12 +25,12 @@ const FiltroOlhos: React.FC = () => {
 
   return (
     <CommonFilter
-    label={t('filter.filter.eye_color')}
-    options={olhosOptions}
+      label={t('filter.filter.eye_color')}
+      options={olhosOptions}
       value={olhosRedux}
       onChange={handleOlhosChange}
       placeholder={t('filter.filter.select_eye_color')}
-      />
+    />
   );
 };
 

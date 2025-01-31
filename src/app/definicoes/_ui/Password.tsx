@@ -1,21 +1,21 @@
-import CommonInput from "@/components/ui/common-input";
-import { AuthService } from "@/services/authService";
-import React, { useState } from "react";
-import { FaLock } from "react-icons/fa";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import CommonInput from '@/components/ui/common-input';
+import { AuthService } from '@/services/authService';
+import React, { useState } from 'react';
+import { FaLock } from 'react-icons/fa';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Password: React.FC = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const resetForm = () => {
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
     setError(null);
   };
 
@@ -23,17 +23,20 @@ const Password: React.FC = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setError("As senhas não correspondem.");
+      setError('As senhas não correspondem.');
       return;
     }
 
-    const response = await AuthService.changePassword(currentPassword, newPassword);
+    const response = await AuthService.changePassword(
+      currentPassword,
+      newPassword
+    );
 
     if (response.success) {
-      setSuccess(response.message || "Senha alterada com sucesso!");
+      setSuccess(response.message || 'Senha alterada com sucesso!');
       resetForm();
     } else {
-      setError(response.error || "Erro ao alterar a senha");
+      setError(response.error || 'Erro ao alterar a senha');
     }
   };
 

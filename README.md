@@ -27,19 +27,16 @@
 
 ## Installation
 
-
-
-
-
 ##📋 Prérequis
-1. Node.js (version 16 ou supérieure)
-    Yarn ou npm
-    git clone https://github.com/username/XGirl.git
 
-##  
+1. Node.js (version 16 ou supérieure)
+   Yarn ou npm
+   git clone https://github.com/username/XGirl.git
+
+##
+
 Pour récupérer les dernières modifications sans affecter ta branche actuelle :
 en makedown
-
 
 # Git Fetch
 
@@ -54,15 +51,20 @@ La commande `git fetch` dans Git permet de récupérer les dernières modificati
 ## Exemple d'utilisation de `git fetch`
 
 1. Pour récupérer les dernières modifications sans affecter ta branche actuelle :
+
    ```bash
    git fetch
 
+   ```
 
-0. branche dev
-    ```bash
+2. branche dev
+
+   ```bash
    git switch dev
 
-0. branche translation
-    ```bash
-   git switch translation
+   ```
 
+3. branche translation
+   ```bash
+   git switch translation
+   ```

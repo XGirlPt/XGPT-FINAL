@@ -1,18 +1,18 @@
-"use client";
-import { useEffect, useState } from "react";
-import HeaderLoged from "../../../components/register/header-loged"
-import supabase from "@/database/supabase";
-import { useSelector } from "react-redux";
-import { MdOutlineEmail } from "react-icons/md";
-import { FaLock } from "react-icons/fa";
-import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
-import { ImBin } from "react-icons/im";
-import Link from "next/link";
-import { RootState } from "@/store";
-import { useRouter } from "next/navigation";
+'use client';
+import { useEffect, useState } from 'react';
+import HeaderLoged from '../../../components/register/header-loged';
+import supabase from '@/database/supabase';
+import { useSelector } from 'react-redux';
+import { MdOutlineEmail } from 'react-icons/md';
+import { FaLock } from 'react-icons/fa';
+import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
+import { ImBin } from 'react-icons/im';
+import Link from 'next/link';
+import { RootState } from '@/store';
+import { useRouter } from 'next/navigation';
 
 function Definicoes() {
-  const [activeTab, setActiveTab] = useState("email");
+  const [activeTab, setActiveTab] = useState('email');
   const reduxState = useSelector((state: RootState) => state);
   const userEmailRedux = useSelector(
     (state: any) => state.profile?.user?.user?.email
@@ -26,11 +26,11 @@ function Definicoes() {
       const { data, error } = await supabase.auth.getSession();
       if (error || !data.session) {
         console.log(
-          "Sessão não iniciada ou erro ao verificar a sessão:",
+          'Sessão não iniciada ou erro ao verificar a sessão:',
           error
         );
       } else {
-        console.log("Sessão iniciada:", data.session);
+        console.log('Sessão iniciada:', data.session);
       }
     };
 
@@ -39,14 +39,14 @@ function Definicoes() {
 
   const handleDeleteAccount = async () => {
     try {
-      if (!userUID) throw new Error("User ID is missing");
+      if (!userUID) throw new Error('User ID is missing');
 
       const { error } = await supabase.auth.admin.deleteUser(userUID);
       if (error) throw error;
 
-      router.push("/");
+      router.push('/');
     } catch (error: any) {
-      console.error("Erro ao excluir conta:", error.message);
+      console.error('Erro ao excluir conta:', error.message);
     }
   };
 
@@ -60,9 +60,9 @@ function Definicoes() {
 
         <div className="flex my-4 align-center items-center justify-center">
           <div
-            onClick={() => setActiveTab("email")}
+            onClick={() => setActiveTab('email')}
             className={`flex ${
-              activeTab === "email" ? "bg-pink-800" : "bg-gray-400"
+              activeTab === 'email' ? 'bg-pink-800' : 'bg-gray-400'
             } hover:bg-pink-900 text-white px-6 py-2 cursor-pointer align-center items-center rounded-l-md`}
           >
             <MdOutlineEmail
@@ -73,9 +73,9 @@ function Definicoes() {
           </div>
 
           <div
-            onClick={() => setActiveTab("password")}
+            onClick={() => setActiveTab('password')}
             className={`flex ${
-              activeTab === "password" ? "bg-pink-800" : "bg-gray-400"
+              activeTab === 'password' ? 'bg-pink-800' : 'bg-gray-400'
             } hover:bg-pink-900 text-white px-6 py-2 cursor-pointer align-center items-center`}
           >
             <FaLock size={18} className="mr-2 items-center align-middle" />
@@ -83,9 +83,9 @@ function Definicoes() {
           </div>
 
           <div
-            onClick={() => setActiveTab("billing")}
+            onClick={() => setActiveTab('billing')}
             className={`flex ${
-              activeTab === "billing" ? "bg-pink-800" : "bg-gray-400"
+              activeTab === 'billing' ? 'bg-pink-800' : 'bg-gray-400'
             } hover:bg-pink-900 text-white px-6 py-2 cursor-pointer align-center items-center`}
           >
             <LiaFileInvoiceDollarSolid
@@ -96,9 +96,9 @@ function Definicoes() {
           </div>
 
           <div
-            onClick={() => setActiveTab("delete")}
+            onClick={() => setActiveTab('delete')}
             className={`flex ${
-              activeTab === "delete" ? "bg-pink-800" : "bg-gray-400"
+              activeTab === 'delete' ? 'bg-pink-800' : 'bg-gray-400'
             } hover:bg-pink-900 text-white px-6 py-2 cursor-pointer align-center items-center rounded-r-md`}
           >
             <ImBin size={20} className="mr-2 items-center align-middle" />
@@ -107,7 +107,7 @@ function Definicoes() {
         </div>
 
         {/* Content for each section */}
-        {activeTab === "email" && (
+        {activeTab === 'email' && (
           <div className="bg-[#1E2427] py-6 w-1/2 px-10 border mt-6 border-gray-600 rounded-md mb-20 mx-auto">
             <p className="text-pink-800 text-2xl">Endereços de Email</p>
             <p className="text-white">
@@ -137,7 +137,7 @@ function Definicoes() {
           </div>
         )}
 
-        {activeTab === "password" && (
+        {activeTab === 'password' && (
           <div className="bg-[#1E2427] py-6 w-1/2 px-10 border mt-6 border-gray-600 rounded-md mb-10 mx-auto">
             <p className="text-pink-800 text-2xl">Alterar Palavra Passe</p>
             <div className="mt-6">
@@ -172,7 +172,7 @@ function Definicoes() {
           </div>
         )}
 
-        {activeTab === "billing" && (
+        {activeTab === 'billing' && (
           <div className="bg-[#1E2427] py-6 w-1/2 px-10 border mt-6 border-gray-600 rounded-md mb-10 mx-auto">
             <p className="text-pink-800 text-2xl">Detalhes de Faturação</p>
             <p className="text-white">
@@ -181,7 +181,7 @@ function Definicoes() {
           </div>
         )}
 
-        {activeTab === "delete" && (
+        {activeTab === 'delete' && (
           <div className="bg-[#1E2427] py-6 w-1/2 px-10 border mt-6 border-gray-600 rounded-md mb-10 mx-auto">
             <p className="text-pink-800 text-2xl mb-4">Eliminar Conta</p>
             <p className="text-white">

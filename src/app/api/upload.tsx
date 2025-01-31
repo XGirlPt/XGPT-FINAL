@@ -29,7 +29,7 @@
 //   if (req.method === 'POST') {
 //     try {
 //       const { image, userUID, fileName } = req.body;
-      
+
 //       const buffer = Buffer.from(image, 'base64');
 //       const watermarkedBuffer = await addWatermark(buffer, 0.3);
 //       const webpBuffer = await sharp(watermarkedBuffer).webp().toBuffer();
@@ -53,7 +53,6 @@
 //   }
 // }
 
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
 import supabase from '@/database/supabase';
@@ -64,18 +63,21 @@ async function convertToWebP(imagePath: string): Promise<Buffer> {
   return sharp(buffer).webp().toBuffer();
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === 'POST') {
     try {
       const { image, userUID, fileName } = req.body;
-      
+
       const buffer = Buffer.from(image, 'base64');
       const webpBuffer = await sharp(buffer).webp().toBuffer();
 
-      const filePath = `${userUID}/${fileName.toLowerCase().replace(/ /g, "_").replace(/\./g, "_")}`;
+      const filePath = `${userUID}/${fileName.toLowerCase().replace(/ /g, '_').replace(/\./g, '_')}`;
 
       const { data, error } = await supabase.storage
-        .from("profileFoto")
+        .from('profileFoto')
         .upload(filePath, webpBuffer, { contentType: 'image/webp' });
 
       if (error) throw new Error(error.message);
@@ -83,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const publicURLFoto = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/profileFoto/${filePath}`;
       res.status(200).json({ url: publicURLFoto });
     } catch (error: any) {
-      console.error("Erro durante o upload:", error.message);
+      console.error('Erro durante o upload:', error.message);
       res.status(500).json({ error: error.message });
     }
   } else {

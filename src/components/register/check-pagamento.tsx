@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { pink } from "@mui/material/colors";
-import { useSelector, useDispatch } from "react-redux";
-import { updatePagamento } from "../../actions/ProfileActions";
+import { useState, useEffect } from 'react';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { pink } from '@mui/material/colors';
+import { useSelector, useDispatch } from 'react-redux';
+import { updatePagamento } from '../../actions/ProfileActions';
 
 interface State {
   [key: string]: boolean;
@@ -27,7 +27,7 @@ const CheckPagamento: React.FC = () => {
   const pagamentoRedux = useSelector(
     (state: any) => state.profile?.profile?.pagamento
   );
-  console.log("pagamentoRedux", pagamentoRedux);
+  console.log('pagamentoRedux', pagamentoRedux);
 
   const [checkboxes, setCheckboxes] = useState<State>(
     initialState || pagamentoRedux
@@ -56,7 +56,7 @@ const CheckPagamento: React.FC = () => {
     setSelectedPagamento(updatedPagamento);
   };
 
-  console.log("selectedPagamento:", selectedPagamento);
+  console.log('selectedPagamento:', selectedPagamento);
 
   return (
     <div>
@@ -69,8 +69,8 @@ const CheckPagamento: React.FC = () => {
                   <Checkbox
                     size="small"
                     sx={{
-                      color: "white",
-                      "&.Mui-checked": { color: pink[800] },
+                      color: 'white',
+                      '&.Mui-checked': { color: pink[800] },
                     }}
                     onChange={handleCheckChange}
                     name={key}
@@ -84,7 +84,6 @@ const CheckPagamento: React.FC = () => {
               />
             </div>
           ))}
-
         </div>
       </FormGroup>
     </div>

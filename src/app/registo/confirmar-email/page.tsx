@@ -1,8 +1,8 @@
-"use client"; // Garantir que o código seja executado no lado do cliente
+'use client'; // Garantir que o código seja executado no lado do cliente
 
-import { useRouter } from "next/navigation"; // Importando o useRouter do next/navigation
-import React, { useEffect, useState } from "react";
-import supabase from "@/database/supabase"; // Importe o Supabase para verificar a sessão
+import { useRouter } from 'next/navigation'; // Importando o useRouter do next/navigation
+import React, { useEffect, useState } from 'react';
+import supabase from '@/database/supabase'; // Importe o Supabase para verificar a sessão
 
 const ConfirmarEmail = () => {
   const [isClient, setIsClient] = useState(false); // Garantir que o código só execute no cliente
@@ -32,7 +32,7 @@ const ConfirmarEmail = () => {
   useEffect(() => {
     if (isVerified) {
       // Realiza a navegação para a criação de perfil quando o e-mail for confirmado
-      router.push("/registo/registo-entrada");
+      router.push('/registo/registo-entrada');
     }
   }, [isVerified, router]);
 
@@ -43,7 +43,10 @@ const ConfirmarEmail = () => {
   return (
     <div className="h-screen">
       <h2>Por favor, verifique seu e-mail.</h2>
-      <p>Um link foi enviado para o seu e-mail. Clique no link para confirmar sua conta.</p>
+      <p>
+        Um link foi enviado para o seu e-mail. Clique no link para confirmar sua
+        conta.
+      </p>
     </div>
   );
 };

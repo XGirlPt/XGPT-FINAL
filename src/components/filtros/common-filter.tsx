@@ -18,10 +18,10 @@ export interface CommonFilterProps {
   iconColor?: string;
 }
 
-import React from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import React from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 const CommonFilter = ({
   label,
@@ -67,8 +67,8 @@ const CommonFilter = ({
                       className={({ active }) =>
                         `relative py-2.5 pl-3 pr-9 cursor-pointer select-none ${
                           active
-                            ? "bg-pink-500 text-white"
-                            : "text-gray-200 hover:bg-[#2D3748]"
+                            ? 'bg-pink-500 text-white'
+                            : 'text-gray-200 hover:bg-[#2D3748]'
                         }`
                       }
                       value={option}
@@ -78,7 +78,7 @@ const CommonFilter = ({
                         <>
                           <span
                             className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
+                              selected ? 'font-medium' : 'font-normal'
                             }`}
                           >
                             {option.name}
@@ -86,7 +86,7 @@ const CommonFilter = ({
                           {selected && (
                             <span
                               className={`absolute inset-y-0 right-0 flex items-center pr-3 ${
-                                active ? "text-white" : "text-[#E84393]"
+                                active ? 'text-white' : 'text-[#E84393]'
                               }`}
                             >
                               <CheckIcon

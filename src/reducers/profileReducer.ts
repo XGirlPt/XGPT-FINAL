@@ -7,7 +7,6 @@ import {
   UPDATE_NOME,
   UPDATE_MAMAS,
   UPDATE_ALTURA,
-
   UPDATE_ORIGEM,
   UPDATE_CORPO,
   UPDATE_CABELO,
@@ -17,46 +16,33 @@ import {
   UPDATE_TELEFONE,
   UPDATE_PELOS,
   UPDATE_IDADE,
-
   UPDATE_CIDADE,
   UPDATE_ADRESS,
   UPDATE_DISTRITO,
   UPDATE_LATITUDE,
   UPDATE_LONGITUDE,
-  
   UPDATE_TAG,
-
   UPDATE_DESCRIPTION,
   UPDATE_LINGUA,
   UPDATE_PAGAMENTO,
   UPDATE_SERVICO,
   UPDATE_SIGNO,
-
-
   SET_PHOTO_URL,
   SET_STORY_URL,
   SET_VPHOTO_URL,
-
   UPDATE_PHOTOS,
   UPDATE_VPHOTOS,
   UPDATE_STORIES,
-
-
-
   UPDATE_PROFILES,
   SET_SELECTED_PROFILE,
-
-  UPDATE_TARIFA
-} from "../actions/ProfileActions";
-
-
-
+  UPDATE_TARIFA,
+} from '../actions/ProfileActions';
 
 // Define the state type
 interface Profile {
   userUID: string | null;
   photos: string[];
-  vphotos: string [];
+  vphotos: string[];
   stories: string[];
   nome?: string | null;
   email?: string | null;
@@ -65,13 +51,13 @@ interface Profile {
   cabelo?: string | null;
 
   cidade?: string | null;
-  adress?:  string | null;
+  adress?: string | null;
   distrito?: string | null;
   latitude?: number | null;
   longitude?: number | null;
   tag?: string | null;
   mamas?: string | null;
-  
+
   origem?: string | null;
   signo?: string | null;
   corpo?: string | null;
@@ -88,11 +74,10 @@ interface Profile {
   photoURL?: string | null;
   storyURL?: string | null;
   vphotoURL?: string | null;
-  
+
   tarifa?: string | null;
 
-  isAuthenticated: boolean,
-
+  isAuthenticated: boolean;
 }
 
 interface AppState {
@@ -146,8 +131,6 @@ interface UpdateIdadeAction {
   payload: number;
 }
 
-
-
 interface UpdateCidadeAction {
   type: typeof UPDATE_CIDADE;
   payload: string;
@@ -170,7 +153,7 @@ interface UpdateLongitudeAction {
 
 interface UpdateTagAction {
   type: typeof UPDATE_TAG;
-  payload: string
+  payload: string;
 }
 
 interface UpdateMamasAction {
@@ -255,7 +238,7 @@ interface UpdateDescriptionAction {
 
 interface updateTarifaAction {
   type: typeof UPDATE_TARIFA;
-  payload: string
+  payload: string;
 }
 
 interface SetPhotoUrlAction {
@@ -267,7 +250,6 @@ interface SetVPhotoUrlAction {
   type: typeof SET_VPHOTO_URL;
   payload: string[];
 }
-
 
 interface SetStoryUrlAction {
   type: typeof SET_STORY_URL;
@@ -299,8 +281,6 @@ interface SetSelectedProfileAction {
   payload: Profile;
 }
 
-
-
 // Combine the action types in a union
 type ProfileActionTypes =
   | LoginSuccessAction
@@ -310,18 +290,14 @@ type ProfileActionTypes =
   | AddProfileDataAction
   | UpdateNomeAction
   | UpdateIdadeAction
-
   | UpdateCidadeAction
   | UpdateAdressAction
   | UpdateDistritoAction
   | UpdateLatitudeAction
   | UpdateLongitudeAction
-
-
   | UpdateTagAction
   | UpdateMamasAction
   | UpdateAlturaAction
- 
   | UpdateOrigemAction
   | UpdateSignoAction
   | UpdateCorpoAction
@@ -336,20 +312,14 @@ type ProfileActionTypes =
   | UpdatePagamentoAction
   | UpdateServicoAction
   | UpdateDescriptionAction
-
   | SetPhotoUrlAction
   | UpdatePhotosAction
- 
   | SetVPhotoUrlAction
   | UpdateVPhotosAction
-
-
   | SetStoryUrlAction
   | UpdateStoriesAction
-
   | UpdateProfilesAction
-  | SetSelectedProfileAction
-  
+  | SetSelectedProfileAction;
 
 // Define the initial state
 const initialState: AppState = {
@@ -366,7 +336,6 @@ const initialState: AppState = {
     stories: [],
     tag: null,
     isAuthenticated: false, // Adicione isso
-
   },
 };
 
@@ -377,41 +346,40 @@ const rootReducer = (
 ): AppState => {
   switch (action.type) {
     case LOGIN_SUCCESS:
-  return {
-    ...state,
-    user: action.payload.user,
-    token: action.payload.token,
-    isLoggedIn: true,
-    email: action.payload.email,
-    profile: {
-      ...state.profile,
-      ...action.payload.profileData,
-    },
-  };
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+        isLoggedIn: true,
+        email: action.payload.email,
+        profile: {
+          ...state.profile,
+          ...action.payload.profileData,
+        },
+      };
 
-      case LOGIN_FAILURE:
-        return {
-          ...state,
-          error: action.payload,
-          isLoggedIn: false,
-        };
-      case LOGOUT:
-        return {
-          ...state,
-          user: null,
-          token: null,
-          isLoggedIn: false,
-          email: null,
-          profile: {
-            userUID: null,
-            photos: [],
-            stories: [],
-            vphotos:[],
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        isLoggedIn: false,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        user: null,
+        token: null,
+        isLoggedIn: false,
+        email: null,
+        profile: {
+          userUID: null,
+          photos: [],
+          stories: [],
+          vphotos: [],
 
-            isAuthenticated: false
-          },
-        };
-
+          isAuthenticated: false,
+        },
+      };
 
     case REGISTER_USER:
       return {
@@ -462,43 +430,41 @@ const rootReducer = (
         },
       };
 
-
-      case UPDATE_ADRESS:
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            adress: action.payload,
-          },
-        };
-
-        case UPDATE_LATITUDE:
-          return {
-            ...state,
-            profile: {
-              ...state.profile,
-              latitude: action.payload,
-            },
-          };
-
-          case UPDATE_LONGITUDE:
-            return {
-              ...state,
-              profile: {
-                ...state.profile,
-                longitude: action.payload,
-              },
-            };
-
-
-      case UPDATE_TAG:
-        return {
+    case UPDATE_ADRESS:
+      return {
         ...state,
-          profile: {
-            ...state.profile,
-            tag: action.payload,
-          },
-        };
+        profile: {
+          ...state.profile,
+          adress: action.payload,
+        },
+      };
+
+    case UPDATE_LATITUDE:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          latitude: action.payload,
+        },
+      };
+
+    case UPDATE_LONGITUDE:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          longitude: action.payload,
+        },
+      };
+
+    case UPDATE_TAG:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          tag: action.payload,
+        },
+      };
 
     case UPDATE_MAMAS:
       return {
@@ -617,14 +583,14 @@ const rootReducer = (
         },
       };
 
-      case UPDATE_TARIFA:
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            tarifa: action.payload,
-          },
-        };
+    case UPDATE_TARIFA:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          tarifa: action.payload,
+        },
+      };
 
     case UPDATE_PAGAMENTO:
       return {
@@ -654,7 +620,7 @@ const rootReducer = (
       };
 
     case SET_PHOTO_URL:
-      console.log("URLs das fotos recebidas no redutor:", action.payload);
+      console.log('URLs das fotos recebidas no redutor:', action.payload);
       return {
         ...state,
         profile: {
@@ -663,8 +629,11 @@ const rootReducer = (
         },
       };
 
-      case SET_VPHOTO_URL:
-      console.log("URLs das Verification fotos recebidas no redutor:", action.payload);
+    case SET_VPHOTO_URL:
+      console.log(
+        'URLs das Verification fotos recebidas no redutor:',
+        action.payload
+      );
       return {
         ...state,
         profile: {
@@ -673,15 +642,15 @@ const rootReducer = (
         },
       };
 
-      case SET_STORY_URL:
-        console.log("URLs dos Stories recebidas no redutor:", action.payload);
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            stories: action.payload,
-          },
-        };
+    case SET_STORY_URL:
+      console.log('URLs dos Stories recebidas no redutor:', action.payload);
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          stories: action.payload,
+        },
+      };
 
     case UPDATE_PHOTOS:
       return {
@@ -692,16 +661,16 @@ const rootReducer = (
         },
       };
 
-      case UPDATE_VPHOTOS:
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            vphotos: action.payload,
-          },
-        };
+    case UPDATE_VPHOTOS:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          vphotos: action.payload,
+        },
+      };
 
-  case UPDATE_STORIES:
+    case UPDATE_STORIES:
       return {
         ...state,
         profile: {
@@ -710,35 +679,32 @@ const rootReducer = (
         },
       };
 
+    case UPDATE_PROFILES:
+      console.log('Recebendo perfis para atualização:', action.payload);
+      return {
+        ...state,
+        profiles: action.payload.map((profile) => ({
+          ...profile,
+          photoURL: profile.photoURL || '', // Garante que photoURL tenha um valor
+          storyURL: profile.storyURL || '',
+          vphotoURL: profile.vphotoURL || '', // Garante que photoURL tenha um valor
 
-      case UPDATE_PROFILES:
-        console.log("Recebendo perfis para atualização:", action.payload);
-        return {
-          ...state,
-          profiles: action.payload.map((profile) => ({
-            ...profile,
-            photoURL: profile.photoURL || "",  // Garante que photoURL tenha um valor
-            storyURL: profile.storyURL || "",
-            vphotoURL: profile.vphotoURL || "",  // Garante que photoURL tenha um valor
+          // Garante que storyURL tenha um valor
+        })),
+      };
 
-            // Garante que storyURL tenha um valor
-          })),
-        };
-      
-      // Define o perfil selecionado com verificação de photos e stories
-      case SET_SELECTED_PROFILE:
-        return {
-          ...state,
-          selectedProfile: {
-            ...action.payload,
-            photoURL: action.payload.photos?.[0] || "",  // Verifica se photos existe e tem pelo menos um item
-            storyURL: action.payload.stories?.[0] || "",
-            vphotoURL: action.payload.vphotos?.[0] || "",  // Verifica se photos existe e tem pelo menos um item
-            // Verifica se stories existe e tem pelo menos um item
-          },
-        };
-  
-  
+    // Define o perfil selecionado com verificação de photos e stories
+    case SET_SELECTED_PROFILE:
+      return {
+        ...state,
+        selectedProfile: {
+          ...action.payload,
+          photoURL: action.payload.photos?.[0] || '', // Verifica se photos existe e tem pelo menos um item
+          storyURL: action.payload.stories?.[0] || '',
+          vphotoURL: action.payload.vphotos?.[0] || '', // Verifica se photos existe e tem pelo menos um item
+          // Verifica se stories existe e tem pelo menos um item
+        },
+      };
 
     default:
       return state;
@@ -746,5 +712,3 @@ const rootReducer = (
 };
 
 export default rootReducer;
-
-

@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { FaMapMarkerAlt, FaFireAlt, FaVideo, FaCrown } from "react-icons/fa"; // Ícone de "Movie"
-import { VscVerifiedFilled } from "react-icons/vsc";
-import { RiMessage2Fill } from "react-icons/ri";
-import { MdFiberManualRecord } from "react-icons/md"; // Ícone de "Live"
-import Image from "next/image";
-import { useEffect, useState, useCallback } from "react";
+import Link from 'next/link';
+import { FaMapMarkerAlt, FaFireAlt, FaVideo, FaCrown } from 'react-icons/fa'; // Ícone de "Movie"
+import { VscVerifiedFilled } from 'react-icons/vsc';
+import { RiMessage2Fill } from 'react-icons/ri';
+import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
+import Image from 'next/image';
+import { useEffect, useState, useCallback } from 'react';
 import { Heart } from 'lucide-react';
-import { useLanguage } from "../../context/LanguageContext"; // Importe o contexto de idioma
-import { useTranslation } from "react-i18next";
-import { AiOutlineClockCircle } from "react-icons/ai";
+import { useLanguage } from '../../context/LanguageContext'; // Importe o contexto de idioma
+import { useTranslation } from 'react-i18next';
+import { AiOutlineClockCircle } from 'react-icons/ai';
 
 interface Profile {
   nome: string;
@@ -30,19 +30,24 @@ interface MainCardProps {
   customClass?: string;
 }
 
-const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage, onProfileClick,  }) => {
+const MainCard: React.FC<MainCardProps> = ({
+  profiles,
+  currentPage,
+  itemsPerPage,
+  onProfileClick,
+}) => {
   const [timeElapsedList, setTimeElapsedList] = useState<string[]>([]);
 
   const formatTimeElapsed = useCallback((minutesElapsed: number): string => {
     const hoursElapsed = minutesElapsed / 60;
     if (hoursElapsed > 48) {
-      return "Há mais de 48 horas";
+      return 'Há mais de 48 horas';
     } else if (minutesElapsed < 60) {
-      return `Há ${minutesElapsed} minuto${minutesElapsed !== 1 ? "s" : ""}`;
+      return `Há ${minutesElapsed} minuto${minutesElapsed !== 1 ? 's' : ''}`;
     } else {
       const hours = Math.floor(hoursElapsed);
       const minutes = minutesElapsed % 60;
-      return `Há ${hours} hora${hours !== 1 ? "s" : ""}${minutes > 0 ? ` ${minutes} minuto${minutes !== 1 ? "s" : ""}` : ""}`;
+      return `Há ${hours} hora${hours !== 1 ? 's' : ''}${minutes > 0 ? ` ${minutes} minuto${minutes !== 1 ? 's' : ''}` : ''}`;
     }
   }, []);
 
@@ -50,7 +55,7 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
     (tagTimestamp: string): string => {
       const timestampDate = new Date(tagTimestamp);
       if (isNaN(timestampDate.getTime())) {
-        return "Tempo indeterminado";
+        return 'Tempo indeterminado';
       }
       const currentTime = Date.now();
       const elapsedTime = currentTime - timestampDate.getTime();
@@ -61,11 +66,15 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
   );
 
   useEffect(() => {
-    const timeElapsed = profiles.map(profile => calculateTimeElapsed(profile.tagtimestamp));
+    const timeElapsed = profiles.map((profile) =>
+      calculateTimeElapsed(profile.tagtimestamp)
+    );
     setTimeElapsedList(timeElapsed);
 
     const interval = setInterval(() => {
-      const updatedTimeElapsed = profiles.map(profile => calculateTimeElapsed(profile.tagtimestamp));
+      const updatedTimeElapsed = profiles.map((profile) =>
+        calculateTimeElapsed(profile.tagtimestamp)
+      );
       setTimeElapsedList(updatedTimeElapsed);
     }, 60000);
 
@@ -80,7 +89,10 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
   });
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProfiles = sortedProfiles.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedProfiles = sortedProfiles.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = useLanguage();
@@ -88,7 +100,7 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
   return (
     <div className="mb-12">
       <h2 className="text-3xl font-bold mb-6 dark:text-white">
-        {t("dashboard.featured_ads")}
+        {t('dashboard.featured_ads')}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -100,7 +112,7 @@ const MainCard: React.FC<MainCardProps> = ({ profiles, currentPage, itemsPerPage
             <div className="relative w-full h-64">
               {/* Imagem com tamanho consistente */}
               <Image
-                src={profile.photos[0] || "/logo.webp"}
+                src={profile.photos[0] || '/logo.webp'}
                 alt={profile.nome}
                 className="object-cover w-full h-full"
                 priority

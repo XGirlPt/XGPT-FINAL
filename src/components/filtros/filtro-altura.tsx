@@ -1,18 +1,17 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateAltura } from "../../actions/ProfileActions";
-import CommonFilter from "./common-filter";
-import {useTranslation} from "react-i18next";
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateAltura } from '../../actions/ProfileActions';
+import CommonFilter from './common-filter';
+import { useTranslation } from 'react-i18next';
 
 const alturaOptions = [
-  { id: 1, name: "< 1,60m", unavailable: false },
-  { id: 2, name: "+ / - 1,65m", unavailable: false },
-  { id: 3, name: "> 1,70m", unavailable: false },
+  { id: 1, name: '< 1,60m', unavailable: false },
+  { id: 2, name: '+ / - 1,65m', unavailable: false },
+  { id: 3, name: '> 1,70m', unavailable: false },
 ];
 
 const FiltroAltura: React.FC = () => {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch();
   const alturaRedux = useSelector(
@@ -25,22 +24,16 @@ const FiltroAltura: React.FC = () => {
 
   return (
     <CommonFilter
-    label={t('filter.height')}
+      label={t('filter.height')}
       options={alturaOptions}
       value={alturaRedux}
       onChange={handleAlturaChange}
       placeholder={t('filter.select_height')}
-      />
+    />
   );
 };
 
 export default FiltroAltura;
-
-
-
-
-
-
 
 // const signoOptions = [
 //   { id: 1, name: t('zodiac.aries'), unavailable: false },

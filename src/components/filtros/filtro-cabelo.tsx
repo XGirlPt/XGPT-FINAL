@@ -1,26 +1,20 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CommonFilter from "./common-filter";
-import { updateCabelo } from "../../actions/ProfileActions";
-import {useTranslation} from "react-i18next";
-
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommonFilter from './common-filter';
+import { updateCabelo } from '../../actions/ProfileActions';
+import { useTranslation } from 'react-i18next';
 
 const FiltroCabelo: React.FC = () => {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch();
   const cabeloRedux = useSelector(
     (state: any) => state.profile?.profile?.cabelo || null
   );
 
-
-
-
   const handleCabeloChange = (newValue: string) => {
     dispatch(updateCabelo(newValue));
   };
-
 
   const cabeloOptions = [
     { id: 1, name: t('filter.black'), unavailable: false },
@@ -32,8 +26,8 @@ const FiltroCabelo: React.FC = () => {
 
   return (
     <CommonFilter
-    label={t('filter.hair_color')}
-    options={cabeloOptions}
+      label={t('filter.hair_color')}
+      options={cabeloOptions}
       value={cabeloRedux}
       onChange={handleCabeloChange}
       placeholder={t('filter.select_hair_color')}

@@ -1,15 +1,13 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CommonFilter from "./common-filter";
-import { updateCorpo } from "../../actions/ProfileActions";
-import { RootState } from "@/store";
-import {useTranslation} from "react-i18next";
-
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommonFilter from './common-filter';
+import { updateCorpo } from '../../actions/ProfileActions';
+import { RootState } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 const FiltroCorpo: React.FC = () => {
-    const {t, i18n} = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const dispatch = useDispatch();
   const corpoRedux = useSelector(
     (state: RootState) => state.profile?.profile?.corpo || null
@@ -29,8 +27,8 @@ const FiltroCorpo: React.FC = () => {
 
   return (
     <CommonFilter
-    label={t('filter.body')}
-    options={corpoOptions}
+      label={t('filter.body')}
+      options={corpoOptions}
       value={corpoRedux}
       onChange={handleCorpoChange}
       placeholder={t('filter.select_body')}

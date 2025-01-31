@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import React, { useState, Fragment } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 interface Option {
   id: number;
@@ -9,9 +9,9 @@ interface Option {
 }
 
 const TipoEstabelecimento: Option[] = [
-  { id: 1, name: "Agencia de Escort", unavailable: false },
-  { id: 2, name: "Salao Erotico", unavailable: false },
-  { id: 3, name: "Centro de Massagens", unavailable: false },
+  { id: 1, name: 'Agencia de Escort', unavailable: false },
+  { id: 2, name: 'Salao Erotico', unavailable: false },
+  { id: 3, name: 'Centro de Massagens', unavailable: false },
 ];
 
 interface ListCategoriaBarProps {
@@ -29,7 +29,7 @@ const ListCategoriaBar: React.FC<ListCategoriaBarProps> = ({
         value={selectedOption}
         onChange={(selectedOption) => {
           setSelectedOption(selectedOption);
-          if (typeof handleOptionSelect === "function") {
+          if (typeof handleOptionSelect === 'function') {
             handleOptionSelect(selectedOption);
           }
         }}
@@ -40,7 +40,7 @@ const ListCategoriaBar: React.FC<ListCategoriaBarProps> = ({
               <p className="text-pink-800">Categoria*</p>
               <Listbox.Button className="relative w-full mt-1 bg-zinc-500 z-100 text-xs text-white rounded-md md:text-sm cursor-default py-2 pl-3 pr-10 text-left shadow-md sm:text-sm">
                 <span className="block truncate">
-                  {selectedOption ? selectedOption.name : "------"}
+                  {selectedOption ? selectedOption.name : '------'}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
@@ -60,7 +60,7 @@ const ListCategoriaBar: React.FC<ListCategoriaBarProps> = ({
                   static
                   className={`
                     absolute mt-1 max-h-36 w-full overflow-auto bg-zinc-600 text-white text-xs md:text-sm shadow-lg ring-1 rounded-md ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10
-                    ${open ? "block" : "hidden"}
+                    ${open ? 'block' : 'hidden'}
                   `}
                 >
                   {TipoEstabelecimento.map((method, methodIdx) => (
@@ -68,7 +68,7 @@ const ListCategoriaBar: React.FC<ListCategoriaBarProps> = ({
                       key={methodIdx}
                       className={({ active }) =>
                         `relative cursor-default select-none py-1 md:pl-10 pl-3 pr-4 text-xs md:text-sm opacity-90 z-10 ${
-                          active ? "bg-zinc-500 text-white" : "text-gray-900"
+                          active ? 'bg-zinc-500 text-white' : 'text-gray-900'
                         }`
                       }
                       value={method}
@@ -77,7 +77,7 @@ const ListCategoriaBar: React.FC<ListCategoriaBarProps> = ({
                         <>
                           <span
                             className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
+                              selected ? 'font-medium' : 'font-normal'
                             }`}
                           >
                             {method.name}

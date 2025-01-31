@@ -1,12 +1,12 @@
-import React from "react";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { pink } from "@mui/material/colors";
-import { FaWhatsapp } from "react-icons/fa";
-import { FaSms } from "react-icons/fa";
-import { MdOutlineEmail } from "react-icons/md";
-import { FaStar } from "react-icons/fa";
+import React from 'react';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { pink } from '@mui/material/colors';
+import { FaWhatsapp } from 'react-icons/fa';
+import { FaSms } from 'react-icons/fa';
+import { MdOutlineEmail } from 'react-icons/md';
+import { FaStar } from 'react-icons/fa';
 
 const CheckContacto: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ const CheckContacto: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "white", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'white', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={
@@ -36,7 +36,7 @@ const CheckContacto: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "gray", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'gray', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={
@@ -54,7 +54,7 @@ const CheckContacto: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "gray", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'gray', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={
@@ -72,7 +72,7 @@ const CheckContacto: React.FC = () => {
               control={
                 <Checkbox
                   size="small"
-                  sx={{ color: "gray", "&.Mui-checked": { color: pink[300] } }}
+                  sx={{ color: 'gray', '&.Mui-checked': { color: pink[300] } }}
                 />
               }
               label={

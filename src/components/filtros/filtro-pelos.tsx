@@ -1,16 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CommonFilter from "./common-filter";
-import { updatePelos } from "../../actions/ProfileActions";
-import {useTranslation} from "react-i18next";
-
-
-
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CommonFilter from './common-filter';
+import { updatePelos } from '../../actions/ProfileActions';
+import { useTranslation } from 'react-i18next';
 
 const FiltroPelos: React.FC = () => {
-          const {t, i18n} = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const dispatch = useDispatch();
   const pelosRedux = useSelector(
     (state: any) => state.profile?.profile?.pelos || null
@@ -28,12 +24,12 @@ const FiltroPelos: React.FC = () => {
 
   return (
     <CommonFilter
-    label={t('filterP.hair_removal')}
+      label={t('filterP.hair_removal')}
       options={pelosOptions}
       value={pelosRedux}
       onChange={handlePelosChange}
       placeholder={t('filterP.select_hair_removal')}
-      />
+    />
   );
 };
 

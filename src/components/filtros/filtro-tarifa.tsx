@@ -1,11 +1,10 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { updateTarifa } from "../../actions/ProfileActions";
-import CommonFilter from "./common-filter";
+import { updateTarifa } from '../../actions/ProfileActions';
+import CommonFilter from './common-filter';
 
-import {useTranslation} from "react-i18next";
-
+import { useTranslation } from 'react-i18next';
 
 interface TarifaOption {
   id: number;
@@ -22,14 +21,14 @@ interface FiltroTarifaProps {
 }
 
 const FiltroTarifa: React.FC<FiltroTarifaProps> = ({
-  bgColor = "bg-gray-700",
-  buttonPadding = "py-0",
-  rounded = "rounded-xl",
+  bgColor = 'bg-gray-700',
+  buttonPadding = 'py-0',
+  rounded = 'rounded-xl',
   onChange,
 }) => {
   const dispatch = useDispatch();
-        const {t, i18n} = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const tarifaRedux = useSelector(
     (state: any) => state.profile?.profile?.tarifa || null
   );
@@ -41,7 +40,6 @@ const FiltroTarifa: React.FC<FiltroTarifaProps> = ({
     return `${t('tarifa.' + value)}`; // "Starting from 50€", etc.
   };
 
-
   const tarifaOptions = [
     { id: 1, name: t('tarifa.50'), value: 50, unavailable: false },
     { id: 2, name: t('tarifa.100'), value: 100, unavailable: false },
@@ -49,7 +47,6 @@ const FiltroTarifa: React.FC<FiltroTarifaProps> = ({
     { id: 4, name: t('tarifa.500'), value: 500, unavailable: true },
     { id: 5, name: t('tarifa.more_than_500'), value: 501, unavailable: false },
   ];
-
 
   // Function to handle tarifa changes
   const handleTarifaChange = (selectedName: string) => {
@@ -66,11 +63,11 @@ const FiltroTarifa: React.FC<FiltroTarifaProps> = ({
 
   return (
     <CommonFilter
-    label={t('filterTa.tarifa')}
-          options={tarifaOptions}
+      label={t('filterTa.tarifa')}
+      options={tarifaOptions}
       value={tarifaRedux ? getDisplayValue(tarifaRedux) : null}
       onChange={handleTarifaChange}
-      placeholder={t('filterTa.select_tarifa')} 
+      placeholder={t('filterTa.select_tarifa')}
       bgColor={bgColor}
       buttonPadding="py-5"
       rounded={rounded}
