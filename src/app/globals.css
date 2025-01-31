@@ -86,7 +86,7 @@
   }
 
   body {
-    @apply bg-[#f2ebee] text-foreground font-sans dark:bg-[#100007];
+    @apply bg-[#fffff] text-foreground font-sans dark:bg-[#100007];
   }
 
   .body-text {

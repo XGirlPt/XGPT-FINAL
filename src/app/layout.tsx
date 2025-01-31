@@ -98,7 +98,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className}  bg-gray-200 dark:bg-gray-900`}>
+      <body className={`${inter.className} bg-[#f2ebee] dark:bg-[#100007]`}>
         <ReduxProvider>
           <LanguageProvider>
             <ThemeProvider attribute="class" defaultTheme="light">
