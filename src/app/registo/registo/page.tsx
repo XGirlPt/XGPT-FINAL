@@ -1,0 +1,169 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import supabase from "@/database/supabase";
+import { registerUser } from "@/actions/ProfileActions";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import FeaturesList from "./_ui/FeaturedList";
+import ListRegister from "@/components/register/list-register";
+import CommonInput from "@/components/ui/common-input";
+
+const Registo: React.FC = () => {
+  const { t } = useTranslation();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<{
+    id: number;
+    name: string;
+    unavailable: boolean;
+  } | null>(null);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleOptionSelect = (option: { id: number; name: string; unavailable: boolean }) => {
+    setSelectedOption(option);
+  };
+
+
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      console.error("As senhas não correspondem");
+      alert("As senhas não correspondem!");
+      return;
+    }
+  
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+  
+      if (error) {
+        console.error("Erro ao registrar:", error.message);
+        alert(`Erro ao registrar: ${error.message}`);
+        return;
+      }
+  
+      // Agora que 'data' está disponível, podemos acessar o token de confirmação
+      const emailRedirectTo = `${window.location.origin}/registo/confirmar-email?email=${email}&token=${data.user?.confirmation_token}&type=signup`;
+  
+      const { error: redirectError } = await supabase.auth.updateUser({
+        emailRedirectTo,
+      });
+  
+      if (redirectError) {
+        console.error("Erro ao configurar redirecionamento:", redirectError.message);
+        return;
+      }
+  
+      console.log("Usuário registrado com sucesso:", data.user);
+  
+      if (data?.user?.id) {
+        dispatch(registerUser(data?.user?.id, email));
+      }
+  
+      router.push("/registo/confirmar-email");
+  
+      if (selectedOption) {
+        switch (selectedOption.id) {
+          case 1:
+            await supabase.from("ProfilesData").insert([
+              {
+                userUID: data.user?.id,
+                userData: data.user,
+              },
+            ]);
+            break;
+  
+          case 2:
+            await supabase.from("etablissements").insert([
+              {
+                userUID: data.user?.id,
+                userData: data.user,
+              },
+            ]);
+            router.push(`/registre-etablissement?email=${email}&userUID=${data.user?.id}`);
+            break;
+  
+          case 3:
+            router.push("/registre-entrada");
+            break;
+          default:
+            break;
+        }
+      }
+    } catch (error: any) {
+      console.error("Erro ao se inscrever:", error.message);
+      alert("Erro inesperado ao registrar. Tente novamente.");
+    }
+  };
+  
+  
+  
+  
+
+
+  return (
+    <div className="pb-4 bg-gray-100 dark:bg-gray-900 rounded-md">
+      <div className="h-full dark:bg-gray-900 justify-center md:flex">
+        <FeaturesList />
+
+        <div className="bg-gray-100 dark:bg-gray-800 mt-10 w-full max-w-lg mx-auto border border-gray-700 rounded-2xl shadow-xl p-6 sm:p-8">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-center text-gray-500 dark:text-white mb-6">
+            {t("RegisterPage.create_account_title")}
+          </h1>
+
+          <form className="space-y-6">
+            <CommonInput
+              label={t("RegisterPage.email_label")}
+              placeholder={t("RegisterPage.email_placeholder")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              required
+            />
+
+            <div>
+              <ListRegister handleOptionSelect={handleOptionSelect} />
+            </div>
+
+            <CommonInput
+              label={t("RegisterPage.password_label")}
+              placeholder={t("RegisterPage.password_placeholder")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              required
+            />
+
+            <CommonInput
+              label={t("RegisterPage.confirm_password_label")}
+              placeholder={t("RegisterPage.confirm_password_placeholder")}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              type="password"
+              required
+            />
+
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={handleRegister}
+                className="w-full py-3 px-6 bg-pink-500 hover:bg-pink-400 text-white text-sm font-semibold rounded-lg shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              >
+                {t("RegisterPage.register_button")}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Registo;

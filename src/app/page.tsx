@@ -192,6 +192,7 @@ const Dashboard: React.FC = () => {
         }}
       />
       <HeroSection profiles={profiles as Profile[]} />
+
       <RecentStories />
       <FeaturedAds />
       <MapSection />

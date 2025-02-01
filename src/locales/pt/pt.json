@@ -163,5 +163,186 @@
     "login_button": "Entrar",
     "register_link": "Não tem uma conta? Registe-se aqui",
     "description": "Faça login no X-Girl para descobrir experiências únicas e confidenciais."
+  },
+
+  "RegisterPage": {
+    "title": "XGirl.fr é a referência para listagens exclusivas de acompanhantes na França",
+    "description_1": "Descubra milhares de acompanhantes no XGirl.fr",
+    "description_2": "O processo de registro é simples e rápido.",
+    "description_3": "Aumente significativamente a sua renda! Atraia entre 30 e 450 clientes todos os meses.",
+    "description_4": "Desfrute de listagens destacadas todos os meses sem custo adicional.",
+    "advantages_link": "Clique aqui para ver todos os benefícios",
+    "create_account_title": "Crie uma Nova Conta",
+    "email_label": "Email*",
+    "email_placeholder": "Digite seu email",
+    "password_label": "Senha*",
+    "password_placeholder": "Digite sua senha",
+    "confirm_password_label": "Confirme sua senha*",
+    "confirm_password_placeholder": "Confirme sua senha",
+    "register_button": "Criar sua conta"
+  }, 
+
+  
+    "contact": {
+      "title": "Contato",
+      "subtitle": "Tem alguma dúvida? Envie-nos uma mensagem e responderemos dentro de 24 horas.",
+      "email_label": "Seu email",
+      "email_placeholder": "seuemail@exemplo.com",
+      "subject_label": "Assunto",
+      "subject_placeholder": "Como podemos ajudá-lo?",
+      "message_label": "Sua mensagem",
+      "message_placeholder": "Deixe sua mensagem...",
+      "send_button": "Enviar Mensagem",
+      "thank_you_message": "Obrigado por entrar em contato com XGirl.pt!"
+    },
+    "MyProfileBar": {
+      "info": "Informação",
+      "other_info": "Outras Informações",
+      "change_photos": "Alterar Fotos",
+      "my_stories": "Minhas Histórias",
+      "settings": "Configurações",
+      "view_profile": "Ver Perfil"
+    },
+    "filter": {
+      "age": "Idade",
+      "select_age": "Selecione a idade",
+      "height": "Altura",
+      "select_height": "Selecione a altura",
+      "hair_color": "Cor de Cabelo",
+      "select_hair_color": "Selecione a cor do cabelo",
+      "black": "Preto",
+      "blonde": "Loiro",
+      "brown": "Castanho",
+      "red": "Ruivo",
+      "other": "Outro",
+      "body": "Corpo",
+      "select_body": "Selecione o tipo de corpo",
+      "normal": "Normal",
+      "athletic": "Atlético",
+      "slim": "Magro",
+      "curvy": "Curvilíneo",
+      "xxl": "XXL",
+      "filter": {
+        "eye_color": "Cor dos Olhos",
+        "select_eye_color": "Selecione a cor dos olhos"
+      },
+      "eyes": {
+        "brown": "Castanho",
+        "black": "Preto",
+        "blue": "Azul",
+        "green": "Verde"
+      }
+    },
+    "filterB": {
+      "breasts": "Seios",
+      "select_breasts": "Selecione o tipo de seios",
+      "breast_size": "Tamanho dos Seios",
+      "select_breast_size": "Selecione um tamanho"
+    },
+    "breasts": {
+      "natural": "Naturais",
+      "silicone": "Silicone"
+    },
+    "breast_size": {
+      "small": "Seios Pequenos (A-B)",
+      "large": "Seios Grandes (C-D)",
+      "xxl": "Seios XXL (E+)"
+    },
+    "filterP": {
+      "hair_removal": "Depilação",
+      "select_hair_removal": "Selecione a preferência de depilação"
+    },
+    "hair_removal": {
+      "smooth": "Totalmente Depilado",
+      "partially_smooth": "Parcialmente Depilado",
+      "natural": "Natural"
+    },
+    "filterT": {
+      "tattoos": "Tatuagens",
+      "select_tattoos": "Selecione a preferência de tatuagens"
+    },
+    "tattoos": {
+      "with_tattoos": "Com Tatuagens",
+      "without_tattoos": "Sem Tatuagens"
+    },
+    "filterS": {
+      "zodiac": "Signo do Zodíaco",
+      "select_zodiac": "Selecione um signo do zodíaco"
+    },
+    "zodiac": {
+      "aries": "Áries",
+      "taurus": "Touro",
+      "gemini": "Gêmeos",
+      "cancer": "Câncer",
+      "leo": "Leão",
+      "virgo": "Virgem",
+      "libra": "Libra",
+      "scorpio": "Escorpião",
+      "sagittarius": "Sagitário",
+      "capricorn": "Capricórnio",
+      "aquarius": "Aquário",
+      "pisces": "Peixes"
+    },
+    "filterTa": {
+      "tarifa": "Tarifa",
+      "select_tarifa": "Selecione uma tarifa"
+    },
+    "tarifa": {
+      "50": "A partir de 50€",
+      "100": "A partir de 100€",
+      "200": "A partir de 200€",
+      "500": "A partir de 500€",
+      "more_than_500": "+ 500€"
+    },
+    "profileR2": {
+      "createTitle": "Crie o Seu Perfil",
+      "createSubtitle": "Complete as informações para começar no"
+    },
+    "input": {
+      "name": "Nome*",
+      "namePlaceholder": "Digite seu nome",
+      "age": "Idade",
+      "agePlaceholder": "Sua idade",
+      "phone": "Número de Telefone*",
+      "phonePlaceholder": "Seu telefone",
+      "chooseOption": "Escolha uma opção",
+      "useFullAddress": "Usar Endereço Completo",
+      "fullAddress": "Endereço Completo",
+      "fullAddressPlaceholder": "Digite o endereço completo",
+      "city": "Cidade",
+      "cityPlaceholder": "Digite sua cidade",
+      "district": "Distrito",
+      "districtPlaceholder": "Digite seu distrito"
+    },
+    "button": {
+      "back": "Voltar",
+      "createAccount": "Criar Conta"
+    },
+    "contactData": {
+      "title": "Dados Gerais",
+      "subtitle": "Atualize seus dados a qualquer momento"
+    },
+    "paymentMethods": {
+      "title": "Métodos de Pagamento"
+    },
+    "languages": {
+      "title": "Idiomas"
+    },
+    "services": {
+      "title": "Serviços"
+    },
+    "description": {
+      "title": "Descrição",
+      "placeholder": "Escreva a descrição aqui..."
+    },
+    "button2": {
+      "back": "Voltar",
+      "continue": "Continuar"
+    },
+    "buttonHG": {
+      "previous": "Anterior",
+      "next": "Próximo"
+    }
   }
-}
+  
+
