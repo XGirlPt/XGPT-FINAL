@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { IoIosOptions, IoIosArrowDown } from 'react-icons/io';
-import { BiSolidMoviePlay } from 'react-icons/bi';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../actions/ProfileActions';
 import { logoutClubs } from '../../actions/ClubsActions';
@@ -10,40 +8,23 @@ import {
   FaUser,
   FaCog,
   FaSignOutAlt,
-  FaTimes,
-  FaGlobe,
-  FaSearch,
 } from 'react-icons/fa';
 import Image from 'next/image';
 
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext'; // Importer le contexte du langage
 import SearchModal from '../ui/search-modal';
-import Filtro from './filtro';
-import { Switch } from '@nextui-org/react'; // Alternador visual
+
 import { useTheme } from 'next-themes';
-import { FaMoon, FaSun } from 'react-icons/fa';
-import ThemeSwitcher from '@/components/ThemeSwitcher'; // Importe o ThemeSwitcher
+
 import {
-  Moon,
-  Sun,
   Search,
   Globe,
-  Menu,
-  FilterIcon,
   SlidersHorizontal,
   ChevronDown,
 } from 'lucide-react';
-import { PiSlidersHorizontal } from 'react-icons/pi';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '../ui/sheet';
 import { Input } from '../ui/input';
 import {
   DropdownMenu,
@@ -113,32 +94,14 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     };
   }, []);
 
-  const toggleLanguageDropdown = () => {
-    setLanguageDropdownOpen(!languageDropdownOpen);
-  };
-
-  const toggleLanguageMenu = () => {
-    setLanguageMenuOpen(!languageMenuOpen);
-  };
-
   const languageMenuRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    // Add event listener to close dropdown when clicking outside
-    document.addEventListener('mousedown', handleClickOutsideLang);
-    return () => {
-      // Cleanup event listener
-      document.removeEventListener('mousedown', handleClickOutsideLang);
-    };
-  }, []);
 
   useEffect(() => {
     setEmail(emailReduxProfile || '');
   }, [emailReduxProfile]);
 
-  const toggleFiltro = () => {
-    setFiltroAberto(!filtroAberto);
-  };
+ 
 
   const handleLogout = () => {
     if (emailReduxProfile) {
@@ -305,6 +268,8 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
       >
         {t('Header.register')}
       </Button>
+
+
       <Button
         onClick={() => router.push('/login')}
         variant="outline"
@@ -387,7 +352,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             </DropdownMenu>
 
             <ThemeToggle />
-            {/* <ThemeSwitcher /> */}
           </div>
         </div>
       </div>
