@@ -61,7 +61,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
         <div className="relative">
           <motion.div className="mb-8" variants={fadeInUp}>
             <span className="bg-[#f1c0d3] text-darkpink lg:px-4 lg:py-1 px-2 py-1 rounded-full text-sm font-medium">
-              BEST ESCORT SERVICES
+              BEST ESCORT SERVICESsssss 
             </span>
           </motion.div>
 
