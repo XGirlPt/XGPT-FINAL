@@ -69,7 +69,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white"
             variants={fadeInUp}
           >
-            Escort Girls & Errotic
+            Escort Girls & Erroticwwwwwwwww
             <br />
             Masseures In Portugal
           </motion.h1>
