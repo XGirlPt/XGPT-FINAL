@@ -2,29 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-.slick-slide img {
-}
-
-@media only screen and (min-device-pixel-ratio: 2),
-  only screen and (min-resolution: 192dpi) {
-  .slick-slide img {
-    /* Aplicar estilos específicos para alta resolução */
-    /* Exemplo: Ajustando tamanho ou qualidade da imagem para telas Retina */
-    width: auto;
-    max-width: 100%;
-  }
-}
-
 @layer base {
   :root {
-    --dark-pink: rgb(243, 33, 118);
-    --dark-pink-hover: rgb(192, 26, 93);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -53,8 +32,6 @@
   }
 
   .dark {
-    --dark-pink: rgb(243, 33, 118);
-    --dark-pink-hover: rgb(192, 26, 93);
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -79,18 +56,6 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
-
-  html {
-    font-family: var(--font-mofugu), system-ui, sans-serif;
-  }
-
-  body {
-    @apply bg-[#fffff] text-foreground font-sans dark:bg-[#100007];
-  }
-
-  .body-text {
-    @apply font-body;
   }
 }
 

@@ -60,8 +60,8 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
       >
         <div className="relative">
           <motion.div className="mb-8" variants={fadeInUp}>
-            <span className="bg-[#f1c0d3] text-darkpink lg:px-4 lg:py-1 px-2 py-1 rounded-full text-sm font-medium">
-              BEST ESCORT SERVICESsssss 
+            <span className="bg-[#f1c0d3] text-darkpink lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
+              BEST ESCORT SERVICES
             </span>
           </motion.div>
 
@@ -69,7 +69,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white"
             variants={fadeInUp}
           >
-            Escort Girls & Erroticwwwwwwwww
+            Escort Girls & Errotic
             <br />
             Masseures In Portugal
           </motion.h1>
@@ -296,6 +296,9 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.2 }}
                     >
+
+
+                      
                       <h3 className="font-bold text-xl mb-1">{profile.nome}</h3>
                       <p className="text-black text-sm flex items-center justify-center">
                         <Image

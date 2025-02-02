@@ -1,10 +1,13 @@
+'use client';
+
 import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { FiPhone } from 'react-icons/fi';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { Profile } from '@/types';
-import Image from 'next/image';
-// import '../../styles/globals.min.css';
 import { useTranslation } from 'react-i18next';
 
 interface LeftSideProps {
@@ -19,9 +22,8 @@ const LeftSide: React.FC<LeftSideProps> = ({
   handleLigaMeClick,
 }) => {
   const [timeElapsed, setTimeElapsed] = useState<string>('');
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  // Função para formatar o tempo
   const formatTimeElapsed = useCallback(
     (minutesElapsed: number): string => {
       const hoursElapsed = minutesElapsed / 60;
@@ -47,7 +49,6 @@ const LeftSide: React.FC<LeftSideProps> = ({
     [t]
   );
 
-  // Função para calcular o tempo decorrido
   const calculateTimeElapsed = useCallback(() => {
     if (!selectedProfile || !selectedProfile.tagtimestamp) {
       setTimeElapsed(t('profile.time_elapsed.indeterminate'));
@@ -63,118 +64,77 @@ const LeftSide: React.FC<LeftSideProps> = ({
 
     const currentTime = Date.now();
     const elapsedTime = currentTime - tagTimestamp.getTime();
-    const minutesElapsed = Math.floor(elapsedTime / (1000 * 60)); // Corrected to 1000 ms
+    const minutesElapsed = Math.floor(elapsedTime / (1000 * 60));
 
     setTimeElapsed(formatTimeElapsed(minutesElapsed));
-  }, [selectedProfile, t, formatTimeElapsed]); // Add selectedProfile and t to the dependency array
+  }, [selectedProfile, t, formatTimeElapsed]);
 
   useEffect(() => {
-    // Recalculate the elapsed time when `tagTimestamp` changes
     if (selectedProfile?.tagtimestamp) {
       calculateTimeElapsed();
-
-      // Set up the interval to update every minute
       const interval = setInterval(calculateTimeElapsed, 60000);
-
       return () => clearInterval(interval);
     }
-  }, [selectedProfile?.tagtimestamp, calculateTimeElapsed]); // Dependência apenas em `tagTimestamp`
+  }, [selectedProfile?.tagtimestamp, calculateTimeElapsed]);
 
   return (
-    <div className="w-full md:w-1/3 flex justify-center items-center mb-44 md:mb-36 md:sticky top-48 z-10 h-full">
-      <div className="relative flex flex-col justify-center items-center">
+    <Card className="w-full lg:w-[370px] overflow-hidden bg-white dark:bg-[#1a0a10] rounded-3xl p-4">
+      <div className="space-y-4">
         {/* Foto de Perfil */}
-        <div className="w-72 h-96 bg-gray-300 flex justify-center items-center rounded-2xl overflow-hidden shadow-md">
-          {selectedProfile ? (
-            Array.isArray(selectedProfile.photoURL) &&
-            selectedProfile.photoURL.length > 0 ? (
-              <Image
-                src={selectedProfile.photoURL[0] || '/logo.webp'}
-                alt={selectedProfile.nome || 'Profile'}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                width={100}
-                height={100}
-              />
-            ) : selectedProfile.photoURL ? (
-              <Image
-                src={selectedProfile.photoURL[0] || '/logo.webp'}
-                alt={selectedProfile.nome || 'Profile'}
-                className="w-full h-full object-cover blur-md"
-                loading="lazy"
-                width={100}
-                height={100}
-              />
-            ) : (
-              <Image
-                src="/logo.webp"
-                alt="Default Profile"
-                className="w-full h-full object-cover blur-md"
-                loading="lazy"
-                width={100}
-                height={100}
-              />
-            )
-          ) : (
-            <Image
-              src="/logo.webp"
-              alt="Placeholder"
-              className="w-full h-full object-cover blur-md"
-              loading="lazy"
-              width={100}
-              height={100}
-            />
-          )}
+        <div className="relative aspect-square rounded-2xl overflow-hidden">
+          <Image
+            src={
+              selectedProfile?.photoURL?.[0] ||
+              '/logo.webp'
+            }
+            alt={selectedProfile?.nome || 'Profile'}
+            fill
+            className="object-cover"
+            sizes="(max-width: 300px) 100vw, 300px"
+          />
         </div>
 
-        {/* Status e Botões */}
-        <div className="flex justify-center items-center w-full absolute -bottom-44">
-          <div className="bg-white dark:bg-gray-800 shadow-lg w-5/6 md:w-3/4 p-6 rounded-2xl">
-            {/* Último Status */}
-            <div className="text-center mb-4">
-              <p className="text-yellow-600 dark:text-yellow-500 text-xs underline italic mb-2">
-                Last Status
-              </p>
-              <p className="text-gray-700 dark:text-gray-400 text-xs mb-2 italic">
-                `{'>'}`{selectedProfile?.tag || 'No status available'}`{'>'}`
-              </p>
-              <div className="flex justify-center items-center">
-                <p className="text-yellow-600 dark:text-yellow-500 text-xs mr-2 flex items-center">
-                  {timeElapsed}
-                  <RiMessage2Fill
-                    className="text-yellow-600 dark:text-yellow-500 ml-2"
-                    size={16}
-                  />
-                </p>
-              </div>
-            </div>
-
-            {/* Botões */}
-            <div className="grid gap-4">
-              {/* Botão Liga-me */}
-              <button
-                className="relative  bg-pink-500 hover:to-red-600 text-white py-2 rounded-md flex justify-center items-center shadow-md transform transition-transform duration-200 hover:scale-105"
-                onClick={handleLigaMeClick}
-                aria-label={t('profile.call_me')}
-              >
-                <FiPhone className="mr-2" />
-                <span className="text-sm">{t('profile.call_me')}</span>
-              </button>
-
-              {/* Botão Compartilhar */}
-              <button
-                className="relative bg-gradient-to-r bg-blue-500 hover:to-blue-700 text-white py-2 rounded-md flex justify-center items-center shadow-md transform transition-transform duration-200 hover:scale-105"
-                onClick={handlePartilhaClick}
-                aria-label={t('profile.share_profile')}
-              >
-                <IoShareSocialOutline className="mr-2" size={20} />
-                <span className="text-sm">{t('profile.share_profile')}</span>
-              </button>
-            </div>
+        {/* Nome, Status e Tempo */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <h3 className="text-2xl font-semibold">{selectedProfile?.nome}</h3>
+            <Image
+              src="/icons/verify.png"
+              alt="Verified User"
+              width={24}
+              height={24}
+            />
+          </div>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            {selectedProfile?.tag || t('profile.no_status_available')}
+          </p>
+          <div className="flex items-center gap-1">
+            <Image src="/icons/clock.png" alt="clock" width={20} height={20} />
+            <span className="text-sm text-gray-400">{timeElapsed}</span>
+            <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500 ml-2" size={16} />
           </div>
         </div>
+
+        {/* Botões de Ação */}
+        <div className="space-y-2">
+          <Button
+            className="w-full rounded-full bg-darkpink hover:bg-darkpinkhover text-white font-body flex items-center justify-center gap-2"
+            onClick={handleLigaMeClick}
+          >
+            <FiPhone />
+            {t('profile.call_me')}
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full rounded-full border-gray-200 dark:border-gray-700 font-body flex items-center justify-center gap-2"
+            onClick={handlePartilhaClick}
+          >
+            <IoShareSocialOutline size={20} />
+            {t('profile.share_profile')}
+          </Button>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

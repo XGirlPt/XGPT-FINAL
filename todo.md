@@ -126,7 +126,7 @@ Mobile
 
 - [x] google analitics e google console
 - [x] contacto email a funcionar
-- [] xgirl.pt a funcionar com vercel
+- [x] xgirl.pt a funcionar com vercel
 - [] captcha email
 - [x] header
 - [x] tradutir todo o SEO para portugues

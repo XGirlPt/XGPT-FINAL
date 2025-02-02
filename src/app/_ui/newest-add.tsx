@@ -11,75 +11,25 @@ import {
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-interface Adds {
-  name: string;
-  image: string;
-  location: string;
-  timeAgo: string;
+interface Profile {
+  nome: string;
+  cidade: string;
+  photos: string[];
+  stories: string[]; // Histórias
+  tag: string;
+  tagtimestamp: string;
+  certificado: boolean;
+  live: boolean | string;
+  // live pode ser booleano ou string
 }
 
-const adds: Adds[] = [
-  {
-    name: 'Olivia Austin',
-    image: '/models/adds/1.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-  {
-    name: 'Jada Fire',
-    image: '/models/adds/2.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-  },
-  {
-    name: 'Eva Angelina',
-    image: '/models/adds/3.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-  {
-    name: 'Abella Danger',
-    image: '/models/adds/4.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-  },
-  {
-    name: 'Eva Elite',
-    image: '/models/adds/1.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-  {
-    name: 'Olivia Austin',
-    image: '/models/adds/2.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-  {
-    name: 'Jada Fire',
-    image: '/models/adds/3.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-  },
-  {
-    name: 'Eva Angelina',
-    image: '/models/adds/4.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-  {
-    name: 'Abella Danger',
-    image: '/models/adds/5.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-  },
-  {
-    name: 'Eva Elite',
-    image: '/models/adds/1.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-  },
-];
+interface NewestAddsProps {
+  profiles: Profile[];
+  currentPage: number; // Página atual
+  itemsPerPage: number;
+  onProfileClick: () => void;
+  customClass?: string;
+}
 
 // Animation variants
 const containerVariants = {
@@ -117,7 +67,29 @@ const cardVariants = {
   },
 };
 
-export function NewestAdds() {
+
+
+  const NewestAdds: React.FC<NewestAddsProps> = ({
+    profiles = [],
+      currentPage,
+    itemsPerPage,
+    onProfileClick,
+  }) => {
+
+
+    const sortedProfiles = profiles ? [...profiles].sort((a, b) => {
+      const dateA = new Date(a.tagtimestamp).getTime();
+      const dateB = new Date(b.tagtimestamp).getTime();
+      return dateB - dateA; // Ordena do mais recente para o mais antigo
+    }) : [];
+  
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProfiles = sortedProfiles.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
+
+
   return (
     <motion.div
       className="relative w-full px-4"
@@ -146,7 +118,7 @@ export function NewestAdds() {
 
         <div className="relative w-full">
           <CarouselContent className="-ml-2">
-            {adds.map((add, index) => (
+          {profiles.map((profile, index) => (
               <CarouselItem
                 key={index}
                 className=" basis-1/2 md:basis-1/5 gap-4"
@@ -167,9 +139,11 @@ export function NewestAdds() {
                       transition: { duration: 0.2 },
                     }}
                   >
+
+
                     <Image
-                      src={add.image}
-                      alt={add.name}
+              src={profile.photos[0] || "./logo.png"}
+              alt={profile.nome}
                       fill
                       className="object-cover rounded-4xl"
                     />
@@ -181,7 +155,7 @@ export function NewestAdds() {
                   >
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-lg md:text-2xl whitespace-nowrap">
-                        {add.name}
+                        {profile.nome}
                       </h3>
                       <div className="font-body flex items-center gap-1 text-sm md:text-base">
                         <Image
@@ -190,7 +164,7 @@ export function NewestAdds() {
                           width={20}
                           height={20}
                         />
-                        {add.location}
+                        {profile.cidade}
                       </div>
                     </div>
                     <div className="text-sm md:text-base text-gray-400 mt-1 flex items-center gap-1 font-body">
@@ -200,7 +174,7 @@ export function NewestAdds() {
                         width={20}
                         height={20}
                       />
-                      {add.timeAgo}
+                      {profile.tagtimestamp}
                     </div>
                   </motion.div>
                 </motion.div>
@@ -228,3 +202,6 @@ export function NewestAdds() {
   );
 }
 //
+
+
+export default NewestAdds;

@@ -1,93 +1,37 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Star, Video, Share2, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext'; // Importe o contexto de idioma
+import { useTranslation } from 'react-i18next';
 
-interface Ad {
-  name: string;
-  image: string;
-  location: string;
-  timeAgo: string;
-  message: string;
-  isLive?: boolean;
-  isPremium?: boolean;
-  hasStories?: boolean;
+
+interface Profile {
+  nome: string;
+  cidade: string;
+  photos: string[];
+  stories: string[]; // Histórias
+  tag: string;
+  tagtimestamp: string;
+  certificado: boolean;
+  live: boolean | string;
+  // live pode ser booleano ou string
 }
 
-const featuredAds: Ad[] = [
-  {
-    name: 'Abella Danger',
-    image: '/models/adds/1.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-    message: 'Come have a dinner with me',
-    isLive: true,
-    isPremium: true,
-    hasStories: true,
-  },
-  {
-    name: 'Lana Taylor',
-    image: '/models/adds/2.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-    message: 'Come have a dinner with me',
-  },
-  {
-    name: 'Eva Elite',
-    image: '/models/adds/3.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-    message: 'Come have a dinner with me',
-    isLive: false,
-    isPremium: true,
-    hasStories: true,
-  },
-  {
-    name: 'Abella Danger',
-    image: '/models/adds/4.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-    message: 'Come have a dinner with me',
-  },
-  {
-    name: 'Emily Wells',
-    image: '/models/adds/5.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-    message: 'Come have a dinner with me',
-    isLive: true,
-    isPremium: false,
-    hasStories: true,
-  },
-  {
-    name: 'Mia Khalifa',
-    image: '/models/adds/6.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-    message: 'Come have a dinner with me',
-    isLive: false,
-    isPremium: false,
-    hasStories: false,
-  },
-  {
-    name: 'Brandi Love',
-    image: '/models/adds/7.png',
-    location: 'Vagos',
-    timeAgo: '5 hours ago',
-    message: 'Come have a dinner with me',
-  },
-  {
-    name: 'Lana Taylor',
-    image: '/models/adds/8.png',
-    location: 'Vagos',
-    timeAgo: '6 hours ago',
-    message: 'Come have a dinner with me',
-  },
-];
+interface FeaturedAdsProps {
+  profiles: Profile[];
+  currentPage: number; // Página atual
+  itemsPerPage: number;
+  onProfileClick: () => void;
+  customClass?: string;
+}
+
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -126,7 +70,84 @@ const badgeVariants = {
   },
 };
 
-export function FeaturedAds() {
+
+
+
+
+
+const FeaturedAds: React.FC<FeaturedAdsProps> = ({
+  profiles = [],
+    currentPage,
+  itemsPerPage,
+  onProfileClick,
+}) => {
+  const [timeElapsedList, setTimeElapsedList] = useState<string[]>([]);
+
+  const formatTimeElapsed = useCallback((minutesElapsed: number): string => {
+    const hoursElapsed = minutesElapsed / 60;
+    if (hoursElapsed > 48) {
+      return 'Há mais de 48 horas';
+    } else if (minutesElapsed < 60) {
+      return `Há ${minutesElapsed} minuto${minutesElapsed !== 1 ? 's' : ''}`;
+    } else {
+      const hours = Math.floor(hoursElapsed);
+      const minutes = minutesElapsed % 60;
+      return `Há ${hours} hora${hours !== 1 ? 's' : ''}${minutes > 0 ? ` ${minutes} minuto${minutes !== 1 ? 's' : ''}` : ''}`;
+    }
+  }, []);
+
+  const calculateTimeElapsed = useCallback(
+    (tagTimestamp: string): string => {
+      const timestampDate = new Date(tagTimestamp);
+      if (isNaN(timestampDate.getTime())) {
+        return 'Tempo indeterminado';
+      }
+      const currentTime = Date.now();
+      const elapsedTime = currentTime - timestampDate.getTime();
+      const minutesElapsed = Math.floor(elapsedTime / (1000 * 60));
+      return formatTimeElapsed(minutesElapsed);
+    },
+    [formatTimeElapsed]
+  );
+
+  useEffect(() => {
+    const timeElapsed = profiles.map((profile) =>
+      calculateTimeElapsed(profile.tagtimestamp)
+    );
+    setTimeElapsedList(timeElapsed);
+
+    const interval = setInterval(() => {
+      const updatedTimeElapsed = profiles.map((profile) =>
+        calculateTimeElapsed(profile.tagtimestamp)
+      );
+      setTimeElapsedList(updatedTimeElapsed);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [profiles, calculateTimeElapsed]);
+
+  // Ordenação dos perfis por tagtimestamp (da mais recente para a mais antiga)
+  const sortedProfiles = profiles ? [...profiles].sort((a, b) => {
+    const dateA = new Date(a.tagtimestamp).getTime();
+    const dateB = new Date(b.tagtimestamp).getTime();
+    return dateB - dateA; // Ordena do mais recente para o mais antigo
+  }) : [];
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProfiles = sortedProfiles.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const { t, i18n } = useTranslation();
+  const { language, changeLanguage } = useLanguage();
+  
+  
+  
+  
+  
+  
+  
   return (
     <div className="p-4 mt-20 relative">
       <motion.div
@@ -149,106 +170,74 @@ export function FeaturedAds() {
           </Link>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {featuredAds.map((ad, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.2 },
-              }}
-              className="overflow-hidden bg-white dark:bg-[#300d1b] rounded-4xl p-1 md:p-2 cursor-pointer relative"
-            >
-              <div className="relative aspect-[4/4] rounded-4xl">
-                <Image
-                  src={ad.image}
-                  alt={ad.name}
-                  fill
-                  className="object-cover rounded-4xl"
-                />
-                <div className="absolute top-0 left-0 right-0 p-3 flex justify-end font-body">
-                  <div className="flex flex-row gap-1.5 flex-wrap justify-end max-w-[80%]">
-                    {ad.isLive && (
-                      <motion.div variants={badgeVariants}>
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#E74C3C]/90 hover:bg-[#E74C3C] dark:bg-[#E74C3C]/90 dark:hover:bg-[#E74C3C] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg"
-                        >
-                          <motion.span
-                            className="w-1 h-1 bg-white rounded-full mr-1"
-                            animate={{
-                              opacity: [1, 0.5, 1],
-                              scale: [1, 1.2, 1],
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                            }}
-                          />
-                          Live
-                        </Badge>
-                      </motion.div>
-                    )}
-                    {ad.isPremium && (
-                      <motion.div variants={badgeVariants}>
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#F1C40F]/90 hover:bg-[#F1C40F] dark:bg-[#F1C40F]/90 dark:hover:bg-[#F1C40F] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg"
-                        >
-                          <Crown fill="white" className="w-2.5 h-2.5 mr-1" />
-                          Premium
-                        </Badge>
-                      </motion.div>
-                    )}
-                    {ad.hasStories && (
-                      <motion.div variants={badgeVariants}>
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#8E44AD]/90 hover:bg-[#8E44AD] dark:bg-[#8E44AD]/90 dark:hover:bg-[#8E44AD] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg"
-                        >
-                          <Video fill="white" className="w-2.5 h-2.5 mr-1" />
-                          Stories
-                        </Badge>
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
+
+
+
+
+
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-4">
+      {profiles.map((profile, index) => (
+        <motion.div
+          key={index}
+          variants={itemVariants}
+          whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+          className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-3 shadow-lg overflow-hidden cursor-pointer transform transition-all"
+        >
+          {/* Imagem do perfil */}
+          <div className="relative rounded-3xl overflow-hidden">
+            <Image
+              src={profile.photos[0]}
+              alt={profile.nome}
+              width={500}
+              height={500}
+              className="object-cover rounded-3xl w-full h-48"
+            />
+          </div>
+          
+          {/* Conteúdo da Card */}
+          <div className="p-3 flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+             
+             
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{profile.nome}</h3>
+             
+             
+              <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
+                <Image src="/icons/location.png" alt="Location" width={14} height={14} />
+                {profile.cidade}
               </div>
-              <motion.div className="p-2" variants={itemVariants}>
-                <div className="flex items-center justify-between">
-                  <h3 className="lg:text-2xl text-lg whitespace-nowrap">
-                    {ad.name}
-                  </h3>
-                  <div className="font-body flex items-center gap-1 text-sm sm:text-base">
-                    {' '}
-                    <Image
-                      src="/icons/location.png"
-                      alt="Location"
-                      width={15}
-                      height={15}
-                    />{' '}
-                    {ad.location}
-                  </div>
-                </div>
-                <p className="text-lg mt-1 text-gray-700 dark:text-gray-300">
-                  &quot;{ad.message}&quot;
-                </p>
-                <div className="text-xs md:text-sm text-gray-400 mt-1 flex items-center gap-1 font-body">
-                  {' '}
-                  <Image
-                    src="/icons/clock.png"
-                    alt="Clock"
-                    width={20}
-                    height={20}
-                  />{' '}
-                  {ad.timeAgo}
-                </div>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
+            </div>
+            
+            {/* Tag ou Estado */}
+            <motion.p
+              className="text-sm text-gray-700 dark:text-gray-300 italic bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-lg"
+              variants={badgeVariants}
+            >
+              "{profile.tag}"
+            </motion.p>
+            
+            {/* Timestamp */}
+            <div className="text-xs text-gray-400 flex items-center gap-1">
+              <Clock size={14} /> {profile.tagtimestamp}
+            </div>
+          </div>
+        </motion.div>
+      ))}
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
         <Link
           href="/ads"
           className="text-sm text-white px-4 py-2 rounded-full bg-darkpink font-body block md:hidden mt-10 text-center"
@@ -274,3 +263,6 @@ export function FeaturedAds() {
     </div>
   );
 }
+
+
+export default FeaturedAds;

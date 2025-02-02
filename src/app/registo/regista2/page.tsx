@@ -111,8 +111,8 @@ const Registre2: React.FC = () => {
   }, [router]);
 
   return (
-    <div className="pb-4 bg-gray-100 dark:bg-gray-900 rounded-md">
-      <div className="h-full dark:bg-gray-900 justify-center md:flex">
+    <div className="pb-4 bg-gray-100 dark:bg-black rounded-md pt-24">
+      <div className="h-full dark:bg-black justify-center md:flex">
         <FeaturesList />
 
         <div className="bg-gray-100 dark:bg-gray-800 mt-10 w-full max-w-lg mx-auto border border-gray-700 rounded-2xl shadow-xl p-6 sm:p-8">

@@ -88,6 +88,14 @@ const HeaderG: React.FC<HeaderGProps> = ({
         </button>
       </div>
     </div>
+
+
+
+
+
+
+
+
   );
 };
 

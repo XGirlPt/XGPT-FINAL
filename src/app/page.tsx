@@ -8,9 +8,11 @@ import '../styles/globals.min.css';
 
 import { HeroSection } from "./_ui/hero-section";
 import { RecentStories } from "./_ui/recent-stories";
-import { FeaturedAds } from "./_ui/featured-ads";
+
+import FeaturedAds  from "./_ui/featured-ads";
+
 import { MapSection } from "./_ui/map-section";
-import { NewestAdds } from "./_ui/newest-add";
+import NewestAdds from "./_ui/newest-add";
 import { Statistics } from "./_ui/statistics";
 import { PublishAdBanner } from "./_ui/publish-ad-banner";
 
@@ -194,9 +196,10 @@ const Dashboard: React.FC = () => {
       <HeroSection profiles={profiles as Profile[]} />
 
       <RecentStories />
-      <FeaturedAds />
+      <FeaturedAds    profiles={profiles}
+      currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
       <MapSection />
-      <NewestAdds />
+      <NewestAdds   />
       <Statistics />
       <PublishAdBanner />
     </main>

@@ -1,55 +1,63 @@
-import React from 'react';
-import { FaCheckCircle, FaClipboardList } from 'react-icons/fa';
+import Image from 'next/image';
+import { Card } from '../../components/ui/card';
 import { useTranslation } from 'react-i18next';
-import { Card, CardBody } from '@nextui-org/react';
 
-interface ServicosPrestadosProps {
-  selectedProfile: { servico?: string[] } | null;
+interface Profile {
+  nome: string;
+  idade: number;
+  altura: string;
+  distrito: string;
+  origem: string;
+  cidade: string;
+  peso: string;
+  tatuagens: string;
+  pelos: string;
+  olhos: string;
+  seios: string;
+  mamas: string;
+  signo: string;
+  cabelo: string;
+  servico?: string[]; // Mantendo um array de strings para os serviços
 }
 
-const ServicosPrestados: React.FC<ServicosPrestadosProps> = ({
-  selectedProfile,
-}) => {
-  const servico = selectedProfile?.servico;
+interface ProvidedServicesProps {
+  selectedProfile?: Profile;
+}
+
+export function ProvidedServices({ selectedProfile }: ProvidedServicesProps) {
   const { t } = useTranslation();
 
-  return (
-    <Card
-      isBlurred
-      className="bg-white dark:bg-gray-800 w-full rounded-xl shadow-lg"
-    >
-      <CardBody>
-        <div className="grid gap-6 py-6 px-8">
-          {/* Título */}
-          <div className="flex items-center gap-3 mb-4">
-            <FaClipboardList className="text-pink-500 text-2xl" />
-            <p className="text-pink-500 text-2xl font-semibold">
-              {t('profile.services_provided')}
-            </p>
-          </div>
+  if (!selectedProfile) return null;
 
-          {/* Lista de Serviços */}
-          {servico && Array.isArray(servico) && servico.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-              {servico.map((servicoItem, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 text-sm bg-pink-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded-lg px-3 py-2 shadow-sm"
-                >
-                  <FaCheckCircle className="text-pink-500" />
-                  {t(`profile.servico.${servicoItem}`)}
-                </div>
-              ))}
+  const servico = selectedProfile.servico;
+
+  return (
+    <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
+      <h2 className="text-3xl md:text-4xl mb-6">{t('profile.services_provided')}</h2>
+
+      {servico && servico.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {servico.map((service, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <span className="text-darkpink">
+                <Image
+                  src="/icons/check.png"
+                  alt="check"
+                  width={25}
+                  height={25}
+                />
+              </span>
+              <span className="text-gray-800 dark:text-gray-200">
+                {t(`profile.servico.${service}`)}
+              </span>
             </div>
-          ) : (
-            <div className="flex flex-col items-center text-gray-400 text-base mt-4">
-              <p>{t('profile.no_services')}</p>
-            </div>
-          )}
+          ))}
         </div>
-      </CardBody>
+      ) : (
+        <div className="text-gray-400 text-base mt-4">
+          <p>{t('profile.no_services')}</p>
+        </div>
+      )}
     </Card>
   );
-};
-
-export default ServicosPrestados;
+}
