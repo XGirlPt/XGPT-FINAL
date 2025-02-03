@@ -330,7 +330,7 @@ const ModificarStories: React.FC<ModificarStoriesProps> = ({
                     }}
                   />
                   <video
-                    src={storyURL}
+                    src={storyURL || '/logo.webp'}
                     className="w-full h-32 object-cover rounded-lg border border-gray-600"
                     controls={false}
                     muted

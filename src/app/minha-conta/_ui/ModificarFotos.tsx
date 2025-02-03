@@ -277,7 +277,7 @@ const ModificarFotos: React.FC<ModificarFotosProps> = ({
                     onClick={() => handleDeletePhoto(index)}
                   />
                   <BlurImage
-                    src={photoURL}
+                    src={photoURL  || '/logo.webp'}
                     alt={`Foto ${index}`}
                     className="w-full h-32 object-cover rounded-lg border border-gray-600"
                   />

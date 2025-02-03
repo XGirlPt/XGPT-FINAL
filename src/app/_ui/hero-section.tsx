@@ -20,6 +20,9 @@ import {
 import Autoplay from 'embla-carousel-autoplay';
 import { Badge } from '@/components/ui/badge';
 import { Profile } from '@/types';
+import Link from 'next/link';
+import { Anonymous_Pro } from 'next/font/google';
+import { TbArrowDownSquare, TbMoodSad } from 'react-icons/tb';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -45,6 +48,18 @@ const floatingAnimation = {
     },
   },
 };
+
+interface Profile {
+  nome: string;
+  cidade: string;
+  photos: string[];
+  stories: string[]; // Histórias
+  tag: string;
+  tagtimestamp: string;
+  certificado: boolean;
+  live: boolean | string;
+  // live pode ser booleano ou string
+}
 
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
   return (
@@ -88,9 +103,9 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             variants={floatingAnimation}
           >
             <HeroImageContainer
-              src={profiles[0]?.photos[0] || '/models/stories/1.png'}
-              alt="Profile picture"
-            />
+  src={profiles[0]?.photos[0] || '/logo.webp'}
+  alt="Profile picture"
+/>
           </motion.div>
 
           <motion.div
@@ -107,10 +122,12 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             }}
           >
             <HeroImageContainer
-              src={profiles[1]?.photos[0] || '/models/stories/2.png'}
+              src={profiles[1]?.photos[0]  || '/logo.webp'}
               alt="Profile picture"
             />
           </motion.div>
+
+          <Link href={`/escort/${profiles.nome}`} passHref>
 
           <motion.div
             className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10"
@@ -126,10 +143,12 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             }}
           >
             <HeroImageContainer
-              src={profiles[2]?.photos[0] || '/models/stories/3.png'}
+              src={profiles[2]?.photos[0]  || '/logo.webp'}
               alt="Profile picture"
             />
           </motion.div>
+          </Link>
+
 
           <motion.div
             className="absolute -bottom-20 lg:bottom-0 right-0 lg:-right-10"
@@ -145,7 +164,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             }}
           >
             <HeroImageContainer
-              src={profiles[3]?.photos[0] || '/models/stories/4.png'}
+              src={profiles[3]?.photos[0]  || '/logo.webp'}
               alt="Profile picture"
             />
           </motion.div>
@@ -158,7 +177,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
         >
           <Carousel
             opts={{
-              align: 'start',
+              align: 'center',
               loop: true,
             }}
             plugins={[
@@ -167,11 +186,11 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               }),
             ]}
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="">
               {profiles.map((profile) => (
                 <CarouselItem
                   key={profile.nome}
-                  className="pl-2 md:pl-4 md:basis-1/5 basis-1/2 "
+                  className="pl-2 md:pl-4 md:basis-1/6 basis-1/2 "
                 >
                   <motion.div
                     className="overflow-hidden rounded-3xl"
@@ -191,7 +210,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                       >
                         {profile.photos[0] && (
                           <Image
-                            src={profile.photos[0]}
+                            src={profile.photos[0] || '/logo.webp'}
                             alt={profile.nome}
                             width={400}
                             height={400}
@@ -230,7 +249,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                               <TooltipTrigger asChild>
                               <Badge
   variant="secondary"
-  className="bg-[#8E44AD] hover:bg-[#8E44AD]/90 dark:bg-[#8E44AD] dark:hover:bg-[#8E44AD] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg"
+  className="bg-[#8E44AD]  dark:bg-[#8E44AD] dark:hover:bg-[#8E44AD] text-white border-none transition-all duration-300 hover:scale-110 transform text-xxs hover:shadow-lg"
 >
   <Image
     src="/icons/stories.png"
@@ -279,7 +298,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                         )}
                       </motion.div>
                       {/* Tag */}
-                      {/* {profile.tag && (
+                      {profile.tag && (
                         <motion.span
                           className="absolute bottom-2 left-2 bg-pink-500 text-white px-2 py-1 rounded-full text-xs"
                           initial={{ opacity: 0, y: 10 }}
@@ -288,7 +307,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                         >
                           {profile.tag}
                         </motion.span>
-                      )} */}
+                      )}
                     </div>
                     <motion.div
                       className="p-4"
@@ -330,3 +349,11 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
   );
 }
 
+
+
+// 961552713 - Patricia silva 
+
+ - renegociar 
+ - taxa fixa 2 a 3 anos 
+ - seguros todos 
+ - 778€  - - - 

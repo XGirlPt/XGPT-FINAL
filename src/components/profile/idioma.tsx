@@ -58,7 +58,7 @@ const Linguas: React.FC<LinguasProps> = ({ selectedProfile }) => {
           linguaRedux.map((lingua: string, index: number) => (
             <div key={index} className="flex items-center">
               <Image
-                src={obterBandeira(lingua)}
+                src={obterBandeira(lingua)  || '/logo.webp'}
                 alt={`${lingua} flag`}
                 width={150}
                 height={150}

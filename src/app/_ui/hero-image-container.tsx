@@ -17,6 +17,7 @@ export function HeroImageContainer({
       }}
     >
       <div className="absolute inset-0 rounded-full border-[4px] border-[#e91e63]" />
+
       <div className="absolute inset-[4px] rounded-full overflow-hidden">
         <Image src={src} alt={alt} width={200} height={200} />
       </div>

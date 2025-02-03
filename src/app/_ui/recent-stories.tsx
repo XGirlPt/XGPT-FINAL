@@ -90,7 +90,7 @@ export function RecentStories() {
                   >
                     <button onClick={() => router.push(`/escort/${profile.nome}`)}>
                       <Image
-                        src={profile.photos[0]}
+                        src={profile.photos[0]  || '/logo.webp'}
                         alt={profile.nome}
                         width={400}
                         height={400}

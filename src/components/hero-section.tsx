@@ -10,7 +10,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { HeroImageContainer } from './hero-image-container';
 import {
   Tooltip,
   TooltipContent,
@@ -145,7 +144,7 @@ export function HeroSection() {
         >
           <Carousel
             opts={{
-              align: 'start',
+              align: 'center',
               loop: true,
             }}
             plugins={[
@@ -154,17 +153,17 @@ export function HeroSection() {
               }),
             ]}
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {profiles.map((profile) => (
-                <CarouselItem
-                  key={profile.nom}
-                  className="pl-2 md:pl-4 md:basis-1/4 basis-1/2 "
-                >
+          <CarouselContent className="">
+  {profiles.map((profile) => (
+    <CarouselItem
+      key={profile.nome}
+      className=" md:basis-1/7 basis-1/7"
+    >
                   <motion.div
                     className="overflow-hidden rounded-3xl"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.1 }}
                     whileHover={{
                       scale: 1.02,
                       transition: { duration: 0.2 },
@@ -178,8 +177,8 @@ export function HeroSection() {
                       >
                         {profile.photos[0] && (
                           <Image
-                            src={profile.photos[0]}
-                            alt={profile.nom}
+                            src={profile.photos[0]  || '/logo.webp'}
+                            alt={profile.nome}
                             width={400}
                             height={400}
                           />

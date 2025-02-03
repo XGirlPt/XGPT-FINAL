@@ -111,32 +111,31 @@ export default StoriesPage;
 
 // SEO complet ajouté
 export const metadata = {
-  title: 'Escort Girls, Masseuses et Accompagnatrices de luxe en France',
+  title: 'Acompanhantes de Luxo, Massagistas e Escorts em Portugal',
   description:
-    "Découvrez des escort girls, masseuses érotiques et accompagnatrices de luxe disponibles à travers le Portugal. Consultez les derniers profils et stories d'accompagnatrices dans votre région.",
+    "Encontre acompanhantes de luxo, massagistas eróticas e escorts disponíveis em todo o Portugal. Veja os perfis mais recentes e histórias das melhores acompanhantes na sua região.",
   keywords: [
-    'escort girls',
-    'masseuses érotiques',
-    'accompagnatrices de luxe',
-    'Portugal',
-    "services d'accompagnement",
-    'luxury escorts',
-    'massages érotiques',
+    'acompanhantes de luxo',
+    'massagistas eróticas',
+    'escorts Portugal',
+    'serviços de acompanhantes',
+    'massagens eróticas',
+    'luxury escorts Portugal',
   ],
   openGraph: {
-    title: 'Escort Girls et Accompagnatrices de luxe en France',
+    title: 'Acompanhantes de Luxo e Massagistas Eróticas em Portugal',
     description:
-      'Découvrez des escort girls et masseuses érotiques de luxe disponibles partout au Portugal.',
+      'Descubra as melhores acompanhantes e massagistas eróticas de luxo disponíveis em Portugal.',
     type: 'website',
-    locale: 'fr_FR',
-    url: 'https://www.xgirl.fr',
-    site_name: 'XGirl - N°1 des Escortes en France',
+    locale: 'pt_PT',
+    url: 'https://www.xgirl.pt',
+    site_name: 'XGirl - Nº1 em Acompanhantes de Luxo em Portugal',
     images: [
       {
-        url: 'https://votre-site.com/images/cover.jpg',
+        url: 'https://www.xgirl.pt/images/logo.png',
         width: 1200,
         height: 630,
-        alt: 'Escort Girls, Masseuses érotiques et Accompagnatrices de luxe en France ',
+        alt: 'Acompanhantes de Luxo, Massagistas Eróticas e Escorts em Portugal',
       },
     ],
   },

@@ -237,7 +237,7 @@ const MinhaConta: React.FC<MinhaContaProps> = () => {
                   <div className="relative w-32 h-32">
                     {photoURLsRedux?.length > 0 ? (
                       <BlurImage
-                        src={photoURLsRedux[0]}
+                        src={photoURLsRedux[0]  || '/logo.webp'}
                         alt={`Foto de ${nomeRedux}`}
                         className="w-full h-full rounded-full object-cover shadow-lg"
                       />

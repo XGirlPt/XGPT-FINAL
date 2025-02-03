@@ -3,13 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import * as React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Star, Video, Share2, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext'; // Importe o contexto de idioma
 import { useTranslation } from 'react-i18next';
-
+import Link from 'next/link';
 
 interface Profile {
   nome: string;
@@ -185,16 +184,30 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
           className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-3 shadow-lg overflow-hidden cursor-pointer transform transition-all"
         >
           {/* Imagem do perfil */}
+          
+          
+          {profile.photos?.[0] ? (
+
+          <Link href={`/escort/${profile.nome}`} passHref>
           <div className="relative rounded-3xl overflow-hidden">
+      
             <Image
-              src={profile.photos[0]}
+ src={profile.photos[0] || '/logo.webp'} 
               alt={profile.nome}
               width={500}
               height={500}
               className="object-cover rounded-3xl w-full h-48"
             />
           </div>
-          
+          </Link>
+          ) : null}
+
+
+
+
+
+
+
           {/* Conteúdo da Card */}
           <div className="p-3 flex flex-col gap-2">
             <div className="flex justify-between items-center">
@@ -202,11 +215,13 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
              
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{profile.nome}</h3>
              
-             
-              <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
-                <Image src="/icons/location.png" alt="Location" width={14} height={14} />
-                {profile.cidade}
-              </div>
+      <button>
+        <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
+          <Image src="/icons/location.png" alt="Location" width={14} height={14} />
+          {profile.cidade}
+        </div>
+      </button>
+
             </div>
             
             {/* Tag ou Estado */}
@@ -219,7 +234,7 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
             
             {/* Timestamp */}
             <div className="text-xs text-gray-400 flex items-center gap-1">
-              <Clock size={14} /> {profile.tagtimestamp}
+            <Clock size={14} /> {timeElapsedList[index]}
             </div>
           </div>
         </motion.div>

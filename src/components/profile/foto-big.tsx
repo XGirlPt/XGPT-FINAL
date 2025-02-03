@@ -40,11 +40,10 @@ const FotoBig: React.FC<FotoBigProps> = ({
         <Image
           src={`${selectedProfile?.photoURL[currentPhotoIndex] || '/logo.webp'}`}
           alt="Large Photo"
-          className="max-w-[80vw] max-h-[80vh] bg-gray-800 transition-opacity duration-900 ease-in-out rounded-2xl blur-2xl"
-          loading="lazy"
+          className="w-screen h-screen bg-gray-800 transition-opacity duration-900 ease-in-out object-contain rounded-2xl"          loading="lazy"
           layout="responsive"
-          width={100}
-          height={100}
+          width={900}
+          height={600}
         />
       </div>
       <button className="text-bold font-bold" onClick={onClose}>

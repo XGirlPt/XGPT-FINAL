@@ -235,7 +235,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         <button className="flex items-center gap-2 bg-transparent border-none cursor-pointer">
           {photoUID ? (
             <Image
-              src={photoUID}
+              src={photoUID  || '/logo.webp'}
               alt="Avatar"
               width={20}
               height={20}
@@ -315,7 +315,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                 )}
               >
                 <Image
-                  src={isActive(link.href) ? link.lightIcon : link.darkIcon}
+                  src={isActive(link.href) ? link.lightIcon : link.darkIcon  || '/logo.webp'}
                   alt={link.label}
                   width={20}
                   height={20}
