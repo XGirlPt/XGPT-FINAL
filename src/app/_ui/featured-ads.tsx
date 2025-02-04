@@ -229,8 +229,8 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
               className="text-sm text-gray-700 dark:text-gray-300 italic bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-lg"
               variants={badgeVariants}
             >
-              "{profile.tag}"
-            </motion.p>
+ {'"' + profile.tag + '"'}            
+ </motion.p>
             
             {/* Timestamp */}
             <div className="text-xs text-gray-400 flex items-center gap-1">

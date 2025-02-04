@@ -127,7 +127,8 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             />
           </motion.div>
 
-          <Link href={`/escort/${profiles.nome}`} passHref>
+          <Link href={`/escort/${profiles[0]?.nome}`} passHref>
+
 
           <motion.div
             className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10"
@@ -350,10 +351,3 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
 }
 
 
-
-// 961552713 - Patricia silva 
-
- - renegociar 
- - taxa fixa 2 a 3 anos 
- - seguros todos 
- - 778€  - - - 
