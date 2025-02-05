@@ -9,14 +9,11 @@
     "searchBar": "Pesquisar...",
     "register": "Registar",
     "myAccount": "Minha Conta",
+        "settings": "Configurações",
+      "logout": "Sair",
     "FR": "Francês",
-    "EN": "Inglês",
+    "EN": "Inglês"
 
-    "user": {
-      "myAccount": "Minha Conta",
-      "settings": "Configurações",
-      "logout": "Sair"
-    }
   },
 
   "Footer": {

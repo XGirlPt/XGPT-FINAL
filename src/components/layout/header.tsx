@@ -249,8 +249,11 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => router.push('/profile')}>
+        <DropdownMenuItem onClick={() => router.push('/definicoes')}>
           <FaCog className="mr-2" /> {t('Header.settings')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push('/minha-conta')}>
+          <FaSignOutAlt className="mr-2" /> {t('Header.myAccount')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           <FaSignOutAlt className="mr-2" /> {t('Header.logout')}

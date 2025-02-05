@@ -9,14 +9,10 @@
     "searchBar": "Chercher...",
     "register": "S'inscrire",
     "myAccount": "Mon compte",
+     "settings": "Paramètres",
+      "logout": "Déconnexion",
     "FR": "Francais",
-    "EN": "Anglais",
-
-    "user": {
-      "myAccount": "Mon compte",
-      "settings": "Paramètres",
-      "logout": "Déconnexion"
-    }
+    "EN": "Anglais"
   },
 
   "Footer": {
