@@ -360,11 +360,11 @@ const Footer = () => {
             theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
           )}
         >
-          Copyright ©2024
+          Xgirl ©2025
         </p>
         <div className="flex gap-4">
           <Link
-            href="/privacy"
+            href="/Privacidade"
             className={cn(
               'text-sm hover:underline',
               theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
@@ -373,7 +373,7 @@ const Footer = () => {
             Privacy Policy
           </Link>
           <Link
-            href="/terms"
+            href="/Termos"
             className={cn(
               'text-sm hover:underline',
               theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'

@@ -110,7 +110,7 @@ Mobile
 - [] solve change profile features issue
 - [] rendering profiles only if they have Tag
 - [] Tarifs not working
-- [] aspas em Tag
+- [X] aspas em Tag
 - [] story badge
 - [] modificar tautagens nao esta a funcionar
 - [] linguas sem imagem do pais
@@ -144,3 +144,19 @@ Mobile
 - [] email confirmacao
 - [x] suspender perfil
 - [] perguntas e respostas
+
+landing page
+- Header and general layout  - comparing with original figma 
+- carousel card should have "tag/state" .. maybee we should use same card from Features and put here .. but smaller. 
+- carousel should have 7 cards, and carousel takes all display whidth .. marign 4 or 6 
+- stories doesnt look nice. 
+- google api map in landing page (replace for current figma image)
+
+profile page
+- finish design. minor corrections comparing with figma
+- show a bigger photo when we click a photo. 
+- language flag not showing. 
+
+Register.
+- when upload photo or story put watermark before send it to supabase storage. 
+

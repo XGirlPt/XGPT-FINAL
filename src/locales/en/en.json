@@ -353,40 +353,46 @@
     "next": "Next"
   },
 
-  "terms": {
-    "title": "Terms and Conditions of Use",
-    "section1": {
-      "title": "1. Purpose",
-      "paragraph1": "This legal notice regulates the use of the XGirl.fr website, owned by XGirl, LDA.",
-      "paragraph2": "Accessing and browsing the site automatically assigns the condition of USER and implies full acceptance of all conditions published in this legal notice.",
-      "paragraph3": "The OWNER OF THE SITE may modify these conditions without prior notice.",
-      "paragraph4": "It is recommended that the USER carefully read this content before using the services and information provided by the site.",
-      "paragraph5": "The USER agrees to use the site in accordance with the law and this legal notice."
-    },
-    "section2": {
-      "title": "2. Identification",
-      "paragraph1": "Legal name: XGirl.pt, LDA.",
-      "paragraph2": "Tax ID: 123456789",
-      "paragraph3": "Address: Rua da Liberdade, 123, 1st floor, Lisbon, Portugal.",
-      "paragraph4": "Contact email: info@xgirl.fr"
-    },
-    "section3": {
-      "title": "3. Communications",
-      "paragraph1": "Contact methods include:",
-      "paragraph2": "Phone: +351 910253456",
-      "paragraph3": "Email: info@xgirl.fr"
-    },
-    "section4": {
-      "title": "4. Terms of Access and Use",
-      "paragraph1": "Access to the site and its services is free of charge.",
-      "paragraph2": "The USER declares that all information provided is true and authentic.",
-      "paragraph3": "The USER agrees to use the contents and services of the site properly.",
-      "listItem1": "Distributing illegal or discriminatory content.",
-      "listItem2": "Introducing viruses or harmful programs.",
-      "listItem3": "Attempting to access restricted areas of the site or third-party systems and extracting unauthorized data.",
-      "listItem4": "Violating intellectual or industrial property rights.",
-      "listItem5": "Impersonating other users.",
-      "listItem6": "Distributing, reproducing, or modifying content without express authorization."
+
+    
+      "TermosPage": {
+        "title": "Terms and Conditions",
+        "section1": {
+          "title": "1. Introduction",
+          "content": "Welcome to XGirl.fr, a platform for adult entertainment service listings. By accessing and using our website, you agree to these Terms and Conditions. If you do not agree with any of the terms, we ask that you do not use our services."
+        },
+        "section2": {
+          "title": "2. Age Requirements",
+          "content": "This website is strictly prohibited for individuals under the age of 18 or the legal age of majority in your country of residence. By using the site, you declare that you are of legal age and take full responsibility for accessing the content."
+        },
+        "section3": {
+          "title": "3. Permitted Use",
+          "content": "3.1. The site is intended exclusively for the publication of adult entertainment service advertisements that comply with the current legislation of the European Union and the advertiser's country.\n3.2. The publication of any advertisement involving illegal activities, sexual exploitation, human trafficking, child pornography, coercion, or any other practice contrary to the law is prohibited.\n3.3. The user is responsible for the content of the advertisements and must ensure that all information provided is true and does not infringe the rights of third parties."
+        },
+        "section4": {
+          "title": "4. Responsibility and Moderation",
+          "content": "4.1. XGirl.fr is not responsible for the content of advertisements published by users but reserves the right to remove or modify any advertisement that violates these Terms and Conditions.\n4.2. We have implemented moderation mechanisms to ensure that the advertisements published comply with the law and site policies."
+        },
+        "section5": {
+          "title": "5. Data Protection and Privacy",
+          "content": "5.1. The site adheres to the guidelines of the General Data Protection Regulation (GDPR) of the European Union.\n5.2. The personal information provided by users will be protected in accordance with our Privacy Policy and will not be shared with third parties without due consent."
+        },
+        "section6": {
+          "title": "6. Payments and Subscriptions",
+          "content": "6.1. Some site services may require payment. All financial transactions will be processed securely.\n6.2. In the event of subscription cancellation, no refunds will be issued for payments already made unless required by law."
+        },
+        "section7": {
+          "title": "7. Sanctions and Account Deletion",
+          "content": "7.1. XGirl.fr reserves the right to suspend or delete user accounts that violate these Terms and Conditions without prior notice.\n7.2. If you identify any illegal or irregular activity on the site, please contact our support team immediately."
+        },
+        "section8": {
+          "title": "8. Final Provisions",
+          "content": "8.1. These Terms and Conditions may be changed at any time. We recommend that users periodically review this document.\n8.2. Continued use of the site after changes to the Terms and Conditions constitutes acceptance of the modifications.",
+          "contact": "If you have any questions, please contact our support team at info@xgirl.fr."
+        }
+      }
     }
-  }
-}
+    
+  
+
+

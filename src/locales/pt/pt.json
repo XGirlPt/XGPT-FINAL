@@ -339,7 +339,168 @@
     "buttonHG": {
       "previous": "Anterior",
       "next": "Próximo"
-    }
-  }
+    },
+    
+      "TermosPage": {
+        "title": "Termos e Condições",
+        "section1": {
+          "title": "1. Introdução",
+          "content": "Bem-vindo ao XGirl.fr, uma plataforma de anúncios voltada para serviços de entretenimento adulto. Ao acessar e utilizar nosso site, você concorda com estes Termos e Condições. Caso não concorde com algum dos termos, solicitamos que não utilize nossos serviços."
+        },
+        "section2": {
+          "title": "2. Requisitos de Idade",
+          "content": "Este site é estritamente proibido para menores de 18 anos ou a idade legal de maioridade no seu país de residência. Ao utilizar o site, você declara ser maior de idade e assumir total responsabilidade pelo acesso ao conteúdo."
+        },
+        "section3": {
+          "title": "3. Uso Permitido",
+          "content": "3.1. O site destina-se exclusivamente à publicação de anúncios de serviços de entretenimento adulto que estejam em conformidade com a legislação vigente na União Europeia e no país do anunciante.\n3.2. É proibida a publicação de qualquer anúncio que envolva atividades ilegais, exploração sexual, tráfico de pessoas, pornografia infantil, coerção ou qualquer outra prática contrária à lei.\n3.3. O usuário é responsável pelo conteúdo dos anúncios e deve garantir que todas as informações fornecidas são verdadeiras e não infringem direitos de terceiros."
+        },
+        "section4": {
+          "title": "4. Responsabilidade e Moderação",
+          "content": "4.1. O XGirl.fr não se responsabiliza pelo conteúdo dos anúncios publicados pelos usuários, mas reserva-se o direito de remover ou modificar qualquer anúncio que viole estes Termos e Condições.\n4.2. Implementamos mecanismos de moderação para garantir que os anúncios publicados estejam em conformidade com a legislação e as políticas do site."
+        },
+        "section5": {
+          "title": "5. Proteção de Dados e Privacidade",
+          "content": "5.1. O site respeita as diretrizes do Regulamento Geral sobre a Proteção de Dados (GDPR) da União Europeia.\n5.2. As informações pessoais fornecidas pelos usuários serão protegidas conforme nossa Política de Privacidade e não serão compartilhadas com terceiros sem o devido consentimento."
+        },
+        "section6": {
+          "title": "6. Pagamentos e Assinaturas",
+          "content": "6.1. Alguns serviços do site podem ser pagos. Todas as transações financeiras serão processadas de forma segura.\n6.2. Em caso de cancelamento de assinatura, não será realizado reembolso de valores já pagos, salvo quando exigido por lei."
+        },
+        "section7": {
+          "title": "7. Sanções e Exclusão de Conta",
+          "content": "7.1. O XGirl.fr reserva-se o direito de suspender ou excluir contas de usuários que violem estes Termos e Condições, sem necessidade de aviso prévio.\n7.2. Se você identificar qualquer atividade ilegal ou irregular no site, entre em contato com nossa equipe de suporte imediatamente."
+        },
+        "section8": {
+          "title": "8. Disposições Finais",
+          "content": "8.1. Estes Termos e Condições podem ser alterados a qualquer momento. Recomendamos que os usuários revisem periodicamente este documento.\n8.2. O uso continuado do site após alterações nos Termos e Condições constitui aceitação das modificações.",
+          "contact": "Caso tenha dúvidas, entre em contato com nossa equipe de suporte através do e-mail info@xgirl.fr."
+        }
+
+      },
+      
+        "privacyPolicy": {
+          "title": "Política de Privacidade e Tratamento de Dados Pessoais",
+          "sections": [
+            {
+              "id": 1,
+              "title": "Entidade Responsável pelo Tratamento de Dados",
+              "content": [
+                "A plataforma Classificados X.net é gerida e operada pela Classificados X, que assume a responsabilidade pela recolha e tratamento dos dados pessoais fornecidos pelos seus utilizadores.",
+                "A presente Política de Privacidade aplica-se a todos os contratos e serviços oferecidos pela Classificados X. Para cumprir as suas funções, a empresa pode recorrer a parceiros e subcontratados."
+              ]
+            },
+              {
+                "id": 2,
+                "title": "Tipos de Dados Recolhidos",
+                "content": [
+                  "Entre os dados pessoais que podem ser recolhidos pelo Classificados X estão:",
+                  {
+                    "list": [
+                      "Nome completo",
+                      "Número de telefone",
+                      "Endereço de e-mail",
+                      "Número de contribuinte",
+                      "Endereço postal"
+                    ]
+                  },
+                  "O fornecimento destes dados deve ser feito de forma consciente e voluntária pelos utilizadores, que garantem a veracidade e atualização das informações disponibilizadas.",
+                  "A recolha de dados pode ocorrer através de formulários no site, comunicações por e-mail ou outros meios eletrónicos autorizados."
+                ]
+              },
+              {
+                "id": 3,
+                "title": "Finalidades do Tratamento de Dados",
+                "content": [
+                  "Os dados recolhidos destinam-se às seguintes finalidades:",
+                  {
+                    "list": [
+                      "Comunicação com utilizadores (atualização de perfil, envio de notificações e alertas por e-mail ou SMS sobre anúncios contratados)",
+                      "Gestão de contratos e serviços solicitados",
+                      "Processamento de faturação",
+                      "Melhoria contínua dos serviços e da experiência do utilizador no site",
+                      "Cumprimento de obrigações legais ou regulatórias",
+                      "Atendimento a questões, sugestões ou reclamações feitas pelos utilizadores"
+                    ]
+                  },
+                  "O Classificados X pode cruzar dados recolhidos para atualizar e garantir a integridade da informação armazenada."
+                ]
+              },
+              {
+                "id": 4,
+                "title": "Partilha de Dados",
+                "content": [
+                  "Os dados pessoais recolhidos podem ser partilhados com terceiros em situações específicas, respeitando a confidencialidade e finalidades estabelecidas, tais como:",
+                  {
+                    "list": [
+                      "Autoridades judiciais e administrativas, quando exigido por lei",
+                      "Parceiros para serviços de contabilidade e faturação",
+                      "Entidades subcontratadas que processam dados em nome do Classificados X, conforme as instruções estabelecidas"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "title": "Direitos dos Titulares dos Dados",
+                "content": [
+                  "Os utilizadores têm direito, em conformidade com a legislação de proteção de dados, a:",
+                  {
+                    "list": [
+                      "Aceder aos seus dados pessoais",
+                      "Solicitar a retificação ou atualização dos seus dados",
+                      "Exigir a eliminação ou anonimização dos dados, quando permitido por lei",
+                      "Pedir a portabilidade dos dados pessoais",
+                      "Opor-se ao tratamento de dados para determinadas finalidades"
+                    ]
+                  },
+                  "Para exercer qualquer um destes direitos, o utilizador deve entrar em contacto através do endereço de e-mail: DPO@classificadosx.net."
+                ]
+              },
+              {
+                "id": 6,
+                "title": "Armazenamento e Segurança dos Dados",
+                "content": [
+                  "Os dados pessoais são armazenados pelo tempo necessário para cumprir as finalidades para as quais foram recolhidos.",
+                  "Quando não houver exigência legal para a sua manutenção, os dados serão eliminados ou anonimizados.",
+                  "O Classificados X adota medidas técnicas e organizacionais para proteger os dados contra perda, acesso não autorizado, uso indevido ou divulgação indevida.",
+                  "Além disso, exige que os seus subcontratados adotem padrões de segurança compatíveis.",
+                  "É recomendável que os utilizadores também adotem medidas de segurança próprias, como a utilização de dispositivos atualizados com software antivírus, firewall ativa e a verificação da autenticidade dos sites que visitam."
+                ]
+              },
+              {
+                "id": 7,
+                "title": "Transferências Internacionais de Dados",
+                "content": [
+                  "Em situações onde for necessário transferir dados para países fora da União Europeia (UE) ou do Espaço Económico Europeu (EEE), o Classificados X assegura o cumprimento dos requisitos legais.",
+                  "Nenhum dado será transferido para jurisdições que não ofereçam garantias adequadas de proteção de dados."
+                ]
+              },
+              {
+                "id": 8,
+                "title": "Comunicação de Dados a Terceiros",
+                "content": [
+                  "Sempre que solicitado judicialmente, ou em processos administrativos, o Classificados X poderá fornecer dados pessoais às autoridades competentes, desde que tal pedido esteja devidamente fundamentado."
+                ]
+              },
+              {
+                "id": 9,
+                "title": "Atualizações desta Política",
+                "content": [
+                  "O Classificados X reserva-se o direito de modificar esta Política de Privacidade sempre que necessário.",
+                  "Recomendamos que os utilizadores consultem este documento periodicamente para se manterem informados sobre as nossas práticas de privacidade."
+                ]
+              },
+              {
+                "id": 10,
+                "title": "Contacto",
+                "content": [
+                  "Para esclarecer dúvidas sobre esta Política de Privacidade ou para exercer os direitos sobre os dados pessoais, os utilizadores podem entrar em contacto através do endereço de e-mail: DPO@classificadosx.net."
+                ]
+              }
+            ]
+          }
+}
+      
   
 

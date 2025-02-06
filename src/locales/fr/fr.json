@@ -386,5 +386,45 @@
       "listItem5": "Impersonner d'autres utilisateurs.",
       "listItem6": "Distribuer, reproduire ou modifier des contenus sans autorisation expresse."
     }
+  },
+  
+    "TermosPage": {
+      "title": "Termes et Conditions",
+      "section1": {
+        "title": "1. Introduction",
+        "content": "Bienvenue sur XGirl.fr, une plateforme dédiée aux annonces de services de divertissement pour adultes. En accédant et utilisant notre site, vous acceptez ces Termes et Conditions. Si vous n'êtes pas d'accord avec ces termes, nous vous demandons de ne pas utiliser nos services."
+      },
+      "section2": {
+        "title": "2. Conditions d'Âge",
+        "content": "Ce site est strictement interdit aux mineurs de moins de 18 ans ou à l'âge légal de majorité dans votre pays de résidence. En utilisant ce site, vous déclarez être majeur et assumez l'entière responsabilité de l'accès au contenu."
+      },
+      "section3": {
+        "title": "3. Utilisation Autorisée",
+        "content": "3.1. Le site est exclusivement destiné à la publication d'annonces de services de divertissement pour adultes conformes à la législation en vigueur dans l'Union Européenne et dans le pays de l'annonceur.\n3.2. La publication de toute annonce impliquant des activités illégales, l'exploitation sexuelle, la traite des êtres humains, la pornographie infantile, la coercition ou toute autre pratique contraire à la loi est interdite.\n3.3. L'utilisateur est responsable du contenu des annonces et doit garantir que toutes les informations fournies sont véridiques et ne portent pas atteinte aux droits des tiers."
+      },
+      "section4": {
+        "title": "4. Responsabilité et Modération",
+        "content": "4.1. XGirl.fr n'est pas responsable du contenu des annonces publiées par les utilisateurs, mais se réserve le droit de supprimer ou de modifier toute annonce qui viole ces Termes et Conditions.\n4.2. Nous avons mis en place des mécanismes de modération pour garantir que les annonces publiées respectent la législation et les politiques du site."
+      },
+      "section5": {
+        "title": "5. Protection des Données et Confidentialité",
+        "content": "5.1. Le site respecte les directives du Règlement Général sur la Protection des Données (RGPD) de l'Union Européenne.\n5.2. Les informations personnelles fournies par les utilisateurs seront protégées conformément à notre Politique de Confidentialité et ne seront pas partagées avec des tiers sans consentement préalable."
+      },
+      "section6": {
+        "title": "6. Paiements et Abonnements",
+        "content": "6.1. Certains services du site peuvent être payants. Toutes les transactions financières seront traitées de manière sécurisée.\n6.2. En cas d'annulation d'abonnement, aucun remboursement ne sera effectué pour les paiements déjà effectués, sauf si la loi l'exige."
+      },
+      "section7": {
+        "title": "7. Sanctions et Suppression de Compte",
+        "content": "7.1. XGirl.fr se réserve le droit de suspendre ou de supprimer les comptes des utilisateurs qui enfreignent ces Termes et Conditions, sans préavis.\n7.2. Si vous identifiez une activité illégale ou irrégulière sur le site, veuillez contacter immédiatement notre équipe d'assistance."
+      },
+      "section8": {
+        "title": "8. Dispositions Finales",
+        "content": "8.1. Ces Termes et Conditions peuvent être modifiés à tout moment. Nous recommandons aux utilisateurs de consulter périodiquement ce document.\n8.2. L'utilisation continue du site après les modifications des Termes et Conditions constitue une acceptation des changements.",
+        "contact": "Si vous avez des questions, veuillez contacter notre équipe d'assistance à info@xgirl.fr."
+      }
+    }
   }
-}
+  
+  
+

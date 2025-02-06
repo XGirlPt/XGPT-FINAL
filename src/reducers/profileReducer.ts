@@ -1,3 +1,4 @@
+import {  } from './../actions/ProfileActions';
 import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -36,6 +37,7 @@ import {
   UPDATE_PROFILES,
   SET_SELECTED_PROFILE,
   UPDATE_TARIFA,
+  
 } from '../actions/ProfileActions';
 
 // Define the state type
@@ -319,7 +321,10 @@ type ProfileActionTypes =
   | SetStoryUrlAction
   | UpdateStoriesAction
   | UpdateProfilesAction
-  | SetSelectedProfileAction;
+  | SetSelectedProfileAction
+  | UpdateLongitudeAction
+  | UpdateLatitudeAction;
+
 
 // Define the initial state
 const initialState: AppState = {
@@ -439,21 +444,20 @@ const rootReducer = (
         },
       };
 
-    case UPDATE_LATITUDE:
-      return {
-        ...state,
-        profile: {
-          ...state.profile,
-          latitude: action.payload,
-        },
-      };
-
+      case UPDATE_LATITUDE:
+        return {
+          ...state,
+          profile: {
+            ...state.profile,
+            latitude: action.payload ? parseFloat(action.payload) : null, // Garante que seja um número ou null
+          },
+        };
     case UPDATE_LONGITUDE:
       return {
         ...state,
         profile: {
           ...state.profile,
-          longitude: action.payload,
+          longitude: action.payload ? parseFloat(action.payload) : null,
         },
       };
 
