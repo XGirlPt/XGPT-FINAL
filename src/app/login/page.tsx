@@ -22,7 +22,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [captchaToken, setCaptchaToken] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -45,15 +44,10 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleCaptchaChange = (token) => {
-    setCaptchaToken(token);
-  };
+
 
   const handleLogin = async () => {
-    if (!captchaToken) {
-      setErrorMessage('Por favor, complete o reCAPTCHA.');
-      return;
-    }
+
 
     setErrorMessage('');
     const { data: user, error } = await supabase.auth.signInWithPassword({
@@ -126,10 +120,10 @@ const Login = () => {
               onChange={handlePasswordChange}
               required
             />
-         <ReCAPTCHA
+         {/* <ReCAPTCHA
   sitekey="6LeNWM4qAAAAABkd3wFZJe2rcVkkx62uNq71L7Cn"
   onChange={handleCaptchaChange}
-/>
+/> */}
 
             {errorMessage && (
               <div className="text-center bg-pink-100 text-pink-500 border border-pink-500 rounded-lg p-2 text-sm">
