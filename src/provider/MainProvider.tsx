@@ -13,12 +13,11 @@ export function MainProvider(props: MainProviderProps) {
 
   return (
     <>
-              <div className="min-h-screen flex flex-col">
-
+      <div className="min-h-screen flex flex-col">
         <Header />
-      <main className="flex-1 pt-[100px]">{children}</main>
+        <main className="flex-1 pt-[100px]">{children}</main>
         <Footer />
-        </div>
+      </div>
     </>
   );
 }

@@ -15,8 +15,7 @@ import { TarifsAndLanguage } from '@/components/profile/tarifs-a-language';
 import Comments from '@/app/escort/[profileName]/_ui/comments';
 import { Description } from '@/components/profile/description';
 import HeaderG from '@/components/header-filter/header-g';
-import FotoBig from '@/components/profile/foto-big'; // Importe o componente FotoBig
-import Certificado from '../../escort/_ui/certificado'
+import FotoBig from '@/components/profile/foto-big'; // Importe o coimport Certificado from '../../escort/_ui/certificado';
 
 function UserProfile() {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
@@ -93,7 +92,7 @@ function UserProfile() {
     (profileId: number) => {
       return profiles.findIndex((profile) => profile.id === profileId);
     },
-    [profiles] 
+    [profiles]
   );
 
   useEffect(() => {
@@ -102,29 +101,26 @@ function UserProfile() {
     }
   }, [profiles, selectedProfile, findProfileIndex]);
 
-  useEffect(() => {
-  }, [isCertified]);
+  useEffect(() => {}, [isCertified]);
 
   console.log('Selected Profile:', selectedProfile);
-
-  
 
   return (
     <>
       {/* Sticky Header */}
       <div className="sticky top-32 z-50 backdrop-blur-sm border-b">
-      <div className="container mx-auto px-4 py-3">
+        <div className="container mx-auto px-4 py-3">
           {/* Desktop view */}
           <div className="hidden md:flex items-center justify-between z-40">
             <h1 className="text-4xl">Profile Details</h1>
-          
-                <HeaderG
-      currentProfileIndex={currentProfileIndex}
-      setCurrentProfileIndex={setCurrentProfileIndex}
-      profiles={profiles}
-    />
+
+            <HeaderG
+              currentProfileIndex={currentProfileIndex}
+              setCurrentProfileIndex={setCurrentProfileIndex}
+              profiles={profiles}
+            />
           </div>
-       
+
           {/* Mobile view */}
           <div className="md:hidden">
             <h1 className="text-3xl text-center mb-3">Profile Details</h1>
@@ -163,41 +159,42 @@ function UserProfile() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left Side - Fixed Profile Card */}
           <div className="w-full md:w-[370px] md:sticky md:top-44 md:self-start relative z-10">
-              <div className="transition-all duration-300 -mt-9 md:mt-[var(--profile-margin,-36px)]">
-                <LeftSide selectedProfile={selectedProfile as any} />
-              </div>
+            <div className="transition-all duration-300 -mt-9 md:mt-[var(--profile-margin,-36px)]">
+              <LeftSide selectedProfile={selectedProfile as any} />
+            </div>
           </div>
-     
 
-{showLargePhoto && (
-              <FotoBig
-                selectedProfile={selectedProfile as any}
-                onClose={() => setShowLargePhoto(false)}
-                currentIndex={photoIndex}
-              />
-            )}
-
-
-{showCertificado && (
-              < Certificado
+          {showLargePhoto && (
+            <FotoBig
               selectedProfile={selectedProfile as any}
-                onClose={() => setShowCertificado(false)}
-                
-              />
-            )}
+              onClose={() => setShowLargePhoto(false)}
+              currentIndex={photoIndex}
+            />
+          )}
 
-          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-40 relative">
-            <PhotosAndCertificado selectedProfile={selectedProfile as any}     isCertified={isCertified}
-                  handleCertificadoClick={handleCertificadoClick}
-                   handlePhotoClick={handlePhotoClick} />
+          {showCertificado && (
+            <Certificado
+              selectedProfile={selectedProfile as any}
+              onClose={() => setShowCertificado(false)}
+            />
+          )}
+
+          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-40 relative z-30">
+            <PhotosAndCertificado
+              selectedProfile={selectedProfile as any}
+              isCertified={isCertified}
+              handleCertificadoClick={handleCertificadoClick}
+              handlePhotoClick={handlePhotoClick}
+            />
             <ProvidedServices selectedProfile={selectedProfile as any} />
             <AboutProfile selectedProfile={selectedProfile as any} />
             <Description selectedProfile={selectedProfile as any} />
             <TarifsAndLanguage selectedProfile={selectedProfile as any} />
             <Comments />
 
+          </div>
             <div
-              className="absolute rounded-full  bg-[#f2cadb] dark:bg-[#2e0415]"
+              className="absolute rounded-full  bg-[#f2cadb] dark:bg-[#2e0415] -z-10"
               style={{
                 height: '350px',
                 width: '350px',
@@ -208,7 +205,6 @@ function UserProfile() {
                 zIndex: 0,
               }}
             />
-          </div>
         </div>
       </div>
     </>

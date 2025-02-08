@@ -113,7 +113,7 @@ export default StoriesPage;
 export const metadata = {
   title: 'Acompanhantes de Luxo, Massagistas e Escorts em Portugal',
   description:
-    "Encontre acompanhantes de luxo, massagistas eróticas e escorts disponíveis em todo o Portugal. Veja os perfis mais recentes e histórias das melhores acompanhantes na sua região.",
+    'Encontre acompanhantes de luxo, massagistas eróticas e escorts disponíveis em todo o Portugal. Veja os perfis mais recentes e histórias das melhores acompanhantes na sua região.',
   keywords: [
     'acompanhantes de luxo',
     'massagistas eróticas',

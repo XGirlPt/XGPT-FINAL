@@ -30,8 +30,6 @@ interface FeaturedAdsProps {
   customClass?: string;
 }
 
-
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -69,14 +67,9 @@ const badgeVariants = {
   },
 };
 
-
-
-
-
-
 const FeaturedAds: React.FC<FeaturedAdsProps> = ({
   profiles = [],
-    currentPage,
+  currentPage,
   itemsPerPage,
   onProfileClick,
 }) => {
@@ -126,11 +119,13 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
   }, [profiles, calculateTimeElapsed]);
 
   // Ordenação dos perfis por tagtimestamp (da mais recente para a mais antiga)
-  const sortedProfiles = profiles ? [...profiles].sort((a, b) => {
-    const dateA = new Date(a.tagtimestamp).getTime();
-    const dateB = new Date(b.tagtimestamp).getTime();
-    return dateB - dateA; // Ordena do mais recente para o mais antigo
-  }) : [];
+  const sortedProfiles = profiles
+    ? [...profiles].sort((a, b) => {
+        const dateA = new Date(a.tagtimestamp).getTime();
+        const dateB = new Date(b.tagtimestamp).getTime();
+        return dateB - dateA; // Ordena do mais recente para o mais antigo
+      })
+    : [];
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProfiles = sortedProfiles.slice(
@@ -140,13 +135,7 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
 
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = useLanguage();
-  
-  
-  
-  
-  
-  
-  
+
   return (
     <div className="p-4 mt-20 relative">
       <motion.div
@@ -169,89 +158,66 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
           </Link>
         </motion.div>
 
-
-
-
-
-
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-4">
-      {profiles.map((profile, index) => (
-        <motion.div
-          key={index}
-          variants={itemVariants}
-          whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-          className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-3 shadow-lg overflow-hidden cursor-pointer transform transition-all"
-        >
-          {/* Imagem do perfil */}
-          
-          
-          {profile.photos?.[0] ? (
-
-          <Link href={`/escort/${profile.nome}`} passHref>
-          <div className="relative rounded-3xl overflow-hidden">
-      
-            <Image
- src={profile.photos[0] || '/logo.webp'} 
-              alt={profile.nome}
-              width={500}
-              height={500}
-              className="object-cover rounded-3xl w-full h-48"
-            />
-          </div>
-          </Link>
-          ) : null}
-
-
-
-
-
-
-
-          {/* Conteúdo da Card */}
-          <div className="p-3 flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-             
-             
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{profile.nome}</h3>
-             
-      <button>
-        <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
-          <Image src="/icons/location.png" alt="Location" width={14} height={14} />
-          {profile.cidade}
-        </div>
-      </button>
-
-            </div>
-            
-            {/* Tag ou Estado */}
-            <motion.p
-              className="text-sm text-gray-700 dark:text-gray-300 italic bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-lg"
-              variants={badgeVariants}
+          {profiles.map((profile, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+              className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-3 shadow-lg overflow-hidden cursor-pointer transform transition-all"
             >
- {'"' + profile.tag + '"'}            
- </motion.p>
-            
-            {/* Timestamp */}
-            <div className="text-xs text-gray-400 flex items-center gap-1">
-            <Clock size={14} /> {timeElapsedList[index]}
-            </div>
-          </div>
-        </motion.div>
-      ))}
+              {/* Imagem do perfil */}
 
-    </div>
+              {profile.photos?.[0] ? (
+                <Link href={`/escort/${profile.nome}`} passHref>
+                  <div className="relative rounded-3xl overflow-hidden">
+                    <Image
+                      src={profile.photos[0] || '/logo.webp'}
+                      alt={profile.nome}
+                      width={500}
+                      height={500}
+                      className="object-cover rounded-3xl w-full h-48"
+                    />
+                  </div>
+                </Link>
+              ) : null}
 
+              {/* Conteúdo da Card */}
+              <div className="p-3 flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {profile.nome}
+                  </h3>
 
+                  <button>
+                    <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
+                      <Image
+                        src="/icons/location.png"
+                        alt="Location"
+                        width={14}
+                        height={14}
+                      />
+                      {profile.cidade}
+                    </div>
+                  </button>
+                </div>
 
+                {/* Tag ou Estado */}
+                <motion.p
+                  className="text-sm text-gray-700 dark:text-gray-300 italic bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-lg"
+                  variants={badgeVariants}
+                >
+                  {'"' + profile.tag + '"'}
+                </motion.p>
 
-
-
-
-
-
-
-
+                {/* Timestamp */}
+                <div className="text-xs text-gray-400 flex items-center gap-1">
+                  <Clock size={14} /> {timeElapsedList[index]}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
         <Link
           href="/ads"
@@ -277,7 +243,6 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
       />
     </div>
   );
-}
-
+};
 
 export default FeaturedAds;

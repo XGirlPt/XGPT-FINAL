@@ -9,11 +9,10 @@
     "searchBar": "Pesquisar...",
     "register": "Registar",
     "myAccount": "Minha Conta",
-        "settings": "Configurações",
-      "logout": "Sair",
+    "settings": "Configurações",
+    "logout": "Sair",
     "FR": "Francês",
     "EN": "Inglês"
-
   },
 
   "Footer": {
@@ -177,39 +176,54 @@
     "confirm_password_label": "Confirme sua senha*",
     "confirm_password_placeholder": "Confirme sua senha",
     "register_button": "Criar sua conta"
-  }, 
+  },
 
-  
-    "contact": {
-      "title": "Contato",
-      "subtitle": "Tem alguma dúvida? Envie-nos uma mensagem e responderemos dentro de 24 horas.",
-      "email_label": "Seu email",
-      "email_placeholder": "seuemail@exemplo.com",
-      "subject_label": "Assunto",
-      "subject_placeholder": "Como podemos ajudá-lo?",
-      "message_label": "Sua mensagem",
-      "message_placeholder": "Deixe sua mensagem...",
-      "send_button": "Enviar Mensagem",
-      "thank_you_message": "Obrigado por entrar em contato com XGirl.pt!"
-    },
-    "MyProfileBar": {
-      "info": "Informação",
-      "other_info": "Outras Informações",
-      "change_photos": "Alterar Fotos",
-      "my_stories": "Minhas Histórias",
-      "settings": "Configurações",
-      "view_profile": "Ver Perfil"
-    },
+  "contact": {
+    "title": "Contato",
+    "subtitle": "Tem alguma dúvida? Envie-nos uma mensagem e responderemos dentro de 24 horas.",
+    "email_label": "Seu email",
+    "email_placeholder": "seuemail@exemplo.com",
+    "subject_label": "Assunto",
+    "subject_placeholder": "Como podemos ajudá-lo?",
+    "message_label": "Sua mensagem",
+    "message_placeholder": "Deixe sua mensagem...",
+    "send_button": "Enviar Mensagem",
+    "thank_you_message": "Obrigado por entrar em contato com XGirl.pt!"
+  },
+  "MyProfileBar": {
+    "info": "Informação",
+    "other_info": "Outras Informações",
+    "change_photos": "Alterar Fotos",
+    "my_stories": "Minhas Histórias",
+    "settings": "Configurações",
+    "view_profile": "Ver Perfil"
+  },
+  "filter": {
+    "age": "Idade",
+    "select_age": "Selecione a idade",
+    "height": "Altura",
+    "select_height": "Selecione a altura",
+    "hair_color": "Cor de Cabelo",
+    "select_hair_color": "Selecione a cor do cabelo",
+    "black": "Preto",
+    "blonde": "Loiro",
+    "brown": "Castanho",
+    "red": "Ruivo",
+    "other": "Outro",
+    "body": "Corpo",
+    "select_body": "Selecione o tipo de corpo",
+    "normal": "Normal",
+    "athletic": "Atlético",
+    "slim": "Magro",
+    "curvy": "Curvilíneo",
+    "xxl": "XXL",
     "filter": {
-      "age": "Idade",
-      "select_age": "Selecione a idade",
-      "height": "Altura",
-      "select_height": "Selecione a altura",
-      "hair_color": "Cor de Cabelo",
-      "select_hair_color": "Selecione a cor do cabelo",
-      "black": "Preto",
-      "blonde": "Loiro",
+      "eye_color": "Cor dos Olhos",
+      "select_eye_color": "Selecione a cor dos olhos"
+    },
+    "eyes": {
       "brown": "Castanho",
+<<<<<<< HEAD
       "red": "Ruivo",
       "other": "Outro",
       "body": "Corpo",
@@ -500,7 +514,7 @@
               }
             ]
           }
-}
+        }}
       
   
 

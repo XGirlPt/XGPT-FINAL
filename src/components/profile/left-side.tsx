@@ -16,10 +16,7 @@ interface LeftSideProps {
   handleLigaMeClick: () => void;
 }
 
-const LeftSide: React.FC<LeftSideProps> = ({
-  selectedProfile,
-
-}) => {
+const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
   const [timeElapsed, setTimeElapsed] = useState<string>('');
   const [showLiga, setShowLiga] = useState(false); // Estado para controlar a exibição de Liga
   const [showPartilha, setShowPartilha] = useState(false); // Estado para controlar a exibição de Liga
@@ -30,11 +27,9 @@ const LeftSide: React.FC<LeftSideProps> = ({
     setShowLiga(true); // Abre o componente Liga
   };
 
-
   const handlePartilhaClick = () => {
     setShowPartilha(true); // Abre o componente Liga
   };
-
 
   return (
     <Card className="w-full lg:w-[370px] overflow-hidden bg-white dark:bg-[#1a0a10] rounded-3xl p-4 mt-10">
@@ -67,7 +62,10 @@ const LeftSide: React.FC<LeftSideProps> = ({
           <div className="flex items-center gap-1">
             <Image src="/icons/clock.png" alt="clock" width={20} height={20} />
             <span className="text-sm text-gray-400">{timeElapsed}</span>
-            <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500 ml-2" size={16} />
+            <RiMessage2Fill
+              className="text-yellow-600 dark:text-yellow-500 ml-2"
+              size={16}
+            />
           </div>
         </div>
 
@@ -96,8 +94,11 @@ const LeftSide: React.FC<LeftSideProps> = ({
         <Liga selectedProfile={selectedProfile} setShowLiga={setShowLiga} />
       )}
 
-{showPartilha && (
-        <Partilha selectedProfile={selectedProfile} setShowPartilha={setShowPartilha} />
+      {showPartilha && (
+        <Partilha
+          selectedProfile={selectedProfile}
+          setShowPartilha={setShowPartilha}
+        />
       )}
     </Card>
   );

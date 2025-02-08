@@ -6,20 +6,20 @@ import Link from 'next/link';
 import { fetchProfiles } from '@/services/profileService';
 import '../styles/globals.min.css';
 
-import { HeroSection } from "./_ui/hero-section";
-import { RecentStories } from "./_ui/recent-stories";
+import { HeroSection } from './_ui/hero-section';
+import { RecentStories } from './_ui/recent-stories';
 
-import FeaturedAds  from "./_ui/featured-ads";
+import FeaturedAds from './_ui/featured-ads';
 
-import { MapSection } from "./_ui/map-section";
-import NewestAdds from "./_ui/newest-add";
-import { Statistics } from "./_ui/statistics";
-import { PublishAdBanner } from "./_ui/publish-ad-banner";
+import { MapSection } from './_ui/map-section';
+import NewestAdds from './_ui/newest-add';
+import { Statistics } from './_ui/statistics';
+import { PublishAdBanner } from './_ui/publish-ad-banner';
 
 // import {useTranslation} from "react-i18next";
 import { useLanguage } from '../context/LanguageContext'; // Importe o contexto de idioma
 import { useTranslation } from 'react-i18next';
-import { Profile } from '@/types';
+import { MapProfile, Profile } from '@/types';
 
 const CarouselG = dynamic(() => import('@/app/_ui/carosel'), { ssr: false });
 const InfoCard = dynamic(() => import('@/components/ui/info-card'), {
@@ -32,32 +32,74 @@ const MainCard = dynamic(() => import('@/components/ui/main-card'), {
   ssr: false,
 });
 
-
-
 async function fetchCoordinates(
   address: string
 ): Promise<{ latitude: number; longitude: number }> {
-  if (!address || address.trim() === '') {
-    console.error('Adresse invalide :', address);
-    return { latitude: 0, longitude: 0 };
-  }
+  const defaultCoords = { latitude: 0, longitude: 0 };
 
   try {
+    // Input validation
+    if (!address || address.trim() === '') {
+      console.warn('Invalid address provided');
+      return defaultCoords;
+    }
+
+    const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!API_KEY) {
+      console.warn('Google Maps API key is not configured');
+      return defaultCoords;
+    }
+
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=VOTRE_API_KEY`
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${API_KEY}`
     );
+
+    if (!response.ok) {
+      console.warn(`HTTP error! status: ${response.status}`);
+      return defaultCoords;
+    }
+
     const data = await response.json();
 
-    if (data.results && data.results[0]) {
-      const location = data.results[0].geometry.location;
-      return { latitude: location.lat, longitude: location.lng };
-    } else {
-      console.error("Aucun résultat trouvé pour l'adresse :", address);
-      return { latitude: 0, longitude: 0 };
+    // Handle all possible API response statuses
+    switch (data.status) {
+      case 'OK':
+        if (data.results?.[0]?.geometry?.location) {
+          const location = data.results[0].geometry.location;
+          return { latitude: location.lat, longitude: location.lng };
+        }
+        console.warn('Invalid response structure from API');
+        break;
+
+      case 'ZERO_RESULTS':
+        console.warn(`No results found for address: ${address}`);
+        break;
+
+      case 'REQUEST_DENIED':
+        console.warn('API request denied. Please check API key configuration');
+        break;
+
+      case 'OVER_QUERY_LIMIT':
+        console.warn('API query limit exceeded');
+        break;
+
+      case 'INVALID_REQUEST':
+        console.warn('Invalid request parameters');
+        break;
+
+      default:
+        console.warn(`Unexpected API status: ${data.status}`);
+        if (data.error_message) {
+          console.warn('API error details:', data.error_message);
+        }
     }
+
+    return defaultCoords;
   } catch (error) {
-    console.error('Erreur lors de la récupération des coordonnées :', error);
-    return { latitude: 0, longitude: 0 };
+    console.warn('Error in fetchCoordinates:', error);
+    return defaultCoords;
   }
 }
 
@@ -74,6 +116,8 @@ const Dashboard: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
 
   useEffect(() => {
+    console.log('useEffect');
+    console.log('API_KEY:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
     async function fetchData() {
       try {
         const combinedProfiles = await fetchProfiles();
@@ -117,6 +161,15 @@ const Dashboard: React.FC = () => {
     setShowMaiores(false);
     localStorage.setItem('hasVisitedDashboard', 'true');
   };
+
+  const mapProfiles = profiles.map((profile) => ({
+    id: profile.id,
+    nome: profile.nome,
+    photos: profile.photos,
+    cidade: profile.cidade,
+    latitude: profile.latitude,
+    longitude: profile.longitude,
+  }));
 
   return (
     // <div className="text-gray-600 w-full overflow-x-hidden">
@@ -167,8 +220,8 @@ const Dashboard: React.FC = () => {
     //   </div>
 
     //   {/* <div className='w-full px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 max-w-full'>
-		// 		<p className='text-white text-3xl flex'>{t("dashboard.news")} </p>
-		// 	</div> */}
+    // 		<p className='text-white text-3xl flex'>{t("dashboard.news")} </p>
+    // 	</div> */}
 
     //   <div className="w-full px-4 sm:px-8 md:px-36 lg:px-36 xl:px-36 max-w-full">
     //     <LastAnnounce
@@ -179,7 +232,7 @@ const Dashboard: React.FC = () => {
     //   </div>
     // </div>
 
-    	<main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-10">
+    <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-10">
       <div
         className="absolute rounded-full z-30 bg-[#f2cadb] dark:bg-[#2e0415]"
         style={{
@@ -196,10 +249,9 @@ const Dashboard: React.FC = () => {
       <HeroSection profiles={profiles as Profile[]} />
 
       <RecentStories />
-      <FeaturedAds    profiles={profiles}
-      currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
-      <MapSection />
-      <NewestAdds   />
+      {/* <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} /> */}
+      <MapSection profiles={mapProfiles} />
+      <NewestAdds />
       <Statistics />
       <PublishAdBanner />
     </main>

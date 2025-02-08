@@ -57,6 +57,18 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  html {
+    font-family: var(--font-mofugu), system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-[#f2ebee] text-foreground font-sans dark:bg-[#100007];
+  }
+
+  .body-text {
+    @apply font-body;
+  }
 }
 
 @layer base {

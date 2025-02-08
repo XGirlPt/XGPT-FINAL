@@ -84,9 +84,7 @@ export function HeroSection() {
           <motion.div
             className="absolute -top-10 lg:top-0 left-0 lg:left-20"
             variants={floatingAnimation}
-          >
-          
-          </motion.div>
+          ></motion.div>
 
           <motion.div
             className="absolute -top-10 lg:top-0 right-0 lg:right-20"
@@ -100,9 +98,7 @@ export function HeroSection() {
                 delay: 0.5,
               },
             }}
-          >
-           
-          </motion.div>
+          ></motion.div>
 
           <motion.div
             className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10"
@@ -116,9 +112,7 @@ export function HeroSection() {
                 delay: 1,
               },
             }}
-          >
-         
-          </motion.div>
+          ></motion.div>
 
           <motion.div
             className="absolute -bottom-20 lg:bottom-0 right-0 lg:-right-10"
@@ -132,9 +126,7 @@ export function HeroSection() {
                 delay: 1.5,
               },
             }}
-          >
-           
-          </motion.div>
+          ></motion.div>
         </div>
 
         {/* Profile Cards Carousel with animation */}
@@ -153,12 +145,12 @@ export function HeroSection() {
               }),
             ]}
           >
-          <CarouselContent className="">
-  {profiles.map((profile) => (
-    <CarouselItem
-      key={profile.nome}
-      className=" md:basis-1/7 basis-1/7"
-    >
+            <CarouselContent className="">
+              {profiles.map((profile) => (
+                <CarouselItem
+                  key={profile.nome}
+                  className=" md:basis-1/7 basis-1/7"
+                >
                   <motion.div
                     className="overflow-hidden rounded-3xl"
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -177,7 +169,7 @@ export function HeroSection() {
                       >
                         {profile.photos[0] && (
                           <Image
-                            src={profile.photos[0]  || '/logo.webp'}
+                            src={profile.photos[0] || '/logo.webp'}
                             alt={profile.nome}
                             width={400}
                             height={400}
@@ -311,4 +303,3 @@ export function HeroSection() {
     </section>
   );
 }
-

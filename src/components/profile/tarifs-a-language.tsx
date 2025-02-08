@@ -2,7 +2,12 @@ import { Card } from '../../components/ui/card';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { FaEuroSign, FaCcMastercard, FaBitcoin, FaCcVisa } from 'react-icons/fa';
+import {
+  FaEuroSign,
+  FaCcMastercard,
+  FaBitcoin,
+  FaCcVisa,
+} from 'react-icons/fa';
 import { RiPaypalLine } from 'react-icons/ri';
 import { FaDollarSign } from 'react-icons/fa6';
 
@@ -20,8 +25,12 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
   const { t } = useTranslation();
 
   // Recuperação dos dados do Redux
-  const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua);
-  const tarifaRedux = useSelector((state: any) => state.profile?.profile?.tarifa);
+  const linguaRedux = useSelector(
+    (state: any) => state.profile?.profile?.lingua
+  );
+  const tarifaRedux = useSelector(
+    (state: any) => state.profile?.profile?.tarifa
+  );
 
   // Ícones dos métodos de pagamento
   const paymentIcons: { [key: string]: JSX.Element } = {
@@ -66,8 +75,15 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
           {linguaRedux &&
             linguaRedux.map((lingua: string, index: number) => (
               <div key={index} className="flex items-center gap-2">
-                <Image src={obterBandeira(lingua) || '/logo.webp'} alt={`${lingua} flag`} width={25} height={25} />
-                <span className="text-gray-800 dark:text-gray-200">{lingua}</span>
+                <Image
+                  src={obterBandeira(lingua) || '/logo.webp'}
+                  alt={`${lingua} flag`}
+                  width={25}
+                  height={25}
+                />
+                <span className="text-gray-800 dark:text-gray-200">
+                  {lingua}
+                </span>
               </div>
             ))}
         </div>
@@ -77,21 +93,33 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
       <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
         <h2 className="text-3xl md:text-4xl mb-4">{t('profile.rates')}</h2>
         <p className="text-lg text-gray-800 dark:text-gray-200">
-          {t('profile.tariffs_starting_from', { tarifa: selectedProfile?.tarifa || tarifaRedux })}
+          {t('profile.tariffs_starting_from', {
+            tarifa: selectedProfile?.tarifa || tarifaRedux,
+          })}
         </p>
 
-        <h2 className="text-3xl md:text-4xl mb-6 mt-4">{t('profile.accepts')}</h2>
-        {selectedProfile?.pagamento && Array.isArray(selectedProfile.pagamento) ? (
+        <h2 className="text-3xl md:text-4xl mb-6 mt-4">
+          {t('profile.accepts')}
+        </h2>
+        {selectedProfile?.pagamento &&
+        Array.isArray(selectedProfile.pagamento) ? (
           <div className="grid grid-cols-3 gap-4">
             {selectedProfile.pagamento.map((pagamento, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 rounded-full">
+              <div
+                key={index}
+                className="flex items-center gap-2 p-2 rounded-full"
+              >
                 {paymentIcons[pagamento] || null}
-                <span className="text-sm text-gray-800 dark:text-gray-200">{pagamento}</span>
+                <span className="text-sm text-gray-800 dark:text-gray-200">
+                  {pagamento}
+                </span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-gray-700 dark:text-gray-500">{t('profile.no_payment_methods_selected')}</p>
+          <p className="text-gray-700 dark:text-gray-500">
+            {t('profile.no_payment_methods_selected')}
+          </p>
         )}
       </Card>
     </div>

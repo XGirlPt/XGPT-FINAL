@@ -9,6 +9,7 @@ import '../i18n/i18n';
 // Importar o NextUIProvider
 import { MainProvider } from '@/provider/MainProvider';
 import { ThemeProvider } from 'next-themes'; // Adicione o ThemeProvider para alternância de temas
+import { interTight, mofugu } from '@/lib/fonts';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -98,7 +99,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} bg-[#f2ebee] dark:bg-[#100007]`}>
+      <body
+        className={`${mofugu.variable} ${interTight.variable} bg-[#f2ebee] dark:bg-[#100007]`}
+      >
         <ReduxProvider>
           <LanguageProvider>
             <ThemeProvider attribute="class" defaultTheme="light">

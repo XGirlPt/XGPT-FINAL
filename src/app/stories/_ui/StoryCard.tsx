@@ -142,7 +142,7 @@ const StoryCard: React.FC<StoryCardProps> = ({ profiles }) => {
                 {/* Vídeo com efeito de zoom no hover */}
                 <div className="relative w-full h-full overflow-hidden">
                   <video
-                    src={story  || '/logo.webp'}
+                    src={story || '/logo.webp'}
                     alt="Thumbnail"
                     className="w-full h-full object-cover border border-zinc-500 shadow-md transition-transform duration-500 ease-in-out transform group-hover:scale-110"
                   />

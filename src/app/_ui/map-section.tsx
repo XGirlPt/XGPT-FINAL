@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import Map from './map';
+import { MapProfile } from '@/types';
 
-export function MapSection() {
+export function MapSection({ profiles }: { profiles: MapProfile[] }) {
   return (
     <div className="flex items-center justify-between py-16 px-4 relative z-10 flex-col md:flex-row">
       {/* Left content */}
@@ -16,13 +18,14 @@ export function MapSection() {
 
       {/* Right content - Map image */}
       <div className="mt-10 md:mt-0 rounded-4xl overflow-hidden">
-        <Image
+        {/* <Image
           src="/map.png"
           alt="Location Map"
           className="w-[400px] h-auto rounded-lg shadow-lg"
           width={400}
           height={400}
-        />
+        /> */}
+        <Map profiles={profiles} />
       </div>
     </div>
   );

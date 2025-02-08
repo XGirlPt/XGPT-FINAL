@@ -27,7 +27,8 @@ const HeaderG: React.FC<HeaderGProps> = ({
   };
 
   const handlePrevProfile = () => {
-    const prevIndex = (currentProfileIndex - 1 + profiles.length) % profiles.length;
+    const prevIndex =
+      (currentProfileIndex - 1 + profiles.length) % profiles.length;
     const prevProfile = profiles[prevIndex];
     if (prevProfile) {
       setCurrentProfileIndex(prevIndex);
