@@ -154,7 +154,7 @@ const RegistoFotos: React.FC = () => {
                     {photo && (
                       <>
                         <BlurImage
-                          src={photo  || '/logo.webp'}
+                          src={photo || '/logo.webp'}
                           alt={`Foto ${index}`}
                           className="w-full h-24 object-cover rounded-md border border-gray-600"
                         />
@@ -205,7 +205,7 @@ const RegistoFotos: React.FC = () => {
                   VselectedPhotos.map((vphoto, index) => (
                     <div key={index} className="relative w-36 h-36">
                       <BlurImage
-                        src={vphoto  || '/logo.webp'}
+                        src={vphoto || '/logo.webp'}
                         alt={`Foto de Verificação ${index}`}
                         className="w-full h-full object-cover rounded-md border border-gray-600"
                       />

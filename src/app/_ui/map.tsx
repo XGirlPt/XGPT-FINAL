@@ -6,18 +6,10 @@ import {
 } from '@react-google-maps/api';
 import { useState } from 'react';
 import MiniCard from '@/components/ui/mini-card';
-
-interface Profile {
-  id: number;
-  nome: string;
-  photos: string[];
-  cidade: string;
-  latitude: number;
-  longitude: number;
-}
+import { MapProfile } from '@/types';
 
 interface MapProps {
-  profiles: Profile[];
+  profiles: MapProfile[];
 }
 
 function Map({ profiles }: MapProps) {
@@ -45,7 +37,9 @@ function Map({ profiles }: MapProps) {
 
   const zoom = validCoordinates.length > 0 ? 10 : 8;
 
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<MapProfile | null>(
+    null
+  );
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyC9gd59nW47Bg63ksUnNd2HmigKDUDGA7E',

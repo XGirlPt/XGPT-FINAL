@@ -18,7 +18,10 @@ type CommentsProps = {
   comments?: Comment[];
 };
 
-function Comments({ profileuid, comments: initialComments = [] }: CommentsProps) {
+function Comments({
+  profileuid,
+  comments: initialComments = [],
+}: CommentsProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(0);
@@ -27,17 +30,35 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
   const emojiInputRef = useRef<HTMLTextAreaElement | null>(null);
   const { t } = useTranslation();
 
-  const emojiList = ['😊', '😂', '😍', '😐', '😢', '😠', '😎', '🥳', '🤩', '🤔'];
+  const emojiList = [
+    '😊',
+    '😂',
+    '😍',
+    '😐',
+    '😢',
+    '😠',
+    '😎',
+    '🥳',
+    '🤩',
+    '🤔',
+  ];
 
   // Fetch comments for the specific profile
   const fetchComments = useCallback(async () => {
-    if (!profileuid.trim()) {
-      console.warn('profileuid is missing or invalid. Skipping fetch.');
-      setComments([]);
-      return;
-    }
-
     try {
+      // Check if profileuid exists and is a string before calling trim()
+      if (!profileuid || typeof profileuid !== 'string') {
+        console.warn('profileuid is undefined or not a string:', profileuid);
+        setComments([]);
+        return;
+      }
+
+      if (!profileuid.trim()) {
+        console.warn('profileuid is empty or contains only whitespace');
+        setComments([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('comments')
         .select('*')
@@ -46,8 +67,9 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
 
       if (error) throw error;
       setComments(data || []);
-    } catch (err) {
-      console.error('Error fetching comments:', err);
+    } catch (error) {
+      console.error('Error in fetchComments:', error);
+      setComments([]);
     }
   }, [profileuid]);
 
@@ -57,7 +79,9 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
 
   const handleCommentSubmit = async () => {
     if (!newComment.trim() || rating === 0 || !authorName.trim()) {
-      alert('Por favor, preencha todos os campos e selecione uma classificação.');
+      alert(
+        'Por favor, preencha todos os campos e selecione uma classificação.'
+      );
       return;
     }
 
@@ -82,13 +106,16 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
     }
   };
 
-  const toggleEmojiPicker = () => setIsEmojiPickerVisible(!isEmojiPickerVisible);
+  const toggleEmojiPicker = () =>
+    setIsEmojiPickerVisible(!isEmojiPickerVisible);
 
   const addEmojiToComment = (emoji: string) => {
     if (emojiInputRef.current) {
       const cursorPosition = emojiInputRef.current.selectionStart;
       const newText =
-        newComment.slice(0, cursorPosition) + emoji + newComment.slice(cursorPosition);
+        newComment.slice(0, cursorPosition) +
+        emoji +
+        newComment.slice(cursorPosition);
       setNewComment(newText);
     }
     setIsEmojiPickerVisible(false);
@@ -96,17 +123,28 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
 
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
-      <h2 className="text-4xl mb-6 text-gray-900 dark:text-white">{t('profile.comments')}</h2>
+      <h2 className="text-4xl mb-6 text-gray-900 dark:text-white">
+        {t('profile.comments')}
+      </h2>
 
       {comments.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">{t('profile.no_comments_yet')}</p>
+        <p className="text-gray-500 dark:text-gray-400">
+          {t('profile.no_comments_yet')}
+        </p>
       ) : (
         <div className="space-y-4">
           {comments.map((comment) => (
-            <div key={comment.id} className="bg-[#faf3f6] dark:bg-black/10 p-4 rounded-2xl">
+            <div
+              key={comment.id}
+              className="bg-[#faf3f6] dark:bg-black/10 p-4 rounded-2xl"
+            >
               <div className="flex justify-between items-start mb-2">
-                <span className="font-medium text-gray-900 dark:text-white">{comment.authorName}</span>
-                <span className="text-sm text-gray-500">{new Date(comment.created_at).toLocaleString()}</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {comment.authorName}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {new Date(comment.created_at).toLocaleString()}
+                </span>
               </div>
               <div className="flex">
                 {[...Array(5)].map((_, index) => (
@@ -119,7 +157,9 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
                   </span>
                 ))}
               </div>
-              <p className="text-gray-700 dark:text-gray-300 mt-2">{comment.comment}</p>
+              <p className="text-gray-700 dark:text-gray-300 mt-2">
+                {comment.comment}
+              </p>
             </div>
           ))}
         </div>
@@ -127,7 +167,9 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
 
       {/* Área para adicionar novo comentário */}
       <div className="mt-6 bg-[#faf3f6] dark:bg-black/10 p-6 rounded-3xl">
-        <h3 className="text-2xl mb-4 text-gray-900 dark:text-white">{t('profile.leave_comment')}</h3>
+        <h3 className="text-2xl mb-4 text-gray-900 dark:text-white">
+          {t('profile.leave_comment')}
+        </h3>
         <input
           type="text"
           className="w-full bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-md mb-4"
@@ -154,11 +196,17 @@ function Comments({ profileuid, comments: initialComments = [] }: CommentsProps)
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <span onClick={toggleEmojiPicker} className="text-2xl cursor-pointer">😀</span>
+        <span onClick={toggleEmojiPicker} className="text-2xl cursor-pointer">
+          😀
+        </span>
         {isEmojiPickerVisible && (
           <div className="absolute bottom-16 right-4 bg-white border border-gray-300 rounded-md p-2 z-10 grid grid-cols-5 gap-2">
             {emojiList.map((emoji) => (
-              <span key={emoji} className="text-2xl cursor-pointer" onClick={() => addEmojiToComment(emoji)}>
+              <span
+                key={emoji}
+                className="text-2xl cursor-pointer"
+                onClick={() => addEmojiToComment(emoji)}
+              >
                 {emoji}
               </span>
             ))}

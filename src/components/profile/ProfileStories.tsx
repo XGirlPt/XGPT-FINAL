@@ -18,15 +18,11 @@ interface ProfileStoriesProps {
   onStoryClick: (index: number) => void;
 }
 
-
-export function ProfileStories({ 
-    selectedProfile,
-    storyURLs,
-    thumbnails,
-     }: ProfileStoriesProps) {
-
-
-
+export function ProfileStories({
+  selectedProfile,
+  storyURLs,
+  thumbnails,
+}: ProfileStoriesProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -41,9 +37,13 @@ export function ProfileStories({
       </h2>
       <Carousel opts={{ align: 'start', loop: true }} className="w-full">
         <CarouselContent className="-ml-2">
-        /             {selectedProfile.storyURL.map((media, index) => {
+          /{' '}
+          {selectedProfile.storyURL.map((media, index) => {
             if (!media) return null;
-            const isVideo = media.endsWith('.mp4') || media.endsWith('.mov') || media.endsWith('.webm');
+            const isVideo =
+              media.endsWith('.mp4') ||
+              media.endsWith('.mov') ||
+              media.endsWith('.webm');
             const thumbnailSrc = thumbnails[index];
 
             return (
@@ -53,13 +53,23 @@ export function ProfileStories({
                     <button onClick={() => onStoryClick(index)}>
                       {isVideo ? (
                         <>
-                          <Image src={thumbnailSrc} alt={`Story ${index + 1}`} fill className="object-cover" />
+                          <Image
+                            src={thumbnailSrc}
+                            alt={`Story ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
                           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                             <span className="text-white text-3xl">▶️</span>
                           </div>
                         </>
                       ) : (
-                        <Image src={thumbnailSrc} alt={`Story ${index + 1}`} fill className="object-cover" />
+                        <Image
+                          src={thumbnailSrc}
+                          alt={`Story ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
                       )}
                     </button>
                   </div>
@@ -74,6 +84,6 @@ export function ProfileStories({
       </Carousel>
     </div>
   );
-};
+}
 
 export default ProfileStories;

@@ -67,28 +67,25 @@ const cardVariants = {
   },
 };
 
+const NewestAdds: React.FC<NewestAddsProps> = ({
+  profiles = [],
+  currentPage,
+  itemsPerPage,
+  onProfileClick,
+}) => {
+  const sortedProfiles = profiles
+    ? [...profiles].sort((a, b) => {
+        const dateA = new Date(a.tagtimestamp).getTime();
+        const dateB = new Date(b.tagtimestamp).getTime();
+        return dateB - dateA; // Ordena do mais recente para o mais antigo
+      })
+    : [];
 
-
-  const NewestAdds: React.FC<NewestAddsProps> = ({
-    profiles = [],
-      currentPage,
-    itemsPerPage,
-    onProfileClick,
-  }) => {
-
-
-    const sortedProfiles = profiles ? [...profiles].sort((a, b) => {
-      const dateA = new Date(a.tagtimestamp).getTime();
-      const dateB = new Date(b.tagtimestamp).getTime();
-      return dateB - dateA; // Ordena do mais recente para o mais antigo
-    }) : [];
-  
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedProfiles = sortedProfiles.slice(
-      startIndex,
-      startIndex + itemsPerPage
-    );
-
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProfiles = sortedProfiles.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <motion.div
@@ -118,7 +115,7 @@ const cardVariants = {
 
         <div className="relative w-full">
           <CarouselContent className="-ml-2">
-          {profiles.map((profile, index) => (
+            {profiles.map((profile, index) => (
               <CarouselItem
                 key={index}
                 className=" basis-1/2 md:basis-1/5 gap-4"
@@ -139,11 +136,9 @@ const cardVariants = {
                       transition: { duration: 0.2 },
                     }}
                   >
-
-
                     <Image
-              src={profile.photos[0] || "./logo.png"}
-              alt={profile.nome}
+                      src={profile.photos[0] || './logo.png'}
+                      alt={profile.nome}
                       fill
                       className="object-cover rounded-4xl"
                     />
@@ -200,8 +195,7 @@ const cardVariants = {
       />
     </motion.div>
   );
-}
+};
 //
-
 
 export default NewestAdds;

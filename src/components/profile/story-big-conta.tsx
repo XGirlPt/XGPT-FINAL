@@ -40,7 +40,7 @@ const StoryBig: React.FC<StoryBigProps> = ({ onClose, currentIndex }) => {
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 z-50 backdrop-blur-md">
       <div className="relative">
         <video
-          src={currentStoryURL  || '/logo.webp'}
+          src={currentStoryURL || '/logo.webp'}
           controls
           autoPlay
           muted

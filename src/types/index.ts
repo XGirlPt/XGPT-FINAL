@@ -37,6 +37,15 @@ export interface Profile {
   comment?: string[]; // Adicionei a propriedade 'live' aqui, tornando-a opcional
 }
 
+export interface MapProfile {
+  id: number;
+  nome: string;
+  photos: string[];
+  cidade: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface UserProfileData {
   userUID: string;
   email: string;

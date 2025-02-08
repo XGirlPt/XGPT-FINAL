@@ -33,7 +33,9 @@ export function ProvidedServices({ selectedProfile }: ProvidedServicesProps) {
 
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
-      <h2 className="text-3xl md:text-4xl mb-6">{t('profile.services_provided')}</h2>
+      <h2 className="text-3xl md:text-4xl mb-6">
+        {t('profile.services_provided')}
+      </h2>
 
       {servico && servico.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

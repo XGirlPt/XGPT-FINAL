@@ -50,22 +50,22 @@ const Footer = () => {
   // };
 
   const footerLinks = {
-  features: [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/product', label: 'Product' },
-  ],
-  solutions: [
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/blog-article', label: 'Blog Article' },
-  ],
-  company: [
-    { href: '/contact', label: 'Contact' },
-    { href: '/login', label: 'Login' },
-    { href: '/signup', label: 'Signup' },
-  ],
-};
+    features: [
+      { href: '/', label: 'Home' },
+      { href: '/about', label: 'About' },
+      { href: '/product', label: 'Product' },
+    ],
+    solutions: [
+      { href: '/pricing', label: 'Pricing' },
+      { href: '/blog', label: 'Blog' },
+      { href: '/blog-article', label: 'Blog Article' },
+    ],
+    company: [
+      { href: '/contact', label: 'Contact' },
+      { href: '/login', label: 'Login' },
+      { href: '/signup', label: 'Signup' },
+    ],
+  };
 
   return (
     // <footer className="bg-white dark:bg-gray-800 w-full pt-8 border-t border-pink-500">
@@ -196,7 +196,7 @@ const Footer = () => {
     //   </div>
     // </footer>
 
-     <footer
+    <footer
       className={cn(
         'container mx-auto py-16',
         theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'

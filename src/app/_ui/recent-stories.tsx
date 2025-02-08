@@ -34,7 +34,7 @@ export function RecentStories() {
       try {
         const fetchedProfiles: Profile[] = await fetchProfiles();
         setProfiles(fetchedProfiles);
-        
+
         // Filtrando por distrito, se existir na URL
         const distrito = searchParams.get('distrito');
         const profilesToDisplay = distrito
@@ -73,8 +73,8 @@ export function RecentStories() {
         <div className="relative w-full">
           <CarouselContent className="-ml-2 py-10">
             {filteredProfiles.map((profile, index) => (
-              <CarouselItem 
-                key={index} 
+              <CarouselItem
+                key={index}
                 className="pl-4 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
               >
                 <motion.div
@@ -83,14 +83,16 @@ export function RecentStories() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <motion.div
-                    className="relative rounded-full overflow-hidden w-16 h-16 md:w-20 md:h-20 border-[2.5px] border-pink-500 shadow-md transition-all duration-300"
+                    className="relative rounded-full overflow-hidden w-16 h-16 md:w-32 md:h-32 border-[3.5px] border-pink-500 shadow-md transition-all duration-300"
                     whileHover={{
                       boxShadow: '0 0 25px rgba(243, 33, 118, 0.4)',
                     }}
                   >
-                    <button onClick={() => router.push(`/escort/${profile.nome}`)}>
+                    <button
+                      onClick={() => router.push(`/escort/${profile.nome}`)}
+                    >
                       <Image
-                        src={profile.photos[0]  || '/logo.webp'}
+                        src={profile.photos[0] || '/logo.webp'}
                         alt={profile.nome}
                         width={400}
                         height={400}
