@@ -25,10 +25,13 @@ import { Anonymous_Pro } from 'next/font/google';
 import { TbArrowDownSquare, TbMoodSad } from 'react-icons/tb';
 import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale'; // Importando o locale português
-import { FaMapMarkerAlt, FaCommentDots, FaClock, FaVideo,FaCrown } from "react-icons/fa"; // Importando os ícones
+import {  FaVideo,FaCrown } from "react-icons/fa"; // Importando os ícones
 import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext'; 
+import FaMapMarkerAlt from "react-icons/fa/";
+import FaCommentDots from "react-icons/fa/";
+import FaClock from "react-icons/fa/";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
