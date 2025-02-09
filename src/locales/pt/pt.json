@@ -3,6 +3,8 @@
     "home": "Início",
     "escort": "Acompanhantes",
     "stories": "Stories",
+    "blog": "Blog",
+    "ads": "Anuncios",
     "filters": "Filtros",
     "search": "Pesquisar...",
     "login": "Entrar",
@@ -223,7 +225,7 @@
     },
     "eyes": {
       "brown": "Castanho",
-<<<<<<< HEAD
+
       "red": "Ruivo",
       "other": "Outro",
       "body": "Corpo",

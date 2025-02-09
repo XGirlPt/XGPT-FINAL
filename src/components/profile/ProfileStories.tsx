@@ -32,7 +32,7 @@ export function ProfileStories({
 
   return (
     <div className="bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl p-6">
-      <h2 className="text-4xl mb-4 text-darkpink font-semibold">
+      <h2 className="text-4xl mb-4 text-pink-600 font-semibold">
         {t('profile.stories_of', { name: selectedProfile.nome })}
       </h2>
       <Carousel opts={{ align: 'start', loop: true }} className="w-full">
@@ -49,7 +49,7 @@ export function ProfileStories({
             return (
               <CarouselItem key={index} className="pl-4 basis-1/3 md:basis-1/5">
                 <div className="flex flex-col items-center">
-                  <div className="relative w-full aspect-square rounded-full overflow-hidden border-4 border-darkpink">
+                  <div className="relative w-full aspect-square rounded-full overflow-hidden border-4 border-pink-600">
                     <button onClick={() => onStoryClick(index)}>
                       {isVideo ? (
                         <>

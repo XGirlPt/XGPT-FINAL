@@ -47,7 +47,7 @@ const HeaderG: React.FC<HeaderGProps> = ({
       </Button>
       <Button
         variant="outline"
-        className="px-4 py-1 rounded-full bg-darkpink text-white text-sm font-body"
+        className="px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body"
         onClick={handleNextProfile}
       >
         Next <ArrowRightIcon className="w-4 h-4 ml-2" />

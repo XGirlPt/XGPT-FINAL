@@ -147,13 +147,13 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
       lightIcon: '/icons/stories.png',
     },
     {
-      href: '/stories-2',
-      label: t('Header.stories'),
+      href: '/blog',
+      label: t('Header.blog'),
       darkIcon: '/icons/stories-dark.png',
       lightIcon: '/icons/stories.png',
     },
     {
-      href: '/ads',
+      href: '/Puclicidade',
       label: t('Header.ads'),
       darkIcon: '/icons/ads-dark.png',
       lightIcon: '/icons/ads.png',
@@ -165,190 +165,16 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   };
 
   return (
-    // <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
-    //   <div
-    //     className={cn(
-    //       'container mx-auto py-2 relative',
-    //       theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'
-    //     )}
-    //   >
-    //     <div className="hidden lg:flex items-center gap-2 justify-between w-full">
-    //       <div className="flex items-center">
-    //         <div ref={logoRef}>
-    //           <Image src={'/logo.webp'} alt="X Girl" width={100} height={100} />
-    //         </div>
-    //       </div>
-    //       <div
-    //         className="relative flex"
-    //         style={{ width: navWidth > 0 ? `${navWidth}px` : 'auto' }}
-    //       >
-    //         <Search
-    //           className={cn(
-    //             'absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5',
-    //             theme === 'dark' ? 'text-zinc-400' : 'text-gray-400'
-    //           )}
-    //         />
-    //         <Input
-    //           type="search"
-    //           placeholder={t('Header.search')}
-    //           className={cn(
-    //             'pl-10 py-2 text-base rounded-full border',
-    //             theme === 'dark'
-    //               ? 'bg-[#2b1a21] border-zinc-700 required text-sm text-white placeholder:text-zinc-400'
-    //               : 'bg-white border-gray-200 text-gray-900 text-sm placeholder:text-gray-400'
-    //           )}
-    //           onClick={() => setModalOpen(true)}
-    //         />
-    //         <Button
-    //           size="icon"
-    //           className={cn(
-    //             'absolute right-2 top-1/2 -translate-y-1/2 rounded-full',
-    //             'bg-darkpink hover:bg-darkpinkhover w-8 h-8'
-    //           )}
-    //         >
-    //           <SlidersHorizontal className="w-4 h-4 dark:text-white" />
-    //         </Button>
-    //       </div>
-    //       <div className="flex items-center gap-2">
-    //         {userUID ? (
-    //           <DropdownMenu>
-    //             <DropdownMenuTrigger asChild>
-    //               <button className="flex items-center gap-2 bg-transparent border-none cursor-pointer">
-    //                 {photoUID ? (
-    //                   <Image
-    //                     src={photoUID || '/logo.webp'}
-    //                     alt="Avatar"
-    //                     width={20}
-    //                     height={20}
-    //                     className="rounded-full border border-pink-500"
-    //                   />
-    //                 ) : (
-    //                   <FaUser className="w-10 h-10 text-gray-500 dark:text-gray-300" />
-    //                 )}
-    //                 <span className="text-gray-700 dark:text-white text-sm">
-    //                   {email}
-    //                 </span>
-    //                 <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-300" />
-    //               </button>
-    //             </DropdownMenuTrigger>
-    //             <DropdownMenuContent align="end">
-    //               <DropdownMenuItem onClick={() => router.push('/definicoes')}>
-    //                 <FaCog className="mr-2" /> {t('Header.settings')}
-    //               </DropdownMenuItem>
-    //               <DropdownMenuItem onClick={() => router.push('/minha-conta')}>
-    //                 <FaSignOutAlt className="mr-2" /> {t('Header.myAccount')}
-    //               </DropdownMenuItem>
-    //               <DropdownMenuItem onClick={handleLogout}>
-    //                 <FaSignOutAlt className="mr-2" /> {t('Header.logout')}
-    //               </DropdownMenuItem>
-    //             </DropdownMenuContent>
-    //           </DropdownMenu>
-    //         ) : (
-    //           <>
-    //             <Button
-    //               onClick={() => router.push('/registo/regista2')}
-    //               className={cn(
-    //                 'rounded-full !px-6 bg-darkpink hover:bg-darkpinkhover dark:text-white font-body'
-    //               )}
-    //             >
-    //               {t('Header.register')}
-    //             </Button>
 
-    //             <Button
-    //               onClick={() => router.push('/login')}
-    //               variant="outline"
-    //               className={cn(
-    //                 'rounded-full !px-6 font-body',
-    //                 theme === 'dark'
-    //                   ? 'border-zinc-700 hover:bg-zinc-800'
-    //                   : 'border-gray-200 hover:bg-gray-100'
-    //               )}
-    //             >
-    //               {t('Header.login')}
-    //             </Button>
-    //           </>
-    //         )}
-    //       </div>
-    //     </div>
 
-    //     <div className="hidden lg:flex items-center gap-6 justify-between">
-    //       <div className="opacity-0">
-    //         <Image src={'/logo.png'} alt="X Girl" width={120} height={120} />
-    //       </div>
-    //       <div ref={navRef} className="flex items-center gap-4">
-    //         {navigationLinks.map((link) => (
-    //           <Link
-    //             key={link.href}
-    //             href={link.href}
-    //             className={cn(
-    //               'flex items-center gap-1 transition-colors text-[#725a64] text-sm hover:text-[#725a64] font-body dark:text-[#a3999d] text-center py-1',
-    //               'hover:text-darkpink',
-    //               link.href === '/' && 'text-darkpink',
-    //               link.href === '/' && 'font-medium',
-    //               isActive(link.href) &&
-    //                 link.href === '/' &&
-    //                 'border-b-2 border-darkpink'
-    //             )}
-    //           >
-    //             <Image
-    //               src={
-    //                 isActive(link.href)
-    //                   ? link.lightIcon
-    //                   : link.darkIcon || '/logo.webp'
-    //               }
-    //               alt={link.label}
-    //               width={20}
-    //               height={20}
-    //             />
-    //             {link.label}
-    //           </Link>
-    //         ))}
-    //       </div>
-
-    //       <div className="flex items-center gap-4">
-    //         <DropdownMenu>
-    //           <DropdownMenuTrigger asChild>
-    //             <Button
-    //               variant="ghost"
-    //               size="sm"
-    //               className="flex items-center gap-1"
-    //             >
-    //               <Globe className="w-4 h-4 text-darkpink" />
-    //               {selectedLanguage}
-    //               <ChevronDown className="w-4 h-4" />
-    //             </Button>
-    //           </DropdownMenuTrigger>
-    //           <DropdownMenuContent>
-    //             <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-    //               {t('EN')}
-    //             </DropdownMenuItem>
-    //             <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
-    //               {t('FR')}
-    //             </DropdownMenuItem>
-    //             <DropdownMenuItem onClick={() => handleLanguageChange('pt')}>
-    //               {t('PT')}
-    //             </DropdownMenuItem>
-    //           </DropdownMenuContent>
-    //         </DropdownMenu>
-    //         <ThemeToggle />
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <SearchModal
-    //     isOpen={modalOpen}
-    //     onClose={() => setModalOpen(false)}
-    //     searchQuery={searchQuery}
-    //     setSearchQuery={setSearchQuery}
-    //   />
-    // </div>
-
-     <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
+     <div className="fixed top-0 left-0 right-0 z-20 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div
         className={cn(
-          'container mx-auto py-2 relative',
+          'container mx-auto py-1 relative',
           theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'
         )}
       >
+
         {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between w-full">
           <div ref={logoRef}>
@@ -390,7 +216,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                     </Link>
                   ))}
                   <div className="pt-4 border-t">
-                    <Button className="w-full mb-2 rounded-full bg-darkpink hover:bg-darkpinkhover">
+                    <Button className="w-full mb-2 rounded-full bg-pink-600 hover:bg-pink-600hover">
                       Register
                     </Button>
                     <Button variant="outline" className="w-full rounded-full">
@@ -403,16 +229,21 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           </div>
         </div>
 
+
+
+
+
+
         {/* Desktop Header */}
-        <div className="hidden lg:flex items-center gap-2 justify-between w-full">
+        <div className="hidden lg:flex items-center pt-2 gap-2 justify-between w-full">
           <div className="flex items-center">
             <div ref={logoRef}>
               <Link href="/">
                 <Image
-                  src={theme === 'dark' ? '/logo-white.png' : '/logo.png'}
+                  src={ '/logo-white.png'}
                   alt="X Girl"
-                  width={120}
-                  height={120}
+                  width={140}
+                  height={140}
                 />
               </Link>
             </div>
@@ -423,7 +254,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           >
             <Search
               className={cn(
-                'absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5',
+                'absolute left-3 top-1/2 -translate-y-1/2 w-5 h-3',
                 theme === 'dark' ? 'text-zinc-400' : 'text-gray-400'
               )}
               onClick={() => setModalOpen(true)}
@@ -432,7 +263,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               type="search"
               placeholder="Search..."
               className={cn(
-                'pl-10 py-5 text-base rounded-full border',
+                'pl-10 py-2 text-base rounded-full border',
                 theme === 'dark'
                   ? 'bg-[#2b1a21] border-zinc-700 text-white placeholder:text-zinc-400'
                   : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-400'
@@ -442,32 +273,34 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               size="icon"
               className={cn(
                 'absolute right-2 top-1/2 -translate-y-1/2 rounded-full',
-                'bg-darkpink hover:bg-darkpinkhover w-8 h-8'
+                'bg-pink-600  hover w-8 h-8'
               )}
             >
               <SlidersHorizontal className="w-4 h-4 dark:text-white" />
             </Button>
           </div>
+          
+          
           <div className="flex items-center gap-2">
-            <Button
-              className={cn(
-                'rounded-full !px-6 bg-darkpink hover:bg-darkpinkhover dark:text-white font-body'
-              )}
-            >
-              Register
-            </Button>
-            <Button
-              variant="outline"
-              className={cn(
-                'rounded-full !px-6 font-body',
-                theme === 'dark'
-                  ? 'border-zinc-700 hover:bg-zinc-800'
-                  : 'border-gray-200 hover:bg-gray-100'
-              )}
-            >
-              Login
-            </Button>
-          </div>
+  <Link href="/registo/regista2">
+    <Button className="rounded-full !px-6 bg-pink-600 hover:bg-pink-600hover dark:text-white font-body">
+      Register
+    </Button>
+  </Link>
+  <Link href="/login">
+    <Button
+      variant="outline"
+      className={cn(
+        'rounded-full !px-6 font-body',
+        theme === 'dark'
+          ? 'border-zinc-700 hover:bg-zinc-800'
+          : 'border-gray-200 hover:bg-gray-100'
+      )}
+    >
+      Login
+    </Button>
+  </Link>
+</div>
         </div>
 
         {/* Mobile Search Bar */}
@@ -481,7 +314,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             />
             <Button
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-darkpink hover:bg-darkpinkhover w-8 h-8 "
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-pink-600 hover:bg-pink-600 hover w-8 h-8 "
             >
               <SlidersHorizontal className="w-4 h-4 dark:text-white" />
             </Button>
@@ -492,37 +325,40 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         <div className="hidden lg:flex items-center gap-6 justify-between pt-2">
           <div className="opacity-0">
             <Image
-              src={theme === 'dark' ? '/logo-white.png' : '/logo.png'}
+              src={'/logo-white.png'}
               alt="X Girl"
               width={120}
               height={120}
             />
           </div>
           <div ref={navRef} className="flex items-center gap-6">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'flex items-center gap-1 transition-colors text-[#725a64] hover:text-[#725a64] font-body dark:text-[#a3999d] text-center py-2',
-                  'hover:text-darkpink',
-                  link.href === '/' && 'text-darkpink',
-                  link.href === '/' && 'font-medium',
-                  isActive(link.href) &&
-                    link.href === '/' &&
-                    'border-b-2 border-darkpink'
-                )}
-              >
-                <Image
-                  src={isActive(link.href) ? link.lightIcon : link.darkIcon}
-                  alt={link.label}
-                  width={20}
-                  height={20}
-                />
-                {link.label}
-              </Link>
-            ))}
-          </div>
+  {navigationLinks.map((link) => {
+    const active = isActive(link.href);
+
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className={cn(
+          'flex items-center gap-1 transition-colors font-body text-center py-2',
+          active ? 'text-pink-600 font-medium border-b-2 border-pink-600' : 'text-[#725a64] dark:text-[#a3999d] hover:text-pink-600'
+        )}
+      >
+        <div className="w-5 h-5 flex items-center justify-center">
+          <Image
+            src={active ? link.lightIcon : link.darkIcon} 
+            alt={link.label}
+            width={20}
+            height={20}
+            className={cn(active ? 'brightness-0 invert-[31%] sepia-[78%] saturate-[593%] hue-rotate-[292deg] contrast-[95%]' : '')}
+          />
+        </div>
+        {link.label}
+      </Link>
+    );
+  })}
+</div>
+
 
           <div className="flex items-center gap-4">
             <DropdownMenu>
@@ -532,15 +368,44 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                   size="sm"
                   className="flex items-center gap-1"
                 >
-                  <Globe className="w-4 h-4 text-darkpink" />
+                  <Globe className="w-4 h-4 text-pink-600" />
                   English
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>English</DropdownMenuItem>
-                <DropdownMenuItem>Portuguese</DropdownMenuItem>
-              </DropdownMenuContent>
+  <DropdownMenuItem>
+    <Image
+      src="/Flags/en.svg"
+      alt="English"
+      width={24}
+      height={24}
+      className="rounded-full"
+    />
+    English
+  </DropdownMenuItem>
+  <DropdownMenuItem>
+    <Image
+      src="/Flags/pt.svg"
+      alt="Portuguese"
+      width={24}
+      height={24}
+      className="rounded-full"
+    />
+    Portuguese
+  </DropdownMenuItem>
+  <DropdownMenuItem>
+    <Image
+      src="/Flags/fr.svg"
+      alt="Francais"
+      width={24}
+      height={24}
+      className="rounded-full"
+    />
+    Francais
+  </DropdownMenuItem>
+</DropdownMenuContent>
+
             </DropdownMenu>
 
             <ThemeToggle />

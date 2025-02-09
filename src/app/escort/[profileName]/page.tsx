@@ -133,7 +133,7 @@ function UserProfile() {
               </Button>
               <Button
                 variant="outline"
-                className="flex-1 px-4 py-1 rounded-full bg-darkpink text-white text-sm font-body"
+                className="flex-1 px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body"
               >
                 Next <ArrowRightIcon className="w-4 h-4 ml-2" />
               </Button>

@@ -41,7 +41,7 @@ export function ProvidedServices({ selectedProfile }: ProvidedServicesProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {servico.map((service, index) => (
             <div key={index} className="flex items-center gap-2">
-              <span className="text-darkpink">
+              <span className="text-pink-600">
                 <Image
                   src="/icons/check.png"
                   alt="check"

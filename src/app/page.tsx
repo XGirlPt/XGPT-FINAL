@@ -251,7 +251,7 @@ const Dashboard: React.FC = () => {
       <RecentStories />
       {/* <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} /> */}
       <MapSection profiles={mapProfiles} />
-      <NewestAdds />
+      <NewestAdds  profiles={profiles as Profile[]}/>
       <Statistics />
       <PublishAdBanner />
     </main>

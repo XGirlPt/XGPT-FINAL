@@ -88,7 +88,7 @@ export function PublishAdBanner() {
 
       <motion.div
         className={cn(
-          'w-full rounded-3xl p-12 text-center bg-darkpink dark:bg-[#1f1017] relative z-10 overflow-hidden'
+          'w-full rounded-3xl p-12 text-center bg-pink-600 dark:bg-[#1f1017] relative z-10 overflow-hidden'
         )}
       >
         <motion.h2
@@ -109,7 +109,7 @@ export function PublishAdBanner() {
           <Button
             className={cn(
               'rounded-full px-8 py-6 text-lg font-medium',
-              'bg-white text-gray-600 hover:bg-gray-100 dark:bg-darkpink dark:text-white'
+              'bg-white text-gray-600 hover:bg-gray-100 dark:bg-pink-600 dark:text-white'
             )}
           >
             Register Now

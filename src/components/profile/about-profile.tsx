@@ -140,7 +140,7 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
               {detail.label}
             </div>
             <div className="flex-1 border-b border-dashed border-gray-300 dark:border-gray-700" />
-            <div className="flex-none text-darkpink font-medium">
+            <div className="flex-none text-pink-600 font-medium">
               {detail.value}
             </div>
           </div>

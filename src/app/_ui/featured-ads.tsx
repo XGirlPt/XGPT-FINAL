@@ -152,7 +152,7 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
           <h2 className="lg:text-5xl text-3xl">Featured Ads</h2>
           <Link
             href="/ads"
-            className="text-sm text-white px-4 py-2 rounded-full bg-darkpink font-body hidden md:block"
+            className="text-sm text-white px-4 py-2 rounded-full bg-pink-600 font-body hidden md:block"
           >
             View All
           </Link>
@@ -221,7 +221,7 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
 
         <Link
           href="/ads"
-          className="text-sm text-white px-4 py-2 rounded-full bg-darkpink font-body block md:hidden mt-10 text-center"
+          className="text-sm text-white px-4 py-2 rounded-full bg-pink-600 font-body block md:hidden mt-10 text-center"
         >
           View All
         </Link>

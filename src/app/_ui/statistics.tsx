@@ -45,10 +45,10 @@ export function Statistics() {
                 <div className="flex items-center justify-center">
                   <NumberTicker
                     value={stat.value}
-                    className="text-5xl text-darkpink"
+                    className="text-5xl text-pink-600"
                   />
                   {stat.suffix && (
-                    <span className="text-5xl text-darkpink">
+                    <span className="text-5xl text-pink-600">
                       {stat.suffix}
                     </span>
                   )}
