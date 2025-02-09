@@ -16,6 +16,7 @@ import Comments from '@/app/escort/[profileName]/_ui/comments';
 import { Description } from '@/components/profile/description';
 import HeaderG from '@/components/header-filter/header-g';
 import FotoBig from '@/components/profile/foto-big'; // Importe o coimport Certificado from '../../escort/_ui/certificado';
+import Certificado from '../_ui/certificado';
 
 function UserProfile() {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);

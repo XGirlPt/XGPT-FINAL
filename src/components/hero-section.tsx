@@ -19,6 +19,7 @@ import {
 import Autoplay from 'embla-carousel-autoplay';
 import { Badge } from '@/components/ui/badge';
 import {  MessageCircle } from "lucide-react";
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from "react-icons/fa";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },

@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { CheckCircle, Radio } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -11,27 +10,16 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { HeroImageContainer } from './hero-image-container';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import Autoplay from 'embla-carousel-autoplay';
-import { Badge } from '@/components/ui/badge';
 import { Profile } from '@/types';
 import Link from 'next/link';
-import { Anonymous_Pro } from 'next/font/google';
-import { TbArrowDownSquare, TbMoodSad } from 'react-icons/tb';
 import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale'; // Importando o locale português
 import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext'; 
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaCommentDots } from "react-icons/fa6";
-import { FaClock } from "react-icons/fa6";
-import { FaVideo, FaCrown } from "react-icons/fa6";
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from "react-icons/fa";
+
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
