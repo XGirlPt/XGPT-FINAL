@@ -232,7 +232,7 @@ const Dashboard: React.FC = () => {
     //   </div>
     // </div>
 
-    <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-10">
+    <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-6">
       <div
         className="absolute rounded-full z-30 bg-[#f2cadb] dark:bg-[#2e0415]"
         style={{
@@ -249,7 +249,7 @@ const Dashboard: React.FC = () => {
       <HeroSection profiles={profiles as Profile[]} />
 
       <RecentStories />
-      {/* <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} /> */}
+      <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
       <MapSection profiles={mapProfiles} />
       <NewestAdds  profiles={profiles as Profile[]}/>
       <Statistics />

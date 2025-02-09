@@ -23,6 +23,12 @@ import { Profile } from '@/types';
 import Link from 'next/link';
 import { Anonymous_Pro } from 'next/font/google';
 import { TbArrowDownSquare, TbMoodSad } from 'react-icons/tb';
+import { formatDistanceToNow } from 'date-fns';
+import { pt } from 'date-fns/locale'; // Importando o locale português
+import { FaMapMarkerAlt, FaCommentDots, FaClock, FaVideo,FaCrown } from "react-icons/fa"; // Importando os ícones
+import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext'; 
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -61,7 +67,28 @@ interface Profile {
   // live pode ser booleano ou string
 }
 
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
+
+ const timeAgo = (timestamp: string) => {
+    const date = new Date(timestamp);
+    return formatDistanceToNow(date, { addSuffix: true, locale: pt });
+  };
+
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
+  
+  const { t, i18n } = useTranslation();
+  const { language, changeLanguage } = useLanguage();
+  
   return (
     <section className="relative py-8 px-4">
       {/* Small profile images on sides - can be implemented as floating decorations */}
@@ -93,8 +120,8 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             className="text-xl font-body text-gray-600 dark:text-gray-300 mb-12"
             variants={fadeInUp}
           >
-            Discover the finest escort girls and skilled erotic masseuses in
-            Portugal.
+          
+            {t('dashboard.meta_description')}
           </motion.p>
 
           {/* Floating corner images */}
@@ -168,9 +195,14 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
           </motion.div>
         </div>
 
+
+
+
         {/* Profile Cards Carousel with animation */}
         <motion.div variants={fadeInUp} className="w-full   pt-20 lg:pt-0">
-          <Carousel
+
+        <div className="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-36">
+        <Carousel
             opts={{
               align: 'center',
               loop: true,
@@ -181,150 +213,76 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               }),
             ]}
           >
-            <CarouselContent className="">
-              {profiles.map((profile) => (
-                <CarouselItem
-                  key={profile.nome}
-                  className="pl-2 md:pl-4 md:basis-1/6 basis-1/2 "
-                >
-                  <motion.div
-                    className="overflow-hidden rounded-3xl"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{
-                      scale: 1.02,
-                      transition: { duration: 0.2 },
-                    }}
-                  >
-                    <div className="aspect-square relative">
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        {profile.photos[0] && (
-                          <Image
-                            src={profile.photos[0] || '/logo.webp'}
-                            alt={profile.nome}
-                            width={400}
-                            height={400}
-                            className="object-cover aspect-square"
-                          />
-                        )}
-                      </motion.div>
-                      {/* Status indicators */}
-                      <motion.div
-                        className="absolute top-2 right-2 flex gap-1.5 font-body"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.2 }}
-                      >
-                        {profile.certificado && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Badge className="bg-[#F1C40F] hover:bg-[#F1C40F]/90 dark:bg-[#F1C40F] dark:hover:bg-[#F1C40F] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg">
-                                  <CheckCircle className="w-2.5 h-2.5 mr-1" />
-                                  Premium
-                                </Badge>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Premium</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                        {profile.stories?.length > 0 && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Badge
-                                  variant="secondary"
-                                  className="bg-[#8E44AD]  dark:bg-[#8E44AD] dark:hover:bg-[#8E44AD] text-white border-none transition-all duration-300 hover:scale-110 transform text-xxs hover:shadow-lg"
-                                >
-                                  <Image
-                                    src="/icons/stories.png"
-                                    alt="Stories"
-                                    width={10}
-                                    height={10}
-                                    className="w-2.5 h-2.5 mr-1"
-                                  />
-                                  Stories
-                                </Badge>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Stories</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
+        <CarouselContent className="flex gap-4">
+  {profiles.map((profile, index) => (
+    <CarouselItem key={index} className="basis-1/2 md:basis-1/6">
+      <motion.div
+        variants={cardVariants}
+        whileHover={{
+          scale: 1.03,
+          transition: { duration: 0.2 },
+        }}
+        whileTap={{ scale: 0.98 }}
+        className="relative bg-white dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
+      >
+        {/* Foto de perfil com Nome e Localidade sobrepostos */}
+        <motion.div className="relative w-full h-[65%] rounded-xl overflow-hidden">
+          <Image
+            src={profile.photos[0] || "/logo.webp"}
+            alt={profile.nome}
+            fill
+            className="object-cover"
+          />
+            {/* Premium Badge */}
+                        <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center  shadow-md">
+                          <FaCrown className="text-white mr-1" />
+                          <span className=" text-xs">Premium</span>
+                        </div>
+                        {/* Badges na imagem */}
                         {profile.live && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Badge
-                                  variant="secondary"
-                                  className="bg-[#E74C3C]/90 hover:bg-[#E74C3C] dark:bg-[#E74C3C]/90 dark:hover:bg-[#E74C3C] text-white border-none transition-all duration-300 hover:scale-110 transform text-xs hover:shadow-lg"
-                                >
-                                  <motion.span
-                                    className="w-1 h-1 bg-white rounded-full mr-1"
-                                    animate={{
-                                      opacity: [1, 0.5, 1],
-                                      scale: [1, 1.2, 1],
-                                    }}
-                                    transition={{
-                                      duration: 1.5,
-                                      repeat: Infinity,
-                                      ease: 'easeInOut',
-                                    }}
-                                  />
-                                  Live
-                                </Badge>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Live Cam</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                          <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
+                            <MdFiberManualRecord className="text-white mr-1" />
+                            <span className="text-xs">Live Cam</span>
+                          </div>
                         )}
-                      </motion.div>
-                      {/* Tag */}
-                      {profile.tag && (
-                        <motion.span
-                          className="absolute bottom-2 left-2 bg-pink-500 text-white px-2 py-1 rounded-full text-xs"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.1 }}
-                        >
-                          {profile.tag}
-                        </motion.span>
-                      )}
-                    </div>
-                    <motion.div
-                      className="p-4"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.2 }}
-                    >
-                      <h3 className="font-bold text-xl mb-1">{profile.nome}</h3>
-                      <p className="text-black text-sm flex items-center justify-center">
-                        <Image
-                          src="/icons/location.png"
-                          alt="Location"
-                          width={16}
-                          height={16}
-                        />
-                        <span className="font-body text-sm dark:text-gray-300">
-                          {' '}
-                          {profile.cidade}
-                        </span>
-                      </p>
-                    </motion.div>
-                  </motion.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+                        {Array.isArray(profile.stories) && profile.stories.length > 0 && (
+                          <div className="absolute top-10 right-2 md:right-3 bg-pink-800 text-white text-xs font-semibold py-1 px-2 rounded-full z-50 flex items-center">
+                            <FaVideo className="text-white mr-1 " />
+                            <span className="text-xs">Stories</span>
+                          </div>
+                        )}
+          {/* Gradiente e Nome + Localidade */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+            <h3 className="text-base md:text-lg font-semibold text-white leading-tight">
+              {profile.nome}
+            </h3>
+            <div className="flex items-center gap-1 text-white text-sm">
+              <FaMapMarkerAlt className="text-pink-600" />
+              {profile.cidade}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Tag e Tempo */}
+        <div className="bg-pink-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-gray-200 px-3 py-3 rounded-xl shadow-md italic text-xs md:text-sm mt-2 flex flex-col justify-between flex-1 min-h-[70px]">
+        <div className=" flex items-start justify-between gap-2">
+  <span className="block break-words leading-tight max-h-[60px] overflow-hidden">
+  &quot;{profile.tag}&quot;   
+  <FaCommentDots className="text-yellow-600 text-md " />
+
+  </span>
+</div>
+          <div className="text-base font-arial text-gray-200 flex items-center gap-1 mt-2">
+            <FaClock className="text-yellow-500 text-md font-normal" />
+            {timeAgo(profile.tagtimestamp)}
+          </div>
+        </div>
+      </motion.div>
+    </CarouselItem>
+  ))}
+</CarouselContent>
+
+
 
             {/* Custom navigation buttons */}
             <div className="flex justify-center gap-2 mt-8">
@@ -332,6 +290,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               <CarouselNext className="static flex translate-x-0 translate-y-0 position-static w-8 h-8 rounded-full" />
             </div>
           </Carousel>
+          </div>
         </motion.div>
       </motion.div>
     </section>

@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale'; // Importando o locale português
+import { FaMapMarkerAlt, FaCommentDots, FaClock } from "react-icons/fa"; // Importando os ícones
 
 interface Profile {
   nome: string;
@@ -121,7 +122,9 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
         </motion.div>
 
         <div className="relative w-full">
-        <CarouselContent className="-ml-2">
+
+          {/* CARD */}
+          <CarouselContent className="-ml-2">
   {profiles.map((profile, index) => (
     <CarouselItem
       key={index}
@@ -134,10 +137,12 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
           transition: { duration: 0.2 },
         }}
         whileTap={{ scale: 0.95 }}
-        className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-4 shadow-lg overflow-hidden cursor-pointer transform transition-all hover:shadow-2xl"
+        className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-4 shadow-lg overflow-hidden cursor-pointer transform transition-all hover:shadow-2xl
+        flex flex-col justify-between min-h-[320px]"
       >
+        {/* Foto de perfil com Nome e Cidade sobrepostos */}
         <motion.div
-          className="relative aspect-[4/4] rounded-full mb-4"
+          className="relative aspect-[4/4] rounded-2xl overflow-hidden"
           whileHover={{
             scale: 1.03,
             transition: { duration: 0.2 },
@@ -147,51 +152,48 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
             src={profile.photos[0] || "/logo.webp"}
             alt={profile.nome}
             fill
-            className="object-cover rounded-full border-4 border-white"
+            className="object-cover rounded-2xl"
           />
+          {/* Gradiente para legibilidade */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+            <h3 className="text-lg md:text-xl font-semibold text-white">
+              {profile.nome}
+            </h3>
+            <div className="flex items-center gap-1 text-white text-sm">
+              <FaMapMarkerAlt className="text-sm" />
+              {profile.cidade}
+            </div>
+          </div>
         </motion.div>
 
+        {/* Conteúdo da Card */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
+          className="flex flex-col justify-between flex-1"
         >
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-xl md:text-2xl text-gray-900 dark:text-white truncate">
-              {profile.nome}
-            </h3>
-            <div className="font-body flex items-center gap-1 text-sm md:text-base text-gray-500 dark:text-gray-300">
-              <Image
-                src="/icons/location.png"
-                alt="Location"
-                width={20}
-                height={20}
-              />
-              {profile.cidade}
+          {/* Tag/Status - Efeito de Balão de Mensagem */}
+          <div className="self-start bg-blue-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-white px-3 py-2 rounded-2xl relative shadow-md italic text-sm md:text-base">
+<div className='flex'>
+<span className="italic">&quot;  {profile.tag}&quot;  </span>            
+<FaCommentDots className=" text-pink-600" />
             </div>
+
+          {/* Tempo passado */}
+          <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+            <FaClock className="text-yellow-500" />
+            {timeAgo(profile.tagtimestamp)}
           </div>
-
-          {/* Tag/Status - agora com ícone e itálico */}
-          <p className="text-sm md:text-base font-medium text-gray-800 dark:text-white bg-blue-100 dark:bg-[#3a1a2a] px-3 py-1 rounded-full inline-flex items-center gap-2 shadow-md mb-2 italic">
-            <Image src="/icons/message.png" alt="Message" width={16} height={16} className="opacity-75" />
-            <span>({profile.tag})</span>
-          </p>
-
-          {/* Time Ago */}
-          <div className="text-xs text-gray-400 mt-1 flex items-center gap-1 font-body">
-            <Image
-              src="/icons/clock.png"
-              alt="Clock"
-              width={18}
-              height={18}
-            />
-            {timeAgo(profile.tagtimestamp)} {/* Exibe o tempo passado */}
           </div>
         </motion.div>
       </motion.div>
     </CarouselItem>
   ))}
 </CarouselContent>
+
+
+{/* CARD */}
 
 
         </div>

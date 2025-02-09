@@ -146,111 +146,73 @@ export function HeroSection() {
               }),
             ]}
           >
-            <CarouselContent className="">
-              {profiles.map((profile) => (
-                <CarouselItem
-                  key={profile.nome}
-                  className=" md:basis-1/7 basis-1/7"
+                <CarouselContent className="-ml-2">
+          {profiles.map((profile, index) => (
+            <CarouselItem
+              key={index}
+              className="basis-1/2 md:basis-1/5 gap-4"
+            >
+              <motion.div
+                variants={cardVariants}
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.2 },
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-4 shadow-lg overflow-hidden cursor-pointer transform transition-all hover:shadow-2xl
+                flex flex-col justify-between min-h-[320px]"
+              >
+                {/* Foto de perfil com Nome e Cidade sobrepostos */}
+                <motion.div
+                  className="relative aspect-[4/4] rounded-2xl overflow-hidden"
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.2 },
+                  }}
                 >
-                   <motion.div
-      className="overflow-hidden rounded-3xl shadow-lg bg-white dark:bg-gray-900"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.2 }}
-      whileHover={{
-        scale: 1.03,
-        transition: { duration: 0.3 },
-      }}
-    >
-      {/* Foto de perfil */}
-      <div className="relative aspect-square overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Image
-            src={profile.photos[0] || "/logo.webp"}
-            alt={profile.nom}
-            width={400}
-            height={400}
-            className="object-cover w-full h-full"
-          />
-        </motion.div>
-
-        {/* Nome e Localização sobre a imagem */}
-        <div className="absolute bottom-2 left-2 bg-black/60 text-white p-2 rounded-lg">
-          <h3 className="font-bold text-md">{profile.nom}</h3>
-          <p className="text-xs flex items-center gap-1">
-            <Image src="/icons/location.png" alt="Location" width={12} height={12} />
-            {profile.distrito}
-          </p>
-        </div>
-      </div>
-
-      {/* Indicadores de status */}
-      <div className="absolute top-2 right-2 flex gap-1.5 font-body">
-        {profile.certifie && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge className="bg-[#F1C40F]/90 text-white text-xs">
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Premium
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>Usuário Premium</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-        {profile.histoires?.length > 0 && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge className="bg-[#8E44AD]/90 text-white text-xs">
-                  <Image src="/icons/stories.png" alt="Stories" width={12} height={12} className="mr-1" />
-                  Stories
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>Possui stories recentes</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-        {profile.enDirect && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge className="bg-[#E74C3C]/90 text-white text-xs flex items-center">
-                  <motion.span
-                    className="w-2 h-2 bg-white rounded-full mr-1"
-                    animate={{ opacity: [1, 0.5, 1], scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  <Image
+                    src={profile.photos[0] || "/logo.webp"}
+                    alt={profile.nome}
+                    fill
+                    className="object-cover rounded-2xl"
                   />
-                  Live
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>Está ao vivo agora</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-      </div>
-
-      {/* Tag de mensagem recente */}
-      {profile.tag && (
-        <motion.div
-          className="flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 text-sm rounded-b-3xl"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <MessageCircle className="w-4 h-4 text-blue-500" />
-          <span className="text-gray-700 dark:text-gray-300">{profile.tag}</span>
-        </motion.div>
-      )}
-    </motion.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+                  {/* Gradiente para legibilidade */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                    <h3 className="text-lg md:text-xl font-semibold text-white">
+                      {profile.nome}
+                    </h3>
+                    <div className="flex items-center gap-1 text-white text-sm">
+                      <FaMapMarkerAlt className="text-sm" />
+                      {profile.cidade}
+                    </div>
+                  </div>
+                </motion.div>
+        
+                {/* Conteúdo da Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex flex-col justify-between flex-1"
+                >
+                  {/* Tag/Status - Efeito de Balão de Mensagem */}
+                  <div className="self-start bg-blue-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-white px-3 py-2 rounded-2xl relative shadow-md italic text-sm md:text-base">
+        <div className='flex'>
+        <span className="italic">&quot;  {profile.tag}&quot;  </span>            
+        <FaCommentDots className=" text-pink-600" />
+                    </div>
+        
+                  {/* Tempo passado */}
+                  <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                    <FaClock className="text-yellow-500" />
+                    {timeAgo(profile.tagtimestamp)}
+                  </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
 
             {/* Custom navigation buttons */}
             <div className="flex justify-center gap-2 mt-8">

@@ -6,7 +6,7 @@ import { logout } from '../../actions/ProfileActions';
 import { logoutClubs } from '../../actions/ClubsActions';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaSignOutAlt, FaSearch, FaHome, FaBook, FaPenAlt } from 'react-icons/fa';
 import Image from 'next/image';
 
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { useLanguage } from '../../context/LanguageContext'; // Importer le cont
 import SearchModal from '../ui/search-modal';
 
 import { useTheme } from 'next-themes';
+import { BiSolidMoviePlay } from "react-icons/bi";
 
 import { Search, Globe, SlidersHorizontal, ChevronDown, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -90,6 +91,8 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
   const languageMenuRef = useRef<HTMLUListElement>(null);
 
+
+
   useEffect(() => {
     setEmail(emailReduxProfile || '');
   }, [emailReduxProfile]);
@@ -128,36 +131,12 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   }, []);
 
   const navigationLinks = [
-    {
-      href: '/',
-      label: t('Header.home'),
-      darkIcon: '/icons/home-dark.png',
-      lightIcon: '/icons/home.png',
-    },
-    {
-      href: '/escort',
-      label: t('Header.escort'),
-      darkIcon: '/icons/escort-dark.png',
-      lightIcon: '/icons/escort.png',
-    },
-    {
-      href: '/stories',
-      label: t('Header.stories'),
-      darkIcon: '/icons/stories-dark.png',
-      lightIcon: '/icons/stories.png',
-    },
-    {
-      href: '/blog',
-      label: t('Header.blog'),
-      darkIcon: '/icons/stories-dark.png',
-      lightIcon: '/icons/stories.png',
-    },
-    {
-      href: '/Puclicidade',
-      label: t('Header.ads'),
-      darkIcon: '/icons/ads-dark.png',
-      lightIcon: '/icons/ads.png',
-    },
+    { href: '/', label: 'Home', Icon: FaHome },
+    { href: '/escort', label: 'Escort', Icon: FaUser },
+    { href: '/stories', label: 'Stories', Icon: BiSolidMoviePlay },
+    { href: '/blog', label: 'Blog', Icon: FaPenAlt },
+    { href: '/blog', label: 'Pub', Icon: FaPenAlt },
+
   ];
 
   const isActive = (path: string) => {
@@ -175,65 +154,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         )}
       >
 
-        {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between w-full">
-          <div ref={logoRef}>
-            <Link href="/">
-            <Image
-              src={theme === 'dark' ? '/logo-white.png' : '/logo.png'}
-              alt="X Girl"
-              width={120}
-              height={120}
-              />
-              </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="w-6 h-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Menu</SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col space-y-4 mt-4">
-                  {navigationLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg"
-                    >
-                      <Image
-                        src={theme === 'dark' ? link.darkIcon : link.lightIcon}
-                        alt={link.label}
-                        width={24}
-                        height={24}
-                      />
-                      {link.label}
-                    </Link>
-                  ))}
-                  <div className="pt-4 border-t">
-                    <Button className="w-full mb-2 rounded-full bg-pink-600 hover:bg-pink-600hover">
-                      Register
-                    </Button>
-                    <Button variant="outline" className="w-full rounded-full">
-                      Login
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-
-
-
-
-
-
         {/* Desktop Header */}
         <div className="hidden lg:flex items-center pt-2 gap-2 justify-between w-full">
           <div className="flex items-center">
@@ -249,8 +169,8 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             </div>
           </div>
           <div
-            className="relative flex"
-            style={{ width: navWidth > 0 ? `${navWidth}px` : 'auto' }}
+  className="relative flex w-36" // Aumentei a largura aqui
+  style={{ width: navWidth > 0 ? `${navWidth}px` : 'auto' }}
           >
             <Search
               className={cn(
@@ -282,13 +202,55 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           
           
           <div className="flex items-center gap-2">
-  <Link href="/registo/regista2">
-    <Button className="rounded-full !px-6 bg-pink-600 hover:bg-pink-600hover dark:text-white font-body">
-      Register
-    </Button>
-  </Link>
-  <Link href="/login">
+          {userUID ? (
+    // Se o usuário estiver logado, exibir o avatar e email
+    <DropdownMenu>
+<DropdownMenuTrigger asChild>
+  <button className="flex items-center gap-2 bg-transparent border-none cursor-pointer">
+    {photoUID ? (
+      <div className="w-10 h-10 relative border border-pink-600 rounded-full"> {/* Contêiner com tamanho fixo */}
+        <Image
+          src={photoUID || '/logo.webp'}
+          alt="Avatar"
+          layout="fill" /* Faz a imagem preencher todo o contêiner */
+          className="rounded-full border-2 border-pink-600 object-cover" /* Borda pink e imagem 100% coberta */
+        
+        />
+      </div>
+    ) : (
+      <FaUser className="w-10 h-10 text-gray-500 dark:text-gray-300" />
+    )}
+    <span className="text-gray-700 dark:text-white text-base">{email}</span>
+    <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-300" />
+  </button>
+</DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => router.push('/definicoes')}>
+          <FaCog className="mr-2 " /> {t('Header.settings')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push('/minha-conta')}>
+          <FaSignOutAlt className="mr-2" /> {t('Header.myAccount')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
+          <FaSignOutAlt className="mr-2" /> {t('Header.logout')}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ) : (
+    <>
     <Button
+      onClick={() => router.push('/registo/regista2')}
+      className={cn(
+        'rounded-full !px-6 bg-pink-600 hover:bg-pink-700 dark:text-white font-body'
+      )}
+    >
+      {t('Header.register')}
+    </Button>
+
+
+    <Button
+      onClick={() => router.push('/login')}
       variant="outline"
       className={cn(
         'rounded-full !px-6 font-body',
@@ -297,32 +259,17 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
           : 'border-gray-200 hover:bg-gray-100'
       )}
     >
-      Login
+      {t('Header.login')}
     </Button>
-  </Link>
+  </>
+)}
 </div>
         </div>
 
-        {/* Mobile Search Bar */}
-        <div className="lg:hidden mt-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full pl-10 pr-12 py-4 text-base rounded-full border"
-            />
-            <Button
-              size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-pink-600 hover:bg-pink-600 hover w-8 h-8 "
-            >
-              <SlidersHorizontal className="w-4 h-4 dark:text-white" />
-            </Button>
-          </div>
-        </div>
+     
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6 justify-between pt-2">
+        <div className="hidden lg:flex items-center gap-2 justify-between pt-2">
           <div className="opacity-0">
             <Image
               src={'/logo-white.png'}
@@ -332,32 +279,21 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             />
           </div>
           <div ref={navRef} className="flex items-center gap-6">
-  {navigationLinks.map((link) => {
-    const active = isActive(link.href);
-
-    return (
-      <Link
-        key={link.href}
-        href={link.href}
-        className={cn(
-          'flex items-center gap-1 transition-colors font-body text-center py-2',
-          active ? 'text-pink-600 font-medium border-b-2 border-pink-600' : 'text-[#725a64] dark:text-[#a3999d] hover:text-pink-600'
-        )}
-      >
-        <div className="w-5 h-5 flex items-center justify-center">
-          <Image
-            src={active ? link.lightIcon : link.darkIcon} 
-            alt={link.label}
-            width={20}
-            height={20}
-            className={cn(active ? 'brightness-0 invert-[31%] sepia-[78%] saturate-[593%] hue-rotate-[292deg] contrast-[95%]' : '')}
-          />
-        </div>
-        {link.label}
-      </Link>
-    );
-  })}
-</div>
+            {navigationLinks.map(({ href, label, Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-1 text-sm font-body text-center py-2 ${
+                  isActive(href)
+                    ? 'text-pink-600 border-b-2 border-pink-600'
+                    : 'text-[#725a64] dark:text-[#a3999d] hover:text-pink-600'
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${isActive(href) ? 'text-pink-600' : 'text-[#725a64] dark:text-[#a3999d]'}`} />
+                {label}
+              </Link>
+            ))}
+          </div>
 
 
           <div className="flex items-center gap-4">
@@ -365,16 +301,16 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="md"
                   className="flex items-center gap-1"
                 >
                   <Globe className="w-4 h-4 text-pink-600" />
-                  English
+                  {selectedLanguage}
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-  <DropdownMenuItem>
+  <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
     <Image
       src="/Flags/en.svg"
       alt="English"
@@ -382,9 +318,9 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
       height={24}
       className="rounded-full"
     />
-    English
+    {t('Header.EN')}
   </DropdownMenuItem>
-  <DropdownMenuItem>
+  <DropdownMenuItem  onClick={() => handleLanguageChange('pt')}>
     <Image
       src="/Flags/pt.svg"
       alt="Portuguese"
@@ -392,9 +328,9 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
       height={24}
       className="rounded-full"
     />
-    Portuguese
-  </DropdownMenuItem>
-  <DropdownMenuItem>
+    {t('Header.PT')}
+    </DropdownMenuItem>
+  <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
     <Image
       src="/Flags/fr.svg"
       alt="Francais"
@@ -402,8 +338,8 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
       height={24}
       className="rounded-full"
     />
-    Francais
-  </DropdownMenuItem>
+    {t('Header.FR')}
+    </DropdownMenuItem>
 </DropdownMenuContent>
 
             </DropdownMenu>
@@ -423,3 +359,92 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 };
 
 export default Header;
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   {/* Mobile Search Bar */}
+{/* <div className="lg:hidden mt-4">
+<div className="relative">
+  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+  <Input
+    type="search"
+    placeholder="Search..."
+    className="w-full pl-10 pr-12 py-4 text-base rounded-full border"
+  />
+  <Button
+    size="icon"
+    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-pink-600 hover:bg-pink-600 hover w-8 h-8 "
+  >
+    <SlidersHorizontal className="w-4 h-4 dark:text-white" />
+  </Button>
+</div>
+</div> */}
+
+
+
+
+
+
+        // {/* Mobile Header */}
+        // <div className="lg:hidden flex items-center justify-between w-full">
+        //   <div ref={logoRef}>
+        //     <Link href="/">
+        //     <Image
+        //       src={theme === 'dark' ? '/logo-white.png' : '/logo.png'}
+        //       alt="X Girl"
+        //       width={120}
+        //       height={120}
+        //       />
+        //       </Link>
+        //   </div>
+        //   <div className="flex items-center gap-2">
+        //     <ThemeToggle />
+        //     <Sheet>
+        //       <SheetTrigger asChild>
+        //         <Button variant="ghost" size="icon">
+        //           <Menu className="w-6 h-6" />
+        //         </Button>
+        //       </SheetTrigger>
+        //       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+        //         <SheetHeader>
+        //           <SheetTitle className="text-left">Menu</SheetTitle>
+        //         </SheetHeader>
+        //         <div className="flex flex-col space-y-4 mt-4">
+        //           {navigationLinks.map((link) => (
+        //             <Link
+        //               key={link.href}
+        //               href={link.href}
+        //               className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg"
+        //             >
+        //               <Image
+        //                 src={theme === 'dark' ? link.darkIcon : link.lightIcon}
+        //                 alt={link.label}
+        //                 width={24}
+        //                 height={24}
+        //               />
+        //               {link.label}
+        //             </Link>
+        //           ))}
+        //           <div className="pt-4 border-t">
+        //             <Button className="w-full mb-2 rounded-full bg-pink-600 hover:bg-pink-600hover">
+        //               Register
+        //             </Button>
+        //             <Button variant="outline" className="w-full rounded-full">
+        //               Login
+        //             </Button>
+        //           </div>
+        //         </div>
+        //       </SheetContent>
+        //     </Sheet>
+        //   </div>
+        // </div>
