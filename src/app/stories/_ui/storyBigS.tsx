@@ -29,6 +29,7 @@ const StoryBigS: React.FC<StoryBigSProps> = ({
   story,
   firstPhotos,
   nome,
+  photos,
   onClose,
 }) => {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);

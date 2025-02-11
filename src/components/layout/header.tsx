@@ -146,7 +146,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   return (
 
 
-     <div className="fixed top-0 left-0 right-0 z-20 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
+     <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div
         className={cn(
           'container mx-auto py-1 relative',

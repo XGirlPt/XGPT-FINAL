@@ -109,7 +109,7 @@ function UserProfile() {
   return (
     <>
       {/* Sticky Header */}
-      <div className="sticky top-32 z-50 backdrop-blur-sm border-b">
+      <div className="sticky top-24 z-50 mt-1 pt-1 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-3">
           {/* Desktop view */}
           <div className="hidden md:flex items-center justify-between z-40">
@@ -180,7 +180,7 @@ function UserProfile() {
             />
           )}
 
-          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-40 relative z-30">
+          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-40 relative">
             <PhotosAndCertificado
               selectedProfile={selectedProfile as any}
               isCertified={isCertified}

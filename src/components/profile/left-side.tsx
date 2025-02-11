@@ -72,7 +72,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
         {/* Botões de Ação */}
         <div className="space-y-2">
           <Button
-            className="w-full rounded-full bg-pink-600  text-white font-body flex items-center justify-center gap-2"
+            className="w-full rounded-full bg-pink-600 hover:bg-pink-700 text-white font-body flex items-center justify-center gap-2"
             onClick={handleLigaClick}
           >
             <FiPhone />

@@ -62,9 +62,9 @@ const Certificado: React.FC<CertificadoProps> = ({ setShowCertificado }) => {
           open={mostrarCertificado}
           onOpenChange={(open: any) => !open && fecharCertificado()}
         >
-          <DialogContent className="max-w-md w-full">
+          <DialogContent className="max-w-md w-full  bg-[#f2ebee] dark:bg-[#100007]">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 text-gray-900 dark:text-white">
               <DialogTitle>{t('profile.certified_profile')}</DialogTitle>
             </div>
 

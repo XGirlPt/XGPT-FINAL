@@ -84,9 +84,9 @@ const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
           open={mostrarLiga}
           onOpenChange={(open) => !open && fecharLiga()}
         >
-          <DialogContent className="max-w-md w-full">
+          <DialogContent className="max-w-md w-full bg-white dark:bg-[#1a0a10] ">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center text-2xl mb-6">
               <DialogTitle>
                 {t('profile.call_to', { nome: selectedProfile?.nome })}{' '}
               </DialogTitle>
@@ -98,16 +98,16 @@ const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
             {/* Contact Options */}
             <div className="flex flex-col gap-4">
               {/* Phone */}
-              <div className="bg-pink-500 hover:bg-pink-600 py-3 rounded-lg flex items-center justify-center transition-colors">
-                <FiPhone size={22} className="mr-2 text-white" />
-                <span className="text-white font-medium">
+              <div className="bg-pink-600 hover:bg-pink-700 py-3 rounded-lg flex items-center justify-center transition-colors">
+                <FiPhone size={22} className="mr-2 text-gray-200 " />
+                <span className="text-gray-200 text-lg">
                   {selectedProfile?.telefone}
                 </span>
               </div>
 
               {/* WhatsApp */}
               <div
-                className="bg-green-600 hover:bg-green-500 py-3 rounded-lg flex items-center justify-center cursor-pointer transition-colors"
+                className="bg-green-600 hover:bg-green-700 py-3 rounded-lg flex items-center justify-center cursor-pointer transition-colors"
                 onClick={() =>
                   window.open(
                     `https://api.whatsapp.com/send?phone=41${selectedProfile?.telefone}`,
@@ -115,8 +115,8 @@ const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
                   )
                 }
               >
-                <FaWhatsapp size={22} className="mr-2 text-white" />
-                <span className="text-white font-medium">WhatsApp</span>
+                <FaWhatsapp size={22} className="mr-2  text-gray-200" />
+                <span className="text-gray-200 text-lg">WhatsApp</span>
               </div>
             </div>
 
@@ -125,8 +125,8 @@ const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
 
             {/* Tarifas */}
             <div className="flex items-center justify-center mb-6">
-              <FaMoneyBillWave size={28} className="text-pink-500 mr-3" />
-              <p className="text-white text-lg font-medium">
+              <FaMoneyBillWave size={28} className="text-pink-600 mr-3" />
+              <p className="text-gray-300 text-2xl font-medium">
                 {t('profile.tariffs_starting_from', {
                   tarifa: selectedProfile?.tarifa,
                 })}
