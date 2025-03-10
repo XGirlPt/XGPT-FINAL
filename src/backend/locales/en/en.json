@@ -493,6 +493,64 @@
     "changesDiscarded": "Changes discarded."
   },
 
+
+  "accountSettings": {
+    "title": "Account Settings",
+    "emailAddress": "Email Address",
+    "currentEmail": "Current email address",
+    "verification": "Verification",
+    "verificationMessage": "If you did not receive the verification email, you can request a new one",
+    "notifications": "Notifications",
+    "notifyMessages": "Receive notifications about new messages and updates",
+    "notifyOffers": "Receive special offers and promotions",
+    "notifyReminders": "Receive reminders about your subscription and payment",
+    "passwordSettings": "Password Settings",
+    "accountStatus": "Account Status",
+    "suspendAccount": "Suspend Account Temporarily",
+    "suspendMessage": "You can reactivate your account at any time",
+    "suspendConfirmMessage": "Are you sure you want to suspend your account? You can reactivate it at any time",
+    "reactivateAccount": "Reactivate Account",
+    "reactivateMessage": "Your account is suspended. Click to reactivate",
+    "reactivateConfirmMessage": "Are you sure you want to reactivate your account?",
+    "deleteAccount": "Delete Account Definitely",
+    "deleteMessage": "This action is irreversible. All data will be permanently removed",
+    "deleteConfirmTitle": "Are you sure you want to delete your account?",
+    "deleteConfirmMessage": "All your data will be permanently removed"
+  },
+  "password": {
+    "current": "Current Password",
+    "new": "New Password",
+    "confirm": "Confirm New Password",
+    "currentRequired": "Current password is required",
+    "minLength": "Password must be at least 8 characters",
+    "confirmRequired": "Please confirm your password",
+    "matchError": "Passwords don't match",
+    "tipsTitle": "Tips for creating a strong password:",
+    "tip1": "Use at least 8 characters",
+    "tip2": "Include uppercase and lowercase letters",
+    "tip3": "Add numbers and symbols"
+  },
+  "buttonSettings": {
+    "update": "Update",
+    "resendVerification": "Resend Verification",
+    "changePassword": "Change Password",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "deleteAccount": "Delete Account"
+  },
+  "messagesSettings": {
+    "passwordChanged": "Password changed successfully!",
+    "passwordChangeError": "Error changing password",
+    "accountDeleted": "Your account has been permanently deleted successfully",
+    "accountSuspended": "Your account has been temporarily suspended successfully",
+    "accountReactivated": "Your account has been successfully reactivated",
+    "fetchError": "Error fetching account status",
+    "statusError": "Error updating status",
+    "statusChangeError": "Error changing account status",
+    "deleteError": "Error deleting account",
+    "noUser": "User not identified"
+  },
+
   "profileR2": {
     "createTitle": "Create Your Profile",
     "createSubtitle": "Complete the information to start on"

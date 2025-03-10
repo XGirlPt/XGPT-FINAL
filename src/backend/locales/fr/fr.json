@@ -490,6 +490,63 @@
     "changesDiscarded": "Modifications annulées."
   },
 
+  "accountSettings": {
+    "title": "Paramètres du compte",
+    "emailAddress": "Adresse email",
+    "currentEmail": "Adresse email actuelle",
+    "verification": "Vérification",
+    "verificationMessage": "Si vous n'avez pas reçu l'email de vérification, vous pouvez en demander un nouveau",
+    "notifications": "Notifications",
+    "notifyMessages": "Recevoir des notifications sur les nouveaux messages et mises à jour",
+    "notifyOffers": "Recevoir des offres spéciales et promotions",
+    "notifyReminders": "Recevoir des rappels sur votre abonnement et paiement",
+    "passwordSettings": "Paramètres du mot de passe",
+    "accountStatus": "Statut du compte",
+    "suspendAccount": "Suspendre le compte temporairement",
+    "suspendMessage": "Vous pouvez réactiver votre compte à tout moment",
+    "suspendConfirmMessage": "Êtes-vous sûr de vouloir suspendre votre compte ? Vous pouvez le réactiver à tout moment",
+    "reactivateAccount": "Réactiver le compte",
+    "reactivateMessage": "Votre compte est suspendu. Cliquez pour le réactiver",
+    "reactivateConfirmMessage": "Êtes-vous sûr de vouloir réactiver votre compte ?",
+    "deleteAccount": "Supprimer le compte définitivement",
+    "deleteMessage": "Cette action est irréversible. Toutes les données seront définitivement supprimées",
+    "deleteConfirmTitle": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+    "deleteConfirmMessage": "Toutes vos données seront définitivement supprimées"
+  },
+  "password": {
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Confirmer le nouveau mot de passe",
+    "currentRequired": "Le mot de passe actuel est requis",
+    "minLength": "Le mot de passe doit comporter au moins 8 caractères",
+    "confirmRequired": "Veuillez confirmer votre mot de passe",
+    "matchError": "Les mots de passe ne correspondent pas",
+    "tipsTitle": "Conseils pour créer un mot de passe fort :",
+    "tip1": "Utilisez au moins 8 caractères",
+    "tip2": "Incluez des lettres majuscules et minuscules",
+    "tip3": "Ajoutez des chiffres et des symboles"
+  },
+  "buttonSettings": {
+    "update": "Mettre à jour",
+    "resendVerification": "Renvoyer la vérification",
+    "changePassword": "Changer le mot de passe",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "deleteAccount": "Supprimer le compte"
+  },
+  "messagesSettings": {
+    "passwordChanged": "Mot de passe changé avec succès !",
+    "passwordChangeError": "Erreur lors du changement de mot de passe",
+    "accountDeleted": "Votre compte a été définitivement supprimé avec succès",
+    "accountSuspended": "Votre compte a été temporairement suspendu avec succès",
+    "accountReactivated": "Votre compte a été réactivé avec succès",
+    "fetchError": "Erreur lors de la récupération du statut du compte",
+    "statusError": "Erreur lors de la mise à jour du statut",
+    "statusChangeError": "Erreur lors du changement de statut du compte",
+    "deleteError": "Erreur lors de la suppression du compte",
+    "noUser": "Utilisateur non identifié"
+  },
+
   "profileR2": {
     "createTitle": "Créez votre profil",
     "createSubtitle": "Complétez les informations pour commencer sur"

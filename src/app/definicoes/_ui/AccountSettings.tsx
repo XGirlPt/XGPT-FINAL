@@ -4,7 +4,7 @@ import { FaUser } from 'react-icons/fa';
 import { logout } from '@/backend/actions/ProfileActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ModalConfirmation from './ModalConfirmation';
+import ModalConfirmation from '../../settings/ModalConfirmation';
 import { profileDataService } from '@/backend/services/profileDataService';
 
 const AccountSettings: React.FC = () => {

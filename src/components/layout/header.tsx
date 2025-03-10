@@ -226,7 +226,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => router.push('/definicoes')}>
+        <DropdownMenuItem onClick={() => router.push('/settings')}>
           <FaCog className="mr-2 " /> {t('Header.settings')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push('/my-account')}>

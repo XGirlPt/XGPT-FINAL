@@ -503,7 +503,63 @@
     },
 
 
-
+    
+      "accountSettings": {
+        "title": "Configurações da Conta",
+        "emailAddress": "Endereço de Email",
+        "currentEmail": "Endereço de email atual",
+        "verification": "Verificação",
+        "verificationMessage": "Se você não recebeu o email de verificação, pode solicitar um novo",
+        "notifications": "Notificações",
+        "notifyMessages": "Receber notificações sobre novas mensagens e atualizações",
+        "notifyOffers": "Receber ofertas e promoções especiais",
+        "notifyReminders": "Receber lembretes sobre sua assinatura e pagamento",
+        "passwordSettings": "Configurações de Senha",
+        "accountStatus": "Status da Conta",
+        "suspendAccount": "Suspender Conta Temporariamente",
+        "suspendMessage": "Você poderá reativar sua conta a qualquer momento",
+        "suspendConfirmMessage": "Tem certeza de que deseja suspender sua conta? Você pode reativá-la a qualquer momento",
+        "reactivateAccount": "Reativar Conta",
+        "reactivateMessage": "Sua conta está suspensa. Clique para reativar",
+        "reactivateConfirmMessage": "Tem certeza de que deseja reativar sua conta?",
+        "deleteAccount": "Eliminar Conta Definitivamente",
+        "deleteMessage": "Esta ação é irreversível. Todos os dados serão permanentemente removidos",
+        "deleteConfirmTitle": "Tem certeza que deseja eliminar sua conta?",
+        "deleteConfirmMessage": "Todos os seus dados serão permanentemente removidos"
+      },
+      "password": {
+        "current": "Senha Atual",
+        "new": "Nova Senha",
+        "confirm": "Confirmar Nova Senha",
+        "currentRequired": "A senha atual é obrigatória",
+        "minLength": "A senha deve ter pelo menos 8 caracteres",
+        "confirmRequired": "Por favor, confirme sua senha",
+        "matchError": "As senhas não correspondem",
+        "tipsTitle": "Dicas para criar uma senha forte:",
+        "tip1": "Use pelo menos 8 caracteres",
+        "tip2": "Inclua letras maiúsculas e minúsculas",
+        "tip3": "Adicione números e símbolos"
+      },
+      "buttonSettings": {
+        "update": "Atualizar",
+        "resendVerification": "Reenviar Verificação",
+        "changePassword": "Alterar Senha",
+        "suspend": "Suspender",
+        "reactivate": "Reativar",
+        "deleteAccount": "Eliminar Conta"
+      },
+      "messagesSettings": {
+        "passwordChanged": "Senha alterada com sucesso!",
+        "passwordChangeError": "Erro ao alterar a senha",
+        "accountDeleted": "Sua conta foi permanentemente eliminada com sucesso",
+        "accountSuspended": "Sua conta foi suspensa temporariamente com sucesso",
+        "accountReactivated": "Sua conta foi reativada com sucesso",
+        "fetchError": "Erro ao buscar o status da conta",
+        "statusError": "Erro ao atualizar o status",
+        "statusChangeError": "Erro ao alterar o status da conta",
+        "deleteError": "Erro ao eliminar a conta",
+        "noUser": "Usuário não identificado"
+      },
 
 
   "profileR2": {
