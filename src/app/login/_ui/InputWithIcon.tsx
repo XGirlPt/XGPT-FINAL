@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/backend/lib/utils';
 
 interface InputWithIconProps {
   label?: string;

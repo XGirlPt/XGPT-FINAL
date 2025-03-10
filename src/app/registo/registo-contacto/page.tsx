@@ -13,7 +13,7 @@ import {
   updatePagamento,
   updateLingua,
   updateServico,
-} from '@/actions/ProfileActions';
+} from '@/backend/actions/ProfileActions';
 
 import { Field, Label, Textarea } from '@headlessui/react';
 import clsx from 'clsx';

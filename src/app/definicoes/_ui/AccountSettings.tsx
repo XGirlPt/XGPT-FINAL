@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaUser } from 'react-icons/fa';
-import { logout } from '@/actions/ProfileActions';
+import { logout } from '@/backend/actions/ProfileActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalConfirmation from './ModalConfirmation';
-import { profileDataService } from '@/services/profileDataService';
+import { profileDataService } from '@/backend/services/profileDataService';
 
 const AccountSettings: React.FC = () => {
   const dispatch = useDispatch();

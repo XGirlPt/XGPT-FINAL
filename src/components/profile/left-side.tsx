@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { Button } from '../../components/ui/button';
-import { Card } from '../../components/ui/card';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
 import { RiMessage2Fill } from 'react-icons/ri';
 import { FiPhone } from 'react-icons/fi';
 import { IoShareSocialOutline } from 'react-icons/io5';
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 import { useTranslation } from 'react-i18next';
 import Liga from './Liga';
 import Partilha from './Partilha';

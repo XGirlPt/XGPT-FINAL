@@ -16,7 +16,7 @@
     "PT": "portuguese"
   },
   "Footer": {
-    "services_description": "Discover the best escort services in the main regions of France.",
+    "services_description": "Discover the best escort services in the main regions of Portugal.",
     "quick_links_title": "QUICK LINKS",
     "escort_lisboa": "Escort in Lisbon",
     "escort_porto": "Escort in Oporto",
@@ -43,10 +43,10 @@
   },
 
   "dashboard": {
-    "escort_title_en": "Escort Girls and Erotic Masseuses in France",
-    "meta_description": "Discover the best escort girls and erotic masseuses in France. Explore our featured ads and news.",
-    "meta_keywords": "escort girls, erotic masseuses, ads, France, services",
-    "meta_og_description": "Find the best escort girls and erotic masseuses in France. Check out our ads and updates.",
+    "escort_title_en": "Escort Girls and Erotic Masseuses in Portugal",
+    "meta_description": "Discover the best escort girls and erotic masseuses in Portugal. Explore our featured ads and news.",
+    "meta_keywords": "escort girls, erotic masseuses, ads, Portugal, services",
+    "meta_og_description": "Find the best escort girls and erotic masseuses in Portugal. Check out our ads and updates.",
     "featured_ads": "Featured Ads",
     "search_area": "Search in Your Area",
     "news": "News"
@@ -64,7 +64,7 @@
   },
 
   "storyPage": {
-    "titleStory": "Escort Girls, Erotic Masseuses and Luxury Companions in France",
+    "titleStory": "Escort Girls, Erotic Masseuses and Luxury Companions in Portugal",
     "latest_stories": "Latest Stories"
   },
 
@@ -137,7 +137,7 @@
       "Multipla Ejeculacao": "Multiple Ejaculations",
       "Face Sitting": "Face Sitting",
       "Fetichismo": "Fetishism",
-      "Beijo Frances": "French Kiss",
+      "Beijo Portugals": "French Kiss",
       "Garganta Profunda": "Deep Throat",
       "Jogos Eroticos": "Erotic Games",
       "Lingerie": "Lingerie",
@@ -164,7 +164,7 @@
     "description": "Login to X-Girl to discover unique and confidential experiences."
   },
   "RegisterPage": {
-    "title": "XGirl.fr is the reference for exclusive escort listings in France",
+    "title": "XGirl.fr is the reference for exclusive escort listings in Portugal",
     "description_1": "Discover thousands of escorts on XGirl.fr",
     "description_2": "The registration process is simple and quick.",
     "description_3": "Increase your income significantly! Attract between 30 and 450 clients every month.",
@@ -236,6 +236,13 @@
     }
   },
 
+    "inputRegister": {
+      "name": "Name",
+      "age": "Age",
+      "phone": "Phone",
+      "city": "City"
+    },
+
   "filterB": {
     "breasts": "Breasts",
     "select_breasts": "Select breast type",
@@ -271,26 +278,31 @@
     "without_tattoos": "Without Tattoos"
   },
 
-  "filterS": {
-    "zodiac": "Zodiac Sign",
-    "select_zodiac": "Select a Zodiac Sign"
-  },
-  "zodiac": {
-    "aries": "Aries",
-    "taurus": "Taurus",
-    "gemini": "Gemini",
-    "cancer": "Cancer",
-    "leo": "Leo",
-    "virgo": "Virgo",
-    "libra": "Libra",
-    "scorpio": "Scorpio",
-    "sagittarius": "Sagittarius",
-    "capricorn": "Capricorn",
-    "aquarius": "Aquarius",
-    "pisces": "Pisces"
-  },
+ "filterTa": {
+  "signo": "Sign"
+},
+"zodiac": {
+  "aries": "Aries",
+  "taurus": "Taurus",
+  "gemini": "Gemini",
+  "cancer": "Cancer",
+  "leo": "Leo",
+  "virgo": "Virgo",
+  "libra": "Libra",
+  "scorpio": "Scorpio",
+  "sagittarius": "Sagittarius",
+  "capricorn": "Capricorn",
+  "aquarius": "Aquarius",
+  "pisces": "Pisces"
+},
+"messages": {
+  "signoUpdated": "Sign updated successfully!",
+  "signoUpdateError": "Error updating the sign."
+},
 
-  "filterTa": {
+
+
+  "filterTarifa": {
     "tarifa": "Rate",
     "select_tarifa": "Select a rate"
   },
@@ -300,6 +312,185 @@
     "200": "Starting from 200€",
     "500": "Starting from 500€",
     "more_than_500": "+ 500€"
+  },
+
+
+  "filter.origin": "Origin",
+  "filterTa.signo": "Zoodiac",
+
+"filterCorpo": {
+    "body": "Body",
+    "select_body": "Select body type",
+    "normal": "Normal",
+    "athletic": "Athletic",
+    "slim": "Slim",
+    "curvy": "Curvy",
+    "xxl": "XXL"
+  },
+  "messagesCorpo": {
+    "corpoUpdated": "Body updated successfully!",
+    "corpoUpdateError": "Error updating the body."
+  },
+  
+    "filterO": {
+      "origin": "Origin",
+      "select_origin": "Select origin"
+    },
+    "origin": {
+      "portuguese": "Portuguese",
+      "brazilian": "Brazilian",
+      "spanish": "Spanish",
+      "african": "African",
+      "latin": "Latin",
+      "oriental": "Oriental"
+    },
+    "messagesOrigin": {
+      "origemUpdated": "Origin updated successfully!",
+      "origemUpdateError": "Error updating the origin."
+    },
+
+
+    
+      "filterAltura": {
+        "height": "Height",
+        "select_height": "Select height"
+      },
+      "height": {
+        "less_than_160": "Less than 1.60m",
+        "around_165": "Around 1.65m",
+        "more_than_170": "More than 1.70m"
+      },
+      "messagesAltura": {
+        "alturaUpdated": "Height updated successfully!",
+        "alturaUpdateError": "Error updating the height."
+      },
+
+      
+        "filterBreast": {
+          "breasts": "Breasts",
+          "select_breasts": "Select breasts"
+        },
+        "breastsFiltro": {
+          "natural": "Natural",
+          "silicone": "Silicone"
+        },
+        "messagesbreast": {
+          "mamasUpdated": "Breasts updated successfully!",
+          "mamasUpdateError": "Error updating the breasts."
+        },
+
+"filterCabelo": {
+    "hair_color": "Hair color",
+    "select_hair_color": "Select hair color"
+  },
+  "hair": {
+    "black": "Black",
+    "blonde": "Blonde",
+    "brown": "Brown",
+    "red": "Red",
+    "other": "Other"
+  },
+  "messagesCabelo": {
+    "cabeloUpdated": "Hair color updated successfully!",
+    "cabeloUpdateError": "Error updating the hair color."
+  },
+
+
+  "filterOlhos": {
+    "eye_color": "Eye color",
+    "select_eye_color": "Select eye color"
+  },
+  "eyes": {
+    "brown": "Brown",
+    "black": "Black",
+    "blue": "Blue",
+    "green": "Green"
+  },
+  "messagesOlhos": {
+    "olhosUpdated": "Eye color updated successfully!",
+    "olhosUpdateError": "Error updating the eye color."
+  },
+
+  
+    "filterBreastsize": {
+      "breasts": "Breasts",
+      "select_breasts": "Select breast type",
+      "breast_size": "Breast Size",
+      "select_breast_size": "Select breast size"
+    },
+    "Breast_size": {
+      "small": "Small Breasts (A-B)",
+      "large": "Large Breasts (C-D)",
+      "xxl": "XXL Breasts (E+)"
+    },
+    "messagesBreastSize": {
+      "seiosUpdated": "Breast size updated successfully!",
+      "seiosUpdateError": "Error updating the breast size."
+    },
+
+
+      "filterPelos": {
+        "hair_removal": "Body Hair",
+        "select_hair_removal": "Select hair preference"
+      },
+      "hair_removalPelos": {
+        "smooth": "Smooth",
+        "partially_smooth": "Partially Smooth",
+        "natural": "Natural"
+      },
+      "messagesPelos": {
+        "pelosUpdated": "Body hair updated successfully!",
+        "pelosUpdateError": "Error updating the body hair."
+      },
+
+
+      "photos": {
+    "title": "Photos",
+    "profilePhotos": "Profile Photos",
+    "socialMediaPhotos": "Social Media Photos",
+    "uploadPhoto": "Upload Your Photo",
+    "socialMediaMessage": "Add your Instagram/Twitter photo to show them the real you.",
+    "locked": "Locked",
+    "lockedMessage": "Buy subscription now to add up to 10 photos of yours.",
+    "buyNow": "Buy Now",
+    "verifyTitle": "Get Verified Today",
+    "verifyMessage": "Verification helps build trust with other users. To get verified, please upload a clear photo of yourself holding a government-issued ID.",
+    "verifyNow": "Verify Now"
+  },
+  "buttonSave": {
+    "discard": "Discard",
+    "saveChanges": "Save Changes"
+  },
+  "messagesPhoto": {
+    "photoUploaded": "Photo uploaded successfully!",
+    "photoDeleted": "Photo deleted successfully!",
+    "uploadError": "Error uploading the photo.",
+    "deleteError": "Error deleting the photo.",
+    "changesSaved": "Changes saved successfully!",
+    "changesDiscarded": "Changes discarded."
+  },
+
+
+  "stories": {
+    "title": "Stories",
+    "profileStories": "Profile Stories",
+    "addStory": "Add Your Story",
+    "locked": "Locked",
+    "lockedMessage": "Buy subscription now to add up to 10 stories of yours.",
+    "buyNow": "Buy Now"
+  },
+  "buttonSaveStories": {
+    "discard": "Discard",
+    "saveChanges": "Save Changes"
+  },
+  "messagesStories": {
+    "storyUploaded": "Story uploaded successfully!",
+    "storyDeleted": "Story deleted successfully!",
+    "uploadError": "Error uploading the story.",
+    "deleteError": "Error deleting the story.",
+    "fetchError": "Error fetching the stories.",
+    "changesSaved": "Changes saved successfully!",
+    "changesDiscarded": "Changes discarded."
   },
 
   "profileR2": {

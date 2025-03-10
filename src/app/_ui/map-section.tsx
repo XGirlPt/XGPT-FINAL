@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Map from './map';
-import { MapProfile } from '@/types';
+import { MapProfile } from '@/backend/types';
 
 export function MapSection({ profiles }: { profiles: MapProfile[] }) {
   return (

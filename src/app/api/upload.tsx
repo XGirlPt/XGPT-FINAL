@@ -55,7 +55,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 
 // Função para converter a imagem para WebP
 async function convertToWebP(imagePath: string): Promise<Buffer> {

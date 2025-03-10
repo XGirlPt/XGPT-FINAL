@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 
 interface HeaderGProps {
   currentProfileIndex: number;

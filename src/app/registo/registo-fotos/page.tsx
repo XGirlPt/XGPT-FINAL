@@ -4,8 +4,8 @@ import React, { useState, ChangeEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { IoTrashBin } from 'react-icons/io5';
-import supabase from '@/database/supabase';
-import { updatePhotos, updateVPhotos } from '@/actions/ProfileActions';
+import supabase from '@/backend/database/supabase';
+import { updatePhotos, updateVPhotos } from '@/backend/actions/ProfileActions';
 import { BlurImage } from '@/components/ui/blur-image';
 import { Button } from '@/components/ui/button';
 import {

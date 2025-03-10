@@ -2,13 +2,13 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import ListCategoriaBar from '@/components/register/list-categoria-bar';
 import FiltroPrice from '@/components/filtros/filtro-tarifa';
 import FiltroDistrito from '@/components/filtros/filtro-distrito';
-import { updateClubsNome, updateClubsTelefone } from '@/actions/ClubsActions';
+import { updateClubsNome, updateClubsTelefone } from '@/backend/actions/ClubsActions';
 
 const RegistoEstabelecimento: React.FC = () => {
   const [clubEmail, setClubEmail] = useState<string>('');

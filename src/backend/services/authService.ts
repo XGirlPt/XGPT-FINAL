@@ -1,5 +1,5 @@
 // services/auth.service.ts
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 
 export interface AuthResponse {
   success: boolean;

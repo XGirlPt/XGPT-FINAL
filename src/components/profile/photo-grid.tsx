@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { Card } from '../../components/ui/card';
-import { Profile } from '@/types';
+import { Card } from '../ui/card';
+import { Profile } from '@/backend/types';
 
 interface PhotoGridProps {
   selectedProfile: Profile;

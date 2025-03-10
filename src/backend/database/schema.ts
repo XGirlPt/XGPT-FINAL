@@ -187,7 +187,6 @@ export type Database = {
           tagTimestamp: string | null;
           tarifa: number | null;
           tatuagem: string | null;
-          tatuagens: string | null;
           telefone: number | null;
           userUID: string | null;
           story: string | null;
@@ -219,7 +218,6 @@ export type Database = {
           tagTimestamp?: string | null;
           tarifa?: number | null;
           tatuagem?: string | null;
-          tatuagens?: string | null;
           telefone?: number | null;
           userUID?: string | null;
           story: string | null;
@@ -251,7 +249,6 @@ export type Database = {
           tagTimestamp?: string | null;
           tarifa?: number | null;
           tatuagem?: string | null;
-          tatuagens?: string | null;
           telefone?: number | null;
           userUID?: string | null;
           story: string | null;

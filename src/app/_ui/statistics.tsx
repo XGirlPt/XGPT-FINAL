@@ -1,5 +1,5 @@
 import { NumberTicker } from '@/components/ui/number-ticker';
-import { cn } from '@/lib/utils';
+import { cn } from '@/backend/lib/utils';
 
 interface Statistic {
   value: number;

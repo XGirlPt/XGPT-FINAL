@@ -7,10 +7,10 @@ import {
   updatePagamento,
   updateDescription,
   updateTarifa,
-} from '@/actions/ProfileActions';
+} from '@/backend/actions/ProfileActions';
 
 import FiltroTarifa from '@/components/filtros/filtro-tarifa';
-import { updateProfileData } from '@/services/profileService';
+import { updateProfileData } from '@/backend/services/profileService';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Field, Label, Textarea } from '@headlessui/react';
@@ -54,16 +54,12 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
     (state: any) => state.profile?.profile?.lingua
   );
 
-  const tarifaRedux = useSelector(
-    (state: any) => state.profile?.profile?.tarifa
-  );
+ 
 
   const servicoRedux = useSelector(
     (state: any) => state.profile?.profile?.servico
   );
-  const descriptionRedux = useSelector(
-    (state: any) => state.profile?.profile?.description
-  );
+
 
   const [selectedPagamento, setSelectedPagamento] = useState<string[]>(
     pagamentoRedux || []
@@ -79,9 +75,7 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
   const [selectedServico, setSelectedServico] = useState<string[]>(
     servicoRedux || []
   );
-  const [description, setDescription] = useState<string>(
-    descriptionRedux || ''
-  );
+
   const [editorState, setEditorState] = useState<string>('');
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -92,11 +86,7 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
     }
   }, [pagamentoRedux]);
 
-  useEffect(() => {
-    if (descriptionRedux) {
-      setDescription(descriptionRedux);
-    }
-  }, [descriptionRedux]);
+
 
   useEffect(() => {
     if (linguaRedux) {
@@ -115,29 +105,7 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
     setSelectedPagamento(updatedPagamento);
   };
 
-  const handleDescriptionChange = (content: string) => {
-    setDescription(content);
-    dispatch(updateDescription(content));
-  };
-
-  const onEmojiClick = (emojiObject: EmojiClickData) => {
-    setDescription(description + emojiObject.emoji);
-  };
-
-  const handleLinguaChange = (updatedLingua: string[]) => {
-    dispatch(updateLingua(updatedLingua));
-    setSelectedLingua(updatedLingua);
-  };
-
-  const handleTarifaChange = (updatedTarifa: string[]) => {
-    dispatch(updateTarifa(updatedTarifa));
-    setSelectedTarifa(updatedTarifa);
-  };
-
-  const handleServicoChange = (updatedServico: string[]) => {
-    dispatch(updateServico(updatedServico));
-    setSelectedServico(updatedServico);
-  };
+ 
 
   const handleGuardar = async () => {
     const dataToUpdate = {
@@ -145,7 +113,6 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
       lingua: selectedLingua.length > 0 ? selectedLingua : null,
       servico: selectedServico.length > 0 ? selectedServico : null,
       tarifa: selectedTarifa.length > 0 ? selectedTarifa : null,
-      description: descriptionRedux || null,
     };
     console.log('Dados a serem atualizados:', dataToUpdate);
 
@@ -227,41 +194,7 @@ const ModificarContacto: React.FC<ModificarContactoProps> = ({
               />
             </div>
 
-            <div className="w-full mt-6 relative">
-              <Field>
-                <Label className="text-lg text-pink-800 font-semibold mb-2">
-                  Descrição
-                </Label>
-
-                <div className="relative">
-                  <Textarea
-                    name="description"
-                    value={description}
-                    onChange={(e) => handleDescriptionChange(e.target.value)}
-                    className={clsx(
-                      'w-full h-32 p-4 pr-10 border rounded-lg',
-                      'data-[hover]:shadow-lg data-[focus]:bg-gray-300',
-                      'focus:outline-none focus:ring-2 focus:ring-pink-800 text-gray-700'
-                    )}
-                    placeholder="Escreva a descrição aqui..."
-                  />
-
-                  {/* Ícone de Emoji dentro da área de texto */}
-                  <FaSmile
-                    className="absolute top-4 right-4 text-pink-600 cursor-pointer"
-                    onClick={() => setShowEmojiPicker((prev) => !prev)}
-                    size={24}
-                  />
-
-                  {/* Picker de Emoji */}
-                  {showEmojiPicker && (
-                    <div className="absolute bottom-full right-0 mb-2 z-50">
-                      <EmojiPicker onEmojiClick={onEmojiClick} />
-                    </div>
-                  )}
-                </div>
-              </Field>
-            </div>
+          
           </div>
         </div>
         <DialogFooter className="bg-gray-800 border-t border-gray-700 p-4">

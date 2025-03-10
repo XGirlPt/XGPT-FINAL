@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../../../../components/ui/card';

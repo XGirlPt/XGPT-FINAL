@@ -7,7 +7,7 @@ import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
-import { useLanguage } from '../../context/LanguageContext'; // Importe o contexto de idioma
+import { useLanguage } from '../../backend/context/LanguageContext'; // Importe o contexto de idioma
 import { useTranslation } from 'react-i18next';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { useCallback } from 'react';

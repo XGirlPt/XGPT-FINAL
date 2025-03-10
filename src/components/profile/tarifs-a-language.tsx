@@ -1,4 +1,4 @@
-import { Card } from '../../components/ui/card';
+import { Card } from '../ui/card';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';

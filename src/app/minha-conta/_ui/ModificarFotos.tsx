@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import { IoTrashBin } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePhotos } from '@/actions/ProfileActions';
+import { updatePhotos } from '@/backend/actions/ProfileActions';
 import Link from 'next/link';
 import { BlurImage } from '@/components/ui/blur-image';
 import { toast } from 'react-toastify';

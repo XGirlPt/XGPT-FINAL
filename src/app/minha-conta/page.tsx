@@ -2,13 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FaMapMarkerAlt, FaUser, FaCamera } from 'react-icons/fa';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import ModificarPerfil from './_ui/ModificarPerfil';
 import ModificarContacto from './_ui/ModificarContacto';
 import ModificarFotos from './_ui/ModificarFotos';
 import ModificarStories from './_ui/ModificarStories';
 import { useDispatch } from 'react-redux';
-import { updateTag } from '@/actions/ProfileActions';
+import { updateTag } from '@/backend/actions/ProfileActions';
 import Definicoes from './_ui/Definicoes';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

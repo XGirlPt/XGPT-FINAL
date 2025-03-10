@@ -1,14 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 import HeaderLoged from '../../../components/register/header-loged';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import { useSelector } from 'react-redux';
 import { MdOutlineEmail } from 'react-icons/md';
 import { FaLock } from 'react-icons/fa';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
 import { ImBin } from 'react-icons/im';
 import Link from 'next/link';
-import { RootState } from '@/store';
+import { RootState } from '@/backend/store';
 import { useRouter } from 'next/navigation';
 
 function Definicoes() {

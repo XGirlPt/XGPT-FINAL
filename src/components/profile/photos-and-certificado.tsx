@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Card } from '../../components/ui/card';
+import { Card } from '../ui/card';
 import { motion } from 'framer-motion';
 import { VscVerifiedFilled } from 'react-icons/vsc';
 import { IoInformationCircle } from 'react-icons/io5';

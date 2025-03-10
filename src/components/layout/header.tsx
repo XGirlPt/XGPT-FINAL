@@ -2,22 +2,22 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../actions/ProfileActions';
-import { logoutClubs } from '../../actions/ClubsActions';
+import { logout } from '../../backend/actions/ProfileActions';
+import { logoutClubs } from '../../backend/actions/ClubsActions';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaUser, FaCog, FaSignOutAlt, FaSearch, FaHome, FaBook, FaPenAlt } from 'react-icons/fa';
 import Image from 'next/image';
 
 import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../../context/LanguageContext'; // Importer le contexte du langage
+import { useLanguage } from '../../backend/context/LanguageContext'; // Importer le contexte du langage
 import SearchModal from '../ui/search-modal';
 
 import { useTheme } from 'next-themes';
 import { BiSolidMoviePlay } from "react-icons/bi";
 
 import { Search, Globe, SlidersHorizontal, ChevronDown, Menu } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/backend/lib/utils';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import {
@@ -135,7 +135,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     { href: '/escort', label: 'Escort', Icon: FaUser },
     { href: '/stories', label: 'Stories', Icon: BiSolidMoviePlay },
     { href: '/blog', label: 'Blog', Icon: FaPenAlt },
-    { href: '/blog', label: 'Pub', Icon: FaPenAlt },
+    { href: '/Pub', label: 'Pub', Icon: FaPenAlt },
 
   ];
 
@@ -229,7 +229,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         <DropdownMenuItem onClick={() => router.push('/definicoes')}>
           <FaCog className="mr-2 " /> {t('Header.settings')}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push('/minha-conta')}>
+        <DropdownMenuItem onClick={() => router.push('/my-account')}>
           <FaSignOutAlt className="mr-2" /> {t('Header.myAccount')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>

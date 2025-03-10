@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateTag } from '@/actions/ProfileActions';
+import { updateTag } from '@/backend/actions/ProfileActions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../ui/button';

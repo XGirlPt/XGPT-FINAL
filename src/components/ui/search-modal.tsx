@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MainCard from './main-card';
-import { fetchProfiles } from '@/services/profileService';
+import { fetchProfiles } from '@/backend/services/profileService';
 import { Dialog, DialogContent, DialogTitle } from './dialog';
 import Link from 'next/link';
 import { VscVerifiedFilled } from 'react-icons/vsc';

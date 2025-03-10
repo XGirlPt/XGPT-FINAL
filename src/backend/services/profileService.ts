@@ -1,5 +1,5 @@
-import supabase from '../database/supabase';
-import { updateStories } from '@/actions/ProfileActions';
+import supabase from '../../backend/database/supabase';
+import { updateStories } from '@/backend/actions/ProfileActions';
 import { Dispatch } from 'redux';
 
 // FETCH PROFILE START

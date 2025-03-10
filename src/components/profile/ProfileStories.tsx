@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 import { useTranslation } from 'react-i18next';
 
 interface ProfileStoriesProps {

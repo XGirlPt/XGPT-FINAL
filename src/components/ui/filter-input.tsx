@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Listbox } from '@headlessui/react';
 import { FiChevronDown } from 'react-icons/fi';
-import { Profile } from '@/types'; // Certifique-se de ajustar o caminho conforme seu projeto
+import { Profile } from '@/backend/types'; // Certifique-se de ajustar o caminho conforme seu projeto
 
 interface FilterComponentProps {
   profiles: Profile[];

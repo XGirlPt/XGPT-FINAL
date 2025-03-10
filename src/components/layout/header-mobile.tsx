@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../actions/ProfileActions';
+import { logout } from '../../backend/actions/ProfileActions';
 import {
   faHome,
   faUsers,

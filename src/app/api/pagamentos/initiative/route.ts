@@ -1,5 +1,5 @@
-import supabase from '@/database/supabase';
-import { createPaymentLink } from '@/lib/verotel';
+import supabase from '@/backend/database/supabase';
+import { createPaymentLink } from '@/backend/lib/verotel';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {

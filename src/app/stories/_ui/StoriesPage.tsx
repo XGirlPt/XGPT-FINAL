@@ -4,9 +4,9 @@
 // Import React hooks and components
 import { useState, useEffect } from 'react';
 
-import { fetchProfiles } from '@/services/profileService';
+import { fetchProfiles } from '@/backend/services/profileService';
 import { useSearchParams } from 'next/navigation';
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 
 import { useTranslation } from 'react-i18next';
 import CaroselRound from '@/components/ui/carosel-round';

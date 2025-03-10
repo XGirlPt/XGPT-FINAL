@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Card } from '../../components/ui/card';
+import { Card } from '../ui/card';
 import { useTranslation } from 'react-i18next';
 
 interface Profile {

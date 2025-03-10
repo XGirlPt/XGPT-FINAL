@@ -1,6 +1,6 @@
 // services/profileService.ts
-import { Profile, UpdateTagResponse, UserProfileData } from '@/types';
-import { supabase } from '../database/supabase';
+import { Profile, UpdateTagResponse, UserProfileData } from '@/backend/types';
+import { supabase } from '../../backend/database/supabase';
 
 export class ProfileDataService {
   async fetchProfileData(profile: Profile) {

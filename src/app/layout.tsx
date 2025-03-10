@@ -4,12 +4,13 @@ import { Metadata } from 'next';
 import { NextUIProvider } from '@nextui-org/react';
 import 'normalize.css'; // Charge normalize.css
 import './globals.css';
-import { LanguageProvider } from '@/context/LanguageContext';
-import '../i18n/i18n';
+import { LanguageProvider } from '@/backend/context/LanguageContext';
 // Importar o NextUIProvider
 import { MainProvider } from '@/provider/MainProvider';
 import { ThemeProvider } from 'next-themes'; // Adicione o ThemeProvider para alternância de temas
-import { interTight, mofugu } from '@/lib/fonts';
+import { interTight, mofugu } from '@/backend/lib/fonts';
+import "../backend/database/i18n/i18n";
+
 
 const inter = Inter({ subsets: ['latin'] });
 

@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import { useDispatch } from 'react-redux';
 import {
   loginSuccess,
   loginFailure,
   addProfileData,
-} from '@/actions/ProfileActions';
-import { fetchProfileFromDatabase } from '@/services/profileService';
+} from '@/backend/actions/ProfileActions';
+import { fetchProfileFromDatabase } from '@/backend/services/profileService';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import InputWithIcon from './_ui/InputWithIcon';

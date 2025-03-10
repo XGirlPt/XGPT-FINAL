@@ -10,7 +10,7 @@ import {
   updateAdress,
   updateLongitude,
   updateLatitude,
-} from '@/actions/ProfileActions';
+} from '@/backend/actions/ProfileActions';
 import { Switch, FormControlLabel } from '@mui/material';
 import Link from 'next/link';
 import FiltroAltura from '@/components/filtros/filtro-altura';
@@ -21,7 +21,7 @@ import FiltroPeito from '@/components/filtros/filtro-peito';
 import FiltroTatuagem from '@/components/filtros/filtro-tatuagem';
 import FiltroPelos from '@/components/filtros/filtro-pelos';
 import FiltroSigno from '@/components/filtros/filtro-signo';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import CommonInput from '@/components/ui/common-input';
 import {
   Dialog,

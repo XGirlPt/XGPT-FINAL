@@ -160,3 +160,33 @@ profile page
 Register.
 - when upload photo or story put watermark before send it to supabase storage. 
 
+
+
+
+
+
+--------
+
+My Account: 
+filters working properly : 
+
+[X] - Name 
+[X] - Age
+[X] - City
+[X] - Phone
+[X] - District
+[X] - Origin 
+[X] - Height
+[X] - Breast
+[X] - Hair color 
+[X] - Eye Color
+[X] - Breast size
+[X] - Body hair
+[X] - Tattos 
+[X] - Sign
+[X] - corpo
+[X] - Rate
+[] - Description
+[] - layout and colors , buttons
+[] - just change in supabase after "Save changes" click
+[] - toast after successfull changes 

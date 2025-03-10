@@ -14,8 +14,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Autoplay from 'embla-carousel-autoplay';
 import { motion } from 'framer-motion';
 import { PlayCircle } from 'lucide-react';
-import { fetchProfiles } from '@/services/profileService';
-import StoryBigS from '../../app/stories/_ui/storyBigS';
+import { fetchProfiles } from '@/backend/services/profileService';
+import StoryBigS from '../stories/_ui/storyBigS';
 
 interface Profile {
   nome: string;

@@ -6,29 +6,12 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Star, Video, Share2, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../../context/LanguageContext'; // Importe o contexto de idioma
+import { useLanguage } from '../../backend/context/LanguageContext'; // Importe o contexto de idioma
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 
-interface Profile {
-  nome: string;
-  cidade: string;
-  photos: string[];
-  stories: string[]; // Histórias
-  tag: string;
-  tagtimestamp: string;
-  certificado: boolean;
-  live: boolean | string;
-  // live pode ser booleano ou string
-}
 
-interface FeaturedAdsProps {
-  profiles: Profile[];
-  currentPage: number; // Página atual
-  itemsPerPage: number;
-  onProfileClick: () => void;
-  customClass?: string;
-}
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -67,12 +50,22 @@ const badgeVariants = {
   },
 };
 
-const FeaturedAds: React.FC<FeaturedAdsProps> = ({
-  profiles = [],
-  currentPage,
-  itemsPerPage,
-  onProfileClick,
-}) => {
+interface Profile {
+  nome: string;
+  cidade: string;
+  photos: string[];
+  stories: string[];
+  tag: string;
+  tagtimestamp: string;
+  certificado: boolean;
+  live: boolean | string;
+  premium: boolean | string;
+}
+export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles: Profile[], currentPage: number, itemsPerPage: number }) {
+
+
+
+
   const [timeElapsedList, setTimeElapsedList] = useState<string[]>([]);
 
   const formatTimeElapsed = useCallback((minutesElapsed: number): string => {
@@ -137,7 +130,7 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
   const { language, changeLanguage } = useLanguage();
 
   return (
-    <div className="p-4 mt-20 relative">
+    <div className="p-4 mt-2 relative">
       <motion.div
         className="relative z-10"
         initial="hidden"
@@ -241,7 +234,9 @@ const FeaturedAds: React.FC<FeaturedAdsProps> = ({
           zIndex: 0,
         }}
       />
+
     </div>
+   
   );
 };
 

@@ -6,7 +6,7 @@ import {
 } from '@react-google-maps/api';
 import { useState } from 'react';
 import MiniCard from '@/components/ui/mini-card';
-import { MapProfile } from '@/types';
+import { MapProfile } from '@/backend/types';
 
 interface MapProps {
   profiles: MapProfile[];

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-import { fetchProfiles } from '@/services/profileService';
+import { fetchProfiles } from '@/backend/services/profileService';
 import { useSearchParams } from 'next/navigation';
 
 import { Listbox } from '@headlessui/react';

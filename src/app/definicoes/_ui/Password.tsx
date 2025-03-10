@@ -1,5 +1,5 @@
 import CommonInput from '@/components/ui/common-input';
-import { AuthService } from '@/services/authService';
+import { AuthService } from '@/backend/services/authService';
 import React, { useState } from 'react';
 import { FaLock } from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify';

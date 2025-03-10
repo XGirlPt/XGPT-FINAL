@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 import Link from 'next/link';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { VscVerifiedFilled } from 'react-icons/vsc';

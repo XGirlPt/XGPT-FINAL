@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 
 const ConfirmarEmail = () => {
   const [isClient, setIsClient] = useState(false);

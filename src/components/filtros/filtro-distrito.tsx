@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonFilter from './common-filter';
-import { updateDistrito } from '../../actions/ProfileActions';
+import { updateDistrito } from '../../backend/actions/ProfileActions';
 
 const distritoOptions = [
   { id: 1, name: 'Lisboa', unavailable: false },

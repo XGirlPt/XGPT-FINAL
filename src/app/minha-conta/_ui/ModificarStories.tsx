@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import { useState, useEffect } from 'react';
-import supabase from '@/database/supabase';
+import supabase from '@/backend/database/supabase';
 import { IoTrashBin } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateStories } from '@/actions/ProfileActions';
+import { updateStories } from '@/backend/actions/ProfileActions';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +18,7 @@ import {
 
 import { ToastContainer } from 'react-toastify';
 import { BlurImage } from '@/components/ui/blur-image';
-import { Profile } from '@/types';
+import { Profile } from '@/backend/types';
 import LoaderBar from '@/components/ui/loader-bar';
 import StoryBigConta from '@/components/profile/story-big-conta';
 import { Button } from '@/components/ui/button';

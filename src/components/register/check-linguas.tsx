@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { pink } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateLingua } from '../../actions/ProfileActions';
+import { updateLingua } from '../../backend/actions/ProfileActions';
 import { useTranslation } from 'react-i18next'; // Importar o hook useTranslation
 
 interface State {

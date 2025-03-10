@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { pink } from '@mui/material/colors';
 import { useSelector, useDispatch } from 'react-redux';
-import { updatePagamento } from '../../actions/ProfileActions';
+import { updatePagamento } from '../../backend/actions/ProfileActions';
 
 interface State {
   [key: string]: boolean;
