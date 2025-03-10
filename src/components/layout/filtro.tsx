@@ -11,7 +11,7 @@ import FiltroOlhos from '../filtros/filtro-olhos';
 import FiltroCorpo from '../filtros/filtro-corpo';
 import FiltroTatuagem from '../filtros/filtro-tatuagem';
 import FiltroOrigem from '../filtros/filtro-origem';
-import { fetchProfiles } from '@/services/profileService';
+import { fetchProfiles } from '@/backend/services/profileService';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

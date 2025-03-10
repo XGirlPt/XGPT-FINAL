@@ -98,7 +98,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         <div className="bg-pink-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-gray-200 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
           <div className="flex items-start justify-between gap-2">
             <span className="block break-words italic text-xs md:text-lg leading-tight max-h-[60px] overflow-hidden font-arial animate-flash">
-              "{profile.tag}"
+            &quot;{profile.tag}&quot;
             </span>
             <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
           </div>

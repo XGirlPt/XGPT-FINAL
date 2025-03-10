@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation'; // Corrigido para 'next/navigation'
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
-import { ProfileDataService } from '@/services/profileDataService';
+import { ProfileDataService } from '@/backend/services/profileDataService';
 
 const RegistoPagamento: React.FC = () => {
   const router = useRouter(); // Certifique-se de que useRouter é chamado em um componente cliente

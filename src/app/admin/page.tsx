@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import CommonInput from '@/components/ui/common-input';
 import SideBarAdmin from './_ui/side-bar-admin';
-import { profileDataService } from '@/services/profileDataService';
+import { profileDataService } from '@/backend/services/profileDataService';
 
 const AdminPage: React.FC = () => {
   const [pendingProfiles, setPendingProfiles] = useState<Profile[]>([]);

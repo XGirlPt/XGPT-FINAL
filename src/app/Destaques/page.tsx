@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/header';
 import FilterBar from '@/components/layout/filter-bar';
-import { fetchProfiles } from '@/services/profileService';
+import { fetchProfiles } from '@/backend/services/profileService';
 import Footer from '@/components/layout/footer';
 import { VscVerifiedFilled } from 'react-icons/vsc';
 import { FaMapMarkerAlt } from 'react-icons/fa';
