@@ -110,7 +110,7 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
                 className="flex items-center gap-2 p-2 rounded-full"
               >
                 {paymentIcons[pagamento] || null}
-                <span className="text-sm text-gray-800 dark:text-gray-200">
+                <span className="text-md text-gray-800 dark:text-gray-200">
                   {pagamento}
                 </span>
               </div>

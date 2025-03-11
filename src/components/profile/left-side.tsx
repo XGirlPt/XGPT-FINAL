@@ -54,9 +54,10 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
               alt="Verified User"
               width={24}
               height={24}
+              className='text-green-500'
             />
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
+          <p className="text-md text-gray-600 dark:text-gray-300">
             {selectedProfile?.tag || t('profile.no_status_available')}
           </p>
           <div className="flex items-center gap-1">

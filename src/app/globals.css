@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --dark-pink: rgb(243, 33, 118);
+    --dark-pink-hover: rgb(192, 26, 93);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;

@@ -19,6 +19,8 @@ const config = {
     },
     extend: {
       colors: {
+        darkpink: 'var(--dark-pink)',
+        darkpinkhover: 'var(--dark-pink-hover)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -31,7 +31,6 @@ export function Description({ selectedProfile }: DescriptionProps) {
       </div>
 
       <div className="prose prose-pink dark:prose-invert max-w-none flex items-center gap-2">
-        <Image src="/icons/check.png" alt="check" width={25} height={25} />
         {selectedProfile?.description ? (
           <p className="text-gray-600 dark:text-gray-300 font-body">
             {selectedProfile.description}

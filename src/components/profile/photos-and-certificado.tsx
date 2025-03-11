@@ -42,9 +42,9 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
             onClick={handleCertificadoClick}
             className={`px-4 py-2 rounded-full flex items-center gap-2 transition-colors duration-300
             ${isCertified ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}
-            text-white shadow-lg`}
+            text-white shadow-lg `}
           >
-            <span className="text-sm font-medium">
+            <span className="text-sm">
               {isCertified
                 ? t('profile.certified')
                 : t('profile.not_certified')}

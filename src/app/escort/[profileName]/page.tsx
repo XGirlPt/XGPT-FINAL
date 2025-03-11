@@ -187,8 +187,8 @@ function UserProfile() {
               handleCertificadoClick={handleCertificadoClick}
               handlePhotoClick={handlePhotoClick}
             />
-            <ProvidedServices selectedProfile={selectedProfile as any} />
             <AboutProfile selectedProfile={selectedProfile as any} />
+            <ProvidedServices selectedProfile={selectedProfile as any} />
             <Description selectedProfile={selectedProfile as any} />
             <TarifsAndLanguage selectedProfile={selectedProfile as any} />
             <Comments />

@@ -1,7 +1,5 @@
 // MobileModal.tsx
 import React from 'react';
-import Password from '../frontend/app/definicoes/_ui/Password';
-import Email from '../frontend/app/definicoes/_ui/Email';
 import { Dialog, DialogContent } from './ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
 
