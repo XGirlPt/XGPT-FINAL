@@ -45,11 +45,11 @@ export function ProvidedServices({ selectedProfile }: ProvidedServicesProps) {
                 <Image
                   src="/icons/check.png"
                   alt="check"
-                  width={15}
-                  height={15}
+                  width={18}
+                  height={18}
                 />
               </span>
-              <span className="text-gray-800 dark:text-gray-200">
+              <span className="text-gray-800 dark:text-gray-300 text-lg">
                 {t(`profile.servico.${service}`)}
               </span>
             </div>

@@ -71,7 +71,7 @@
   "profile": {
     "previous": "Précédent",
     "next": "Suivant",
-    "tariffs_starting_from": "Tarifs à partir de {{tarifa}} €",
+    "tariffs_starting_from": "Tarifs à partir de ",
     "call_to": "Appeler {{nome}}",
     "share_profile_of": "Partager le Profil de {{nome}}",
     "share_by_email": "Partager par Email",
@@ -671,6 +671,16 @@
         "content": "8.1. Ces Termes et Conditions peuvent être modifiés à tout moment. Nous recommandons aux utilisateurs de consulter périodiquement ce document.\n8.2. L'utilisation continue du site après les modifications des Termes et Conditions constitue une acceptation des changements.",
         "contact": "Si vous avez des questions, veuillez contacter notre équipe d'assistance à info@xgirl.fr."
       }
+    },
+    "language": {
+      "es": "Espagnol",
+      "pt": "Portugais",
+      "ru": "Russe",
+      "en": "Anglais",
+      "fr": "Français",
+      "ar": "Arabe",
+      "de": "Allemand",
+      "it": "Italien"
     }
   }
   

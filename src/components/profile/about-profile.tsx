@@ -17,6 +17,7 @@ import {
   TbZodiacTaurus,
   TbZodiacVirgo,
 } from 'react-icons/tb';
+import { useTranslation } from 'react-i18next';
 
 interface Profile {
   nome: string;
@@ -40,62 +41,64 @@ interface AboutProfileProps {
 }
 
 const signoIcons: { [key: string]: JSX.Element } = {
-  Carneiro: <TbZodiacAries className="text-pink-800 mr-2" />,
-  Touro: <TbZodiacTaurus className="text-pink-800 mr-2" />,
-  Gémeos: <TbZodiacGemini className="text-pink-800 mr-2" />,
-  Caranguejo: <TbZodiacCancer className="text-pink-800 mr-2" />,
-  Leão: <TbZodiacLeo className="text-pink-800 mr-2" />,
-  Virgem: <TbZodiacVirgo className="text-pink-800 mr-2" />,
-  Balança: <TbZodiacLibra className="text-pink-800 mr-2" />,
-  Escorpião: <TbZodiacScorpio className="text-pink-800 mr-2" />,
-  Sagitário: <TbZodiacSagittarius className="text-pink-800 mr-2" />,
-  Capricórnio: <TbZodiacCapricorn className="text-pink-800 mr-2" />,
-  Aquário: <TbZodiacAquarius className="text-pink-800 mr-2" />,
-  Peixes: <TbZodiacPisces className="text-pink-800 mr-2" />,
+  Carneiro: <TbZodiacAries className="text-pink-500 mr-2" />,
+  Touro: <TbZodiacTaurus className="text-pink-500 mr-2" />,
+  Gémeos: <TbZodiacGemini className="text-pink-500 mr-2" />,
+  Caranguejo: <TbZodiacCancer className="text-pink-500 mr-2" />,
+  Leão: <TbZodiacLeo className="text-pink-500 mr-2" />,
+  Virgem: <TbZodiacVirgo className="text-pink-500 mr-2" />,
+  Balança: <TbZodiacLibra className="text-pink-500 mr-2" />,
+  Escorpião: <TbZodiacScorpio className="text-pink-500 mr-2" />,
+  Sagitário: <TbZodiacSagittarius className="text-pink-500 mr-2" />,
+  Capricórnio: <TbZodiacCapricorn className="text-pink-500 mr-2" />,
+  Aquário: <TbZodiacAquarius className="text-pink-500 mr-2" />,
+  Peixes: <TbZodiacPisces className="text-pink-500 mr-2" />,
 };
 
 export function AboutProfile({ selectedProfile }: AboutProfileProps) {
   if (!selectedProfile) return null;
+  const { t } = useTranslation();
+
 
   const details = [
     {
-      label: 'Idade',
+      label: t('input.age'),
       value: selectedProfile.idade,
       icon: <LiaBirthdayCakeSolid className="text-pink-500" />,
     },
     {
-      label: 'Altura',
+      label: t('filter.height'),
       value: selectedProfile.altura,
       icon: <GiBodyHeight className="text-pink-500" />,
     },
     // { label: "Peso", value: selectedProfile.peso, icon: <FaWeightScale className="text-pink-500" /> },
     {
-      label: 'Olhos',
+      label: t('filterOlhos.eye_color'),
       value: selectedProfile.olhos,
       icon: <FaEye className="text-pink-500" />,
     },
     {
-      label: 'Cabelo',
+      label: t('filter.hair_color'),
       value: selectedProfile.cabelo,
       icon: <FaCheck className="text-pink-500" />,
     },
     {
-      label: 'Tatuagens',
+      label: t('filterT.tattoos'),
       value: selectedProfile.tatuagens,
       icon: <FaCheck className="text-pink-500" />,
     },
     {
-      label: 'Pelos',
+      label: t('filterP.hair_removal'),
       value: selectedProfile.pelos,
       icon: <AiOutlineScissor className="text-pink-500" />,
     },
     {
-      label: 'Seios',
+      label: t('filterB.breast_size'),
       value: selectedProfile.seios,
       icon: <FaCheck className="text-pink-500" />,
     },
     {
-      label: 'Mamas',
+      label: t('filterB.breasts'),
       value: selectedProfile.mamas,
       icon: <FaCheck className="text-pink-500" />,
     },
@@ -105,23 +108,26 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
       icon: <FaMapMarkerAlt className="text-pink-500" />,
     },
     {
-      label: 'Cidade',
+      label: t('input.city'),
       value: selectedProfile.cidade,
       icon: <FaMapMarkerAlt className="text-pink-500" />,
     },
     {
-      label: 'Origem',
+      label: t('filter.origin'),
       value: selectedProfile.origem,
       icon: <FaFlag className="text-pink-500" />,
     },
     {
-      label: 'Signo',
+      label: t('filterTa.signo'),
       value: selectedProfile.signo,
       icon: signoIcons[selectedProfile.signo] || (
         <TbZodiacPisces className="text-pink-500" />
       ),
     },
   ];
+
+  const filteredDetails = details.filter((detail) => detail.value);
+
 
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
@@ -130,7 +136,7 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-10">
-        {details.map((detail, index) => (
+      {filteredDetails.map((detail, index) => (
           <div
             key={index}
             className="flex flex-row items-center gap-4 font-body"

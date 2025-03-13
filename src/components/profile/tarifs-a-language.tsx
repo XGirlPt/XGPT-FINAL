@@ -32,6 +32,8 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
     (state: any) => state.profile?.profile?.tarifa
   );
 
+  const idiomas = selectedProfile?.lingua || linguaRedux || [];
+
   // Ícones dos métodos de pagamento
   const paymentIcons: { [key: string]: JSX.Element } = {
     Paypall: <RiPaypalLine className="text-blue-400 w-5 h-5" />,
@@ -43,27 +45,13 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
   };
 
   // Função para buscar bandeiras de idiomas
-  const obterBandeira = (lingua: string): string => {
-    switch (lingua) {
-      case t('language.russian'):
-        return '/Flags/ru.svg';
-      case t('language.german'):
-        return '/Flags/ale.svg';
-      case t('language.portuguese'):
-        return '/Flags/pt.svg';
-      case t('language.french'):
-        return '/Flags/fr.svg';
-      case t('language.english'):
-        return '/Flags/ing.svg';
-      case t('language.italian'):
-        return '/Flags/it.svg';
-      case t('language.spanish'):
-        return '/Flags/es.svg';
-      case t('language.arabic'):
-        return '/Flags/ar.png';
-      default:
-        return '';
-    }
+  const obterBandeira = (codigo: string): string => {
+    return `/Flags/${codigo}.svg`; // Diretório das bandeiras
+  };
+
+  // Função para traduzir o nome do idioma baseado na língua da interface
+  const traduzirIdioma = (codigo: string): string => {
+    return t(`language.${codigo}`, { defaultValue: codigo.toUpperCase() });
   };
 
   return (
@@ -71,32 +59,46 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
       {/* Cartão de Línguas */}
       <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
         <h2 className="text-3xl md:text-4xl mb-6">{t('profile.languages')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {linguaRedux &&
-            linguaRedux.map((lingua: string, index: number) => (
-              <div key={index} className="flex items-center gap-2">
+        {idiomas.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {idiomas.map((lingua: string, index: number) => (
+              <div key={index} className="flex items-center gap-2 ">
                 <Image
-                  src={obterBandeira(lingua) || '/logo.webp'}
-                  alt={`${lingua} flag`}
+                  src={obterBandeira(lingua)}
+                  alt={`${traduzirIdioma(lingua)} flag`}
                   width={25}
                   height={25}
+                  onError={(e) => (e.currentTarget.src = '/logo.png')}
+                  className="rounded-full"
                 />
                 <span className="text-gray-800 dark:text-gray-200">
-                  {lingua}
+                  {traduzirIdioma(lingua)}
                 </span>
               </div>
             ))}
-        </div>
+          </div>
+        ) : (
+          <p className="text-gray-700 dark:text-gray-500">
+            {t('profile.no_languages_selected')}
+          </p>
+        )}
       </Card>
+
+
+
+
 
       {/* Cartão de Tarifas e Métodos de Pagamento */}
       <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
         <h2 className="text-3xl md:text-4xl mb-4">{t('profile.rates')}</h2>
+       
+       
         <p className="text-lg text-gray-800 dark:text-gray-200">
-          {t('profile.tariffs_starting_from', {
-            tarifa: selectedProfile?.tarifa || tarifaRedux,
-          })}
-        </p>
+  {t('profile.tariffs_starting_from')}{' '}
+  <span className="text-2xl text-yellow-500 font-semibold">
+    {selectedProfile?.tarifa || tarifaRedux} €
+  </span>
+</p>
 
         <h2 className="text-3xl md:text-4xl mb-6 mt-4">
           {t('profile.accepts')}

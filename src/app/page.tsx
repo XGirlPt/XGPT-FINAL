@@ -181,8 +181,8 @@ const Dashboard: React.FC = () => {
       <HeroSection profiles={profiles as Profile[]} />
 
       <RecentStories />
-      <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
-      <MapSection profiles={mapProfiles} />
+      <FeaturedAds profiles={profiles} currentPage={currentPage} itemsPerPage={itemsPerPage} />
+      {/* <MapSection profxiles={mapProfiles} /> */}
       <NewestAdds  profiles={profiles as Profile[]}/>
       <Statistics />
       <PublishAdBanner />

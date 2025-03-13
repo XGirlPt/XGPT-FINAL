@@ -52,15 +52,21 @@ const StoryBigS: React.FC<StoryBigSProps> = ({
       <div className="flex">
         {/* Exibe a imagem do avatar no canto superior */}
         <div className="absolute top-4 left-4 w-16 h-16 rounded-full border-2 border-yellow-500 overflow-hidden cursor-pointer">
-          <Image
-            src={firstPhotos || '/logo.webp'}
-            alt="Avatar"
-            className="w-full h-16 transition duration-500 ease-in-out transform hover:scale-110 hover:opacity-60 object-cover"
-            layout="responsive"
-            width={100}
-            height={100}
-          />
-        </div>
+  {firstPhotos ? (
+    <Image
+      src={firstPhotos}
+      alt={`${nome} Avatar`}
+      className="w-full h-full object-cover transition duration-500 ease-in-out transform hover:scale-110 hover:opacity-60"
+      layout="fill" // Preenche o contêiner
+    />
+  ) : (
+    <img
+      src="/logo.webp"
+      alt="Avatar padrão"
+      className="w-full h-full object-cover"
+    />
+  )}
+</div>
 
         {/* Nome e cidade e nome ao lado da imagem do avatar */}
         <div className="absolute top-4 left-20 flex flex-col justify-center ml-3">

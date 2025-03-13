@@ -96,6 +96,8 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
   );
 
   useEffect(() => {
+    if (!profiles || profiles.length === 0) return;
+
     const timeElapsed = profiles.map((profile) =>
       calculateTimeElapsed(profile.tagtimestamp)
     );
@@ -128,6 +130,26 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
 
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = useLanguage();
+
+
+  if (!profiles) {
+    return (
+      <div className="p-4 mt-2 relative">
+        <h2 className="lg:text-5xl text-3xl">Featured Ads</h2>
+        <p>Loading profiles...</p>
+      </div>
+    );
+  }
+
+  if (profiles.length === 0) {
+    return (
+      <div className="p-4 mt-2 relative">
+        <h2 className="lg:text-5xl text-3xl">Featured Ads</h2>
+        <p>No profiles available.</p>
+      </div>
+    );
+  } 
+
 
   return (
     <div className="p-4 mt-2 relative">
@@ -197,14 +219,14 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
 
                 {/* Tag ou Estado */}
                 <motion.p
-                  className="text-sm text-gray-700 dark:text-gray-300 italic bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-lg"
+                  className="text-sm text-gray-700 dark:text-gray-300 italic  px-3 py-1 rounded-lg"
                   variants={badgeVariants}
                 >
                   {'"' + profile.tag + '"'}
                 </motion.p>
 
                 {/* Timestamp */}
-                <div className="text-xs text-gray-400 flex items-center gap-1">
+                <div className="text-xs flex items-center gap-1">
                   <Clock size={14} /> {timeElapsedList[index]}
                 </div>
               </div>

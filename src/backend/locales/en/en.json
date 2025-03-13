@@ -13,7 +13,7 @@
     "logout": "Log out",
     "FR": "French",
     "EN": "English",
-    "PT": "portuguese"
+    "PT": "Portuguese"
   },
   "Footer": {
     "services_description": "Discover the best escort services in the main regions of Portugal.",
@@ -71,7 +71,7 @@
   "profile": {
     "previous": "Previous",
     "next": "Next",
-    "tariffs_starting_from": "Tariffs starting from {{tarifa}} €",
+    "tariffs_starting_from": "Tariffs starting from",
     "call_to": "Call {{nome}}",
     "share_profile_of": "Share the Profile of {{nome}}",
     "share_by_email": "Share by Email",
@@ -639,8 +639,18 @@
           "content": "8.1. These Terms and Conditions may be changed at any time. We recommend that users periodically review this document.\n8.2. Continued use of the site after changes to the Terms and Conditions constitutes acceptance of the modifications.",
           "contact": "If you have any questions, please contact our support team at info@xgirl.fr."
         }
-      }
+      },
+      "language": {
+        "es": "Spanish",
+        "pt": "Portuguese",
+        "ru": "Russian",
+        "en": "English",
+        "fr": "French",
+        "ar": "Arabic",
+        "de": "German",
+        "it": "Italian"
     }
+  }
     
   
 

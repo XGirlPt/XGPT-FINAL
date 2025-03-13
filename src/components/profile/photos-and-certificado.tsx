@@ -41,7 +41,7 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
             whileTap={{ scale: 0.98 }}
             onClick={handleCertificadoClick}
             className={`px-4 py-2 rounded-full flex items-center gap-2 transition-colors duration-300
-            ${isCertified ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}
+            ${isCertified ? 'bg-green-600 hover:bg-green-500' : 'bg-red-500 hover:bg-red-600'}
             text-white shadow-lg `}
           >
             <span className="text-sm">

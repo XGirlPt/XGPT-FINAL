@@ -71,7 +71,7 @@
   "profile": {
     "previous": "Anterior",
     "next": "Próximo",
-    "tariffs_starting_from": "Tarifas a partir de {{tarifa}} €",
+    "tariffs_starting_from": "Tarifas a partir de ",
     "call_to": "Ligar para {{nome}}",
     "share_profile_of": "Compartilhar Perfil de {{nome}}",
     "share_by_email": "Compartilhar por Email",
@@ -99,6 +99,7 @@
     "about": "Sobre {{name}}",
     "services_provided": "Serviços oferecidos",
     "languages": "Idiomas",
+
     "accepts": "Aceita:",
     "no_payment_methods_selected": "Nenhum método de pagamento selecionado.",
     "rates": "Tarifas:",
@@ -109,16 +110,7 @@
     "write_comment_placeholder": "Escreva seu comentário aqui...",
     "send_comment": "Enviar comentário",
 
-    "linguas": {
-      "russian": "Russo",
-      "german": "Alemão",
-      "portuguese": "Português",
-      "french": "Francês",
-      "english": "Inglês",
-      "italian": "Italiano",
-      "spanish": "Espanhol",
-      "arabic": "Árabe"
-    },
+
     "servico": {
       "69": "69",
       "AnulingusActivo": "Anulingus (Ativo)",
@@ -686,5 +678,16 @@
       "content": "8.1. Estes Termos e Condições podem ser alterados a qualquer momento. Recomendamos que os usuários consultem este documento periodicamente.\n8.2. O uso contínuo do site após alterações nos Termos e Condições constitui aceitação das mudanças.",
       "contact": "Se você tiver dúvidas, entre em contato com nossa equipe de suporte em info@xgirl.pt."
     }
+  },
+
+  "language": {
+    "es": "Espanhol",
+    "pt": "Português",
+    "ru": "Russo",
+    "en": "Inglês",
+    "fr": "Francês",
+    "ar": "Árabe",
+    "de": "Alemão",
+    "it": "Italiano"
   }
 }
