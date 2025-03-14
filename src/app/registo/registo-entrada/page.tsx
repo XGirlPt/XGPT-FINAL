@@ -1,6 +1,32 @@
 'use client';
-import { useState, useEffect, ChangeEvent, useRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import FiltroAltura from '@/components/filtros/filtro-altura';
+import FiltroCorpo from '@/components/filtros/filtro-corpo';
+import FiltroMamas from '@/components/filtros/filtro-mamas';
+import FiltroOlhos from '@/components/filtros/filtro-olhos';
+import FiltroPeito from '@/components/filtros/filtro-peito';
+import FiltroPelos from '@/components/filtros/filtro-pelos';
+import FiltroTatuagem from '@/components/filtros/filtro-tatuagem';
+import FiltroSigno from '@/components/filtros/filtro-signo';
+import FiltroCabelo from '@/components/filtros/filtro-cabelo';
+import FiltroDistrito from '@/components/filtros/filtro-distrito';
+import { toast } from 'react-toastify';
 import {
   updateNome,
   updateIdade,
@@ -8,31 +34,13 @@ import {
   updateCidade,
   updateDistrito,
   updateAdress,
-  updateLongitude,
   updateLatitude,
+  updateLongitude,
 } from '@/backend/actions/ProfileActions';
-import { Switch, FormControlLabel } from '@mui/material';
-import Link from 'next/link';
-import FiltroAltura from '@/components/filtros/filtro-altura';
-import FiltroCorpo from '@/components/filtros/filtro-corpo';
-import FiltroMamas from '@/components/filtros/filtro-mamas';
-import FiltroOlhos from '@/components/filtros/filtro-olhos';
-import FiltroPeito from '@/components/filtros/filtro-peito';
-import FiltroTatuagem from '@/components/filtros/filtro-tatuagem';
-import FiltroPelos from '@/components/filtros/filtro-pelos';
-import FiltroSigno from '@/components/filtros/filtro-signo';
+import { Switch } from '@/components/ui/switch';
 import supabase from '@/backend/database/supabase';
-import CommonInput from '@/components/ui/common-input';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import FiltroCabelo from '@/components/filtros/filtro-cabelo';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 
 declare global {
   interface Window {
@@ -40,197 +48,129 @@ declare global {
   }
 }
 
-const RegistoEntrada = () => {
+// Schema do formulário ajustado para o registro
+const formSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  age: z.string().min(1, { message: 'Age is required' }),
+  phone: z.string().min(1, { message: 'Phone is required' }),
+  city: z.string().optional(),
+  district: z.string().optional(),
+  address: z.string().optional(),
+  height: z.string().optional(),
+  body: z.string().optional(),
+  breasts: z.string().optional(),
+  hair: z.string().optional(),
+  eyes: z.string().optional(),
+  breastSize: z.string().optional(),
+  hairiness: z.string().optional(),
+  tattoos: z.string().optional(),
+  sign: z.string().optional(),
+  useAdress: z.boolean().default(false),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+interface Category {
+  id: string;
+  title: string;
+  fields: Array<keyof FormValues>;
+}
+
+export function RegistoEntrada() {
   const dispatch = useDispatch();
-  const [nome, setNome] = useState('');
-  const [idade, setIdade] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [distrito, setDistrito] = useState('');
-  const [adress, setAdress] = useState('');
-  const [useAdress, setUseAdress] = useState(false);
+  const { t } = useTranslation();
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const autocompleteRef = useRef<any>(null);
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState('basicInfo');
 
-  const nomeRedux = useSelector((state: any) => state.profile?.profile?.nome);
-  const idadeRedux = useSelector((state: any) => state.profile?.profile?.idade);
-  const telefoneRedux = useSelector(
-    (state: any) => state.profile?.profile?.telefone
-  );
-  const cidadeRedux = useSelector(
-    (state: any) => state.profile?.profile?.cidade
-  );
-  const distritoRedux = useSelector(
-    (state: any) => state.profile?.profile?.distrito
-  );
-  const adressRedux = useSelector(
-    (state: any) => state.profile?.profile?.adress
-  );
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    setNome(nomeRedux || '');
-    setIdade(idadeRedux || '');
-    setTelefone(telefoneRedux || '');
-    setCidade(cidadeRedux || '');
-    setDistrito(distritoRedux || '');
-    setAdress(adressRedux || '');
-  }, [
-    nomeRedux,
-    idadeRedux,
-    telefoneRedux,
-    cidadeRedux,
-    distritoRedux,
-    adressRedux,
-  ]);
-
-  const handleNomeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNome(event.target.value);
-    dispatch(updateNome(event.target.value));
-  };
-
-  const handleIdadeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setIdade(event.target.value);
-    dispatch(updateIdade(event.target.value));
-  };
-
-  const handleTelefoneChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTelefone(event.target.value);
-    dispatch(updateTelefone(event.target.value));
-  };
-
-  const handleCidadeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCidade(event.target.value);
-    dispatch(updateCidade(event.target.value));
-  };
-
-  const handleDistritoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDistrito(event.target.value);
-    dispatch(updateDistrito(event.target.value));
-  };
-
-  const handleAdressChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setAdress(event.target.value);
-    dispatch(updateAdress(event.target.value));
-  };
-
-  const handleFiltroTatuagem = (filtro: any) => {
-    // Aqui você pode atualizar o estado geral de filtros
-    console.log('Filtro de Tatuagem atualizado:', filtro);
-  };
-
-  const toggleAdressOption = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    setUseAdress(checked);
-    if (checked) {
-      setCidade('');
-      setDistrito('');
-      dispatch(updateCidade(''));
-      dispatch(updateDistrito(''));
-    } else {
-      setAdress('');
-      dispatch(updateAdress(''));
-    }
-  };
-
-  const handleSelectAddress = useCallback(
-    (address: string, lat: number, lng: number) => {
-      setAdress(address); // Definindo o valor do endereço corretamente
-      setLatitude(lat);
-      setLongitude(lng);
-      dispatch(updateAdress(address)); // Atualizando no Redux
-      dispatch(updateLatitude(lat));
-      dispatch(updateLongitude(lng));
+  // Define categorias para as abas
+  const categories: Category[] = [
+    {
+      id: 'basicInfo',
+      title: 'Informação Básica',
+      fields: ['name', 'age', 'phone', 'city', 'district', 'address', 'useAdress'],
     },
-    [dispatch]
-  );
+    {
+      id: 'profileInfo',
+      title: 'Informação de Perfil',
+      fields: ['height', 'breasts', 'body', 'hair', 'eyes', 'breastSize', 'hairiness', 'tattoos', 'sign'],
+    },
+  ];
 
-  // Carregamento dinâmico do script do Google
+  // Inicializa o formulário com valores vazios (registro)
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      age: '',
+      phone: '',
+      city: '',
+      district: '',
+      address: '',
+      height: '',
+      breasts: '',
+      body: '',
+      hair: '',
+      eyes: '',
+      breastSize: '',
+      hairiness: '',
+      tattoos: '',
+      sign: '',
+      useAdress: false,
+    },
+  });
+
+  // Carrega o Google Maps API
   useEffect(() => {
     const loadGoogleAPI = () => {
       if (typeof window !== 'undefined' && !window.google) {
-        const existingScript = document.querySelector(
-          'script[src*="maps.googleapis.com"]'
-        );
+        const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
         if (!existingScript) {
           const script = document.createElement('script');
           script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
           script.async = true;
-          script.onload = () => {
-            console.log('Google Maps API carregada com sucesso!');
-            setGoogleLoaded(true);
-          };
-          script.onerror = (error) => {
-            console.error(
-              'Erro ao carregar o script da API do Google Maps:',
-              error
-            );
-          };
+          script.onload = () => setGoogleLoaded(true);
+          script.onerror = (error) => console.error('Erro ao carregar Google Maps:', error);
           document.body.appendChild(script);
         } else {
           setGoogleLoaded(true);
         }
       }
     };
-
-    // Carregar a API se ainda não estiver carregada
-    if (!googleLoaded) {
-      loadGoogleAPI();
-    }
-
-    return () => {
-      const scripts = document.querySelectorAll(
-        'script[src*="maps.googleapis.com"]'
-      );
-      scripts.forEach((script) => script.remove());
-    };
+    if (!googleLoaded) loadGoogleAPI();
   }, [googleLoaded]);
 
+  // Configura o Autocomplete do Google Maps
   useEffect(() => {
-    if (
-      googleLoaded &&
-      useAdress &&
-      window.google &&
-      !autocompleteRef.current
-    ) {
-      const input = document.getElementById('adress-input') as HTMLInputElement;
-
-      if (input) {
-        if (window.google && window.google.maps && window.google.maps.places) {
-          autocompleteRef.current = new window.google.maps.places.Autocomplete(
-            input,
-            {
-              types: ['geocode'], // Limitar a busca a endereços
-              componentRestrictions: { country: 'pt' }, // Restringir a busca para Portugal
-            }
-          );
-
-          autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current.getPlace();
-            if (place?.formatted_address) {
-              const lat = place.geometry.location.lat();
-              const lng = place.geometry.location.lng();
-              handleSelectAddress(place.formatted_address, lat, lng);
-            }
-          });
-        } else {
-          console.error('Google Maps não foi carregado corretamente.');
-        }
+    if (googleLoaded && form.getValues('useAdress') && window.google && !autocompleteRef.current) {
+      const input = document.getElementById('address-input') as HTMLInputElement;
+      if (input && window.google?.maps?.places) {
+        autocompleteRef.current = new window.google.maps.places.Autocomplete(input, {
+          types: ['geocode'],
+          componentRestrictions: { country: 'pt' },
+        });
+        autocompleteRef.current.addListener('place_changed', () => {
+          const place = autocompleteRef.current.getPlace();
+          if (place?.formatted_address) {
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            form.setValue('address', place.formatted_address);
+            dispatch(updateAdress(place.formatted_address));
+            dispatch(updateLatitude(lat));
+            dispatch(updateLongitude(lng));
+          }
+        });
       }
     }
-
     return () => {
       if (autocompleteRef.current) {
         autocompleteRef.current.unbindAll();
         autocompleteRef.current = null;
       }
     };
-  }, [googleLoaded, useAdress, handleSelectAddress]);
+  }, [googleLoaded, form, dispatch]);
 
+  // Verifica sessão do Supabase
   useEffect(() => {
     const getSession = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -243,119 +183,246 @@ const RegistoEntrada = () => {
     getSession();
   }, []);
 
-  return (
-    <Dialog open onClose={() => {}} fullWidth>
-      <DialogContent className="max-w-4xl w-full  h-2/3 md:h-4/5 sm:max-h-[80vh] p-0  overflow-hidden">
-        <DialogHeader className="bg-pink-900 py-6 px-4 md:px-10">
-          <h1 className="text-3xl font-bold tracking-wide text-white justify-center items-center">
-            {t('profileR2.createTitle')}
-          </h1>
-          <DialogTitle className="text-sm mt-2 text-gray-200">
-            {t('profileR2.createSubtitle')} <strong>Xgirl.pt</strong>
-          </DialogTitle>
-        </DialogHeader>
+  // Toggle para usar endereço completo
+  const toggleAdressOption = (checked: boolean) => {
+    form.setValue('useAdress', checked);
+    if (checked) {
+      form.setValue('city', '');
+      form.setValue('district', '');
+      dispatch(updateCidade(''));
+      dispatch(updateDistrito(''));
+    } else {
+      form.setValue('address', '');
+      dispatch(updateAdress(''));
+    }
+  };
 
-        <div className="p-8 space-y-8 overflow-y-auto">
-          {/* Grupo de inputs em duas colunas no desktop e uma coluna no mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <CommonInput
-              label={t('input.name')}
-              value={nome}
-              onChange={handleNomeChange}
-              placeholder={t('input.namePlaceholder')}
-            />
-            <CommonInput
-              label={t('input.age')}
-              value={idade}
-              onChange={handleIdadeChange}
-              placeholder={t('input.agePlaceholder')}
-            />
-            <CommonInput
-              label={t('input.phone')}
-              value={telefone}
-              onChange={handleTelefoneChange}
-              placeholder={t('input.phonePlaceholder')}
-            />
-          </div>
+  // Renderiza o conteúdo da aba ativa
+  const getActiveCategoryContent = () => {
+    const category = categories.find((cat) => cat.id === activeTab);
+    if (!category) return null;
 
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
-              {' '}
-              {t('input.chooseOption')}
-            </label>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={useAdress}
-                  onChange={toggleAdressOption}
-                  color="primary"
-                />
-              }
-              label={t('input.useFullAddress')}
-              className="text-gray-300"
+    return (
+      <div className="bg-opacity-40 rounded-3xl p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
+          {category.fields.map((fieldName) => (
+            <FormField
+              key={fieldName}
+              control={form.control}
+              name={fieldName}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-md font-medium text-gray-400">
+                    {t(`input.${fieldName}`) || fieldName}
+                  </FormLabel>
+                  <FormControl>
+                    {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' || fieldName === 'city' ? (
+                      <Input
+                        {...field}
+                        className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          if (fieldName === 'name') dispatch(updateNome(e.target.value));
+                          if (fieldName === 'age') dispatch(updateIdade(e.target.value));
+                          if (fieldName === 'phone') dispatch(updateTelefone(e.target.value));
+                          if (fieldName === 'city') dispatch(updateCidade(e.target.value));
+                        }}
+                      />
+                    ) : fieldName === 'district' ? (
+                      <FiltroDistrito
+                        onChange={(value) => {
+                          form.setValue('district', value);
+                          dispatch(updateDistrito(value));
+                        }}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'address' && form.getValues('useAdress') ? (
+                      <Input
+                        id="address-input"
+                        {...field}
+                        className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          dispatch(updateAdress(e.target.value));
+                        }}
+                      />
+                    ) : fieldName === 'height' ? (
+                      <FiltroAltura
+                        onChange={(value) => form.setValue('height', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'breasts' ? (
+                      <FiltroMamas
+                        onChange={(value) => form.setValue('breasts', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'body' ? (
+                      <FiltroCorpo
+                        onChange={(value) => form.setValue('body', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'hair' ? (
+                      <FiltroCabelo
+                        onChange={(value) => form.setValue('hair', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'eyes' ? (
+                      <FiltroOlhos
+                        onChange={(value) => form.setValue('eyes', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'breastSize' ? (
+                      <FiltroPeito
+                        onChange={(value) => form.setValue('breastSize', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'hairiness' ? (
+                      <FiltroPelos
+                        onChange={(value) => form.setValue('hairiness', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'tattoos' ? (
+                      <FiltroTatuagem
+                        onChange={(value) => form.setValue('tattoos', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'sign' ? (
+                      <FiltroSigno
+                        onChange={(value) => form.setValue('sign', value)}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+                    ) : fieldName === 'useAdress' ? (
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          toggleAdressOption(checked);
+                        }}
+                      />
+                    ) : null}
+                  </FormControl>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
             />
-
-            {useAdress ? (
-              <div className="mt-6">
-                <input
-                  label={t('input.fullAddress')}
-                  id="adress-input"
-                  value={adress}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setAdress(e.target.value)
-                  } // Corrigindo o tipo de evento
-                  placeholder={t('input.fullAddressPlaceholder')}
-                />
-              </div>
-            ) : (
-              <div className=" mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <CommonInput
-                  label={t('input.city')}
-                  value={cidade}
-                  onChange={handleCidadeChange}
-                  placeholder={t('input.cityPlaceholder')}
-                />
-                <CommonInput
-                  label={t('input.district')}
-                  value={distrito}
-                  onChange={handleDistritoChange}
-                  placeholder={t('input.districtPlaceholder')}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Filtros em duas colunas no desktop e uma no mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FiltroAltura />
-            <FiltroCorpo />
-            <FiltroOlhos />
-            <FiltroCabelo />
-            <FiltroMamas />
-            <FiltroPeito />
-            <FiltroPelos />
-            <FiltroTatuagem />
-            <FiltroSigno />
-          </div>
+          ))}
         </div>
+      </div>
+    );
+  };
 
-        <div className="justify-around">
-          <DialogFooter className="bg-gray-800 pb-4 ">
-            <Link href="/">
-              <Button variant="voltar" color="secondary" className="px-6 py-3">
-                {t('button.back')}
-              </Button>
-            </Link>
-            <Link href="/registo/registo-contacto">
-              <Button variant="guarder" color="primary" className="px-6 py-3">
-                {t('button.createAccount')}
-              </Button>
-            </Link>
-          </DialogFooter>
-        </div>
-      </DialogContent>
-    </Dialog>
+  // Componente de botão de aba
+  const TabButton = ({
+    id,
+    title,
+    isActive,
+    onClick,
+  }: {
+    id: string;
+    title: string;
+    isActive: boolean;
+    onClick: () => void;
+  }) => (
+    <button
+      onClick={onClick}
+      className={`py-3 px-4 text-left transition-colors focus:outline-none border dark:border-b-gray-800 dark:border-opacity-50 ${
+        isActive
+          ? 'text-darkpink border-l-2 border-l-darkpink font-medium'
+          : 'text-gray-600 hover:text-darkpink'
+      }`}
+    >
+      {title}
+    </button>
   );
-};
+
+  // Função de submissão do formulário
+  const handleSubmit = async () => {
+    const data = form.getValues();
+    try {
+      // Atualiza o Redux com os dados preenchidos
+      dispatch(updateNome(data.name));
+      dispatch(updateIdade(data.age));
+      dispatch(updateTelefone(data.phone));
+      if (!data.useAdress) {
+        dispatch(updateCidade(data.city));
+        dispatch(updateDistrito(data.district));
+      } else {
+        dispatch(updateAdress(data.address));
+      }
+      toast.success('Dados salvos localmente com sucesso!');
+      // Navega para a próxima página
+      window.location.href = '/registo/registo-contacto';
+    } catch (error) {
+      console.error('Erro ao processar o registro:', error);
+      toast.error('Erro ao salvar os dados.');
+    }
+  };
+
+  return (
+    <div className="p-8 bg-white dark:bg-[#100007] dark:border-gray-800 border dark:border-opacity-20 dark:border rounded-3xl">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+        <div className="w-full md:w-auto">
+          <h1 className="text-2xl font-bold">{t('profileR2.createTitle')}</h1>
+          <p className="text-sm text-gray-500">{t('profileR2.createSubtitle')} <strong>Xgirl.pt</strong></p>
+          <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
+        </div>
+        <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
+          <Link href="/">
+            <Button className="rounded-full dark:bg-transparent dark:text-white" variant="outline">
+              {t('button.back')}
+            </Button>
+          </Link>
+          <Button
+            onClick={form.handleSubmit(handleSubmit)}
+            className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
+          >
+            {t('button.createAccount')}
+          </Button>
+        </div>
+      </div>
+      <Separator className="my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 hidden md:block" />
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          {/* Desktop View - Vertical tabs on left */}
+          <div className="hidden md:flex gap-8">
+            <div className="w-64 flex flex-col">
+              {categories.map((category) => (
+                <TabButton
+                  key={category.id}
+                  id={category.id}
+                  title={category.title}
+                  isActive={activeTab === category.id}
+                  onClick={() => setActiveTab(category.id)}
+                />
+              ))}
+            </div>
+            <div className="flex-1">{getActiveCategoryContent()}</div>
+          </div>
+
+          {/* Mobile View - Horizontal tabs on top */}
+          <div className="md:hidden">
+            <div className="flex border-b bg-pink-400 overflow-x-auto">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveTab(category.id)}
+                  className={`py-2 px-4 flex-shrink-0 transition-colors ${
+                    activeTab === category.id
+                      ? 'text-darkpink border-b-2 dark:border-b-gray-800 dark:border-opacity-50 border-darkpink font-medium'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  {category.title}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4">{getActiveCategoryContent()}</div>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
 
 export default RegistoEntrada;

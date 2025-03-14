@@ -291,7 +291,7 @@ export function GeneralInformationForm() {
 
     return (
       <div className="bg-opacity-40 rounded-3xl p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 bg-opacity-25 rounded-2xl " >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl " >
           {category.fields.map((fieldName) => (
             <FormField
               key={fieldName}

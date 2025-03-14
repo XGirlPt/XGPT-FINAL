@@ -31,6 +31,7 @@ const Registre2: React.FC = () => {
     unavailable: boolean;
   }) => {
     setSelectedOption(option);
+    console.log('Opção selecionada:', option); // Log para verificar a seleção
   };
 
   const handleRegister = async () => {
@@ -40,75 +41,92 @@ const Registre2: React.FC = () => {
     }
 
     try {
+      console.log('Iniciando registro com:', { email, password });
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://localhost:3000/registo/confirmar-email', // URL de redirecionamento após a verificação
+          emailRedirectTo: 'http://localhost:3000/registo/confirmar-email',
         },
       });
 
       if (error) {
-        console.error('Erro ao se inscrever:', error.message);
-        console.error('Detalhes do erro:', error); // Aqui estamos adicionando todos os detalhes do erro
+        console.error('Erro ao se inscrever:', error.message, error);
         return;
       }
 
       console.log('Usuário registrado com sucesso:', data.user);
 
       if (data?.user?.id) {
-        dispatch(registerUser(data?.user?.id, email));
+        dispatch(registerUser(data.user.id, email));
+        console.log('Redux atualizado com userUID:', data.user.id);
       }
 
       console.log('E-mail enviado automaticamente pelo Supabase para:', email);
 
-      if (selectedOption) {
-        switch (selectedOption.id) {
-          case 1:
-            await supabase.from('ProfilesData').insert([
-              {
-                userUID: data.user?.id,
-                userData: data.user,
-              },
-            ]);
-            router.push('/registo/confirmar-email');
-            break;
+      if (!selectedOption) {
+        console.warn('Nenhuma opção selecionada. Redirecionando para confirmar-email por padrão.');
+        router.push('/registo/confirmar-email');
+        return;
+      }
 
-          case 2:
-            await supabase.from('etablissements').insert([
-              {
-                userUID: data.user?.id,
-                userData: data.user,
-              },
-            ]);
-            router.push(
-              `/registre-etablissement?email=${email}&userUID=${data.user?.id}`
-            );
-            break;
+      console.log('Opção selecionada para redirecionamento:', selectedOption);
+      switch (selectedOption.id) {
+        case 1:
+          console.log('Inserindo em ProfilesData...');
+          const { error: profileError } = await supabase.from('ProfilesData').insert([
+            {
+              userUID: data.user?.id,
+              userData: data.user,
+            },
+          ]);
+          if (profileError) {
+            console.error('Erro ao inserir em ProfilesData:', profileError);
+            return;
+          }
+          console.log('Redirecionando para /registo/confirmar-email');
+          router.push('/registo/confirmar-email');
+          break;
 
-          case 3:
-            router.push('/registre-entrada');
-            break;
-          default:
-            break;
-        }
+        case 2:
+          console.log('Inserindo em etablissements...');
+          const { error: etablissementError } = await supabase.from('etablissements').insert([
+            {
+              userUID: data.user?.id,
+              userData: data.user,
+            },
+          ]);
+          if (etablissementError) {
+            console.error('Erro ao inserir em etablissements:', etablissementError);
+            return;
+          }
+          console.log('Redirecionando para /registre-etablissement');
+          router.push(`/registre-etablissement?email=${email}&userUID=${data.user?.id}`);
+          break;
+
+        case 3:
+          console.log('Redirecionando para /registre-entrada');
+          router.push('/registre-entrada');
+          break;
+
+        default:
+          console.warn('Opção inválida, redirecionando para /registo/confirmar-email por padrão');
+          router.push('/registo/confirmar-email');
+          break;
       }
     } catch (error: any) {
-      console.error('Erro ao se inscrever:', error.message);
-      console.error('Detalhes do erro:', error); // Adiciona o objeto de erro completo
+      console.error('Erro ao se inscrever:', error.message, error);
     }
   };
 
   useEffect(() => {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        router.push('/registo/regista2');
-      }
+      console.log('Sessão atual:', data.session);
+      // Removido o redirecionamento para evitar interferência
     };
-
     checkSession();
-  }, [router]);
+  }, []);
 
   return (
     <div className="pb-4 bg-gray-100 dark:bg-black rounded-md pt-24">

@@ -87,7 +87,7 @@ const RegistoPagamento: React.FC = () => {
         olhos: olhosRedux,
         origem: origemRedux,
         seios: seiosRedux,
-        tatuagens: tatuagemRedux,
+        tatuagem: tatuagemRedux,
         mamas: mamasRedux,
         pelos: pelosRedux,
         signo: signoRedux,

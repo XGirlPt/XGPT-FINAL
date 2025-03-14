@@ -210,7 +210,7 @@ export const ServicePreferencesForm = () => {
     if (!category) return null;
 
     return (
-      <div className="bg-[#f2ebee] dark:bg-[#27191f] bg-opacity-40 rounded-3xl p-6">
+      <div className="bg-[#f2ebee] bg-opacity-40 rounded-3xl p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {category.options.map((option) => (
             <div key={option.id} className="flex items-center space-x-2">
