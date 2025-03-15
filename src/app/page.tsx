@@ -11,7 +11,7 @@ import { RecentStories } from './_ui/recent-stories';
 
 import FeaturedAds from './_ui/featured-ads';
 
-import { MapSection } from './_ui/map-section';
+import  MapSection from './_ui/map-section';
 import NewestAdds from './_ui/newest-add';
 import { Statistics } from './_ui/statistics';
 import { PublishAdBanner } from './_ui/publish-ad-banner';
@@ -181,8 +181,8 @@ const Dashboard: React.FC = () => {
       <HeroSection profiles={profiles as Profile[]} />
 
       <RecentStories />
-      <FeaturedAds profiles={profiles} currentPage={currentPage} itemsPerPage={itemsPerPage} />
-      {/* <MapSection profxiles={mapProfiles} /> */}
+      <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
+      <MapSection profiles={profiles} />
       <NewestAdds  profiles={profiles as Profile[]}/>
       <Statistics />
       <PublishAdBanner />

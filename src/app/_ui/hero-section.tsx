@@ -18,7 +18,7 @@ import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../backend/context/LanguageContext'; 
 import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -240,7 +240,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                             {/* Gradiente e Nome + Localidade */}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
                               <h3 className="text-base md:text-lg font-semibold text-white leading-tight flex items-center gap-1">
-                                {profile.nome} {profile.certificado && <FaCheckCircle className="text-green-500" />}
+                                {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
                               </h3>
                               <div className="flex items-center gap-1 text-white text-sm">
                                 <FaMapMarkerAlt className="text-pink-600" />

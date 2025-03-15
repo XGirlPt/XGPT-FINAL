@@ -24,7 +24,7 @@ export interface Profile {
   latitude: number;
   longitude: number;
   peso: string;
-  tatuagens: string;
+  tatuagem: string;
   pelos: string;
   olhos: string;
   seios: string;
@@ -37,14 +37,6 @@ export interface Profile {
   comment?: string[]; // Adicionei a propriedade 'live' aqui, tornando-a opcional
 }
 
-export interface MapProfile {
-  id: number;
-  nome: string;
-  photos: string[];
-  cidade: string;
-  latitude: number;
-  longitude: number;
-}
 
 export interface UserProfileData {
   userUID: string;
@@ -58,7 +50,7 @@ export interface UserProfileData {
   olhos: string;
   origem: string;
   seios: string;
-  tatuagens: string;
+  tatuagem: string;
   mamas: string;
   pelos: string;
   signo: string;

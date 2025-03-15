@@ -33,7 +33,6 @@ export function RegistoContacto() {
   const servicoRedux = useSelector((state: any) => state.profile?.profile?.servico || []);
   const pagamentoRedux = useSelector((state: any) => state.profile?.profile?.pagamento || []);
   const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || []);
-  // const descriptionRedux = useSelector((state: any) => state.profile?.profile?.description || '');
 
   // Estado inicial das categorias
   const [categories, setCategories] = useState<PreferenceCategory[]>([
@@ -106,10 +105,9 @@ export function RegistoContacto() {
     },
   ]);
 
-  // const [description, setDescription] = useState<string> h('');
   const [activeTab, setActiveTab] = useState('payment');
 
-  // Sincroniza o estado inicial apenas uma vez na montagem
+  // Sincroniza o estado inicial apenas na montagem
   useEffect(() => {
     setCategories((prevCategories) =>
       prevCategories.map((category) => ({
@@ -127,8 +125,7 @@ export function RegistoContacto() {
         })),
       }))
     );
-    // setDescription(descriptionRedux || '');
-  }, [linguaRedux, pagamentoRedux, servicoRedux]); // Sem dependências, executa apenas na montagem
+  }, []); // Sem dependências, executa apenas na montagem
 
   // Handle checkbox changes
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
@@ -159,19 +156,13 @@ export function RegistoContacto() {
     }
   };
 
-  // Handle description change
-  // const handleDescriptionChange = (content: string) => {
-  //   setDescription(content);
-  //   dispatch(updateDescription(content));
-  // };
-
   // Renderiza o conteúdo da aba ativa
   const getActiveCategoryContent = () => {
     const category = categories.find((cat) => cat.id === activeTab);
     if (!category) return null;
 
     return (
-      <div className="bg-opacity-40  rounded-3xl p-6">
+      <div className="bg-opacity-40 rounded-3xl p-6">
         {category.id === 'description' ? (
           <div className="w-full">
             {/* <Textarea
@@ -183,7 +174,7 @@ export function RegistoContacto() {
             /> */}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4  border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
             {category.options?.map((option) => (
               <div key={option.id} className="flex items-center space-x-2">
                 <Checkbox

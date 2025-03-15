@@ -5,13 +5,12 @@ import * as React from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Star, Video, Share2, Crown } from 'lucide-react';
+import { MdVerified } from 'react-icons/md'; // Ícone de certificado
+import { FaMapMarkerAlt } from 'react-icons/fa'; // Ícone de localização
 import { motion } from 'framer-motion';
-import { useLanguage } from '../../backend/context/LanguageContext'; // Importe o contexto de idioma
+import { useLanguage } from '../../backend/context/LanguageContext';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-
-
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -61,12 +60,11 @@ interface Profile {
   live: boolean | string;
   premium: boolean | string;
 }
-export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles: Profile[], currentPage: number, itemsPerPage: number }) {
 
-
-
-
+export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], currentPage: number, itemsPerPage: number }) {
   const [timeElapsedList, setTimeElapsedList] = useState<string[]>([]);
+
+  const ITEMS_PER_PAGE = 12; // Definindo o número fixo de perfis a exibir
 
   const formatTimeElapsed = useCallback((minutesElapsed: number): string => {
     const hoursElapsed = minutesElapsed / 60;
@@ -122,15 +120,11 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
       })
     : [];
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProfiles = sortedProfiles.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProfiles = sortedProfiles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const { t, i18n } = useTranslation();
-  const { language, changeLanguage } = useLanguage();
-
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   if (!profiles) {
     return (
@@ -148,8 +142,7 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
         <p>No profiles available.</p>
       </div>
     );
-  } 
-
+  }
 
   return (
     <div className="p-4 mt-2 relative">
@@ -174,63 +167,51 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-4">
-          {profiles.map((profile, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-              className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-3 shadow-lg overflow-hidden cursor-pointer transform transition-all"
-            >
-              {/* Imagem do perfil */}
-
-              {profile.photos?.[0] ? (
-                <Link href={`/escort/${profile.nome}`} passHref>
-                  <div className="relative rounded-3xl overflow-hidden">
+          {paginatedProfiles.map((profile, index) => (
+            <Link href={`/escort/${profile.nome}`} passHref key={index}>
+              <motion.div
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+                className="relative bg-white dark:bg-[#300d1b] rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all"
+              >
+                {/* Imagem do perfil com Nome e Localidade sobrepostos */}
+                {profile.photos?.[0] ? (
+                  <div className="relative rounded-3xl overflow-hidden w-full h-48">
                     <Image
                       src={profile.photos[0] || '/logo.webp'}
                       alt={profile.nome}
                       width={500}
                       height={500}
-                      className="object-cover rounded-3xl w-full h-48"
+                      className="object-cover rounded-3xl w-full h-full"
                     />
-                  </div>
-                </Link>
-              ) : null}
-
-              {/* Conteúdo da Card */}
-              <div className="p-3 flex flex-col gap-2">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {profile.nome}
-                  </h3>
-
-                  <button>
-                    <div className="text-xs text-gray-500 dark:text-gray-300 flex items-center gap-1">
-                      <Image
-                        src="/icons/location.png"
-                        alt="Location"
-                        width={14}
-                        height={14}
-                      />
-                      {profile.cidade}
+                    {/* Gradiente e Nome + Localidade */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                      <h3 className="text-base font-semibold text-white flex items-center gap-1">
+                        {profile.nome}
+                        {profile.certificado && <MdVerified className="text-green-500" />}
+                      </h3>
+                      <div className="flex items-center gap-1 text-white text-sm">
+                        <FaMapMarkerAlt className="text-pink-600" />
+                        {profile.cidade}
+                      </div>
                     </div>
-                  </button>
-                </div>
+                  </div>
+                ) : null}
 
-                {/* Tag ou Estado */}
-                <motion.p
-                  className="text-sm text-gray-700 dark:text-gray-300 italic  px-3 py-1 rounded-lg"
-                  variants={badgeVariants}
-                >
-                  {'"' + profile.tag + '"'}
-                </motion.p>
-
-                {/* Timestamp */}
-                <div className="text-xs flex items-center gap-1">
-                  <Clock size={14} /> {timeElapsedList[index]}
+                {/* Conteúdo da Card (Tag e Timestamp) */}
+                <div className="p-3 flex flex-col gap-2">
+                  <motion.p
+                    className="text-sm text-gray-700 dark:text-gray-300 italic px-3 py-1 rounded-lg"
+                    variants={badgeVariants}
+                  >
+                    {'"' + profile.tag + '"'}
+                  </motion.p>
+                  <div className="text-xs flex items-center gap-1">
+                    <Clock size={14} /> {timeElapsedList[index]}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
@@ -256,10 +237,8 @@ export function FeaturedAds({ profiles, currentPage, itemsPerPage }: { profiles:
           zIndex: 0,
         }}
       />
-
     </div>
-   
   );
-};
+}
 
 export default FeaturedAds;

@@ -1,4 +1,3 @@
-// registe1.tsx (ajustado)
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -10,6 +9,18 @@ import { useTranslation } from 'react-i18next';
 import FeaturesList from './_ui/FeaturedList';
 import ListRegister from '@/components/register/list-register';
 import CommonInput from '@/components/ui/common-input';
+
+// Função para determinar a URL de redirecionamento dinâmica
+const getRedirectUrl = () => {
+  if (typeof window === 'undefined') return 'https://www.xgirl.pt/registo/confirmar-email'; // Default no servidor
+  const host = window.location.host;
+  if (host.includes('localhost')) {
+    return 'http://localhost:3000/registo/confirmar-email';
+  } else if (host.includes('vercel.app')) {
+    return `${window.location.origin}/registo/confirmar-email`;
+  }
+  return 'https://www.xgirl.pt/registo/confirmar-email'; // Produção
+};
 
 const Registre1: React.FC = () => {
   const { t } = useTranslation();
@@ -38,11 +49,12 @@ const Registre1: React.FC = () => {
 
     try {
       console.log('Iniciando registro com:', { email, password });
+      const redirectTo = getRedirectUrl(); // URL dinâmica
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://localhost:3000/registo/confirmar-email',
+          emailRedirectTo: redirectTo,
         },
       });
 
@@ -58,7 +70,7 @@ const Registre1: React.FC = () => {
         console.log('Redux atualizado com userUID:', data.user.id);
       }
 
-      console.log('E-mail enviado automaticamente pelo Supabase para:', email);
+      console.log('E-mail enviado automaticamente pelo Supabase para:', email, 'com redirectTo:', redirectTo);
 
       if (!selectedOption) {
         console.warn('Nenhuma opção selecionada. Redirecionando para confirmar-email por padrão.');
@@ -69,11 +81,9 @@ const Registre1: React.FC = () => {
       console.log('Opção selecionada para redirecionamento:', selectedOption);
       switch (selectedOption.id) {
         case 1:
-          // Removido a inserção em ProfilesData aqui
           console.log('Redirecionando para /registo/confirmar-email');
           router.push('/registo/confirmar-email');
           break;
-
         case 2:
           console.log('Inserindo em etablissements...');
           const { error: etablissementError } = await supabase.from('etablissements').insert([
@@ -89,12 +99,10 @@ const Registre1: React.FC = () => {
           console.log('Redirecionando para /registre-etablissement');
           router.push(`/registre-etablissement?email=${email}&userUID=${data.user?.id}`);
           break;
-
         case 3:
           console.log('Redirecionando para /registre-entrada');
           router.push('/registre-entrada');
           break;
-
         default:
           console.warn('Opção inválida, redirecionando para /registo/confirmar-email por padrão');
           router.push('/registo/confirmar-email');
