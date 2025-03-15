@@ -15,21 +15,39 @@ const ConfirmarEmail = () => {
   useEffect(() => {
     if (isClient) {
       const verifyEmailAndRedirect = async () => {
-        const queryParams = new URLSearchParams(window.location.search);
-        const token = queryParams.get('access_token');
+        // Ler o fragmento da URL (após #)
+        const hash = window.location.hash.substring(1); // Remove o "#"
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
 
-        if (token) {
-          // Configura a sessão com os tokens recebidos
-          await supabase.auth.setSession({
-            access_token: token,
-            refresh_token: queryParams.get('refresh_token') || '',
+        if (accessToken && refreshToken) {
+          // Configurar a sessão com os tokens recebidos
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
           });
-        }
 
-        // Verifica se o email foi confirmado
-        const { data } = await supabase.auth.getUser();
-        if (data?.user?.email_confirmed_at) {
-          router.push('/registo/registo-entrada');
+          if (error) {
+            console.error('Erro ao configurar a sessão:', error.message);
+            return;
+          }
+
+          // Verificar se o email foi confirmado
+          const { data, error: userError } = await supabase.auth.getUser();
+          if (userError) {
+            console.error('Erro ao obter usuário:', userError.message);
+            return;
+          }
+
+          if (data?.user?.email_confirmed_at) {
+            console.log('Email confirmado com sucesso:', data.user);
+            router.push('/registo/registo-entrada');
+          } else {
+            console.log('Email ainda não confirmado.');
+          }
+        } else {
+          console.error('Tokens de autenticação não encontrados na URL.');
         }
       };
 
@@ -45,8 +63,7 @@ const ConfirmarEmail = () => {
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-black">
       <h2 className="text-2xl font-semibold mb-4">Confirmação de E-mail</h2>
       <p className="mb-6">
-        Um link foi enviado para o seu e-mail. Clique no link para confirmar sua
-        conta.
+        Um link foi enviado para o seu e-mail. Clique no link para confirmar sua conta.
       </p>
       <p className="text-blue-500">Verificando e-mail...</p>
     </div>
