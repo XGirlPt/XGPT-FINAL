@@ -1,3 +1,4 @@
+// registe1.tsx (ajustado)
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -10,9 +11,8 @@ import FeaturesList from './_ui/FeaturedList';
 import ListRegister from '@/components/register/list-register';
 import CommonInput from '@/components/ui/common-input';
 
-const Registre2: React.FC = () => {
+const Registre1: React.FC = () => {
   const { t } = useTranslation();
-
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -25,13 +25,9 @@ const Registre2: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleOptionSelect = (option: {
-    id: number;
-    name: string;
-    unavailable: boolean;
-  }) => {
+  const handleOptionSelect = (option: { id: number; name: string; unavailable: boolean }) => {
     setSelectedOption(option);
-    console.log('Opção selecionada:', option); // Log para verificar a seleção
+    console.log('Opção selecionada:', option);
   };
 
   const handleRegister = async () => {
@@ -73,17 +69,7 @@ const Registre2: React.FC = () => {
       console.log('Opção selecionada para redirecionamento:', selectedOption);
       switch (selectedOption.id) {
         case 1:
-          console.log('Inserindo em ProfilesData...');
-          const { error: profileError } = await supabase.from('ProfilesData').insert([
-            {
-              userUID: data.user?.id,
-              userData: data.user,
-            },
-          ]);
-          if (profileError) {
-            console.error('Erro ao inserir em ProfilesData:', profileError);
-            return;
-          }
+          // Removido a inserção em ProfilesData aqui
           console.log('Redirecionando para /registo/confirmar-email');
           router.push('/registo/confirmar-email');
           break;
@@ -123,7 +109,6 @@ const Registre2: React.FC = () => {
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       console.log('Sessão atual:', data.session);
-      // Removido o redirecionamento para evitar interferência
     };
     checkSession();
   }, []);
@@ -132,12 +117,10 @@ const Registre2: React.FC = () => {
     <div className="pb-4 bg-gray-100 dark:bg-black rounded-md pt-24">
       <div className="h-full dark:bg-black justify-center md:flex">
         <FeaturesList />
-
         <div className="bg-gray-100 dark:bg-gray-800 mt-10 w-full max-w-lg mx-auto border border-gray-700 rounded-2xl shadow-xl p-6 sm:p-8">
           <h1 className="text-2xl md:text-3xl font-extrabold text-center text-gray-500 dark:text-white mb-6">
             {t('RegisterPage.create_account_title')}
           </h1>
-
           <form className="space-y-6">
             <CommonInput
               label={t('RegisterPage.email_label')}
@@ -147,11 +130,9 @@ const Registre2: React.FC = () => {
               type="email"
               required
             />
-
             <div>
               <ListRegister handleOptionSelect={handleOptionSelect} />
             </div>
-
             <CommonInput
               label={t('RegisterPage.password_label')}
               placeholder={t('RegisterPage.password_placeholder')}
@@ -160,7 +141,6 @@ const Registre2: React.FC = () => {
               type="password"
               required
             />
-
             <CommonInput
               label={t('RegisterPage.confirm_password_label')}
               placeholder={t('RegisterPage.confirm_password_placeholder')}
@@ -169,7 +149,6 @@ const Registre2: React.FC = () => {
               type="password"
               required
             />
-
             <div className="mt-6">
               <button
                 type="button"
@@ -186,4 +165,4 @@ const Registre2: React.FC = () => {
   );
 };
 
-export default Registre2;
+export default Registre1;

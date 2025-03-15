@@ -2,22 +2,20 @@ import { Inter } from 'next/font/google';
 import ReduxProvider from '@/provider/ReduxProvider';
 import { Metadata } from 'next';
 import { NextUIProvider } from '@nextui-org/react';
-import 'normalize.css'; // Charge normalize.css
+import 'normalize.css';
 import './globals.css';
 import { LanguageProvider } from '@/backend/context/LanguageContext';
-// Importar o NextUIProvider
 import { MainProvider } from '@/provider/MainProvider';
-import { ThemeProvider } from 'next-themes'; // Adicione o ThemeProvider para alternância de temas
+import { ThemeProvider } from 'next-themes';
 import { interTight, mofugu } from '@/backend/lib/fonts';
+import Script from 'next/script'; // Importar o componente Script
 import "../backend/database/i18n/i18n";
-
 
 const inter = Inter({ subsets: ['latin'] });
 
 // Métadonnées pour SEO
 export const metadata: Metadata = {
-  title:
-    'XGirl - Anúncios Eróticos, Acompanhantes e Escorts de Luxo em Portugal',
+  title: 'XGirl - Anúncios Eróticos, Acompanhantes e Escorts de Luxo em Portugal',
   description:
     'Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal.',
   authors: [{ name: 'XGirl' }],
@@ -45,10 +43,9 @@ export const metadata: Metadata = {
       'Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal.',
     images: ['/logoxg.png'],
   },
-  metadataBase: new URL('https://www.xgirl.pt/'), // URL base
+  metadataBase: new URL('https://www.xgirl.pt/'),
 };
 
-// Composant racine
 export default function RootLayout({
   children,
 }: {
@@ -67,7 +64,7 @@ export default function RootLayout({
         <meta name="author" content="XGirl" />
         <meta
           name="keywords"
-          content="Acompanhantes, Acompanhantes Portugal, Acompanhantes Lisboa, Acompanhantes Porto, Acompanhantes Faro, Acompanhantes Madeira,  Acompanhantes Luxo, Escort,  Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos , Massagem Eróticas, anúncios, Portugal, "
+          content="Acompanhantes, Acompanhantes Portugal, Acompanhantes Lisboa, Acompanhantes Porto, Acompanhantes Faro, Acompanhantes Madeira, Acompanhantes Luxo, Escort, Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos , Massagem Eróticas, anúncios, Portugal, "
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="language" content="portuguese" />
@@ -85,29 +82,31 @@ export default function RootLayout({
         <meta property="og:image" content="/logoxg.png" />
         <meta property="og:image:alt" content="Logo XGirl" />
         <meta property="twitter:card" content="summary_large_image" />
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-FGCZWRX0E3"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-FGCZWRX0E3');
-      `,
-          }}
-        />
       </head>
       <body
         className={`${mofugu.variable} ${interTight.variable} bg-[#f2ebee] dark:bg-[#100007]`}
       >
+        {/* Carregar o script do Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-FGCZWRX0E3"
+          strategy="afterInteractive" // Carrega após a página estar interativa
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FGCZWRX0E3');
+            `,
+          }}
+        />
+
         <ReduxProvider>
           <LanguageProvider>
             <ThemeProvider attribute="class" defaultTheme="light">
-              {' '}
-              {/* ThemeProvider */}
               <NextUIProvider>
                 <MainProvider>{children}</MainProvider>
               </NextUIProvider>

@@ -128,7 +128,7 @@ export function RegistoContacto() {
       }))
     );
     // setDescription(descriptionRedux || '');
-  }, []); // Sem dependências, executa apenas na montagem
+  }, [linguaRedux, pagamentoRedux, servicoRedux]); // Sem dependências, executa apenas na montagem
 
   // Handle checkbox changes
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {

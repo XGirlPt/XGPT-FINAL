@@ -56,8 +56,9 @@ const signoIcons: { [key: string]: JSX.Element } = {
 };
 
 export function AboutProfile({ selectedProfile }: AboutProfileProps) {
-  if (!selectedProfile) return null;
   const { t } = useTranslation();
+
+  if (!selectedProfile) return null;
 
 
   const details = [

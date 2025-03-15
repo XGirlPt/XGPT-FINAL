@@ -73,7 +73,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
         <div className="space-y-2">
         <div className="flex items-center gap-2">
   <p className="text-lg italic text-gray-600 dark:text-gray-300">
-    "{selectedProfile?.tag || t('profile.no_status_available')}"
+  &quot;{selectedProfile?.tag || t('profile.no_status_available')}&quot;
     <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500" size={16} />
   </p> 
 
