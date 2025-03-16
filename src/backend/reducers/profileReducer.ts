@@ -341,7 +341,6 @@ const initialState: AppState = {
     tag: null,
     isAuthenticated: false,
     premium: false,
-    
   },
 };
 
@@ -356,7 +355,7 @@ const rootReducer = (
         ...state,
         user: action.payload.user,
         token: action.payload.token,
-        isLoggedIn: true,
+        isLoggedIn: true, // Já é atualizado aqui
         email: action.payload.email,
         profile: {
           ...state.profile,

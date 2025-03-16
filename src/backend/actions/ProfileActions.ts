@@ -51,7 +51,7 @@ interface Profile {
 }
 
 // Ação de login bem-sucedido
-export const loginSuccess = (userData: { email: string; token: string; user: any }) => {
+export const loginSuccess = (userData: { email: string; token: string; user: { uid: string } }) => {
   if (!userData || !userData.token || !userData.email) {
     console.error('Dados de login incompletos:', userData);
     return {
@@ -61,14 +61,10 @@ export const loginSuccess = (userData: { email: string; token: string; user: any
   }
   localStorage.setItem('userToken', userData.token);
   localStorage.setItem('email', userData.email);
+  localStorage.setItem('userUID', userData.user.uid);
   return {
     type: LOGIN_SUCCESS,
-    payload: {
-      ...userData,
-      profileData: {
-        isAuthenticated: true, // Certifica-te que isto está aqui
-      },
-    },
+    payload: userData,
   };
 };
 
@@ -78,14 +74,11 @@ export const loginFailure = (error: string) => ({
   payload: error,
 });
 
-// Ação de logout
-export const logout = () => {
-  localStorage.removeItem('userToken');
-  localStorage.removeItem('email');
-  return {
-    type: LOGOUT,
-  };
-};
+export const logout = () => ({
+  type: LOGOUT,
+});
+
+
 
 // Ação para registrar utilizador
 export const registerUser = (userUID: string, email: string) => ({
@@ -97,9 +90,9 @@ export const registerUser = (userUID: string, email: string) => ({
 });
 
 // Ação para adicionar dados ao perfil
-export const addProfileData = (data: Partial<Profile>) => ({
+export const addProfileData = (profileData: any) => ({
   type: ADD_PROFILE_DATA,
-  payload: data,
+  payload: profileData,
 });
 
 // Ações de atualização de campos específicos

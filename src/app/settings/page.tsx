@@ -1,8 +1,12 @@
 'use client';
 import React from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AccountSettingsForm } from '../../components/forms/account-settings-form';
 import { SubscriptionForm } from '../../components/forms/subscription-form';
+import { logout } from '@/backend/actions/ProfileActions';
 
 import {
   Breadcrumb,
@@ -14,6 +18,23 @@ import {
 } from '@/components/ui/breadcrumb';
 
 export default function Settings() {
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: any) => state.profile.isLoggedIn);
+
+  useEffect(() => {
+    console.log('MyAccount - isLoggedIn:', isLoggedIn);
+    if (!isLoggedIn) {
+      console.log('MyAccount - Redirecionando para /login');
+      router.push('/login');
+    }
+  }, [isLoggedIn, router]);
+
+  if (!isLoggedIn) {
+    return null; // Redirecionado
+  }
+
   return (
     <main className="bg-[#f2ebee] dark:bg-[#100007] py-10 ">
       <div className="container mx-auto relative font-body">

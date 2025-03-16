@@ -193,7 +193,7 @@ export function RegistoEntrada() {
       dispatch(updateDistrito(''));
     } else {
       form.setValue('address', '');
-      dispatch(updateaddress(''));
+      dispatch(updateAddress(''));
     }
   };
 
@@ -241,7 +241,7 @@ export function RegistoEntrada() {
                         className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
                         onChange={(e) => {
                           field.onChange(e);
-                          dispatch(updateaddress(e.target.value));
+                          dispatch(updateAddress(e.target.value));
                         }}
                       />
                     ) : fieldName === 'height' ? (
@@ -345,7 +345,7 @@ export function RegistoEntrada() {
         dispatch(updateCidade(data.city));
         dispatch(updateDistrito(data.district));
       } else {
-        dispatch(updateaddress(data.address));
+        dispatch(updateAddress(data.address));
       }
       toast.success('Dados salvos localmente com sucesso!');
       // Navega para a próxima página

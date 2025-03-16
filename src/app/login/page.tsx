@@ -27,14 +27,19 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('userToken');
-    const email = localStorage.getItem('email');
+    const storedEmail = localStorage.getItem('email');
 
-    if (token && email) {
+    if (token && storedEmail) {
       dispatch(
-        loginSuccess({ email, token, user: {} })
+        loginSuccess({
+          email: storedEmail,
+          token,
+          user: { uid: localStorage.getItem('userUID') || '' },
+        })
       );
+      router.push('/my-account'); // Redireciona para my-account ao carregar
     }
-  }, [dispatch]);
+  }, [dispatch, router]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -44,11 +49,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-
-
   const handleLogin = async () => {
-
-
     setErrorMessage('');
     const { data: user, error } = await supabase.auth.signInWithPassword({
       email,
@@ -57,36 +58,37 @@ const Login = () => {
 
     if (error) {
       setErrorMessage('Email ou senha incorretos.');
-      dispatch(loginFailure(error));
-    } else {
-      if (user) {
-        const userUID = user.user.id;
-        if (!userUID) {
-          setErrorMessage('Erro ao recuperar os dados do usuário.');
-          return;
-        }
-
-        try {
-          const profileData = await fetchProfileFromDatabase(userUID);
-          dispatch(addProfileData(profileData));
-        } catch (fetchError) {
-          setErrorMessage('Erro ao carregar dados do perfil.');
-          return;
-        }
-
-        dispatch(
-          loginSuccess({
-            email: user.user.email,
-            userUID: userUID,
-          })
-        );
-
-        localStorage.setItem('userToken', user.session.refresh_token);
-        localStorage.setItem('email', email);
-        router.push('/escort');
-      } else {
-        setErrorMessage('Erro ao processar o login.');
+      dispatch(loginFailure(error.message));
+    } else if (user) {
+      const userUID = user.user.id;
+      if (!userUID) {
+        setErrorMessage('Erro ao recuperar os dados do usuário.');
+        return;
       }
+
+      try {
+        const profileData = await fetchProfileFromDatabase(userUID);
+        dispatch(addProfileData(profileData));
+      } catch (fetchError) {
+        setErrorMessage('Erro ao carregar dados do perfil.');
+        return;
+      }
+
+      const token = user.session.refresh_token;
+      dispatch(
+        loginSuccess({
+          email: user.user.email,
+          token,
+          user: { uid: userUID },
+        })
+      );
+
+      localStorage.setItem('userToken', token);
+      localStorage.setItem('email', email);
+      localStorage.setItem('userUID', userUID);
+      router.push('/my-account'); // Redireciona para my-account após login
+    } else {
+      setErrorMessage('Erro ao processar o login.');
     }
   };
 
@@ -120,11 +122,6 @@ const Login = () => {
               onChange={handlePasswordChange}
               required
             />
-         {/* <ReCAPTCHA
-  sitekey="6LeNWM4qAAAAABkd3wFZJe2rcVkkx62uNq71L7Cn"
-  onChange={handleCaptchaChange}
-/> */}
-
             {errorMessage && (
               <div className="text-center bg-pink-100 text-pink-500 border border-pink-500 rounded-lg p-2 text-sm">
                 {errorMessage}

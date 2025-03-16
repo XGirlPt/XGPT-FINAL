@@ -21,27 +21,20 @@ import {
 
 export default function MyAccount() {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state: any) => state.profile.profile.isAuthenticated);
+  const isLoggedIn = useSelector((state: any) => state.profile.isLoggedIn);
 
-  // Verifica autenticação e redireciona se não autenticado
   useEffect(() => {
-    console.log('isAuthenticated:', isAuthenticated); // Para depuração
-    if (isAuthenticated === false) {
+    console.log('MyAccount - isLoggedIn:', isLoggedIn);
+    if (!isLoggedIn) {
+      console.log('MyAccount - Redirecionando para /login');
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isLoggedIn, router]);
 
-  // Renderiza apenas se autenticado
-  if (isAuthenticated === false) {
-    return null;
+  if (!isLoggedIn) {
+    return null; // Redirecionado
   }
 
-  // Função de logout
-  const handleLogout = () => {
-    dispatch(logout());
-    router.push('/login');
-  };
 
   return (
     <main className="bg-[#f2ebee] dark:bg-[#100007] py-10">
@@ -53,9 +46,7 @@ export default function MyAccount() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-darkpink">
-                My Account
-              </BreadcrumbPage>
+              <BreadcrumbPage className="text-darkpink">My Account</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -65,34 +56,19 @@ export default function MyAccount() {
           <Tabs defaultValue="general-information">
             <div className="overflow-x-auto scrollbar-hide pb-2">
               <TabsList className="w-max min-w-full bg-transparent lg:grid lg:grid-cols-5 2xl:gap-0 flex gap-0 mb-10">
-                <TabsTrigger
-                  value="general-information"
-                  className="text-xl whitespace-nowrap"
-                >
+                <TabsTrigger value="general-information" className="text-xl whitespace-nowrap">
                   General Information
                 </TabsTrigger>
-                <TabsTrigger
-                  value="service-preferences"
-                  className="text-xl whitespace-nowrap"
-                >
+                <TabsTrigger value="service-preferences" className="text-xl whitespace-nowrap">
                   Service Preferences
                 </TabsTrigger>
-                <TabsTrigger
-                  value="photos"
-                  className="text-xl whitespace-nowrap"
-                >
+                <TabsTrigger value="photos" className="text-xl whitespace-nowrap">
                   Photos
                 </TabsTrigger>
-                <TabsTrigger
-                  value="stories"
-                  className="text-xl whitespace-nowrap"
-                >
+                <TabsTrigger value="stories" className="text-xl whitespace-nowrap">
                   Stories
                 </TabsTrigger>
-                <TabsTrigger
-                  value="my-card"
-                  className="text-xl whitespace-nowrap"
-                >
+                <TabsTrigger value="my-card" className="text-xl whitespace-nowrap">
                   My Card
                 </TabsTrigger>
               </TabsList>
@@ -114,12 +90,7 @@ export default function MyAccount() {
             </TabsContent>
           </Tabs>
         </div>
-        <button
-          onClick={handleLogout}
-          className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
+     
       </div>
     </main>
   );
