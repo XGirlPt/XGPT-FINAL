@@ -118,15 +118,15 @@ const Dashboard: React.FC = () => {
               return profile;
             }
 
-            if (profile.adress && profile.adress.trim() !== '') {
-              const coordinates = await fetchCoordinates(profile.adress);
+            if (profile.address && profile.address.trim() !== '') {
+              const coordinates = await fetchCoordinates(profile.address);
               return {
                 ...profile,
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude,
               };
             } else {
-              console.warn(`Adresse invalide pour le profil ${profile.nome}`);
+              console.warn(`addresse invalide pour le profil ${profile.nome}`);
               return profile;
             }
           })
@@ -178,9 +178,10 @@ const Dashboard: React.FC = () => {
           zIndex: 0,
         }}
       />
-      <HeroSection profiles={profiles as Profile[]} />
 
+      <HeroSection profiles={profiles as Profile[]} />
       <RecentStories />
+
       <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
       <MapSection profiles={profiles} />
       <NewestAdds  profiles={profiles as Profile[]}/>

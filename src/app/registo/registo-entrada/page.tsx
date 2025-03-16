@@ -33,7 +33,7 @@ import {
   updateTelefone,
   updateCidade,
   updateDistrito,
-  updateAdress,
+  updateaddress,
   updateLatitude,
   updateLongitude,
 } from '@/backend/actions/ProfileActions';
@@ -65,7 +65,7 @@ const formSchema = z.object({
   hairiness: z.string().optional(),
   tattoos: z.string().optional(),
   sign: z.string().optional(),
-  useAdress: z.boolean().default(false),
+  useaddress: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -88,7 +88,7 @@ export function RegistoEntrada() {
     {
       id: 'basicInfo',
       title: 'Informação Básica',
-      fields: ['name', 'age', 'phone', 'city', 'district', 'address', 'useAdress'],
+      fields: ['name', 'age', 'phone', 'city', 'district', 'address', 'useaddress'],
     },
     {
       id: 'profileInfo',
@@ -116,7 +116,7 @@ export function RegistoEntrada() {
       hairiness: '',
       tattoos: '',
       sign: '',
-      useAdress: false,
+      useaddress: false,
     },
   });
 
@@ -142,7 +142,7 @@ export function RegistoEntrada() {
 
   // Configura o Autocomplete do Google Maps
   useEffect(() => {
-    if (googleLoaded && form.getValues('useAdress') && window.google && !autocompleteRef.current) {
+    if (googleLoaded && form.getValues('useaddress') && window.google && !autocompleteRef.current) {
       const input = document.getElementById('address-input') as HTMLInputElement;
       if (input && window.google?.maps?.places) {
         autocompleteRef.current = new window.google.maps.places.Autocomplete(input, {
@@ -155,7 +155,7 @@ export function RegistoEntrada() {
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
             form.setValue('address', place.formatted_address);
-            dispatch(updateAdress(place.formatted_address));
+            dispatch(updateaddress(place.formatted_address));
             dispatch(updateLatitude(lat));
             dispatch(updateLongitude(lng));
           }
@@ -184,8 +184,8 @@ export function RegistoEntrada() {
   }, []);
 
   // Toggle para usar endereço completo
-  const toggleAdressOption = (checked: boolean) => {
-    form.setValue('useAdress', checked);
+  const toggleaddressOption = (checked: boolean) => {
+    form.setValue('useaddress', checked);
     if (checked) {
       form.setValue('city', '');
       form.setValue('district', '');
@@ -193,7 +193,7 @@ export function RegistoEntrada() {
       dispatch(updateDistrito(''));
     } else {
       form.setValue('address', '');
-      dispatch(updateAdress(''));
+      dispatch(updateaddress(''));
     }
   };
 
@@ -211,11 +211,9 @@ export function RegistoEntrada() {
               control={form.control}
               name={fieldName}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-md font-medium text-gray-400">
-                    {t(`input.${fieldName}`) || fieldName}
-                  </FormLabel>
-                  <FormControl>
+                <FormItem>                <FormLabel className="text-md font-medium text-gray-400">
+                {t(`input.${fieldName}`) || fieldName}
+              </FormLabel>                  <FormControl>
                     {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' || fieldName === 'city' ? (
                       <Input
                         {...field}
@@ -236,14 +234,14 @@ export function RegistoEntrada() {
                         }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'address' && form.getValues('useAdress') ? (
+                    ) : fieldName === 'address' && form.getValues('useaddress') ? (
                       <Input
                         id="address-input"
                         {...field}
                         className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
                         onChange={(e) => {
                           field.onChange(e);
-                          dispatch(updateAdress(e.target.value));
+                          dispatch(updateaddress(e.target.value));
                         }}
                       />
                     ) : fieldName === 'height' ? (
@@ -291,12 +289,12 @@ export function RegistoEntrada() {
                         onChange={(value) => form.setValue('sign', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'useAdress' ? (
+                    ) : fieldName === 'useaddress' ? (
                       <Switch
                         checked={field.value}
                         onCheckedChange={(checked) => {
                           field.onChange(checked);
-                          toggleAdressOption(checked);
+                          toggleaddressOption(checked);
                         }}
                       />
                     ) : null}
@@ -343,11 +341,11 @@ export function RegistoEntrada() {
       dispatch(updateNome(data.name));
       dispatch(updateIdade(data.age));
       dispatch(updateTelefone(data.phone));
-      if (!data.useAdress) {
+      if (!data.useaddress) {
         dispatch(updateCidade(data.city));
         dispatch(updateDistrito(data.district));
       } else {
-        dispatch(updateAdress(data.address));
+        dispatch(updateaddress(data.address));
       }
       toast.success('Dados salvos localmente com sucesso!');
       // Navega para a próxima página

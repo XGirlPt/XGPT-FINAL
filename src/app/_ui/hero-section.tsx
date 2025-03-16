@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import {
@@ -9,23 +10,25 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { HeroImageContainer } from './hero-image-container';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import { pt } from 'date-fns/locale'; // Importando o locale português
-import { MdFiberManualRecord } from 'react-icons/md'; // Ícone de "Live"
+import { pt } from 'date-fns/locale';
+import { MdFiberManualRecord } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../../backend/context/LanguageContext'; 
-import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from "react-icons/fa";
-import { MdVerified } from "react-icons/md";
+import { useLanguage } from '../../backend/context/LanguageContext';
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from 'react-icons/fa';
+import { MdVerified } from 'react-icons/md';
+import { X } from 'lucide-react';
 
+// Variantes de animação para fade-in
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 },
 };
 
+// Variantes para animação em sequência
 const staggerChildren = {
   animate: {
     transition: {
@@ -34,17 +37,24 @@ const staggerChildren = {
   },
 };
 
-const floatingAnimation = {
-  animate: {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: 'easeInOut',
-    },
+// Variantes para os círculos flutuantes dos stories
+const storyCircleVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1, 
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+  exit: { 
+    opacity: 0, 
+    y: -50, 
+    scale: 0.8, 
+    transition: { duration: 0.6, ease: 'easeIn' },
   },
 };
 
+// Interface para os dados dos perfis
 interface Profile {
   nome: string;
   cidade: string;
@@ -57,6 +67,7 @@ interface Profile {
   premium: boolean | string;
 }
 
+// Variantes para os cartões do carrossel
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: {
@@ -69,18 +80,45 @@ const cardVariants = {
   },
 };
 
+// Função para formatar o tempo decorrido
 const timeAgo = (timestamp: string) => {
   const date = new Date(timestamp);
   return formatDistanceToNow(date, { addSuffix: true, locale: pt });
 };
 
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
-  const { t, i18n } = useTranslation();
-  const { language, changeLanguage } = useLanguage();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const [selectedStory, setSelectedStory] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Filtrar perfis com stories
+  const profilesWithStories = profiles.filter(profile => profile.stories && profile.stories.length > 0);
+
+  // Rotação automática dos stories a cada 5 segundos
+  useEffect(() => {
+    if (profilesWithStories.length <= 4) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 4) % profilesWithStories.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [profilesWithStories]);
+
+  // Selecionar os 4 stories a exibir
+  const displayedStories = profilesWithStories.slice(currentIndex, currentIndex + 4);
+  if (displayedStories.length < 4 && profilesWithStories.length > 0) {
+    const remaining = 4 - displayedStories.length;
+    displayedStories.push(...profilesWithStories.slice(0, remaining));
+  }
+
+  const openStory = (story: string) => setSelectedStory(story);
+  const closeStory = () => setSelectedStory(null);
 
   return (
-    <section className="relative py-8 md:px-4">
-      {/* Main content */}
+    <section className="relative md:px-4">
+      {/* Conteúdo principal */}
       <motion.div
         className="text-center"
         initial="initial"
@@ -110,78 +148,97 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             {t('dashboard.meta_description')}
           </motion.p>
 
-          {/* Floating corner images */}
-          <motion.div
-            className="absolute -top-10 lg:top-0 left-0 lg:left-20"
-            variants={floatingAnimation}
-          >
-            <HeroImageContainer
-              src={profiles[0]?.photos[0] || '/logo.webp'}
-              alt="Profile picture"
-            />
-          </motion.div>
-
-          <motion.div
-            className="absolute -top-10 lg:top-0 right-0 lg:right-20"
-            variants={floatingAnimation}
-            animate={{
-              y: [0, -10, 0],
-              transition: {
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 0.5,
-              },
-            }}
-          >
-            <HeroImageContainer
-              src={profiles[1]?.photos[0] || '/logo.webp'}
-              alt="Profile picture"
-            />
-          </motion.div>
-
-          <Link href={`/escort/${profiles[0]?.nome}`} passHref>
+          {/* Círculos flutuantes com stories */}
+          {displayedStories.length > 0 && (
             <motion.div
-              className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10"
-              variants={floatingAnimation}
-              animate={{
-                y: [0, -10, 0],
-                transition: {
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: 1,
-                },
-              }}
+              key={currentIndex}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={storyCircleVariants}
+              className="absolute -top-10 lg:top-0 left-0 lg:left-20 cursor-pointer"
+              onClick={() => openStory(displayedStories[0].stories[0])}
             >
-              <HeroImageContainer
-                src={profiles[5]?.photos[0] || '/logo.webp'}
-                alt="Profile picture"
-              />
+              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
+                <video
+                  src={displayedStories[0].stories[0]}
+                  className="object-cover w-full h-full"
+                  autoPlay
+                  loop
+                  muted
+                />
+              </div>
             </motion.div>
-          </Link>
+          )}
 
-          <motion.div
-            className="absolute -bottom-20 lg:bottom-0 right-0 lg:-right-10"
-            variants={floatingAnimation}
-            animate={{
-              y: [0, -10, 0],
-              transition: {
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 1.5,
-              },
-            }}
-          >
-            <HeroImageContainer
-              src={profiles[3]?.photos[0] || '/logo.webp'}
-              alt="Profile picture"
-            />
-          </motion.div>
+          {displayedStories.length > 1 && (
+            <motion.div
+              key={currentIndex + 1}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={storyCircleVariants}
+              className="absolute -top-10 lg:top-0 right-0 lg:right-20 cursor-pointer"
+              onClick={() => openStory(displayedStories[1].stories[0])}
+            >
+              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
+                <video
+                  src={displayedStories[1].stories[0]}
+                  className="object-cover w-full h-full"
+                  autoPlay
+                  loop
+                  muted
+                />
+              </div>
+            </motion.div>
+          )}
+
+          {displayedStories.length > 2 && (
+            <motion.div
+              key={currentIndex + 2}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={storyCircleVariants}
+              className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10 cursor-pointer"
+              onClick={() => openStory(displayedStories[2].stories[0])}
+            >
+              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
+                <video
+                  src={displayedStories[2].stories[0]}
+                  className="object-cover w-full h-full"
+                  autoPlay
+                  loop
+                  muted
+                />
+              </div>
+            </motion.div>
+          )}
+
+          {displayedStories.length > 3 && (
+            <motion.div
+              key={currentIndex + 3}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={storyCircleVariants}
+              className="absolute -bottom-20 lg:bottom-0 right-0 lg:-right-10 cursor-pointer"
+              onClick={() => openStory(displayedStories[3].stories[0])}
+            >
+              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
+                <video
+                  src={displayedStories[3].stories[0]}
+                  className="object-cover w-full h-full"
+                  autoPlay
+                  loop
+                  muted
+                />
+              </div>
+            </motion.div>
+          )}
         </div>
 
-        {/* Profile Cards Carousel with animation */}
+        {/* Carrossel de Perfis */}
         <motion.div variants={fadeInUp} className="w-full pt-20 lg:pt-0">
           <div className="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-36">
             <Carousel
@@ -189,11 +246,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                 align: 'center',
                 loop: true,
               }}
-              plugins={[
-                Autoplay({
-                  delay: 2000,
-                }),
-              ]}
+              plugins={[Autoplay({ delay: 2000 })]}
             >
               <CarouselContent className="flex gap-4 pb-4">
                 {profiles.map((profile, index) => (
@@ -202,14 +255,11 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                       <Link href={`/escort/${profile.nome}`} passHref>
                         <motion.div
                           variants={cardVariants}
-                          whileHover={{
-                            scale: 1.03,
-                            transition: { duration: 0.2 },
-                          }}
+                          whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
                           whileTap={{ scale: 0.98 }}
                           className="relative bg-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
                         >
-                          {/* Foto de perfil com Nome e Localidade sobrepostos */}
+                          {/* Foto de perfil com Nome e Localidade */}
                           <motion.div className="relative w-full h-[65%] rounded-xl overflow-hidden">
                             <Image
                               src={profile.photos[0]}
@@ -217,7 +267,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                               fill
                               className="object-cover w-full h-full"
                             />
-                            {/* Premium Badge */}
+                            {/* Badge Premium */}
                             {profile.premium && (
                               <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
                                 <FaCrown className="text-white mr-1" />
@@ -237,7 +287,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                                 <span className="text-xs">Stories</span>
                               </div>
                             )}
-                            {/* Gradiente e Nome + Localidade */}
+                            {/* Gradiente com Nome e Localidade */}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
                               <h3 className="text-base md:text-lg font-semibold text-white leading-tight flex items-center gap-1">
                                 {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
@@ -250,14 +300,14 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                           </motion.div>
 
                           {/* Tag e Tempo */}
-                          <div className="bg-pink-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-gray-200 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
+                          <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                             <div className="flex items-start justify-between gap-2">
-                              <span className="block break-words italic text-xs md:text-lg leading-tight max-h-[60px] overflow-hidden font-arial animate-flash">
-                              &quot;{profile.tag}&quot;
+                              <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
+                                "{profile.tag}"
                               </span>
                               <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                             </div>
-                            <div className="text-xs font-arial text-black dark:text-gray-100 flex items-center gap-1 mt-2">
+                            <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-2">
                               <FaClock className="text-yellow-500 h-4 w-4 font-normal" />
                               {timeAgo(profile.tagtimestamp)}
                             </div>
@@ -269,15 +319,35 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                 ))}
               </CarouselContent>
 
-              {/* Custom navigation buttons */}
+              {/* Botões de navegação do carrossel */}
               <div className="flex justify-center gap-2 mt-2">
-                <CarouselPrevious className="static flex translate-x-0 bg-white text-pink-600 dark:text-white dark:bg-black dark-text-white translate-y-0 position-static w-10 h-10 rounded-full" />
-                <CarouselNext className="static flex translate-x-0 bg-pink-600 hover:bg-pink-700 text-white translate-y-0 position-static w-10 h-10 rounded-full" />
+                <CarouselPrevious className="static flex translate-x-0 bg-white text-pink-600 dark:text-white dark:bg-black translate-y-0 w-10 h-10 rounded-full" />
+                <CarouselNext className="static flex translate-x-0 bg-pink-600 hover:bg-pink-700 text-white translate-y-0 w-10 h-10 rounded-full" />
               </div>
             </Carousel>
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Modal de Story */}
+      {selectedStory && (
+        <motion.div
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <video
+            src={selectedStory}
+            className="max-w-[90%] max-h-[90%] rounded-lg"
+            autoPlay
+            controls
+          />
+          <button onClick={closeStory} className="absolute top-4 right-4 text-white">
+            <X size={32} />
+          </button>
+        </motion.div>
+      )}
     </section>
   );
 }

@@ -26,7 +26,7 @@ const RegistoPagamento: React.FC = () => {
   const pelosRedux = useSelector((state: any) => state.profile?.profile.pelos);
   const idadeRedux = useSelector((state: any) => state.profile?.profile.idade);
   const signoRedux = useSelector((state: any) => state.profile?.profile.signo);
-  const adressRedux = useSelector((state: any) => state.profile?.profile.adress);
+  const addressRedux = useSelector((state: any) => state.profile?.profile.address);
   const pagamentoRedux = useSelector((state: any) => state.profile?.profile.pagamento);
   const linguaRedux = useSelector((state: any) => state.profile?.profile.lingua);
   const servicoRedux = useSelector((state: any) => state.profile?.profile.servico);
@@ -55,7 +55,7 @@ const RegistoPagamento: React.FC = () => {
         signo: signoRedux,
         distrito: distritoRedux,
         cidade: cidadeRedux,
-        adress: adressRedux,
+        address: addressRedux,
         longitude: longitudeRedux,
         latitude: latitudeRedux,
         telefone: telefoneRedux,

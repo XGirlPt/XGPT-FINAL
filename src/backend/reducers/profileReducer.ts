@@ -1,4 +1,3 @@
-import {  } from './../actions/ProfileActions';
 import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -18,7 +17,7 @@ import {
   UPDATE_PELOS,
   UPDATE_IDADE,
   UPDATE_CIDADE,
-  UPDATE_ADRESS,
+  UPDATE_ADDRESS,
   UPDATE_DISTRITO,
   UPDATE_LATITUDE,
   UPDATE_LONGITUDE,
@@ -37,10 +36,10 @@ import {
   UPDATE_PROFILES,
   SET_SELECTED_PROFILE,
   UPDATE_TARIFA,
-  
+  SET_PREMIUM, // Nova constante adicionada
 } from '../actions/ProfileActions';
 
-// Define the state type
+// Define o tipo do estado do perfil
 interface Profile {
   userUID: string | null;
   photos: string[];
@@ -51,15 +50,13 @@ interface Profile {
   idade?: number | null;
   altura?: number | null;
   cabelo?: string | null;
-
   cidade?: string | null;
-  adress?: string | null;
+  address?: string | null;
   distrito?: string | null;
   latitude?: number | null;
   longitude?: number | null;
   tag?: string | null;
   mamas?: string | null;
-
   origem?: string | null;
   signo?: string | null;
   corpo?: string | null;
@@ -72,16 +69,15 @@ interface Profile {
   pagamento?: string | null;
   servico?: string | null;
   description?: string | null;
-
   photoURL?: string | null;
   storyURL?: string | null;
   vphotoURL?: string | null;
-
   tarifa?: string | null;
-
   isAuthenticated: boolean;
+  premium: boolean; // Novo campo adicionado
 }
 
+// Define o tipo do estado da aplicação
 interface AppState {
   user: any | null;
   token: string | null;
@@ -94,7 +90,7 @@ interface AppState {
   selectedProfile?: Profile;
 }
 
-// Define the action payload types
+// Define os tipos das ações com payloads
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
   payload: any;
@@ -125,122 +121,122 @@ interface AddProfileDataAction {
 
 interface UpdateNomeAction {
   type: typeof UPDATE_NOME;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateIdadeAction {
   type: typeof UPDATE_IDADE;
-  payload: number;
+  payload: number | null;
 }
 
 interface UpdateCidadeAction {
   type: typeof UPDATE_CIDADE;
-  payload: string;
+  payload: string | null;
 }
 
-interface UpdateAdressAction {
-  type: typeof UPDATE_ADRESS;
-  payload: string;
+interface UpdateAddressAction {
+  type: typeof UPDATE_ADDRESS;
+  payload: string | null;
 }
 
 interface UpdateLatitudeAction {
   type: typeof UPDATE_LATITUDE;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateLongitudeAction {
   type: typeof UPDATE_LONGITUDE;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateTagAction {
   type: typeof UPDATE_TAG;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateMamasAction {
   type: typeof UPDATE_MAMAS;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateAlturaAction {
   type: typeof UPDATE_ALTURA;
-  payload: number;
+  payload: number | null;
 }
 
 interface UpdateDistritoAction {
   type: typeof UPDATE_DISTRITO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateOrigemAction {
   type: typeof UPDATE_ORIGEM;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateSignoAction {
   type: typeof UPDATE_SIGNO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateCorpoAction {
   type: typeof UPDATE_CORPO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateOlhosAction {
   type: typeof UPDATE_OLHOS;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateSeiosAction {
   type: typeof UPDATE_SEIOS;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateTatuagemAction {
   type: typeof UPDATE_TATUAGEM;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateTelefoneAction {
   type: typeof UPDATE_TELEFONE;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdatePelosAction {
   type: typeof UPDATE_PELOS;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateCabeloAction {
   type: typeof UPDATE_CABELO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateLinguaAction {
   type: typeof UPDATE_LINGUA;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdatePagamentoAction {
   type: typeof UPDATE_PAGAMENTO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateServicoAction {
   type: typeof UPDATE_SERVICO;
-  payload: string;
+  payload: string | null;
 }
 
 interface UpdateDescriptionAction {
   type: typeof UPDATE_DESCRIPTION;
-  payload: string;
+  payload: string | null;
 }
 
-interface updateTarifaAction {
+interface UpdateTarifaAction {
   type: typeof UPDATE_TARIFA;
-  payload: string;
+  payload: string | null;
 }
 
 interface SetPhotoUrlAction {
@@ -283,7 +279,12 @@ interface SetSelectedProfileAction {
   payload: Profile;
 }
 
-// Combine the action types in a union
+interface SetPremiumAction {
+  type: typeof SET_PREMIUM;
+  payload: boolean;
+}
+
+// Combina os tipos de ações em uma união
 type ProfileActionTypes =
   | LoginSuccessAction
   | LoginFailureAction
@@ -293,7 +294,7 @@ type ProfileActionTypes =
   | UpdateNomeAction
   | UpdateIdadeAction
   | UpdateCidadeAction
-  | UpdateAdressAction
+  | UpdateAddressAction
   | UpdateDistritoAction
   | UpdateLatitudeAction
   | UpdateLongitudeAction
@@ -310,7 +311,7 @@ type ProfileActionTypes =
   | UpdatePelosAction
   | UpdateCabeloAction
   | UpdateLinguaAction
-  | updateTarifaAction
+  | UpdateTarifaAction
   | UpdatePagamentoAction
   | UpdateServicoAction
   | UpdateDescriptionAction
@@ -322,11 +323,9 @@ type ProfileActionTypes =
   | UpdateStoriesAction
   | UpdateProfilesAction
   | SetSelectedProfileAction
-  | UpdateLongitudeAction
-  | UpdateLatitudeAction;
+  | SetPremiumAction;
 
-
-// Define the initial state
+// Define o estado inicial
 const initialState: AppState = {
   user: null,
   token: null,
@@ -340,11 +339,13 @@ const initialState: AppState = {
     vphotos: [],
     stories: [],
     tag: null,
-    isAuthenticated: false, // Adicione isso
+    isAuthenticated: false,
+    premium: false,
+    
   },
 };
 
-// Define the reducer
+// Define o reducer
 const rootReducer = (
   state = initialState,
   action: ProfileActionTypes
@@ -369,6 +370,7 @@ const rootReducer = (
         error: action.payload,
         isLoggedIn: false,
       };
+
     case LOGOUT:
       return {
         ...state,
@@ -381,8 +383,8 @@ const rootReducer = (
           photos: [],
           stories: [],
           vphotos: [],
-
           isAuthenticated: false,
+          premium: false, // Reseta premium ao fazer logout
         },
       };
 
@@ -435,29 +437,40 @@ const rootReducer = (
         },
       };
 
-    case UPDATE_ADRESS:
+    case UPDATE_ADDRESS:
       return {
         ...state,
         profile: {
           ...state.profile,
-          adress: action.payload,
+          address: action.payload,
         },
       };
 
-      case UPDATE_LATITUDE:
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            latitude: action.payload ? parseFloat(action.payload) : null, // Garante que seja um número ou null
-          },
-        };
-    case UPDATE_LONGITUDE:
+    case UPDATE_LATITUDE:
+      const latitude = action.payload ? parseFloat(action.payload) : null;
+      if (latitude !== null && isNaN(latitude)) {
+        console.error('Latitude inválida:', action.payload);
+        return state;
+      }
       return {
         ...state,
         profile: {
           ...state.profile,
-          longitude: action.payload ? parseFloat(action.payload) : null,
+          latitude,
+        },
+      };
+
+    case UPDATE_LONGITUDE:
+      const longitude = action.payload ? parseFloat(action.payload) : null;
+      if (longitude !== null && isNaN(longitude)) {
+        console.error('Longitude inválida:', action.payload);
+        return state;
+      }
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          longitude,
         },
       };
 
@@ -624,7 +637,10 @@ const rootReducer = (
       };
 
     case SET_PHOTO_URL:
-      console.log('URLs das fotos recebidas no redutor:', action.payload);
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de SET_PHOTO_URL deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
@@ -634,10 +650,10 @@ const rootReducer = (
       };
 
     case SET_VPHOTO_URL:
-      console.log(
-        'URLs das Verification fotos recebidas no redutor:',
-        action.payload
-      );
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de SET_VPHOTO_URL deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
@@ -647,7 +663,10 @@ const rootReducer = (
       };
 
     case SET_STORY_URL:
-      console.log('URLs dos Stories recebidas no redutor:', action.payload);
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de SET_STORY_URL deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
@@ -657,6 +676,10 @@ const rootReducer = (
       };
 
     case UPDATE_PHOTOS:
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de UPDATE_PHOTOS deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
@@ -666,6 +689,10 @@ const rootReducer = (
       };
 
     case UPDATE_VPHOTOS:
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de UPDATE_VPHOTOS deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
@@ -675,11 +702,24 @@ const rootReducer = (
       };
 
     case UPDATE_STORIES:
+      if (!Array.isArray(action.payload)) {
+        console.error('Payload de UPDATE_STORIES deve ser um array');
+        return state;
+      }
       return {
         ...state,
         profile: {
           ...state.profile,
           stories: action.payload,
+        },
+      };
+
+    case SET_PREMIUM:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          premium: action.payload,
         },
       };
 
@@ -689,24 +729,20 @@ const rootReducer = (
         ...state,
         profiles: action.payload.map((profile) => ({
           ...profile,
-          photoURL: profile.photoURL || '', // Garante que photoURL tenha um valor
+          photoURL: profile.photoURL || '',
           storyURL: profile.storyURL || '',
-          vphotoURL: profile.vphotoURL || '', // Garante que photoURL tenha um valor
-
-          // Garante que storyURL tenha um valor
+          vphotoURL: profile.vphotoURL || '',
         })),
       };
 
-    // Define o perfil selecionado com verificação de photos e stories
     case SET_SELECTED_PROFILE:
       return {
         ...state,
         selectedProfile: {
           ...action.payload,
-          photoURL: action.payload.photos?.[0] || '', // Verifica se photos existe e tem pelo menos um item
+          photoURL: action.payload.photos?.[0] || '',
           storyURL: action.payload.stories?.[0] || '',
-          vphotoURL: action.payload.vphotos?.[0] || '', // Verifica se photos existe e tem pelo menos um item
-          // Verifica se stories existe e tem pelo menos um item
+          vphotoURL: action.payload.vphotos?.[0] || '',
         },
       };
 

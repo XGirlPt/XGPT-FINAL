@@ -42,8 +42,8 @@ const ConfirmarEmail = () => {
 
           if (data?.user?.email_confirmed_at) {
             console.log('Email confirmado com sucesso:', data.user);
-            router.push('/registo/registo-entrada');
-          } else {
+            router.push('/registo/subscriptionPlan');
+                    } else {
             console.log('Email ainda não confirmado.');
           }
         } else {

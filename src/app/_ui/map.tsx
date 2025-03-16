@@ -50,6 +50,15 @@ const Map = ({ profiles = [] }: MapProps) => {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
+    console.log('Profiles:', profiles);
+    console.log('Valid Coordinates:', validCoordinates);
+    console.log('Center:', center);
+
+    if (!Array.isArray(center) || center.length !== 2 || typeof center[0] !== 'number' || typeof center[1] !== 'number') {
+      console.error('Invalid center coordinates:', center);
+      return;
+    }
+
     const map = L.map(containerRef.current, {
       center,
       zoom,
@@ -66,18 +75,29 @@ const Map = ({ profiles = [] }: MapProps) => {
       const marker = L.marker([profile.latitude, profile.longitude], { icon: redIcon })
         .addTo(map)
         .bindPopup(
-          `<div style="max-width: 320px; background: white; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-            <img src="${profile.photos[0]}" alt="${profile.nome}" style="width: 100%; height: 120px; object-fit: cover;" />
-            <div style="padding: 0.75rem; text-align: center;">
-              <h3 style="font-size: 1rem; font-weight: 600; color: #300d1b; margin: 0;">${profile.nome}</h3>
-              <div style="display: flex; justify-content: center; align-items: center; gap: 0.25rem; color: #666; font-size: 0.875rem;">
-                <span style="color: #ec4899;">&#x1F4CD;</span> ${profile.cidade}
+          `
+          <a href="/escort/${profile.nome}" style="text-decoration: none; color: inherit; display: block; width: 120px; height: 220px;">
+            <div style="width: 120px; height: 220px; background: #111e; border-radius: 1rem; box-shadow: 0 4px 2px rgba(0, 0, 0, 0.2); overflow: hidden; font-family: Arial, sans-serif; cursor: pointer;">
+              <div style="position: relative; width: 120px; height: 220px;">
+                <img src="${profile.photos[0] || '/logo.webp'}" alt="${profile.nome}" style="width: 100%; height: 100%; object-fit: fill; border-radius: 1rem 1rem 0 0; display: block;" />
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent); padding: 0.5rem;">
+                  <h3 style="font-size: 0.9rem; font-weight: 700; color: white; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.25rem;">
+                    ${profile.nome}
+                    ${profile.certificado ? '<span style="color: #22c55e; font-size: 0.75rem;">✔</span>' : ''}
+                  </h3>
+                  <div style="display: flex; align-items: center; gap: 0.25rem; color: #f1f1f1; font-size: 0.75rem; font-weight: 500;">
+                    <span style="color: #ec4899;">📍</span> ${profile.cidade}
+                  </div>
+                </div>
               </div>
+              <div style="height: 80px; background: #fff;"></div>
             </div>
-          </div>`
+          </a>
+          `
         );
       markersRef.current.push(marker);
     });
+
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();

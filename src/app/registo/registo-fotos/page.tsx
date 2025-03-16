@@ -11,22 +11,28 @@ import { BlurImage } from '@/components/ui/blur-image';
 import { IoTrashBin } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 
 export function RegistoFotos() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const router = useRouter();
 
   // Dados do Redux
   const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
   const photosFromRedux = useSelector((state: any) => state.profile?.profile?.photos || []);
   const vphotosFromRedux = useSelector((state: any) => state.profile?.profile?.vphotos || []);
+  const isPremium = useSelector((state: any) => state.profile?.profile?.premium || false);
 
   // Estado local sincronizado com Redux
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>(photosFromRedux);
   const [vSelectedPhotos, setVSelectedPhotos] = useState<string[]>(vphotosFromRedux);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showPlanChoiceModal, setShowPlanChoiceModal] = useState(false);
 
-  // Limite de fotos (10 para perfil, 1 para verificação)
-  const maxProfilePhotos = 10;
+  // Limite de fotos com base no plano
+  const maxProfilePhotos = isPremium ? 10 : 3;
   const maxVerificationPhotos = 1;
 
   // Sincronizar com Redux na montagem
@@ -38,10 +44,18 @@ export function RegistoFotos() {
   // Função para upload de fotos de perfil
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const files = Array.from(event.target.files).slice(0, maxProfilePhotos - selectedPhotos.length);
+      const files = Array.from(event.target.files);
+      const remainingSlots = maxProfilePhotos - selectedPhotos.length;
+
+      if (remainingSlots <= 0) {
+        setShowUpgradeModal(true);
+        return;
+      }
+
+      const filesToUpload = files.slice(0, remainingSlots);
       const uploadedPhotoURLs: string[] = [];
 
-      const uploadPromises = files.map(async (file) => {
+      const uploadPromises = filesToUpload.map(async (file) => {
         const filePath = `${userUID}/${file.name.toLowerCase().replace(/ /g, '_').replace(/\./g, '_')}.webp`;
         try {
           const { error } = await supabase.storage.from('profileFoto').upload(filePath, file);
@@ -135,9 +149,9 @@ export function RegistoFotos() {
   // Renderizar cards de fotos de perfil
   const renderProfilePhotoCards = () => {
     const photoCards = [];
-    const totalCards = maxProfilePhotos;
 
-    // Adicionar fotos existentes
+    const totalCards = isPremium ? 10 : 4; // 10 para premium, 4 para free (3 fotos + 1 bloqueada)
+
     selectedPhotos.forEach((photoURL, index) => {
       photoCards.push(
         <div
@@ -157,9 +171,9 @@ export function RegistoFotos() {
         </div>
       );
     });
-
-    // Adicionar placeholders até atingir o limite
-    const placeholdersCount = totalCards - selectedPhotos.length;
+  
+    // Adicionar placeholders até atingir o limite de fotos permitidas (3 para free, 10 para premium)
+    const placeholdersCount = maxProfilePhotos - selectedPhotos.length;
     for (let i = 0; i < placeholdersCount; i++) {
       photoCards.push(
         <label
@@ -178,8 +192,32 @@ export function RegistoFotos() {
           </span>
         </label>
       );
+    };
+  
+    // Se o utilizador for free, adicionar a quarta card "bloqueada" sempre
+    if (!isPremium) {
+      photoCards.push(
+        <div
+          key="locked"
+          className="aspect-square bg-[#fff4de] dark:bg-[#27191f] rounded-3xl flex flex-col items-center justify-center cursor-pointer"
+          onClick={() => setShowPlanChoiceModal(true)} // Abre o modal de escolha de plano
+        >
+          <div className="text-yellow-500 mb-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fdb315">
+              <path d="M12 17C10.89 17 10 16.1 10 15C10 13.89 10.89 13 12 13C13.11 13 14 13.89 14 15C14 16.1 13.11 17 12 17M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.89 8 4 8.89 4 10V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V10C20 8.89 19.11 8 18 8M8.9 6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8H8.9V6Z" />
+            </svg>
+          </div>
+          <h3>{t('photos.locked')}</h3>
+          <span className="text-sm text-gray-500 text-center px-4">
+            {t('photos.lockedMessage')}
+          </span>
+          <button className="mt-2 bg-[#fdb315] text-white dark:text-black px-4 py-1 rounded-full text-sm hover:bg-yellow-600">
+            {t('photos.buyNow')}
+          </button>
+        </div>
+      );
     }
-
+  
     return photoCards;
   };
 
@@ -218,7 +256,7 @@ export function RegistoFotos() {
           {t('photos.uploadPhoto')}
         </span>
         <span className="text-xs text-gray-400 text-center mt-1 px-4">
-          {t('photos.verifyMessage')} {/* Ajustado para mensagem de verificação */}
+          {t('photos.verifyMessage')}
         </span>
       </label>
     );
@@ -291,6 +329,50 @@ export function RegistoFotos() {
           </div>
         </div>
       </div>
+
+      {/* Modal de Upgrade para Premium */}
+      <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Atualizar para Premium</DialogTitle>
+            <DialogDescription>
+              {isPremium
+                ? 'Você atingiu o limite de 10 fotos no plano premium.'
+                : 'Você atingiu o limite de 3 fotos no plano gratuito. Atualize para o plano premium para adicionar até 10 fotos e desbloquear mais funcionalidades!'}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowUpgradeModal(false)}>
+              Fechar
+            </Button>
+            {!isPremium && (
+              <Button onClick={() => router.push('/planos')}>
+                Mudar para Premium
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Escolha de Plano */}
+      <Dialog open={showPlanChoiceModal} onOpenChange={setShowPlanChoiceModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Escolha o Seu Plano</DialogTitle>
+            <DialogDescription>
+              Para adicionar mais fotos, escolha um plano premium.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => setShowPlanChoiceModal(false)}>
+              Manter Plano Gratuito
+            </Button>
+            <Button onClick={() => router.push('/planos')}>
+              Mudar para Premium
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

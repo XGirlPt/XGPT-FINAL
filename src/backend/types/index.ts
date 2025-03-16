@@ -20,7 +20,7 @@ export interface Profile {
   distrito: string;
   origem: string;
   cidade: string;
-  adress: string;
+  address: string;
   latitude: number;
   longitude: number;
   peso: string;
@@ -34,7 +34,9 @@ export interface Profile {
   inactive: boolean;
   certificado: boolean;
   live?: boolean;
-  comment?: string[]; // Adicionei a propriedade 'live' aqui, tornando-a opcional
+  comment?: string[];
+  premium: boolean; 
+  // Adicionei a propriedade 'live' aqui, tornando-a opcional
 }
 
 
@@ -56,7 +58,7 @@ export interface UserProfileData {
   signo: string;
   distrito: string;
   cidade: string;
-  adress: string;
+  address: string;
   longitude: string;
   latitude: string;
   telefone: string;
@@ -66,7 +68,8 @@ export interface UserProfileData {
   description: string;
   certificado: boolean;
   status: null;
-  comment?: string[]; // Adicionei a propriedade 'live' aqui, tornando-a opcional
+  comment?: string[];
+  premium: boolean; 
 }
 
 export interface PhotoData {

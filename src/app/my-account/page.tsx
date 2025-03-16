@@ -1,12 +1,15 @@
 'use client';
-import React from 'react';
+
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GeneralInformationForm } from '@/components/forms/general-information-form';
 import { ServicePreferencesForm } from '@/components/forms/service-preferences-form';
 import PhotosForm from '@/components/forms/photos-form';
 import { StoriesForm } from '@/components/forms/stories-form';
 import { MyCardForm } from '@/components/forms/my-card-form';
-
+import { logout } from '@/backend/actions/ProfileActions';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,9 +20,32 @@ import {
 } from '@/components/ui/breadcrumb';
 
 export default function MyAccount() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: any) => state.profile.profile.isAuthenticated);
+
+  // Verifica autenticação e redireciona se não autenticado
+  useEffect(() => {
+    console.log('isAuthenticated:', isAuthenticated); // Para depuração
+    if (isAuthenticated === false) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  // Renderiza apenas se autenticado
+  if (isAuthenticated === false) {
+    return null;
+  }
+
+  // Função de logout
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/login');
+  };
+
   return (
-    <main className="bg-[#f2ebee] dark:bg-[#100007] py-10 ">
-      <div className="container mx-auto relative font-body ">
+    <main className="bg-[#f2ebee] dark:bg-[#100007] py-10">
+      <div className="container mx-auto relative font-body">
         <Breadcrumb>
           <BreadcrumbList className="text-md">
             <BreadcrumbItem>
@@ -88,6 +114,12 @@ export default function MyAccount() {
             </TabsContent>
           </Tabs>
         </div>
+        <button
+          onClick={handleLogout}
+          className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
       </div>
     </main>
   );

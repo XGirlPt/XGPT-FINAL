@@ -160,7 +160,7 @@ export type Database = {
           certificado: string | null;
 
           cidade: string | null;
-          adress: string | null;
+          address: string | null;
           distrito: string | null;
           latitude: number | null;
           longitude: number | null;

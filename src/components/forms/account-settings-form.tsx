@@ -220,7 +220,6 @@ export function AccountSettingsForm() {
                   name="currentPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm text-gray-400">{t('password.current')}</FormLabel>
                       <div className="relative">
                         <FormControl>
                           <Input
@@ -249,7 +248,6 @@ export function AccountSettingsForm() {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm text-gray-400">{t('password.new')}</FormLabel>
                       <div className="relative">
                         <FormControl>
                           <Input
@@ -278,7 +276,6 @@ export function AccountSettingsForm() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm text-gray-400">{t('password.confirm')}</FormLabel>
                       <div className="relative">
                         <FormControl>
                           <Input
