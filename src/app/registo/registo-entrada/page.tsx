@@ -33,7 +33,7 @@ import {
   updateTelefone,
   updateCidade,
   updateDistrito,
-  updateaddress,
+  updateAddress,
   updateLatitude,
   updateLongitude,
 } from '@/backend/actions/ProfileActions';
@@ -155,7 +155,7 @@ export function RegistoEntrada() {
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
             form.setValue('address', place.formatted_address);
-            dispatch(updateaddress(place.formatted_address));
+            dispatch(updateAddress(place.formatted_address));
             dispatch(updateLatitude(lat));
             dispatch(updateLongitude(lng));
           }
