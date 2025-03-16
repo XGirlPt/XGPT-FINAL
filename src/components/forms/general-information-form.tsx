@@ -463,7 +463,9 @@ export function GeneralInformationForm() {
               name={fieldName}
               render={({ field }) => (
                 <FormItem>
-              
+              <FormLabel className="text-md font-medium text-gray-400">
+                    {t(`input.${fieldName}`) || fieldName}
+                  </FormLabel>
                   <FormControl>{renderField(fieldName, field)}</FormControl>
                   <FormMessage className="text-red-500" />
                 </FormItem>

@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { updateServico, updatePagamento, updateLingua, updateDescription } from '@/backend/actions/ProfileActions';
+import { updateServico, updatePagamento, updateLingua, setPremium } from '@/backend/actions/ProfileActions';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
 import FiltroPrice from '@/components/filtros/filtro-tarifa';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { SubscriptionPlan } from '../subscriptionPlan/page';
 
 interface PreferenceOption {
   id: string;
@@ -33,6 +34,7 @@ export function RegistoContacto() {
   const servicoRedux = useSelector((state: any) => state.profile?.profile?.servico || []);
   const pagamentoRedux = useSelector((state: any) => state.profile?.profile?.pagamento || []);
   const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || []);
+  const isPremium = useSelector((state: any) => state.profile?.profile?.premium || false);
 
   // Estado inicial das categorias
   const [categories, setCategories] = useState<PreferenceCategory[]>([
@@ -106,6 +108,7 @@ export function RegistoContacto() {
   ]);
 
   const [activeTab, setActiveTab] = useState('payment');
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
 
   // Sincroniza o estado inicial apenas na montagem
   useEffect(() => {
@@ -127,8 +130,19 @@ export function RegistoContacto() {
     );
   }, []); // Sem dependências, executa apenas na montagem
 
-  // Handle checkbox changes
+  // Handle checkbox changes com limitação para serviços
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
+    if (categoryId === 'services' && !isPremium && checked) {
+      const selectedServices = categories
+        .find((cat) => cat.id === 'services')!
+        .options!.filter((opt) => opt.checked).length;
+
+      if (selectedServices >= 5) {
+        setShowUpgradePopup(true);
+        return;
+      }
+    }
+
     const updatedCategories = categories.map((category) => {
       if (category.id === categoryId && category.options) {
         return {
@@ -228,6 +242,15 @@ export function RegistoContacto() {
     window.location.href = '/registo/registo-fotos';
   };
 
+  // Handle seleção de plano no pop-up
+  const handlePlanoSelect = (plano: 'free' | 'premium') => {
+    if (plano === 'premium') {
+      dispatch(setPremium(true));
+      toast.success('Plano Premium selecionado! Continue seu registro com todas as opções desbloqueadas.');
+    }
+    setShowUpgradePopup(false);
+  };
+
   return (
     <div className="p-8 bg-white dark:bg-[#100007] dark:border-gray-800 mt-8 border dark:border-opacity-20 dark:border rounded-3xl">
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
@@ -290,6 +313,30 @@ export function RegistoContacto() {
         </div>
         <div className="mt-4">{getActiveCategoryContent()}</div>
       </div>
+
+      {/* Pop-up de Upgrade */}
+      <Dialog open={showUpgradePopup} onOpenChange={setShowUpgradePopup}>
+        <DialogContent className="sm:max-w-[900px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-darkpink">Escolha um Plano</DialogTitle>
+            <DialogDescription>
+              Você atingiu o limite de 5 serviços no plano gratuito. Escolha o plano Premium para desbloquear até 40 serviços e outros benefícios exclusivos! O pagamento será solicitado no final do registro.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <SubscriptionPlan onPlanoSelect={handlePlanoSelect} />
+          </div>
+          <DialogFooter className="mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setShowUpgradePopup(false)}
+              className="rounded-full"
+            >
+              Continuar Grátis
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

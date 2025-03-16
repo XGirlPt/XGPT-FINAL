@@ -95,6 +95,9 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
   // Filtrar perfis com stories
   const profilesWithStories = profiles.filter(profile => profile.stories && profile.stories.length > 0);
 
+  // Filtrar perfis com tag preenchida para o carrossel
+  const profilesWithTag = profiles.filter(profile => profile.tag && profile.tag.trim() !== '');
+
   // Rotação automática dos stories a cada 5 segundos
   useEffect(() => {
     if (profilesWithStories.length <= 4) return;
@@ -136,9 +139,9 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white"
             variants={fadeInUp}
           >
-            Escort Girls & Errotic
+            Escort Girls & Erotic
             <br />
-            Masseures In Portugal
+            Masseuses In Portugal
           </motion.h1>
 
           <motion.p
@@ -249,7 +252,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               plugins={[Autoplay({ delay: 2000 })]}
             >
               <CarouselContent className="flex gap-4 pb-4">
-                {profiles.map((profile, index) => (
+                {profilesWithTag.map((profile, index) => (
                   Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] && (
                     <CarouselItem key={index} className="basis-1/2 md:basis-1/6">
                       <Link href={`/escort/${profile.nome}`} passHref>
@@ -303,7 +306,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                           <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                             <div className="flex items-start justify-between gap-2">
                               <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
-                              &quot;{profile.tag}&quot;
+                                "{profile.tag}"
                               </span>
                               <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                             </div>
@@ -351,3 +354,5 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
     </section>
   );
 }
+
+export default HeroSection;
