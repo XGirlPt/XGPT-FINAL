@@ -272,12 +272,12 @@ export function GeneralInformationForm() {
   
       // Atualiza o estado no Redux apenas após sucesso
       dispatch(updateNome(data.name));
-      dispatch(updateIdade(data.age));
+      dispatch(updateIdade(data.idade));
       dispatch(updateTelefone(data.phone));
       dispatch(updateCidade(data.city));
       dispatch(updateDistrito(data.district));
       dispatch(updateOrigem(data.origin));
-      dispatch(updateAltura(data.height));
+      dispatch(updateAltura(data.altura));
       dispatch(updateMamas(data.breasts));
       dispatch(updateCorpo(data.body));
       dispatch(updateCabelo(data.hair));
@@ -327,173 +327,171 @@ export function GeneralInformationForm() {
   };
 
   // Função para renderizar os campos com lógica de read-only e filtros
-  const renderField = (fieldname: keyof FormValues, field: any) => {
-    const commonInputClass = "relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200";
+// Função para renderizar os campos com lógica de read-only e filtros
+const renderField = (fieldname: keyof FormValues, field: any) => {
+  const commonInputClass = "relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200";
+  const readOnlyClass = "text-gray-400 dark:text-gray-500 cursor-not-allowed"; // Classe para campos readOnly
 
-    if (useAddress && (fieldname === 'city' || fieldname === 'district')) {
-      return (
-        <Input
-          value={field.value}
-          readOnly
-          className={commonInputClass}
-        />
-      );
-    }
+  if (useAddress && (fieldname === 'city' || fieldname === 'district')) {
+    return (
+      <Input
+        value={field.value}
+        readOnly
+        className={`${commonInputClass} ${readOnlyClass}`} // Combina as classes
+      />
+    );
+  }
 
-    switch (fieldname) {
-      case 'name':
-      case 'age':
-      case 'phone':
-        return <Input {...field} className={commonInputClass} />;
-      case 'city':
-        return <Input {...field} className={commonInputClass} />;
-      case 'district':
+  // Lista de campos que não são filtros
+  const nonFilterFields: (keyof FormValues)[] = ['name', 'age', 'phone', 'city', 'address', 'briefBio', 'liveCam', 'attends'];
+
+  // Renderiza o campo
+  switch (fieldname) {
+    case 'name':
+    case 'age':
+    case 'phone':
+      return <Input {...field} className={commonInputClass} />;
+    case 'city':
+      return <Input {...field} className={commonInputClass} />;
+    case 'district':
+      return <FiltroDistrito value={field.value} onChange={(value) => form.setValue('district', value)} bgColor="bg-[#FFF5F8] dark:bg-[#27191f]" />;
+    case 'address':
+      if (useAddress) {
         return (
-          <FiltroDistrito
-            value={field.value}
-            onChange={(value) => form.setValue('district', value)}
-            bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
-          />
-        );
-      case 'address':
-        if (useAddress) {
-          return (
-            <div className="relative">
-              <Input
-                value={addressInput}
-                onChange={(e) => {
-                  setAddressInput(e.target.value);
-                  fetchSuggestions(e.target.value);
-                }}
-                placeholder="Digite o endereço completo (apenas Portugal)"
-                className={commonInputClass}
-              />
-              {suggestions.length > 0 && (
-                <ul className="absolute z-10 w-full bg-white dark:bg-[#27191f] border border-pink-200 dark:border-[#2D3748] rounded-lg mt-1 max-h-40 overflow-y-auto">
-                  {suggestions.map((suggestion) => (
-                    <li
-                      key={suggestion.id}
-                      onClick={() => handleSuggestionSelect(suggestion)}
-                      className="px-3 py-2 text-sm text-gray-600 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-[#4A5568] cursor-pointer"
-                    >
-                      {suggestion.place_name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          );
-        }
-        return null;
-      case 'origin':
-        return <FiltroOrigem value={field.value} onChange={field.onChange} />;
-      case 'height':
-        return <FiltroAltura value={field.value} onChange={field.onChange} />;
-      case 'breasts':
-        return <FiltroMamas value={field.value} onChange={field.onChange} />;
-      case 'body':
-        return <FiltroCorpo value={field.value} onChange={field.onChange} />;
-      case 'hair':
-        return <FiltroCabelo value={field.value} onChange={field.onChange} />;
-      case 'eyes':
-        return <FiltroOlhos value={field.value} onChange={field.onChange} />;
-      case 'breastSize':
-        return <FiltroPeito value={field.value} onChange={field.onChange} />;
-      case 'hairiness':
-        return <FiltroPelos value={field.value} onChange={field.onChange} />;
-      case 'tattoos':
-        return <FiltroTatuagem value={field.value} onChange={field.onChange} />;
-      case 'sign':
-        return <FiltroSigno value={field.value} onChange={field.onChange} />;
-      case 'selectRate':
-        return <FiltroTarifa value={field.value} onChange={field.onChange} />;
-      case 'briefBio':
-        return <Textarea {...field} />;
-      case 'liveCam':
-        return <Switch checked={field.value} onCheckedChange={field.onChange} />;
-      case 'attends':
-        return (
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                checked={field.value.myPrivateApartment}
-                onCheckedChange={(checked) =>
-                  form.setValue('attends.myPrivateApartment', checked as boolean)
-                }
-              />
-              <span>Apartamento Privado</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                checked={field.value.dislocation}
-                onCheckedChange={(checked) =>
-                  form.setValue('attends.dislocation', checked as boolean)
-                }
-              />
-              <span>Deslocação</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                checked={field.value.hotels}
-                onCheckedChange={(checked) =>
-                  form.setValue('attends.hotels', checked as boolean)
-                }
-              />
-              <span>Hotéis</span>
-            </div>
+          <div className="relative">
+            <Input
+              value={addressInput}
+              onChange={(e) => {
+                setAddressInput(e.target.value);
+                fetchSuggestions(e.target.value);
+              }}
+              placeholder="Digite o endereço completo (apenas Portugal)"
+              className={commonInputClass}
+            />
+            {suggestions.length > 0 && (
+              <ul className="absolute z-10 w-full bg-white dark:bg-[#27191f] border border-pink-200 dark:border-[#2D3748] rounded-lg mt-1 max-h-40 overflow-y-auto">
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.id}
+                    onClick={() => handleSuggestionSelect(suggestion)}
+                    className="px-3 py-2 text-sm text-gray-600 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-[#4A5568] cursor-pointer"
+                  >
+                    {suggestion.place_name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         );
-      default:
-        return null;
-    }
-  };
+      }
+      return null;
+    case 'origin':
+      return <FiltroOrigem value={field.value} onChange={field.onChange} />;
+    case 'height':
+      return <FiltroAltura value={field.value} onChange={field.onChange} />;
+    case 'breasts':
+      return <FiltroMamas value={field.value} onChange={field.onChange} />;
+    case 'body':
+      return <FiltroCorpo value={field.value} onChange={field.onChange} />;
+    case 'hair':
+      return <FiltroCabelo value={field.value} onChange={field.onChange} />;
+    case 'eyes':
+      return <FiltroOlhos value={field.value} onChange={field.onChange} />;
+    case 'breastSize':
+      return <FiltroPeito value={field.value} onChange={field.onChange} />;
+    case 'hairiness':
+      return <FiltroPelos value={field.value} onChange={field.onChange} />;
+    case 'tattoos':
+      return <FiltroTatuagem value={field.value} onChange={field.onChange} />;
+    case 'sign':
+      return <FiltroSigno value={field.value} onChange={field.onChange} />;
+    case 'selectRate':
+      return <FiltroTarifa value={field.value} onChange={field.onChange} />;
+    case 'briefBio':
+      return <Textarea {...field} />;
+    case 'liveCam':
+      return <Switch checked={field.value} onCheckedChange={field.onChange} />;
+    case 'attends':
+      return (
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              checked={field.value.myPrivateApartment}
+              onCheckedChange={(checked) => form.setValue('attends.myPrivateApartment', checked as boolean)}
+            />
+            <span>Apartamento Privado</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              checked={field.value.dislocation}
+              onCheckedChange={(checked) => form.setValue('attends.dislocation', checked as boolean)}
+            />
+            <span>Deslocação</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              checked={field.value.hotels}
+              onCheckedChange={(checked) => form.setValue('attends.hotels', checked as boolean)}
+            />
+            <span>Hotéis</span>
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+};
+  
+  // Atualize o getActiveCategoryContent
+const getActiveCategoryContent = () => {
+  const category = categories.find((cat) => cat.id === activeTab);
+  if (!category) return null;
 
-  // Renderiza o conteúdo da categoria ativa
-  const getActiveCategoryContent = () => {
-    const category = categories.find((cat) => cat.id === activeTab);
-    if (!category) return null;
+  const nonFilterFields: (keyof FormValues)[] = ['name', 'age', 'phone', 'city', 'address', 'briefBio', 'liveCam', 'attends'];
 
-    return (
-      <div className="bg-opacity-40 rounded-3xl p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
-          {category.fields.map((fieldName) => (
-            <FormField
-              key={fieldName}
-              control={form.control}
-              name={fieldName}
-              render={({ field }) => (
-                <FormItem>
-              <FormLabel className="text-md font-medium text-gray-400">
+  return (
+    <div className="bg-opacity-40 rounded-3xl p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
+        {category.fields.map((fieldName) => (
+          <FormField
+            key={fieldName}
+            control={form.control}
+            name={fieldName}
+            render={({ field }) => (
+              <FormItem>
+                {(nonFilterFields.includes(fieldName) || (fieldName === 'district' && useAddress)) && (
+                  <FormLabel className="text-md font-medium text-gray-400">
                     {t(`input.${fieldName}`) || fieldName}
                   </FormLabel>
-                  <FormControl>{renderField(fieldName, field)}</FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
+                )}
+                <FormControl>{renderField(fieldName, field)}</FormControl>
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        ))}
+        {activeTab === 'basicInfo' && (
+          <div className="flex items-center space-x-2 mt-4">
+            <Switch
+              checked={useAddress}
+              onCheckedChange={(checked) => {
+                setUseAddress(checked);
+                if (!checked) {
+                  form.setValue('address', '');
+                  form.setValue('latitude', 0);
+                  form.setValue('longitude', 0);
+                  setAddressInput('');
+                  setSuggestions([]);
+                }
+              }}
             />
-          ))}
-          {activeTab === 'basicInfo' && (
-            <div className="flex items-center space-x-2 mt-4">
-              <Switch
-                checked={useAddress}
-                onCheckedChange={(checked) => {
-                  setUseAddress(checked);
-                  if (!checked) {
-                    form.setValue('address', '');
-                    form.setValue('latitude', 0);
-                    form.setValue('longitude', 0);
-                    setAddressInput('');
-                    setSuggestions([]);
-                  }
-                }}
-              />
-              <span>Usar Endereço Completo</span>
-            </div>
-          )}
-        </div>
+            <span>Usar Endereço Completo</span>
+          </div>
+        )}
       </div>
-    );
-  };
+    </div>
+  );
+};
 
   // Componente de botão para abas
   const TabButton = ({

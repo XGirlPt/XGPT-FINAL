@@ -20,7 +20,7 @@ Landing page:
  [] - cores icon tempo
 
  - Maps: 
- [] - colocar componente maps a funcionar
+ [X] - colocar componente maps a funcionar
 
  - Newest adds:
  [] - melhorar card
@@ -68,3 +68,8 @@ Landing page:
  [] - verification email working properly
  [] - all workflow working with supabase
  [] - correct little design issues
+ [] - block to loggedIn only
+
+
+ [] - Translate all project
+

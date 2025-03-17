@@ -2,9 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import {
   Form,
   FormControl,
@@ -42,13 +43,6 @@ import supabase from '@/backend/database/supabase';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 
-declare global {
-  interface Window {
-    google: any;
-  }
-}
-
-// Schema do formulário ajustado para o registro
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   age: z.string().min(1, { message: 'Age is required' }),
@@ -78,12 +72,16 @@ interface Category {
 
 export function RegistoEntrada() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { t } = useTranslation();
-  const [googleLoaded, setGoogleLoaded] = useState(false);
-  const autocompleteRef = useRef<any>(null);
+  const [useAddress, setUseAddress] = useState(false);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [addressInput, setAddressInput] = useState('');
   const [activeTab, setActiveTab] = useState('basicInfo');
 
-  // Define categorias para as abas
+  // Carregar valores do Redux como estado inicial
+  const profile = useSelector((state: any) => state.profile?.profile || {});
+
   const categories: Category[] = [
     {
       id: 'basicInfo',
@@ -97,80 +95,28 @@ export function RegistoEntrada() {
     },
   ];
 
-  // Inicializa o formulário com valores vazios (registro)
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      age: '',
-      phone: '',
-      city: '',
-      district: '',
-      address: '',
-      height: '',
-      breasts: '',
-      body: '',
-      hair: '',
-      eyes: '',
-      breastSize: '',
-      hairiness: '',
-      tattoos: '',
-      sign: '',
-      useaddress: false,
+      name: profile.nome || '',
+      age: profile.idade || '',
+      phone: profile.telefone || '',
+      city: profile.cidade || '',
+      district: profile.distrito || '',
+      address: profile.address || '',
+      height: profile.height || '',
+      breasts: profile.breasts || '',
+      body: profile.body || '',
+      hair: profile.hair || '',
+      eyes: profile.eyes || '',
+      breastSize: profile.breastSize || '',
+      hairiness: profile.hairiness || '',
+      tattoos: profile.tattoos || '',
+      sign: profile.sign || '',
+      useaddress: profile.useaddress || false,
     },
   });
 
-  // Carrega o Google Maps API
-  useEffect(() => {
-    const loadGoogleAPI = () => {
-      if (typeof window !== 'undefined' && !window.google) {
-        const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
-        if (!existingScript) {
-          const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
-          script.async = true;
-          script.onload = () => setGoogleLoaded(true);
-          script.onerror = (error) => console.error('Erro ao carregar Google Maps:', error);
-          document.body.appendChild(script);
-        } else {
-          setGoogleLoaded(true);
-        }
-      }
-    };
-    if (!googleLoaded) loadGoogleAPI();
-  }, [googleLoaded]);
-
-  // Configura o Autocomplete do Google Maps
-  useEffect(() => {
-    if (googleLoaded && form.getValues('useaddress') && window.google && !autocompleteRef.current) {
-      const input = document.getElementById('address-input') as HTMLInputElement;
-      if (input && window.google?.maps?.places) {
-        autocompleteRef.current = new window.google.maps.places.Autocomplete(input, {
-          types: ['geocode'],
-          componentRestrictions: { country: 'pt' },
-        });
-        autocompleteRef.current.addListener('place_changed', () => {
-          const place = autocompleteRef.current.getPlace();
-          if (place?.formatted_address) {
-            const lat = place.geometry.location.lat();
-            const lng = place.geometry.location.lng();
-            form.setValue('address', place.formatted_address);
-            dispatch(updateAddress(place.formatted_address));
-            dispatch(updateLatitude(lat));
-            dispatch(updateLongitude(lng));
-          }
-        });
-      }
-    }
-    return () => {
-      if (autocompleteRef.current) {
-        autocompleteRef.current.unbindAll();
-        autocompleteRef.current = null;
-      }
-    };
-  }, [googleLoaded, form, dispatch]);
-
-  // Verifica sessão do Supabase
   useEffect(() => {
     const getSession = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -181,10 +127,51 @@ export function RegistoEntrada() {
       }
     };
     getSession();
-  }, []);
 
-  // Toggle para usar endereço completo
-  const toggleaddressOption = (checked: boolean) => {
+    // Sincronizar useAddress com o valor inicial do formulário
+    setUseAddress(form.getValues('useaddress'));
+    setAddressInput(form.getValues('address'));
+  }, [form]);
+
+  const fetchSuggestions = async (query: string) => {
+    if (!query || query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || '';
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      query
+    )}.json?access_token=${accessToken}&types=address,place&limit=5&country=PT`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setSuggestions(data.features || []);
+    } catch (error) {
+      console.error('Erro ao buscar sugestões do Mapbox:', error);
+      toast.error('Erro ao buscar sugestões de endereço.');
+    }
+  };
+
+  const handleSuggestionSelect = (suggestion: any) => {
+    const city = suggestion.context.find((c: any) => c.id.includes('place'))?.text || '';
+    const district = suggestion.context.find((c: any) => c.id.includes('region'))?.text || '';
+    const address = suggestion.place_name || '';
+    const [longitude, latitude] = suggestion.center || [0, 0];
+
+    form.setValue('city', city);
+    form.setValue('district', district);
+    form.setValue('address', address);
+    dispatch(updateCidade(city));
+    dispatch(updateDistrito(district));
+    dispatch(updateAddress(address));
+    dispatch(updateLatitude(latitude));
+    dispatch(updateLongitude(longitude));
+    setAddressInput(address);
+    setSuggestions([]);
+  };
+
+  const toggleAddressOption = (checked: boolean) => {
+    setUseAddress(checked);
     form.setValue('useaddress', checked);
     if (checked) {
       form.setValue('city', '');
@@ -194,13 +181,20 @@ export function RegistoEntrada() {
     } else {
       form.setValue('address', '');
       dispatch(updateAddress(''));
+      dispatch(updateLatitude(0));
+      dispatch(updateLongitude(0));
+      setAddressInput('');
+      setSuggestions([]);
     }
   };
 
-  // Renderiza o conteúdo da aba ativa
   const getActiveCategoryContent = () => {
     const category = categories.find((cat) => cat.id === activeTab);
     if (!category) return null;
+
+    const commonInputClass =
+      'relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200';
+    const readOnlyClass = 'text-gray-400 dark:text-gray-500 cursor-not-allowed';
 
     return (
       <div className="bg-opacity-40 rounded-3xl p-6">
@@ -211,20 +205,70 @@ export function RegistoEntrada() {
               control={form.control}
               name={fieldName}
               render={({ field }) => (
-                <FormItem>                <FormLabel className="text-md font-medium text-gray-400">
-                {t(`input.${fieldName}`) || fieldName}
-              </FormLabel>                  <FormControl>
-                    {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' || fieldName === 'city' ? (
+                <FormItem>
+                  {/* Labels para todos os campos relevantes */}
+                  {fieldName === 'name' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.name') || 'Nome'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'age' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.age') || 'Idade'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'phone' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.phone') || 'Telefone'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'city' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.city') || 'Cidade'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'district' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.district') || 'Distrito'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'address' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.address') || 'Morada Completa'}
+                    </FormLabel>
+                  )}
+                  <FormControl>
+                    {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' ? (
                       <Input
                         {...field}
-                        className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
+                        className={commonInputClass}
                         onChange={(e) => {
                           field.onChange(e);
                           if (fieldName === 'name') dispatch(updateNome(e.target.value));
                           if (fieldName === 'age') dispatch(updateIdade(e.target.value));
                           if (fieldName === 'phone') dispatch(updateTelefone(e.target.value));
-                          if (fieldName === 'city') dispatch(updateCidade(e.target.value));
                         }}
+                      />
+                    ) : fieldName === 'city' && useAddress ? (
+                      <Input
+                        value={field.value}
+                        readOnly
+                        className={`${commonInputClass} ${readOnlyClass}`}
+                      />
+                    ) : fieldName === 'city' ? (
+                      <Input
+                        {...field}
+                        className={commonInputClass}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          dispatch(updateCidade(e.target.value));
+                        }}
+                      />
+                    ) : fieldName === 'district' && useAddress ? (
+                      <Input
+                        value={field.value}
+                        readOnly
+                        className={`${commonInputClass} ${readOnlyClass}`}
                       />
                     ) : fieldName === 'district' ? (
                       <FiltroDistrito
@@ -232,18 +276,54 @@ export function RegistoEntrada() {
                           form.setValue('district', value);
                           dispatch(updateDistrito(value));
                         }}
+                        value={field.value}
+                        disabled={useAddress}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'address' && form.getValues('useaddress') ? (
-                      <Input
-                        id="address-input"
-                        {...field}
-                        className="relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          dispatch(updateAddress(e.target.value));
-                        }}
-                      />
+                    ) : fieldName === 'address' ? (
+                      <div className="flex flex-col gap-2">
+                        <Input
+                          value={addressInput}
+                          onChange={(e) => {
+                            if (useAddress) {
+                              setAddressInput(e.target.value);
+                              fetchSuggestions(e.target.value);
+                              field.onChange(e.target.value);
+                              dispatch(updateAddress(e.target.value));
+                            }
+                          }}
+                          disabled={!useAddress}
+                          placeholder={
+                            useAddress ? 'Digite o endereço completo (apenas Portugal)' : 'Ative para inserir endereço'
+                          }
+                          className={commonInputClass}
+                        />
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              toggleAddressOption(checked);
+                            }}
+                          />
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            {t('input.useaddress') || 'Morada Completa'}
+                          </span>
+                        </div>
+                        {suggestions.length > 0 && useAddress && (
+                          <ul className="absolute z-10 w-full bg-white dark:bg-[#27191f] border border-pink-200 dark:border-[#2D3748] rounded-lg mt-1 max-h-40 overflow-y-auto">
+                            {suggestions.map((suggestion) => (
+                              <li
+                                key={suggestion.id}
+                                onClick={() => handleSuggestionSelect(suggestion)}
+                                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-[#4A5568] cursor-pointer"
+                              >
+                                {suggestion.place_name}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     ) : fieldName === 'height' ? (
                       <FiltroAltura
                         onChange={(value) => form.setValue('height', value)}
@@ -289,14 +369,6 @@ export function RegistoEntrada() {
                         onChange={(value) => form.setValue('sign', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'useaddress' ? (
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          field.onChange(checked);
-                          toggleaddressOption(checked);
-                        }}
-                      />
                     ) : null}
                   </FormControl>
                   <FormMessage className="text-red-500" />
@@ -309,7 +381,6 @@ export function RegistoEntrada() {
     );
   };
 
-  // Componente de botão de aba
   const TabButton = ({
     id,
     title,
@@ -324,20 +395,16 @@ export function RegistoEntrada() {
     <button
       onClick={onClick}
       className={`py-3 px-4 text-left transition-colors focus:outline-none border dark:border-b-gray-800 dark:border-opacity-50 ${
-        isActive
-          ? 'text-darkpink border-l-2 border-l-darkpink font-medium'
-          : 'text-gray-600 hover:text-darkpink'
+        isActive ? 'text-darkpink border-l-2 border-l-darkpink font-medium' : 'text-gray-600 hover:text-darkpink'
       }`}
     >
       {title}
     </button>
   );
 
-  // Função de submissão do formulário
   const handleSubmit = async () => {
     const data = form.getValues();
     try {
-      // Atualiza o Redux com os dados preenchidos
       dispatch(updateNome(data.name));
       dispatch(updateIdade(data.age));
       dispatch(updateTelefone(data.phone));
@@ -348,8 +415,7 @@ export function RegistoEntrada() {
         dispatch(updateAddress(data.address));
       }
       toast.success('Dados salvos localmente com sucesso!');
-      // Navega para a próxima página
-      window.location.href = '/registo/registo-contacto';
+      router.push('/registo/registo-contacto');
     } catch (error) {
       console.error('Erro ao processar o registro:', error);
       toast.error('Erro ao salvar os dados.');
@@ -361,7 +427,9 @@ export function RegistoEntrada() {
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
           <h1 className="text-2xl font-bold">{t('profileR2.createTitle')}</h1>
-          <p className="text-sm text-gray-500">{t('profileR2.createSubtitle')} <strong>Xgirl.pt</strong></p>
+          <p className="text-sm text-gray-500">
+            {t('profileR2.createSubtitle')} <strong>Xgirl.pt</strong>
+          </p>
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
@@ -382,7 +450,6 @@ export function RegistoEntrada() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          {/* Desktop View - Vertical tabs on left */}
           <div className="hidden md:flex gap-8">
             <div className="w-64 flex flex-col">
               {categories.map((category) => (
@@ -397,8 +464,6 @@ export function RegistoEntrada() {
             </div>
             <div className="flex-1">{getActiveCategoryContent()}</div>
           </div>
-
-          {/* Mobile View - Horizontal tabs on top */}
           <div className="md:hidden">
             <div className="flex border-b bg-pink-400 overflow-x-auto">
               {categories.map((category) => (

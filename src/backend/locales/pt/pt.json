@@ -571,12 +571,15 @@
     "fullAddressPlaceholder": "Digite o endereço completo",
     "city": "Cidade",
     "cityPlaceholder": "Digite sua cidade",
-    "district": "Região",
-    "districtPlaceholder": "Digite sua região"
+    "district": "Distrito",
+    "districtPlaceholder": "Digite sua região",
+    "address": "Morada Completa",
+    "useaddress": "Usar Morada"
+
   },
   "button": {
     "back": "Voltar",
-    "createAccount": "Criar Conta"
+    "next": "Seguinte"
   },
 
   "contactData": {

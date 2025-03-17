@@ -1,46 +1,119 @@
+// FiltroDistrito.tsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonFilter from './common-filter';
 import { updateDistrito } from '../../backend/actions/ProfileActions';
+import { updateProfileData } from '@/backend/services/profileService';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-const distritoOptions = [
-  { id: 1, name: 'Lisboa', unavailable: false },
-  { id: 2, name: 'Porto', unavailable: false },
-  { id: 3, name: 'Aveiro', unavailable: false },
-  { id: 4, name: 'Beja', unavailable: false },
-  { id: 5, name: 'Bragança', unavailable: false },
-  { id: 6, name: 'Braga', unavailable: false },
-  { id: 7, name: 'Castelo Branco', unavailable: false },
-  { id: 8, name: 'Coimbra', unavailable: false },
-  { id: 9, name: 'Évora', unavailable: false },
-  { id: 10, name: 'Guarda', unavailable: false },
-  { id: 11, name: 'Leiria', unavailable: false },
-  { id: 12, name: 'Santarém', unavailable: false },
-  { id: 13, name: 'Setúbal', unavailable: false },
-  { id: 14, name: 'Viana do Castelo', unavailable: false },
-  { id: 15, name: 'Vila Real', unavailable: false },
-  { id: 16, name: 'Viseu', unavailable: false },
-  { id: 17, name: 'Madeira', unavailable: false },
-  { id: 18, name: 'Açores', unavailable: false },
-];
+interface FilterOption {
+  id: string; // Valor fixo em português
+  name: string; // Mesmo valor fixo em português para exibição
+}
 
-const FiltroDistrito: React.FC = () => {
+interface FiltroDistritoProps {
+  onChange?: (value: string) => void;
+  value?: string;
+  disabled?: boolean;
+  bgColor?: string;
+}
+
+type DistritoKey =
+  | 'lisboa'
+  | 'porto'
+  | 'aveiro'
+  | 'beja'
+  | 'braganca'
+  | 'braga'
+  | 'casteloBranco'
+  | 'coimbra'
+  | 'evora'
+  | 'guarda'
+  | 'leiria'
+  | 'santarem'
+  | 'setubal'
+  | 'vianaDoCastelo'
+  | 'vilaReal'
+  | 'viseu'
+  | 'madeira'
+  | 'acores';
+
+const FiltroDistrito: React.FC<FiltroDistritoProps> = ({ onChange, value, disabled, bgColor }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const distritoRedux = useSelector(
-    (state: any) => state.profile?.profile?.distrito || null
+    (state: { profile?: { profile?: { distrito?: string; userUID?: string } } }) =>
+      state.profile?.profile?.distrito || ''
+  );
+  const userUID = useSelector(
+    (state: { profile?: { profile?: { distrito?: string; userUID?: string } } }) =>
+      state.profile?.profile?.userUID
   );
 
-  const handleDistritoChange = (newValue: string) => {
-    dispatch(updateDistrito(newValue));
+  // Mapeamento fixo dos distritos em português (Portugal)
+  const distritosEmPortugues: Record<DistritoKey, string> = {
+    lisboa: 'Lisboa',
+    porto: 'Porto',
+    aveiro: 'Aveiro',
+    beja: 'Beja',
+    braganca: 'Bragança',
+    braga: 'Braga',
+    casteloBranco: 'Castelo Branco',
+    coimbra: 'Coimbra',
+    evora: 'Évora',
+    guarda: 'Guarda',
+    leiria: 'Leiria',
+    santarem: 'Santarém',
+    setubal: 'Setúbal',
+    vianaDoCastelo: 'Viana do Castelo',
+    vilaReal: 'Vila Real',
+    viseu: 'Viseu',
+    madeira: 'Madeira',
+    acores: 'Açores',
+  };
+
+  // Opções para o filtro: id e name são o mesmo valor em português
+  const distritoOptions: FilterOption[] = Object.keys(distritosEmPortugues).map((key) => ({
+    id: distritosEmPortugues[key as DistritoKey], // Valor fixo em português
+    name: distritosEmPortugues[key as DistritoKey], // Mesmo valor em português para exibição
+  }));
+
+  const handleDistritoChange = async (selectedId: string) => {
+    const distritoEmPortugues = selectedId; // O valor recebido já é o id em português
+
+    // Atualiza o Redux
+    dispatch(updateDistrito(distritoEmPortugues));
+
+    if (!userUID) {
+      toast.error('Erro: usuário não identificado.');
+      return;
+    }
+
+    try {
+      // Salva no banco de dados
+      await updateProfileData({ distrito: distritoEmPortugues }, userUID);
+      toast.success(t('messages.distritoUpdated'), { position: 'top-right', autoClose: 1000 });
+
+      if (onChange) {
+        onChange(distritoEmPortugues); // Passa o valor em português para o formulário
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar distrito:', error);
+      toast.error(t('messages.distritoUpdateError'));
+    }
   };
 
   return (
     <CommonFilter
-      label="Distrito"
+      label={t('filter.district')} // Label traduzido
       options={distritoOptions}
-      value={distritoRedux}
+      value={value || distritoRedux} // Prioriza o valor do formulário, fallback para Redux
       onChange={handleDistritoChange}
-      placeholder="Distrito"
+      bgColor={bgColor}
+      placeholder={t('filter.select_district')} // Placeholder traduzido
+      disabled={disabled} // Desativa se useAddress estiver ativo
     />
   );
 };

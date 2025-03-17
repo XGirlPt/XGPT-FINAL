@@ -74,7 +74,7 @@ const Registre1: React.FC = () => {
 
       if (!selectedOption) {
         console.warn('Nenhuma opção selecionada. Redirecionando para confirmar-email por padrão.');
-        router.push('/registo/confirmar-email');
+        router.push('/registo/subscriptionPlan');
         return;
       }
 
@@ -105,7 +105,7 @@ const Registre1: React.FC = () => {
           break;
         default:
           console.warn('Opção inválida, redirecionando para /registo/confirmar-email por padrão');
-          router.push('/registo/confirmar-email');
+          router.push('/registo/registo-entrada');
           break;
       }
     } catch (error: any) {

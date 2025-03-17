@@ -12,7 +12,7 @@ import FiltroPrice from '@/components/filtros/filtro-tarifa';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { SubscriptionPlan } from '../subscriptionPlan/page';
+import { SubscriptionPlan } from '../../../components/subscriptionPlan';
 
 interface PreferenceOption {
   id: string;
@@ -110,7 +110,7 @@ export function RegistoContacto() {
   const [activeTab, setActiveTab] = useState('payment');
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
 
-  // Sincroniza o estado inicial apenas na montagem
+  // Sincroniza o estado inicial com Redux apenas na montagem
   useEffect(() => {
     setCategories((prevCategories) =>
       prevCategories.map((category) => ({
@@ -248,7 +248,7 @@ export function RegistoContacto() {
       dispatch(setPremium(true));
       toast.success('Plano Premium selecionado! Continue seu registro com todas as opções desbloqueadas.');
     }
-    setShowUpgradePopup(false);
+    setShowUpgradePopup(false); // Fecha o pop-up sem redirecionar
   };
 
   return (

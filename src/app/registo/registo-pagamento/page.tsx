@@ -35,6 +35,7 @@ const RegistoPagamento: React.FC = () => {
   const distritoRedux = useSelector((state: any) => state.profile?.profile.distrito);
   const latitudeRedux = useSelector((state: any) => state.profile?.profile.latitude);
   const longitudeRedux = useSelector((state: any) => state.profile?.profile.longitude);
+  const premiumRedux =  useSelector((state: any) => state.profile?.profile.premium);
 
   const handleSubmit = async (event: React.MouseEvent) => {
     try {
@@ -65,6 +66,7 @@ const RegistoPagamento: React.FC = () => {
         description: descriptionRedux,
         certificado: false,
         status: null,
+        premium: premiumRedux
       };
 
       // Criar ou atualizar perfil
@@ -81,7 +83,7 @@ const RegistoPagamento: React.FC = () => {
       }
 
       toast.success('Perfil criado/atualizado com sucesso!', { position: 'top-right', autoClose: 1000 });
-      router.push('/minha-conta');
+      router.push('/my-account');
     } catch (error: any) {
       console.error('Erro ao criar perfil:', error.message);
       toast.error('Erro ao finalizar o perfil. Tente novamente.', {
