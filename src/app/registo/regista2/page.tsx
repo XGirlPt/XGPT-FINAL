@@ -74,7 +74,7 @@ const Registre1: React.FC = () => {
 
       if (!selectedOption) {
         console.warn('Nenhuma opção selecionada. Redirecionando para confirmar-email por padrão.');
-        router.push('/registo/subscriptionPlan');
+        router.push('/registo/confirmar-email');
         return;
       }
 
