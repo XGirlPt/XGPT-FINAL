@@ -1,338 +1,274 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-import Image from 'next/image';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
-import CommonInput from '@/components/ui/common-input';
-import SideBarAdmin from './_ui/side-bar-admin';
-import { profileDataService } from '@/backend/services/profileDataService';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePremiumStatus } from '@/backend/actions/ProfileActions';
+import { supabase } from '@/backend/database/supabase';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { Profile } from '@/backend/types';
 
-const AdminPage: React.FC = () => {
-  const [pendingProfiles, setPendingProfiles] = useState<Profile[]>([]);
-  const [approvedProfiles, setApprovedProfiles] = useState<Profile[]>([]);
-  const [inactiveProfiles, setInactiveProfiles] = useState<Profile[]>([]);
-  const [certificatedProfiles, setCertificatedProfiles] = useState<Profile[]>(
-    []
-  );
-  const [NoncertificatedProfiles, setNoncertificatedProfiles] = useState<
-    Profile[]
-  >([]);
-  const [activeSection, setActiveSection] = useState<string>('pending');
-  const [expandedProfile, setExpandedProfile] = useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+interface AdminProfile extends Profile {
+  status: boolean | null; // Adiciona status para refletir ativo/inativo
+}
 
-  const router = useRouter();
-  const userEmail = useSelector((state: any) => state.profile?.profile.email);
+const Admin = () => {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const currentUserUID = useSelector((state: { profile: { userUID?: string } }) => state.profile.userUID);
+  const loading = useSelector((state: { profile: { loading: boolean } }) => state.profile.loading);
+  const error = useSelector((state: { profile: { error?: string | null } }) => state.profile.error);
 
+  const [profiles, setProfiles] = useState<AdminProfile[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Carregar perfis e verificar se o usuário é admin com base no .env
   useEffect(() => {
-    const authorizedEmails =
-      process.env.NEXT_PUBLIC_AUTHORIZED_EMAILS?.split(',') || [];
-    if (!userEmail || !authorizedEmails.includes(userEmail)) {
-      router.push('/login');
-    }
-  }, [userEmail, router]);
-
-  useEffect(() => {
-    fetchProfiles();
-  }, []);
-
-  const fetchProfiles = async () => {
-    try {
-      const [pending, approved, inactive, certificated, nonCertificated] =
-        await Promise.all([
-          profileDataService.getPendingProfiles(),
-          profileDataService.getApprovedProfiles(),
-          profileDataService.getInactiveProfiles(),
-          profileDataService.getCertificatedProfiles(),
-          profileDataService.getNonCertificatedProfiles(),
-        ]);
-
-      setPendingProfiles(pending);
-      setApprovedProfiles(approved);
-      setInactiveProfiles(inactive);
-      setCertificatedProfiles(certificated);
-      setNoncertificatedProfiles(nonCertificated);
-    } catch (error) {
-      console.error('Error fetching profiles:', error);
-      toast.error('Erro ao carregar os perfis. Tente novamente.');
-    }
-  };
-
-  const handleApprove = async (id: number) => {
-    try {
-      await profileDataService.approveProfile(id);
-      const approvedProfile =
-        pendingProfiles.find((profile) => profile.id === id) ||
-        inactiveProfiles.find((profile) => profile.id === id);
-
-      await fetchProfiles();
-      if (approvedProfile) {
-        toast.success(`O perfil de ${approvedProfile.nome} foi aprovado.`);
+    const loadData = async () => {
+      if (!currentUserUID) {
+        console.log('currentUserUID não disponível');
+        toast.error(t('messages.userNotIdentified'));
+        return;
       }
-    } catch (error) {
-      console.error('Error approving profile:', error);
-      toast.error('Erro ao aprovar o perfil. Tente novamente.');
-    }
-  };
 
-  const handleReject = async (id: number) => {
-    try {
-      await profileDataService.rejectProfile(id);
-      const rejectedProfile =
-        approvedProfiles.find((profile) => profile.id === id) ||
-        pendingProfiles.find((profile) => profile.id === id);
+      // Obter o e-mail do usuário atual via Supabase Auth
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData?.user) {
+        console.error('Erro ao obter usuário atual:', userError?.message);
+        toast.error(t('messages.authError'));
+        return;
+      }
 
-      await fetchProfiles();
-      if (rejectedProfile) {
-        toast.success(
-          `O perfil de ${rejectedProfile.nome} foi rejeitado com sucesso.`
+      const userEmail = userData.user.email;
+      console.log('E-mail do usuário atual:', userEmail);
+
+      // Verificar se o e-mail corresponde ao ADMIN_EMAIL do .env
+      const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL; // Ajuste o nome da variável conforme teu .env
+      if (!adminEmail) {
+        console.error('ADMIN_EMAIL não definido no .env');
+        toast.error(t('messages.configError'));
+        return;
+      }
+
+      if (userEmail !== adminEmail) {
+        console.log('Usuário não é admin. E-mail esperado:', adminEmail);
+        toast.error(t('messages.notAdmin'));
+        setIsAdmin(false);
+        return;
+      }
+
+      setIsAdmin(true);
+
+      // Carregar todos os perfis
+      try {
+        const { data, error } = await supabase
+          .from('ProfilesData')
+          .select('*');
+
+        if (error) throw error;
+
+        const fetchedProfiles = await Promise.all(
+          data.map(async (profile) => {
+            const { data: photoData } = await supabase
+              .from('profilephoto')
+              .select('imageurl')
+              .eq('userUID', profile.userUID);
+
+            return {
+              ...profile,
+              photos: photoData ? photoData.map((p) => p.imageurl) : [],
+              status: profile.status ?? null, // Se null, considera pendente
+            } as AdminProfile;
+          })
         );
-      }
-    } catch (error) {
-      console.error('Error rejecting profile:', error);
-      toast.error('Erro ao rejeitar o perfil. Tente novamente.');
-    }
-  };
 
-  const handleRejectCertificado = async (id: number) => {
+        console.log('Perfis carregados:', fetchedProfiles);
+        setProfiles(fetchedProfiles);
+      } catch (err: any) {
+        console.error('Erro ao carregar perfis:', err.message);
+        toast.error(t('messages.fetchError'));
+      }
+    };
+
+    loadData();
+  }, [currentUserUID, dispatch, t]);
+
+  // Função para atualizar o status do perfil (ativo/inativo)
+  const handleToggleStatus = async (userUID: string, currentStatus: boolean | null) => {
+    const newStatus = currentStatus === true ? false : true; // Alterna entre ativo e inativo
     try {
-      await profileDataService.rejectCertificate(id);
-      const rejectedProfile = certificatedProfiles.find(
-        (profile) => profile.id === id
+      await supabase
+        .from('ProfilesData')
+        .update({ status: newStatus })
+        .eq('userUID', userUID);
+
+      setProfiles((prev) =>
+        prev.map((p) => (p.userUID === userUID ? { ...p, status: newStatus } : p))
       );
-
-      await fetchProfiles();
-      if (rejectedProfile) {
-        toast.success(
-          `O perfil de ${rejectedProfile.nome} foi rejeitado com sucesso.`
-        );
-      }
-    } catch (error) {
-      console.error('Error rejecting certificate:', error);
-      toast.error('Erro ao rejeitar o certificado. Tente novamente.');
+      toast.success(t('messages.profileStatusUpdated'));
+    } catch (error: any) {
+      console.error('Erro ao atualizar status:', error.message);
+      toast.error(t('messages.updateError'));
     }
   };
 
-  const handleAceptCertificado = async (id: number) => {
+  // Função para atualizar o status premium
+  const handleTogglePremium = async (userUID: string, currentPremium: boolean) => {
+    const newPremium = !currentPremium;
     try {
-      await profileDataService.acceptCertificate(id);
-      const acceptedProfile = approvedProfiles.find(
-        (profile) => profile.id === id
+      await dispatch(updatePremiumStatus({ userUID, premium: newPremium })).unwrap();
+      setProfiles((prev) =>
+        prev.map((p) => (p.userUID === userUID ? { ...p, premium: newPremium } : p))
       );
+      toast.success(t('messages.premiumUpdated'));
+    } catch (error: any) {
+      console.error('Erro ao atualizar premium:', error.message);
+      toast.error(t('messages.updateError'));
+    }
+  };
 
-      await fetchProfiles();
-      if (acceptedProfile) {
-        toast.success(
-          `O perfil de ${acceptedProfile.nome} foi certificado com sucesso.`
-        );
+  // Função para atualizar o status certificado
+  const handleToggleCertified = async (userUID: string, currentCertified: boolean) => {
+    const newCertified = !currentCertified;
+    try {
+      await supabase
+        .from('ProfilesData')
+        .update({ certificado: newCertified })
+        .eq('userUID', userUID);
+
+      setProfiles((prev) =>
+        prev.map((p) => (p.userUID === userUID ? { ...p, certificado: newCertified } : p))
+      );
+      toast.success(t('messages.certifiedUpdated'));
+    } catch (error: any) {
+      console.error('Erro ao atualizar certificado:', error.message);
+      toast.error(t('messages.updateError'));
+    }
+  };
+
+  // Função para excluir um perfil
+  const handleDeleteProfile = async (userUID: string) => {
+    if (!confirm(t('messages.confirmDelete'))) return;
+
+    try {
+      // Excluir fotos do storage
+      const { data: photos } = await supabase
+        .from('profilephoto')
+        .select('imageurl')
+        .eq('userUID', userUID);
+
+      if (photos && photos.length > 0) {
+        const filePaths = photos.map((photo) => `${userUID}/${photo.imageurl.split('/').pop()}`);
+        await supabase.storage.from('profileFoto').remove(filePaths);
       }
-    } catch (error) {
-      console.error('Error accepting certificate:', error);
-      toast.error('Erro ao certificar o perfil. Tente novamente.');
+
+      // Excluir dados associados
+      await Promise.all([
+        supabase.from('profilephoto').delete().eq('userUID', userUID),
+        supabase.from('VPhoto').delete().eq('userUID', userUID),
+        supabase.from('stories').delete().eq('userUID', userUID),
+        supabase.from('ProfilesData').delete().eq('userUID', userUID),
+      ]);
+
+      setProfiles((prev) => prev.filter((p) => p.userUID !== userUID));
+      toast.success(t('messages.profileDeleted'));
+    } catch (error: any) {
+      console.error('Erro ao excluir perfil:', error.message);
+      toast.error(t('messages.deleteError'));
     }
   };
 
-  const toggleExpandProfile = (id: number) => {
-    setExpandedProfile(expandedProfile === id ? null : id);
-  };
+  if (loading) {
+    return <div className="p-8 text-center">{t('loading')}</div>;
+  }
 
-  const filteredProfiles = (profiles: Profile[]) => {
-    return profiles.filter((profile) =>
-      // Check if nome exists before calling toLowerCase
-      (profile.nome || '').toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  };
+  if (error) {
+    return <div className="p-8 text-center text-red-500">{t('error')}: {error}</div>;
+  }
 
-  const renderProfileList = (
-    profiles: Profile[],
-    title: string,
-    approveHandler?: (id: number) => void,
-    rejectHandler?: (id: number) => void
-  ) => (
-    <div className="ml-10">
-      <h2 className="text-2xl text-white mb-4">{title}</h2>
-      {/* <input
-        type="text"
-        placeholder="Procurar perfis..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-4 px-4 py-2 rounded-lg bg-gray-200 text-gray-900 w-full"
-      /> */}
-      <CommonInput
-        label="Procurar perfis"
-        value={searchTerm}
-        onChange={(e: any) => setSearchTerm(e.target.value)}
-        placeholder="Procurar perfis..."
-        className="mb-4"
-      />
-      {filteredProfiles(profiles).length === 0 ? (
-        <p className="text-white">Nenhum perfil nesta seção</p>
-      ) : (
-        <ul className="space-y-4">
-          {filteredProfiles(profiles).map((profile) => (
-            <li
-              key={profile.id}
-              className="flex flex-col p-6 bg-gray-800 rounded-lg shadow-lg space-y-4"
-            >
-              <div className="flex items-center space-x-6">
-                {profile.photoURL ? (
-                  <Image
-                    src={profile.photoURL || '/logo.webp'}
-                    alt={`Profile Photo`}
-                    className="w-20 h-20 object-cover rounded-full border-2 border-gray-700"
-                    width={80}
-                    height={80}
-                    loading="lazy"
-                  />
-                ) : (
-                  <p className="text-white">Sem fotos</p>
-                )}
-
-                {profile.vphotoURL ? (
-                  <Image
-                    src={profile.vphotoURL || '/logo.webp'}
-                    alt={`Profile Photo`}
-                    className="w-20 h-20 object-cover rounded-full border-2 border-gray-700"
-                    width={80}
-                    height={80}
-                    loading="lazy"
-                  />
-                ) : (
-                  <p className="text-white">Sem fotos</p>
-                )}
-                <div className="flex-1 text-white">
-                  <p className="font-semibold text-xl">Nome: {profile.nome}</p>
-                  <p>Email: {profile.email}</p>
-                  <p>UserUID: {profile.userUID}</p>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  {/* Seta para expandir/colapsar */}
-                  <button
-                    onClick={() => toggleExpandProfile(profile.id)}
-                    className="p-2 rounded-full bg-gray-600 text-white hover:bg-gray-500 transition-all duration-300 flex items-center justify-center w-10 h-10"
-                    aria-label="Expandir/Colapsar perfil"
-                  >
-                    {expandedProfile === profile.id ? '▲' : '▼'}
-                  </button>
-                  {/* Botões Aprovar/Rejeitar */}
-                  {approveHandler && (
-                    <button
-                      onClick={() => approveHandler(profile.id)}
-                      className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all duration-300"
-                    >
-                      Aprovar
-                    </button>
-                  )}
-                  {rejectHandler && (
-                    <button
-                      onClick={() => rejectHandler(profile.id)}
-                      className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all duration-300"
-                    >
-                      Rejeitar
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Informações adicionais (expand/collapse) */}
-              {expandedProfile === profile.id && (
-                <div className="bg-gray-700 p-4 rounded-lg space-y-2 text-white">
-                  <p>Idade: {profile.idade}</p>
-                  <p>Cidade: {profile.cidade}</p>
-                  <p>Distrito: {profile.distrito}</p>
-                  <p>Lingua: {profile.lingua}</p>
-                  <p>Origem: {profile.origem}</p>
-                  <p>Mamas: {profile.mamas}</p>
-                  <p>Altura: {profile.altura}</p>
-                  <p>Tatuagens: {profile.tatuagens}</p>
-                  <p>Pelos: {profile.pelos}</p>
-                  <p>Olhos: {profile.olhos}</p>
-                  <p>Silicone: {profile.seios}</p>
-                  <p>Signo: {profile.signo}</p>
-                  <p>Preço: {profile.tarifa}</p>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-
-  const renderProfiles = () => {
-    switch (activeSection) {
-      case 'pending':
-        return renderProfileList(
-          pendingProfiles,
-          `Perfis Pendentes (${pendingProfiles.length})`,
-          handleApprove,
-          handleReject
-        );
-      case 'approved':
-        return renderProfileList(
-          approvedProfiles,
-          `Perfis Aprovados (${approvedProfiles.length})`,
-          undefined,
-          handleReject
-        ); // Rejeitar aqui também
-      case 'rejected':
-        return renderProfileList(
-          inactiveProfiles,
-          `Perfis Nao Aprovados (${inactiveProfiles.length})`,
-          handleApprove,
-          undefined
-        );
-      case 'certified':
-        return renderProfileList(
-          certificatedProfiles,
-          `Perfis Certificados (${certificatedProfiles.length})`,
-          undefined,
-          handleRejectCertificado
-        ); // Rejeitar aqui também
-
-      case 'noncertified':
-        return renderProfileList(
-          NoncertificatedProfiles,
-          `Perfis Nao Certificados (${NoncertificatedProfiles.length})`,
-          handleAceptCertificado,
-          undefined
-        );
-      default:
-        return <p className="text-white">Selecione uma seção</p>;
-    }
-  };
+  if (!isAdmin) {
+    return <div className="p-8 text-center text-red-500">{t('messages.notAdmin')}</div>;
+  }
 
   return (
-    <div className="min-h-screen flex bg-gray-900">
-      <ToastContainer />
-
-      {/* Sidebar fixada */}
-      <div className="bg-gray-300 w-64 sticky top-0">
-        <SideBarAdmin
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-        />
-      </div>
-
-      <div className="flex-1">
-        <main className="relative">
-          {/* Painel de Administração fixo no topo */}
-          <div className="bg-gray-900 top-0 left-0 right-0 p-6 z-10 border-b border-gray-800 sticky">
-            <h1 className="text-4xl font-bold text-white">
-              Painel de Administração
-            </h1>
-          </div>
-
-          {/* Conteúdo de Perfis com Scroll */}
-          <div className="mt-4 px-10">{renderProfiles()}</div>
-        </main>
+    <div className="p-8 bg-white dark:bg-[#100007] dark:border-gray-800 dark:border-opacity-50 dark:border rounded-3xl">
+      <h1 className="text-3xl font-bold mb-6">{t('admin.title')}</h1>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-100 dark:bg-gray-800">
+              <th className="p-4 font-semibold">{t('admin.name')}</th>
+              <th className="p-4 font-semibold">{t('admin.email')}</th>
+              <th className="p-4 font-semibold">{t('admin.status')}</th>
+              <th className="p-4 font-semibold">{t('admin.premium')}</th>
+              <th className="p-4 font-semibold">{t('admin.certified')}</th>
+              <th className="p-4 font-semibold">{t('admin.actions')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {profiles.map((profile) => (
+              <tr key={profile.userUID} className="border-b dark:border-gray-700">
+                <td className="p-4">{profile.nome}</td>
+                <td className="p-4">{profile.email}</td>
+                <td className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id={`status-${profile.userUID}`}
+                      checked={profile.status === true}
+                      onCheckedChange={() => handleToggleStatus(profile.userUID!, profile.status)}
+                    />
+                    <Label htmlFor={`status-${profile.userUID}`}>
+                      {profile.status === true
+                        ? t('admin.active')
+                        : profile.status === false
+                        ? t('admin.inactive')
+                        : t('admin.pending')}
+                    </Label>
+                  </div>
+                </td>
+                <td className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id={`premium-${profile.userUID}`}
+                      checked={profile.premium}
+                      onCheckedChange={() => handleTogglePremium(profile.userUID!, profile.premium)}
+                    />
+                    <Label htmlFor={`premium-${profile.userUID}`}>
+                      {profile.premium ? t('admin.yes') : t('admin.no')}
+                    </Label>
+                  </div>
+                </td>
+                <td className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id={`certified-${profile.userUID}`}
+                      checked={profile.certificado}
+                      onCheckedChange={() => handleToggleCertified(profile.userUID!, profile.certificado)}
+                    />
+                    <Label htmlFor={`certified-${profile.userUID}`}>
+                      {profile.certificado ? t('admin.yes') : t('admin.no')}
+                    </Label>
+                  </div>
+                </td>
+                <td className="p-4">
+                  <Button
+                    variant="destructive"
+                    className="rounded-full"
+                    onClick={() => handleDeleteProfile(profile.userUID!)}
+                  >
+                    {t('admin.delete')}
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
 
-export default AdminPage;
+export default Admin;

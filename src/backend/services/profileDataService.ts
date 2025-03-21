@@ -3,49 +3,46 @@ import { Profile, UpdateTagResponse, UserProfileData } from '@/backend/types';
 import { supabase } from '../../backend/database/supabase';
 
 export class ProfileDataService {
-  async fetchProfileData(profile: Profile) {
-    const profileWithPhoto = await this.fetchProfilePhotos(profile);
-    const profileWithVPhoto = await this.fetchProfileVPhotos(profileWithPhoto);
-    return profileWithVPhoto;
-  }
 
-  private async fetchProfilePhotos(profile: Profile) {
-    const { data: profilePhotoData } = await supabase
+  private async fetchProfilePhotos(profile: Profile): Promise<Profile> {
+    const { data: profilePhotoData, error: photoError } = await supabase
       .from('profilephoto')
-      .select('*')
+      .select('imageurl')
       .eq('userUID', profile.userUID);
 
-    const profilePhotoURL =
-      profilePhotoData && profilePhotoData.length > 0
-        ? profilePhotoData[0].imageurl
-        : null;
+    if (photoError) {
+      console.error('Erro ao buscar fotos do perfil:', photoError.message);
+      return { ...profile, photos: [] }; // Retorna vazio em caso de erro
+    }
+
+    const photos = profilePhotoData?.map((photo) => photo.imageurl) || [];
+    console.log('Fotos buscadas para o perfil:', photos);
 
     return {
       ...profile,
-      photoURL: profilePhotoURL,
+      photos, // Array com todas as fotos
+      photoURL: photos.length > 0 ? photos[0] : null, // Mantém compatibilidade com photoURL
     };
   }
 
-  private async fetchProfileVPhotos(profile: Profile) {
-    const { data: profileVPhotoData, error: profileVPhotoDataError } =
-      await supabase.from('VPhoto').select('*').eq('userUID', profile.userUID);
+  private async fetchProfileVPhotos(profile: Profile): Promise<Profile> {
+    const { data: profileVPhotoData, error: profileVPhotoDataError } = await supabase
+      .from('VPhoto')
+      .select('imageurl')
+      .eq('userUID', profile.userUID);
 
     if (profileVPhotoDataError) {
-      console.error(
-        'Error fetching verification photo:',
-        profileVPhotoDataError.message
-      );
-      return {
-        ...profile,
-        vphotoURL: null,
-      };
+      console.error('Erro ao buscar fotos de verificação:', profileVPhotoDataError.message);
+      return { ...profile, vphotos: [] };
     }
 
-    const profileVPhotoURL = profileVPhotoData?.[0]?.imageurl || null;
+    const vphotos = profileVPhotoData?.map((vphoto) => vphoto.imageurl) || [];
+    console.log('Fotos de verificação buscadas:', vphotos);
 
     return {
       ...profile,
-      vphotoURL: profileVPhotoURL,
+      vphotos,
+      vphotoURL: vphotos.length > 0 ? vphotos[0] : null, // Mantém compatibilidade
     };
   }
 
@@ -59,6 +56,13 @@ export class ProfileDataService {
 
     return Promise.all(data.map((profile) => this.fetchProfileData(profile)));
   }
+
+  async fetchProfileData(profile: Profile): Promise<Profile> {
+    const profileWithPhoto = await this.fetchProfilePhotos(profile);
+    const profileWithVPhoto = await this.fetchProfileVPhotos(profileWithPhoto);
+    return profileWithVPhoto;
+  }
+
 
   async getApprovedProfiles(): Promise<Profile[]> {
     const { data, error } = await supabase
@@ -215,6 +219,13 @@ export class ProfileDataService {
     return data.status;
   }
 
+
+
+
+
+
+  
+
   static async createProfile(userData: UserProfileData): Promise<null> {
     const { data: profileData, error: profileError } = await supabase
       .from('ProfilesData')
@@ -290,60 +301,54 @@ export class ProfileDataService {
     }
   }
 
-  async fetchProfile(profileName: string) {
-    try {
-      const { data: profileData, error: profileError } = await supabase
-        .from('ProfilesData')
-        .select('*')
-        .eq('nome', decodeURIComponent(profileName))
-        .single();
+// src/backend/services/profileDataService.ts (atualizado)
+async fetchProfile(profileName: string) {
+  try {
+    const { data: profileData, error: profileError } = await supabase
+      .from('ProfilesData')
+      .select('*')
+      .eq('nome', decodeURIComponent(profileName))
+      .single();
 
-      if (profileError) {
-        throw profileError;
-      }
+    if (profileError) throw profileError;
 
-      const { data: comments, error: commentsError } = await supabase
-        .from('comments')
-        .select('*')
-        .eq('comment', profileData.comments);
+    const { data: photoData, error: photoError } = await supabase
+      .from('profilephoto')
+      .select('imageurl')
+      .eq('userUID', profileData.userUID);
 
-      if (commentsError) {
-        throw comments;
-      }
+    if (photoError) throw photoError;
 
-      const { data: photoData, error: photoError } = await supabase
-        .from('profilephoto')
-        .select('*')
-        .eq('userUID', profileData.userUID);
+    const { data: storyData, error: storyError } = await supabase
+      .from('stories')
+      .select('storyurl')
+      .eq('userUID', profileData.userUID);
 
-      if (photoError) {
-        throw photoError;
-      }
+    if (storyError) throw storyError;
 
-      const { data: storyData, error: storyError } = await supabase
-        .from('stories')
-        .select('*')
-        .eq('userUID', profileData.userUID);
+    const combinedProfileData = {
+      ...profileData,
+      photos: photoData?.map((photo) => photo.imageurl) || [], // Alterado de photoURL para photos
+      storyURL: storyData?.map((story) => story.storyurl) || [],
+    };
 
-      if (storyError) {
-        throw storyError;
-      }
+    console.log('Perfil combinado retornado:', combinedProfileData); // Log para depuração
 
-      const combinedProfileData = {
-        ...profileData,
-        photoURL: photoData.map((photo) => photo.imageurl) || [],
-        storyURL: storyData?.map((story) => story.storyurl) || [],
-      };
-
-      return {
-        profile: combinedProfileData,
-        isCertified: profileData.certificado,
-      };
-    } catch (error: any) {
-      console.error('Erro ao buscar perfil:', error.message);
-      throw error;
-    }
+    return {
+      profile: combinedProfileData,
+      isCertified: profileData.certificado || false,
+    };
+  } catch (error: any) {
+    console.error('Erro ao buscar perfil:', error.message);
+    throw error;
   }
+}
+
+
+
+
+
+
   async getSession() {
     try {
       const {

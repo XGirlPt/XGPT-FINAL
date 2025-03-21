@@ -37,21 +37,27 @@ const staggerChildren = {
   },
 };
 
-// Variantes para os círculos flutuantes dos stories
+// Variantes para os círculos flutuantes dos stories com movimento dinâmico
 const storyCircleVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1, 
-    transition: { duration: 0.6, ease: 'easeOut' },
+  hidden: { opacity: 0, y: 50, scale: 0.8, rotate: -10 },
+  visible: {
+    opacity: 1,
+    y: [0, -35, 0],
+    scale: 1,
+    rotate: 1,
+    transition: {
+      y: { repeat: Infinity, repeatType: 'loop', duration: 2, ease: 'easeInOut' },
+      opacity: { duration: 0.8 },
+      scale: { duration: 0.8 },
+      rotate: { duration: 0.8 },
+    },
   },
-  exit: { 
-    opacity: 0, 
-    y: -50, 
-    scale: 0.8, 
-    transition: { duration: 0.6, ease: 'easeIn' },
+  hover: {
+    scale: 1.2,
+    boxShadow: '0px 0px 20px rgba(236, 72, 153, 1)',
+    transition: { duration: 0.3 },
   },
+  exit: { opacity: 0, y: -50, scale: 0.8, rotate: 10, transition: { duration: 0.6, ease: 'easeIn' } },
 };
 
 // Interface para os dados dos perfis
@@ -73,10 +79,7 @@ const cardVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-    },
+    transition: { duration: 0.5, ease: 'easeOut' },
   },
 };
 
@@ -86,10 +89,18 @@ const timeAgo = (timestamp: string) => {
   return formatDistanceToNow(date, { addSuffix: true, locale: pt });
 };
 
+// Posições predefinidas para os círculos flutuantes
+const storyPositions = [
+  '-top-10 lg:top-0 left-0 lg:left-20 w-16 h-16',
+  '-top-10 lg:top-0 right-0 lg:right-20 w-16 h-16',
+  '-bottom-20 lg:bottom-0 left-0 lg:-left-10 w-32 h-32',
+  '-bottom-20 lg:bottom-0 right-0 lg:-right-10 w-24 h-24',
+];
+
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const [selectedStory, setSelectedStory] = useState<string | null>(null);
+  const [selectedStory, setSelectedStory] = useState<{ story: string; profile: Profile } | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Filtrar perfis com stories
@@ -116,12 +127,11 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
     displayedStories.push(...profilesWithStories.slice(0, remaining));
   }
 
-  const openStory = (story: string) => setSelectedStory(story);
+  const openStory = (story: string, profile: Profile) => setSelectedStory({ story, profile });
   const closeStory = () => setSelectedStory(null);
 
   return (
     <section className="relative md:px-4">
-      {/* Conteúdo principal */}
       <motion.div
         className="text-center"
         initial="initial"
@@ -152,109 +162,46 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
           </motion.p>
 
           {/* Círculos flutuantes com stories */}
-          {displayedStories.length > 0 && (
+          {displayedStories.map((profile, index) => (
             <motion.div
-              key={currentIndex}
+              key={`${profile.nome}-${index}`} // Chave única combinando nome e índice
               initial="hidden"
               animate="visible"
               exit="exit"
               variants={storyCircleVariants}
-              className="absolute -top-10 lg:top-0 left-0 lg:left-20 cursor-pointer"
-              onClick={() => openStory(displayedStories[0].stories[0])}
+              whileHover="hover"
+              className={`absolute ${storyPositions[index]} cursor-pointer group`}
+              onClick={() => openStory(profile.stories[0], profile)}
             >
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
+              <div className="relative rounded-full overflow-hidden border-4 border-pink-500 shadow-lg">
+                <div className="absolute inset-0 rounded-full border-2 border-pink-400 opacity-70 animate-[pulse_1.5s_infinite]" />
                 <video
-                  src={displayedStories[0].stories[0]}
+                  src={profile.stories[0]}
                   className="object-cover w-full h-full"
                   autoPlay
                   loop
                   muted
                 />
               </div>
-            </motion.div>
-          )}
-
-          {displayedStories.length > 1 && (
-            <motion.div
-              key={currentIndex + 1}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={storyCircleVariants}
-              className="absolute -top-10 lg:top-0 right-0 lg:right-20 cursor-pointer"
-              onClick={() => openStory(displayedStories[1].stories[0])}
-            >
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
-                <video
-                  src={displayedStories[1].stories[0]}
-                  className="object-cover w-full h-full"
-                  autoPlay
-                  loop
-                  muted
-                />
+              <div className="mt-2 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <p>{profile.nome}</p>
+                <p className="text-gray-300">{profile.cidade}</p>
               </div>
             </motion.div>
-          )}
-
-          {displayedStories.length > 2 && (
-            <motion.div
-              key={currentIndex + 2}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={storyCircleVariants}
-              className="absolute -bottom-20 lg:bottom-0 left-0 lg:-left-10 cursor-pointer"
-              onClick={() => openStory(displayedStories[2].stories[0])}
-            >
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
-                <video
-                  src={displayedStories[2].stories[0]}
-                  className="object-cover w-full h-full"
-                  autoPlay
-                  loop
-                  muted
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {displayedStories.length > 3 && (
-            <motion.div
-              key={currentIndex + 3}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={storyCircleVariants}
-              className="absolute -bottom-20 lg:bottom-0 right-0 lg:-right-10 cursor-pointer"
-              onClick={() => openStory(displayedStories[3].stories[0])}
-            >
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500">
-                <video
-                  src={displayedStories[3].stories[0]}
-                  className="object-cover w-full h-full"
-                  autoPlay
-                  loop
-                  muted
-                />
-              </div>
-            </motion.div>
-          )}
+          ))}
         </div>
 
         {/* Carrossel de Perfis */}
         <motion.div variants={fadeInUp} className="w-full pt-20 lg:pt-0">
           <div className="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-36">
             <Carousel
-              opts={{
-                align: 'center',
-                loop: true,
-              }}
+              opts={{ align: 'center', loop: true }}
               plugins={[Autoplay({ delay: 2000 })]}
             >
               <CarouselContent className="flex gap-4 pb-4">
-                {profilesWithTag.map((profile, index) => (
+                {profilesWithTag.map((profile) => (
                   Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] && (
-                    <CarouselItem key={index} className="basis-1/2 md:basis-1/6">
+                    <CarouselItem key={profile.nome} className="basis-1/2 md:basis-1/6">
                       <Link href={`/escort/${profile.nome}`} passHref>
                         <motion.div
                           variants={cardVariants}
@@ -262,7 +209,6 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                           whileTap={{ scale: 0.98 }}
                           className="relative bg-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
                         >
-                          {/* Foto de perfil com Nome e Localidade */}
                           <motion.div className="relative w-full h-[65%] rounded-xl overflow-hidden">
                             <Image
                               src={profile.photos[0]}
@@ -270,14 +216,12 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                               fill
                               className="object-cover w-full h-full"
                             />
-                            {/* Badge Premium */}
                             {profile.premium && (
                               <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
                                 <FaCrown className="text-white mr-1" />
                                 <span className="text-xs">Premium</span>
                               </div>
                             )}
-                            {/* Badges na imagem */}
                             {profile.live && (
                               <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
                                 <MdFiberManualRecord className="text-white mr-1" />
@@ -290,7 +234,6 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                                 <span className="text-xs">Stories</span>
                               </div>
                             )}
-                            {/* Gradiente com Nome e Localidade */}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
                               <h3 className="text-base md:text-lg font-semibold text-white leading-tight flex items-center gap-1">
                                 {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
@@ -301,8 +244,6 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                               </div>
                             </div>
                           </motion.div>
-
-                          {/* Tag e Tempo */}
                           <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                             <div className="flex items-start justify-between gap-2">
                               <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
@@ -321,8 +262,6 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                   )
                 ))}
               </CarouselContent>
-
-              {/* Botões de navegação do carrossel */}
               <div className="flex justify-center gap-2 mt-2">
                 <CarouselPrevious className="static flex translate-x-0 bg-white text-pink-600 dark:text-white dark:bg-black translate-y-0 w-10 h-10 rounded-full" />
                 <CarouselNext className="static flex translate-x-0 bg-pink-600 hover:bg-pink-700 text-white translate-y-0 w-10 h-10 rounded-full" />
@@ -332,7 +271,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
         </motion.div>
       </motion.div>
 
-      {/* Modal de Story */}
+      {/* Modal de Story com Avatar e Localidade */}
       {selectedStory && (
         <motion.div
           className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
@@ -341,12 +280,44 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
           exit={{ opacity: 0 }}
         >
           <video
-            src={selectedStory}
-            className="max-w-[90%] max-h-[90%] rounded-lg"
+            src={selectedStory.story}
+            className="max-w-[90%] max-h-[90%] rounded-lg z-0"
             autoPlay
             controls
           />
-          <button onClick={closeStory} className="absolute top-4 right-4 text-white">
+          <motion.div
+            className="absolute top-4 right-4 flex items-center gap-3 z-50"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link href={`/escort/${selectedStory.profile.nome}`} passHref>
+              <motion.div
+                className="w-12 h-12 rounded-full overflow-hidden cursor-pointer border-2 border-pink-500 bg-black"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Image
+                  src={selectedStory.profile.photos[0]}
+                  alt={selectedStory.profile.nome}
+                  width={48}
+                  height={48}
+                  className="object-cover rounded-full"
+                />
+              </motion.div>
+            </Link>
+            <div className="text-white">
+              <p className="font-semibold text-lg">{selectedStory.profile.nome}</p>
+              <p className="text-sm text-gray-300 flex items-center gap-1">
+                <FaMapMarkerAlt className="text-pink-600" />
+                {selectedStory.profile.cidade}
+              </p>
+            </div>
+          </motion.div>
+          <button
+            onClick={closeStory}
+            className="absolute top-4 left-4 text-white z-50 p-2 bg-black/50 rounded-full"
+          >
             <X size={32} />
           </button>
         </motion.div>

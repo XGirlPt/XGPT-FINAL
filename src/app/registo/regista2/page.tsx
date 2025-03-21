@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import supabase from '@/backend/database/supabase';
-import { registerUser } from '@/backend/actions/ProfileActions';
+import { registerUser } from '@/backend/reducers/profileSlice';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import FeaturesList from './_ui/FeaturedList';

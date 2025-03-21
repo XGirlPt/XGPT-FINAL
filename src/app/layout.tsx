@@ -9,7 +9,7 @@ import { MainProvider } from '@/provider/MainProvider';
 import { ThemeProvider } from 'next-themes';
 import { interTight, mofugu } from '@/backend/lib/fonts';
 import Script from 'next/script'; // Importar o componente Script
-import "../backend/database/i18n/i18n";
+import "../backend/context/i18n/i18n";
 
 const inter = Inter({ subsets: ['latin'] });
 

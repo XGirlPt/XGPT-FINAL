@@ -3,7 +3,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { updatePhotos, updateVPhotos } from '@/backend/actions/ProfileActions';
+import { updatePhotos, updateVPhotos } from '@/backend/reducers/profileSlice';
 import supabase from '@/backend/database/supabase';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

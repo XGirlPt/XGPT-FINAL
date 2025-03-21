@@ -23,6 +23,10 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  // Logs para depuração (útil para verificar se os dados estão chegando corretamente)
+  console.log('PhotosAndCertificado - selectedProfile:', selectedProfile);
+  console.log('PhotosAndCertificado - photos:', selectedProfile?.photos);
+
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
@@ -42,7 +46,7 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
             onClick={handleCertificadoClick}
             className={`px-4 py-2 rounded-full flex items-center gap-2 transition-colors duration-300
             ${isCertified ? 'bg-green-600 hover:bg-green-500' : 'bg-red-500 hover:bg-red-600'}
-            text-white shadow-lg `}
+            text-white shadow-lg`}
           >
             <span className="text-sm">
               {isCertified
@@ -58,35 +62,27 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
         )}
       </div>
 
+      {/* Grid para exibir as fotos */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {selectedProfile?.photoURL?.length > 0 ? (
-          selectedProfile.photoURL.map((media: string, index: number) => (
+        {selectedProfile?.photos?.length > 0 ? (
+          // Mapeia todas as fotos do array selectedProfile.photos
+          selectedProfile.photos.map((media: string, index: number) => (
             <div
               key={index}
               className="aspect-square relative rounded-3xl overflow-hidden hover:scale-105 transition-transform cursor-pointer"
-              onClick={() => handlePhotoClick(index)}
+              onClick={() => handlePhotoClick(index)} // Clique para abrir a foto
             >
-              {media.endsWith('.mp4') ||
-              media.endsWith('.mov') ||
-              media.endsWith('.webm') ? (
-                <video
-                  autoPlay
-                  controlsList="nodownload"
-                  className="w-full h-full object-cover"
-                >
-                  <source src={media || '/logo.webp'} type="video/mp4" />
-                </video>
-              ) : (
-                <Image
-                  src={media || '/logo.webp'}
-                  alt={`${selectedProfile.nome} - Photo ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              )}
+              <Image
+                src={media || '/logo.webp'} // Usa a URL da foto ou o fallback, igual ao LeftSide
+                alt={`${selectedProfile?.nome || 'Profile'} - Photo ${index + 1}`}
+                fill // Preenche o contêiner
+                className="object-cover" // Garante que a imagem cubra o espaço sem distorção
+                sizes="(max-width: 300px) 100vw, 300px" // Define tamanhos responsivos, consistente com LeftSide
+              />
             </div>
           ))
         ) : (
+          // Caso não haja fotos, exibe uma mensagem
           <div className="relative rounded-xl overflow-hidden w-full h-96 flex items-center justify-center bg-gray-200 dark:bg-gray-700">
             <p className="text-gray-500 dark:text-gray-400">
               {t('profile.no_photos_available')}

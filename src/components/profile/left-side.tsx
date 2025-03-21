@@ -43,8 +43,8 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
         {/* Foto de Perfil */}
         <div className="relative aspect-square rounded-2xl overflow-hidden">
       <Image
-        src={selectedProfile?.photoURL?.[0] || '/logo.webp'}
-        alt={selectedProfile?.nome || 'Profile'}
+      alt={selectedProfile.nome}
+src={selectedProfile?.photos?.[0] || '/logo.webp'} // Usar photos em vez de photoURL        alt={selectedProfile?.nome || 'Profile'}
         fill
         className="object-cover"
         sizes="(max-width: 300px) 100vw, 300px"
@@ -70,20 +70,21 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
 
 
         {/* Nome, Status e Tempo */}
-        <div className="space-y-2">
-        <div className="flex items-center gap-2">
-  <p className="text-lg italic text-gray-600 dark:text-gray-300">
-  &quot;{selectedProfile?.tag || t('profile.no_status_available')}&quot;
-    <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500" size={16} />
-  </p> 
+        {selectedProfile?.tag && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <p className="text-lg italic text-gray-600 dark:text-gray-300">
+                &quot;{selectedProfile.tag}&quot;
+                <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500" size={16} />
+              </p>
+            </div>
 
-</div>
-
-          <div className="flex items-center gap-1">
-            <Image src="/icons/clock.png" alt="clock" width={20} height={20} />
-            <span className="text-sm text-gray-400">{timeAgo(selectedProfile?.tagtimestamp)}</span>
+            <div className="flex items-center gap-1">
+              <Image src="/icons/clock.png" alt="clock" width={20} height={20} />
+              <span className="text-sm text-gray-400">{timeAgo(selectedProfile.tagtimestamp)}</span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Botões de Ação */}
         <div className="space-y-2">

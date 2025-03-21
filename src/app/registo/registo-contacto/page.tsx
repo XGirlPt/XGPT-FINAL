@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { updateServico, updatePagamento, updateLingua, setPremium } from '@/backend/actions/ProfileActions';
+import { updateServico, updatePagamento, updateLingua, updatePremium } from '@/backend/reducers/profileSlice';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -128,7 +128,7 @@ export function RegistoContacto() {
         })),
       }))
     );
-  }, []); // Sem dependências, executa apenas na montagem
+  }, [linguaRedux, pagamentoRedux, servicoRedux]); // Agora está correto!
 
   // Handle checkbox changes com limitação para serviços
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
@@ -245,7 +245,7 @@ export function RegistoContacto() {
   // Handle seleção de plano no pop-up
   const handlePlanoSelect = (plano: 'free' | 'premium') => {
     if (plano === 'premium') {
-      dispatch(setPremium(true));
+      dispatch(updatePremium(true));
       toast.success('Plano Premium selecionado! Continue seu registro com todas as opções desbloqueadas.');
     }
     setShowUpgradePopup(false); // Fecha o pop-up sem redirecionar

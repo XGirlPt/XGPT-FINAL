@@ -1,17 +1,52 @@
+'use client';
+
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { updatePremiumStatus } from '@/backend/actions/ProfileActions'; // Corrigido para importar o thunk correto
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, X, Crown, Gift } from 'lucide-react';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/navigation';
-import { setPremium } from '@/backend/actions/ProfileActions';
+import supabase from '@/backend/database/supabase';
+import { toast } from 'react-toastify';
 
-export function SubscriptionPlan({ onPlanoSelect }: { onPlanoSelect: (plano: 'free' | 'premium') => void }) {
-  const router = useRouter();
+interface SubscriptionPlanProps {
+  userUID: string;
+  onPlanoSelect: () => void;
+}
+
+export function SubscriptionPlan({ userUID, onPlanoSelect }: SubscriptionPlanProps) {
   const dispatch = useDispatch();
 
-  const handlePlanoSelect = (plano: 'free' | 'premium') => {
-    dispatch(setPremium(plano === 'premium'));
-    onPlanoSelect(plano); // Notifica o componente pai da escolha
+  const handlePlanoSelect = async (plano: 'free' | 'premium') => {
+    const isPremium = plano === 'premium';
+
+    if (!userUID) {
+      console.error('userUID não disponível para atualização');
+      toast.error('Erro: Usuário não identificado');
+      return;
+    }
+
+    try {
+      console.log('Tentando atualizar premium para:', isPremium, 'com userUID:', userUID);
+      // Atualiza diretamente no Supabase
+      const { error } = await supabase
+        .from('ProfilesData')
+        .update({ premium: isPremium })
+        .eq('userUID', userUID);
+
+      if (error) throw new Error(error.message);
+
+      console.log('Supabase atualizado com premium:', isPremium);
+      // Usa o thunk para atualizar o Redux
+      await dispatch(updatePremiumStatus({ userUID, premium: isPremium })).unwrap();
+      console.log('Redux atualizado com premium:', isPremium);
+      toast.success('Plano atualizado com sucesso!');
+    } catch (error: any) {
+      console.error('Erro ao atualizar status premium no Supabase:', error.message);
+      toast.error('Erro ao atualizar o plano');
+    }
+
+    onPlanoSelect(); // Fecha o popup
   };
 
   return (

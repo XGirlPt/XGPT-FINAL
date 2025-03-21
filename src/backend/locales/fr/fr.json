@@ -681,7 +681,18 @@
       "ar": "Arabe",
       "de": "Allemand",
       "it": "Italien"
-    }
+    },
+
+  "MySettings": {
+    "home": "Accueil",
+    "myAccount": "Mon Compte",
+    "title": "Paramètres de Mon Compte",
+    "generalInformation": "Informations Générales",
+    "servicePreferences": "Préférences de Service",
+    "photos": "Photos",
+    "stories": "Histoires",
+    "myCard": "Ma Carte"
+  }
   }
   
   

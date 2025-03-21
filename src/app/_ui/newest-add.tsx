@@ -121,14 +121,14 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
           </div>
         </motion.div>
 
-        <div className="relative w-full">
+        <div className="relative w-full py-4">
 
           {/* CARD */}
           <CarouselContent className="-ml-2">
   {profiles.map((profile, index) => (
     <CarouselItem
       key={index}
-      className="basis-1/2 md:basis-1/5 gap-4"
+      className="basis-1/2 md:basis-1/5 gap-8"
     >
       <motion.div
         variants={cardVariants}
@@ -137,8 +137,8 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
           transition: { duration: 0.2 },
         }}
         whileTap={{ scale: 0.95 }}
-        className="relative bg-white dark:bg-[#300d1b] rounded-3xl p-4 shadow-lg overflow-hidden cursor-pointer transform transition-all hover:shadow-2xl
-        flex flex-col justify-between min-h-[320px]"
+        className="relativerounded-3xl  shadow-lg overflow-hidden py-8 cursor-pointer transform transition-all hover:shadow-2xl
+        flex flex-col justify-between"
       >
         {/* Foto de perfil com Nome e Cidade sobrepostos */}
         <motion.div
@@ -160,7 +160,7 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
               {profile.nome}
             </h3>
             <div className="flex items-center gap-1 text-white text-sm">
-              <FaMapMarkerAlt className="text-sm" />
+              <FaMapMarkerAlt className="text-sm text-pink-800" />
               {profile.cidade}
             </div>
           </div>
@@ -174,18 +174,7 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
           className="flex flex-col justify-between flex-1"
         >
           {/* Tag/Status - Efeito de Balão de Mensagem */}
-          <div className="self-start bg-blue-100 dark:bg-[#3a1a2a] text-gray-800 dark:text-white px-3 py-2 rounded-2xl relative shadow-md italic text-sm md:text-base">
-<div className='flex'>
-<span className="italic">&quot;  {profile.tag}&quot;  </span>            
-<FaCommentDots className=" text-pink-600" />
-            </div>
-
-          {/* Tempo passado */}
-          <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-            <FaClock className="text-yellow-500" />
-            {timeAgo(profile.tagtimestamp)}
-          </div>
-          </div>
+      
         </motion.div>
       </motion.div>
     </CarouselItem>

@@ -2,20 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import supabase from '@/backend/database/supabase';
-import { useDispatch } from 'react-redux';
-import {
-  loginSuccess,
-  loginFailure,
-  addProfileData,
-} from '@/backend/actions/ProfileActions';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch } from '@/backend/store';
 import { fetchProfileFromDatabase } from '@/backend/services/profileService';
-import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 import InputWithIcon from './_ui/InputWithIcon';
 import { Button } from '@/components/ui/button';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { addProfileData } from '@/backend/reducers/profileSlice';
+import { login } from '@/backend/actions/ProfileActions';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -23,122 +17,76 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const { loading, error, isLoggedIn, userUID } = useSelector((state: any) => state.profile);
 
+  // Redireciona para /my-account se o usuário já estiver logado
   useEffect(() => {
-    const token = localStorage.getItem('userToken');
-    const storedEmail = localStorage.getItem('email');
-
-    if (token && storedEmail) {
-      dispatch(
-        loginSuccess({
-          email: storedEmail,
-          token,
-          user: { uid: localStorage.getItem('userUID') || '' },
-        })
-      );
-      router.push('/my-account'); // Redireciona para my-account ao carregar
+    if (isLoggedIn && userUID) {
+      router.push('/my-account');
     }
-  }, [dispatch, router]);
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
+  }, [isLoggedIn, userUID, router]);
 
   const handleLogin = async () => {
     setErrorMessage('');
-    const { data: user, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMessage('Email ou senha incorretos.');
-      dispatch(loginFailure(error.message));
-    } else if (user) {
-      const userUID = user.user.id;
-      if (!userUID) {
-        setErrorMessage('Erro ao recuperar os dados do usuário.');
-        return;
+    try {
+      // Dispara o login thunk e espera o resultado
+      const result = await dispatch(login({ email, password })).unwrap();
+      
+      // Verifica se o resultado contém o userUID
+      const uid = result.userUID || result.user?.uid;
+      if (!uid) {
+        throw new Error('UID do usuário não encontrado no resultado do login.');
       }
 
-      try {
-        const profileData = await fetchProfileFromDatabase(userUID);
+      console.log('Login bem-sucedido - userUID:', uid);
+
+      // Busca os dados do perfil e atualiza o estado Redux
+      const profileData = await fetchProfileFromDatabase(uid);
+      if (profileData) {
         dispatch(addProfileData(profileData));
-      } catch (fetchError) {
-        setErrorMessage('Erro ao carregar dados do perfil.');
-        return;
+      } else {
+        console.warn('Nenhum dado de perfil encontrado para o usuário:', uid);
       }
 
-      const token = user.session.refresh_token;
-      dispatch(
-        loginSuccess({
-          email: user.user.email,
-          token,
-          user: { uid: userUID },
-        })
-      );
-
-      localStorage.setItem('userToken', token);
-      localStorage.setItem('email', email);
-      localStorage.setItem('userUID', userUID);
-      router.push('/my-account'); // Redireciona para my-account após login
-    } else {
-      setErrorMessage('Erro ao processar o login.');
+      // O redirecionamento será tratado pelo useEffect
+    } catch (err: any) {
+      const message = err.message || t('loginPage.error') || 'Email ou senha incorretos.';
+      setErrorMessage(message);
+      console.error('Erro ao fazer login:', err);
     }
   };
 
   return (
-    <>
-      <Head>
-        <title>Connexion - X-Girl</title>
-      </Head>
-      <div className="flex flex-col items-center mt-36 h-screen pb-4">
-        <div className="w-full mt-10 max-w-md md:w-1/3 rounded-lg shadow-2xl border px-6 py-6 space-y-4">
-          <h1 className="text-3xl font-extrabold text-center text-pink-500 mb-4">
-            {t('loginPage.title')}
-          </h1>
-          <p className="text-center text-gray-400 text-sm mb-4">
-            {t('loginPage.description')}
-          </p>
-          <div className="space-y-4">
-            <InputWithIcon
-              label={t('loginPage.email')}
-              type="email"
-              placeholder={t('loginPage.email_placeholder')}
-              value={email}
-              onChange={handleEmailChange}
-              required
-            />
-            <InputWithIcon
-              label={t('loginPage.password')}
-              type="password"
-              placeholder={t('loginPage.password_placeholder')}
-              value={password}
-              onChange={handlePasswordChange}
-              required
-            />
-            {errorMessage && (
-              <div className="text-center bg-pink-100 text-pink-500 border border-pink-500 rounded-lg p-2 text-sm">
-                {errorMessage}
-              </div>
-            )}
-          </div>
-          <Button onClick={handleLogin} variant="guarder" className="w-full">
-            {t('loginPage.login_button')}
-          </Button>
-          <div className="text-center mt-4">
-            <Link href="/regista2" className="text-pink-500 hover:text-pink-600 font-semibold">
-              {t('loginPage.register_link')}
-            </Link>
-          </div>
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold mb-6">{t('loginPage.title')}</h1>
+      <div className="w-full max-w-md space-y-4">
+        <InputWithIcon
+          label={t('loginPage.email')}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Digite seu email"
+        />
+        <InputWithIcon
+          label={t('loginPage.password')}
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Digite sua senha"
+        />
+        <Button
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-full bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
+        >
+          {loading ? 'Fazendo login...' : t('loginPage.login_button')}
+        </Button>
+        {(errorMessage || error) && (
+          <p className="text-red-500 text-center">{errorMessage || error}</p>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../backend/actions/ProfileActions';
-import { logoutClubs } from '../../backend/actions/ClubsActions';
+import { setUserUID, setLoggedIn } from '@/backend/reducers/profileSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaUser, FaCog, FaSignOutAlt, FaSearch, FaHome, FaBook, FaPenAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../../backend/context/LanguageContext';
+import { useLanguage } from '@/backend/context/LanguageContext';
 import SearchModal from '../ui/search-modal';
 import { useTheme } from 'next-themes';
 import { BiSolidMoviePlay } from "react-icons/bi";
-import { Search, Globe, SlidersHorizontal, ChevronDown, Menu } from 'lucide-react';
+import { Search, Globe, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { cn } from '@/backend/lib/utils';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -24,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { ThemeToggle } from '../theme-toggle';
+import supabase from '@/backend/database/supabase';
 
 interface HeaderProps {
   blur?: boolean;
@@ -37,40 +37,113 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   const pathname = usePathname();
   const { theme } = useTheme();
 
-  const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
-  const email = useSelector((state: any) => state.profile?.profile?.email || '');
-  const photoUID = useSelector((state: any) => state.profile?.profile?.photos?.[0]);
+  const userUID = useSelector((state: any) => state.profile.userUID);
+  const email = useSelector((state: any) => state.profile.email || '');
+  const photoUID = useSelector((state: any) => state.profile.photos?.[0]);
   const isLoggedIn = useSelector((state: any) => state.profile.isLoggedIn);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [selectedLanguage, setSelectedLanguage] = useState<string>('PT');
-  console.log('Header - isLoggedIn:', isLoggedIn);
+
+  // Sincronizar o estado com a sessão do Supabase ao carregar
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Erro ao obter sessão:', error.message);
+        dispatch(setLoggedIn(false));
+        dispatch(setUserUID(null));
+        return;
+      }
+      if (session) {
+        dispatch(setUserUID(session.user.id));
+        dispatch(setLoggedIn(true));
+        console.log('Sessão sincronizada - userUID:', session.user.id);
+      } else {
+        dispatch(setLoggedIn(false));
+        dispatch(setUserUID(null));
+        console.log('Nenhuma sessão ativa encontrada');
+      }
+    };
+    checkSession();
+
+    // Escutar mudanças na autenticação
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        dispatch(setUserUID(session.user.id));
+        dispatch(setLoggedIn(true));
+        console.log('Usuário logado - userUID:', session.user.id);
+      } else if (event === 'SIGNED_OUT') {
+        dispatch(setLoggedIn(false));
+        dispatch(setUserUID(null));
+        console.log('Usuário deslogado');
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log('Token atualizado:', session?.user.id);
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [dispatch]);
+
+  console.log('Header - isLoggedIn:', isLoggedIn, 'userUID:', userUID);
 
   const handleLanguageChange = (lang: string) => {
     changeLanguage(lang);
     setSelectedLanguage(lang.toUpperCase());
   };
 
-  const handleLogout = () => {
-    if (email) dispatch(logout());
-    else dispatch(logoutClubs());
-    localStorage.removeItem('email');
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userUID');
-    router.push('/');
+  const handleLogout = async () => {
+    try {
+      // Verificar se há uma sessão ativa antes de tentar o logout
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error('Erro ao verificar sessão antes do logout:', sessionError.message);
+      }
+
+      if (session) {
+        // Se houver uma sessão, tentar fazer logout
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.error('Erro ao fazer logout no Supabase:', error.message);
+          throw error;
+        }
+        console.log('Logout realizado com sucesso no Supabase');
+      } else {
+        console.log('Nenhuma sessão ativa encontrada para logout');
+      }
+
+      // Independentemente do resultado do Supabase, limpar o estado local
+      dispatch(setLoggedIn(false));
+      dispatch(setUserUID(null));
+      localStorage.removeItem('email');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userUID');
+
+      console.log('Estado local limpo, redirecionando para /');
+      router.push('/');
+    } catch (error) {
+      console.error('Falha no logout:', error);
+      // Limpar o estado local mesmo em caso de erro no Supabase
+      dispatch(setLoggedIn(false));
+      dispatch(setUserUID(null));
+      localStorage.removeItem('email');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userUID');
+      console.log('Estado local limpo após erro, redirecionando para /');
+      router.push('/');
+    }
   };
 
   const handleMyAccountClick = () => {
-    console.log('Header - Clicou em My Account, isLoggedIn:', isLoggedIn);
-    // Adiciona um pequeno atraso para garantir que o estado esteja sincronizado
-    setTimeout(() => {
-      if (isLoggedIn) {
-        router.push('/my-account');
-      } else {
-        router.push('/login');
-      }
-    }, 100); // 100ms de atraso
+    console.log('Header - Clicou em My Account, isLoggedIn:', isLoggedIn, 'userUID:', userUID);
+    if (isLoggedIn && userUID) {
+      router.push('/my-account');
+    } else {
+      router.push('/login');
+    }
   };
 
   const navigationLinks = [
@@ -89,7 +162,14 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         <div className="hidden lg:grid grid-cols-[200px_1fr_300px] items-center gap-4 pt-2">
           <div className="flex items-center justify-start">
             <Link href="/">
-              <Image src="/logo-white.png" alt="X Girl" width={140} height={140} />
+              <Image 
+                src="/logo-white.png" 
+                alt="X Girl" 
+                width={140} 
+                height={140} 
+                style={{ width: 'auto', height: 'auto' }}
+                priority
+              />
             </Link>
           </div>
           <div className="flex justify-center">
@@ -122,7 +202,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            {userUID ? (
+            {isLoggedIn && userUID ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2 bg-transparent border-none cursor-pointer">
@@ -178,7 +258,13 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         </div>
         <div className="hidden lg:grid grid-cols-[200px_1fr_300px] items-center gap-4 pt-2">
           <div className="opacity-0">
-            <Image src="/logo-white.png" alt="X Girl" width={120} height={120} />
+            <Image 
+              src="/logo-white.png" 
+              alt="X Girl" 
+              width={120} 
+              height={120} 
+              style={{ width: 'auto', height: 'auto' }}
+            />
           </div>
           <div className="flex items-center justify-center gap-6">
             {navigationLinks.map(({ href, label, Icon }) => (

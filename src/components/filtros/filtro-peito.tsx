@@ -1,33 +1,23 @@
+// components/filtros/filtro-peito.tsx
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateSeios } from '../../backend/actions/ProfileActions';
-import { updateProfileData } from '@/backend/services/profileService';
-import CommonFilter from './common-filter';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import CommonFilter from './common-filter';
 
 interface FilterOption {
-  id: string; // Valor fixo em português
-  name: string; // Valor traduzido para exibição
+  id: string;
+  name: string;
 }
 
 interface FiltroPeitoProps {
-  onChange?: (value: string) => void;
+  value: string; // Recebe o valor do react-hook-form
+  onChange: (value: string) => void; // Atualiza o valor no react-hook-form
   bgColor?: string;
 }
 
 type PeitoKey = 'pequeno' | 'grande' | 'xxl';
 
-const FiltroPeito: React.FC<FiltroPeitoProps> = ({ onChange, bgColor }) => {
-  const dispatch = useDispatch();
+const FiltroPeito: React.FC<FiltroPeitoProps> = ({ value, onChange, bgColor }) => {
   const { t } = useTranslation();
-
-  const seiosRedux = useSelector((state: { profile?: { profile?: { seios?: string; userUID?: string } } }) =>
-    state.profile?.profile?.seios || null
-  );
-  const userUID = useSelector((state: { profile?: { profile?: { seios?: string; userUID?: string } } }) =>
-    state.profile?.profile?.userUID
-  );
 
   // Mapeamento fixo das opções de tamanho de peito em português (Portugal)
   const peitosEmPortugues: Record<PeitoKey, string> = {
@@ -45,52 +35,32 @@ const FiltroPeito: React.FC<FiltroPeitoProps> = ({ onChange, bgColor }) => {
 
   // Opções para o filtro: id é o valor em português, name é o valor traduzido
   const peitoOptions: FilterOption[] = Object.keys(peitosEmPortugues).map((key) => ({
-    id: peitosEmPortugues[key as PeitoKey], // Valor fixo em português
-    name: peitosTraduzidos[key as PeitoKey], // Valor traduzido
+    id: peitosEmPortugues[key as PeitoKey],
+    name: peitosTraduzidos[key as PeitoKey],
   }));
 
-  const handleSeiosChange = async (selectedId: string) => {
-    const peitoEmPortugues = selectedId; // O valor recebido já é o id em português
-
-    // Atualiza o Redux
-    dispatch(updateSeios(peitoEmPortugues));
-
-    if (!userUID) {
-      toast.error('Erro: usuário não identificado.');
-      return;
-    }
-
-    try {
-      // Salva no banco de dados
-      await updateProfileData({ seios: peitoEmPortugues }, userUID);
-      toast.success(t('messages.seiosUpdated'), { position: 'top-right', autoClose: 1000 });
-
-      if (onChange) {
-        onChange(peitoEmPortugues); // Passa o valor em português para o formulário
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar tamanho do peito:', error);
-      toast.error(t('messages.seiosUpdateError'));
-    }
+  const handlePeitoChange = (selectedId: string) => {
+    console.log('Peito selecionado:', selectedId);
+    onChange(selectedId); // Apenas atualiza o estado do formulário
   };
 
-  // Valor exibido é o traduzido correspondente ao tamanho do peito em português no Redux
-  const displayedValue = seiosRedux
+  // Valor exibido é o traduzido correspondente ao tamanho do peito em português
+  const displayedValue = value
     ? peitosTraduzidos[
         Object.keys(peitosEmPortugues).find(
-          (key) => peitosEmPortugues[key as PeitoKey] === seiosRedux
+          (key) => peitosEmPortugues[key as PeitoKey] === value
         ) as PeitoKey
       ]
     : null;
 
   return (
     <CommonFilter
-      label={t('filterB.breast_size')} // Label traduzido
+      label={t('filterB.breast_size')}
       options={peitoOptions}
-      value={displayedValue} // Exibe o valor traduzido
-      onChange={handleSeiosChange}
+      value={displayedValue}
+      onChange={handlePeitoChange}
       bgColor={bgColor}
-      placeholder={t('filterB.select_breast_size')} // Placeholder traduzido
+      placeholder={t('filterB.select_breast_size')}
     />
   );
 };

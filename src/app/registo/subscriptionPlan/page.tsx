@@ -5,14 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Check, X, Crown, Gift } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { setPremium } from '@/backend/actions/ProfileActions';
+import { updatePremium } from '@/backend/reducers/profileSlice';
+
 
 export function SubscriptionPlan() {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handlePlanoSelect = (plano: 'free' | 'premium') => {
-    dispatch(setPremium(plano === 'premium'));
+    dispatch(updatePremium(plano === 'premium'));
     setTimeout(() => {
       router.push('/registo/registo-entrada');
     }, 100);

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonFilter from './common-filter';
-import { updateDistrito } from '../../backend/actions/ProfileActions';
+import { updateDistrito, } from '@/backend/reducers/profileSlice';
 import { updateProfileData } from '@/backend/services/profileService';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';

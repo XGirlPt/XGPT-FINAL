@@ -649,7 +649,18 @@
         "ar": "Arabic",
         "de": "German",
         "it": "Italian"
-    }
+    },
+    "MySettings": {
+    "home": "Home",
+    "myAccount": "My Account",
+    "title": "My Account Settings",
+    "generalInformation": "General Information",
+    "servicePreferences": "Service Preferences",
+    "photos": "Photos",
+    "stories": "Stories",
+    "myCard": "My Card"
+  }
+
   }
     
   

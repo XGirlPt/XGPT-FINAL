@@ -1,100 +1,66 @@
+// components/filtros/filtro-cabelo.tsx
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateCabelo } from '../../backend/actions/ProfileActions';
-import { updateProfileData } from '@/backend/services/profileService';
-import CommonFilter from './common-filter';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import CommonFilter from './common-filter';
 
 interface FilterOption {
-  id: string; // Valor fixo em português
-  name: string; // Valor traduzido para exibição
+  id: string;
+  name: string;
 }
 
 interface FiltroCabeloProps {
-  onChange?: (value: string) => void;
+  value: string; // Recebe o valor do react-hook-form
+  onChange: (value: string) => void; // Atualiza o valor no react-hook-form
   bgColor?: string;
 }
 
-type CabeloKey = 'preto' | 'loiro' | 'castanho' | 'ruivo' | 'outro';
+type CabeloKey = 'loiro' | 'castanho' | 'preto' | 'ruivo' | 'grisalho';
 
-const FiltroCabelo: React.FC<FiltroCabeloProps> = ({ onChange, bgColor }) => {
-  const dispatch = useDispatch();
+const FiltroCabelo: React.FC<FiltroCabeloProps> = ({ value, onChange, bgColor }) => {
   const { t } = useTranslation();
 
-  const cabeloRedux = useSelector((state: { profile?: { profile?: { cabelo?: string; userUID?: string } } }) =>
-    state.profile?.profile?.cabelo || null
-  );
-  const userUID = useSelector((state: { profile?: { profile?: { cabelo?: string; userUID?: string } } }) =>
-    state.profile?.profile?.userUID
-  );
-
-  // Mapeamento fixo das opções de cabelo em português (Portugal)
   const cabelosEmPortugues: Record<CabeloKey, string> = {
-    preto: 'Preto',
     loiro: 'Loiro',
     castanho: 'Castanho',
+    preto: 'Preto',
     ruivo: 'Ruivo',
-    outro: 'Outro',
+    grisalho: 'Grisalho',
   };
 
-  // Mapeamento dinâmico para exibição com tradução
   const cabelosTraduzidos: Record<CabeloKey, string> = {
-    preto: t('hair.black'),
     loiro: t('hair.blonde'),
     castanho: t('hair.brown'),
+    preto: t('hair.black'),
     ruivo: t('hair.red'),
-    outro: t('hair.other'),
+    grisalho: t('hair.gray'),
   };
 
-  // Opções para o filtro: id é o valor em português, name é o valor traduzido
   const cabeloOptions: FilterOption[] = Object.keys(cabelosEmPortugues).map((key) => ({
-    id: cabelosEmPortugues[key as CabeloKey], // Valor fixo em português
-    name: cabelosTraduzidos[key as CabeloKey], // Valor traduzido
+    id: cabelosEmPortugues[key as CabeloKey],
+    name: cabelosTraduzidos[key as CabeloKey],
   }));
 
-  const handleCabeloChange = async (selectedId: string) => {
-    const cabeloEmPortugues = selectedId; // O valor recebido já é o id em português
-
-    // Atualiza o Redux
-    dispatch(updateCabelo(cabeloEmPortugues));
-
-    if (!userUID) {
-      toast.error('Erro: usuário não identificado.');
-      return;
-    }
-
-    try {
-      // Salva no banco de dados
-      await updateProfileData({ cabelo: cabeloEmPortugues }, userUID);
-      toast.success(t('messages.cabeloUpdated'), { position: 'top-right', autoClose: 1000 });
-
-      if (onChange) {
-        onChange(cabeloEmPortugues); // Passa o valor em português para o formulário
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar cabelo:', error);
-      toast.error(t('messages.cabeloUpdateError'));
-    }
+  const handleCabeloChange = (selectedId: string) => {
+    console.log('Cabelo selecionado:', selectedId);
+    onChange(selectedId); // Apenas atualiza o estado do formulário
   };
 
-  // Valor exibido é o traduzido correspondente ao cabelo em português no Redux
-  const displayedValue = cabeloRedux
+  const displayedValue = value
     ? cabelosTraduzidos[
         Object.keys(cabelosEmPortugues).find(
-          (key) => cabelosEmPortugues[key as CabeloKey] === cabeloRedux
+          (key) => cabelosEmPortugues[key as CabeloKey] === value
         ) as CabeloKey
       ]
     : null;
 
   return (
     <CommonFilter
-      label={t('filter.hair_color')} // Label traduzido
+      label={t('filter.hair')}
       options={cabeloOptions}
-      value={displayedValue} // Exibe o valor traduzido
+      value={displayedValue}
       onChange={handleCabeloChange}
       bgColor={bgColor}
-      placeholder={t('filter.select_hair_color')} // Placeholder traduzido
+      placeholder={t('filter.select_hair')}
     />
   );
 };

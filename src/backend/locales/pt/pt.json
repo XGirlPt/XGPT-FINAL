@@ -692,5 +692,18 @@
     "ar": "Árabe",
     "de": "Alemão",
     "it": "Italiano"
+  },
+
+  "MySettings": {
+    "home": "Início",
+    "myAccount": "Minha Conta",
+    "title": "Minha Conta",
+    "generalInformation": "Informações Gerais",
+    "servicePreferences": "Preferências de Serviço",
+    "photos": "Fotos",
+    "stories": "Histórias",
+    "myCard": "Meu Cartão"
   }
+
+
 }

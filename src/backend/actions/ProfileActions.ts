@@ -1,281 +1,407 @@
-// ProfileActions.tsx
+// src/backend/actions/ProfileActions.ts
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import supabase from '../database/supabase';
+import { setUserUID } from '../reducers/profileSlice';
+import { profileDataService } from '@/backend/services/profileDataService';
+import {
+  logoutAction,
+  updateNome,
+  updateEmail,
+  updateIdade,
+  updateTelefone,
+  updateOrigem,
+  updateDistrito,
+  updateCidade,
+  updateAltura,
+  updateCabelo,
+  updateCorpo,
+  updateOlhos,
+  updateSeios,
+  updateTatuagem,
+  updateMamas,
+  updatePelos,
+  updateSigno,
+  updateTarifa,
+  updateDescription,
+  updatePremium,
+  updateCertificado,
+  updateLive,
+  updatePhotos,
+  updateStories,
+  updateLingua,
+  updatePagamento,
+  updateServico,
+  updatePeso,
+  updateAddress,
+  updateLatitude,
+  updateLongitude,
+  updateComment,
+  setSelectedProfile,
+} from '../reducers/profileSlice';
+import { Profile, UserProfileData } from '@/backend/types';
 
-// Constantes de ação (em maiúsculas, seguindo a convenção Redux)
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-export const LOGOUT = 'LOGOUT';
-export const REGISTER_USER = 'REGISTER_USER';
-export const ADD_PROFILE_DATA = 'ADD_PROFILE_DATA';
-export const UPDATE_NOME = 'UPDATE_NOME';
-export const UPDATE_USER_ID = 'UPDATE_USER_ID';
-export const UPDATE_IDADE = 'UPDATE_IDADE';
-export const UPDATE_ALTURA = 'UPDATE_ALTURA';
-export const UPDATE_CABELO = 'UPDATE_CABELO';
-export const UPDATE_CORPO = 'UPDATE_CORPO';
-export const UPDATE_MAMAS = 'UPDATE_MAMAS';
-export const UPDATE_OLHOS = 'UPDATE_OLHOS';
-export const UPDATE_ORIGEM = 'UPDATE_ORIGEM';
-export const UPDATE_SEIOS = 'UPDATE_SEIOS';
-export const UPDATE_TATUAGEM = 'UPDATE_TATUAGEM';
-export const UPDATE_TELEFONE = 'UPDATE_TELEFONE';
-export const UPDATE_PELOS = 'UPDATE_PELOS';
-export const UPDATE_DISTRITO = 'UPDATE_DISTRITO';
-export const UPDATE_PHOTOS = 'UPDATE_PHOTOS';
-export const UPDATE_VPHOTOS = 'UPDATE_VPHOTOS';
-export const UPDATE_STORIES = 'UPDATE_STORIES';
-export const UPDATE_TARIFA = 'UPDATE_TARIFA';
-export const SET_USER_ID = 'SET_USER_ID';
-export const UPDATE_PAGAMENTO = 'UPDATE_PAGAMENTO';
-export const UPDATE_SERVICO = 'UPDATE_SERVICO';
-export const UPDATE_LINGUA = 'UPDATE_LINGUA';
-export const UPDATE_CIDADE = 'UPDATE_CIDADE';
-export const UPDATE_ADDRESS = 'UPDATE_ADDRESS'; // Corrigido de 'UPDATE_address'
-export const UPDATE_LATITUDE = 'UPDATE_LATITUDE';
-export const UPDATE_LONGITUDE = 'UPDATE_LONGITUDE';
-export const UPDATE_TAG = 'UPDATE_TAG';
-export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION';
-export const SET_PHOTO_URL = 'SET_PHOTO_URL';
-export const SET_VPHOTO_URL = 'SET_VPHOTO_URL';
-export const SET_STORY_URL = 'SET_STORY_URL';
-export const UPDATE_SIGNO = 'UPDATE_SIGNO';
-export const UPDATE_PROFILES = 'UPDATE_PROFILES';
-export const SET_SELECTED_PROFILE = 'SET_SELECTED_PROFILE';
-export const SET_PREMIUM = 'SET_PREMIUM';
-
-// Interface para tipagem de perfis (usada em updateProfiles e setSelectedProfile)
-interface Profile {
-  photoURL?: string;
-  storyURL?: string;
-  vphotoURL?: string;
-  // Adicione outros campos conforme necessário
-}
-
-// Ação de login bem-sucedido
-export const loginSuccess = (userData: { email: string; token: string; user: { uid: string } }) => {
-  if (!userData || !userData.token || !userData.email) {
-    console.error('Dados de login incompletos:', userData);
-    return {
-      type: LOGIN_FAILURE,
-      payload: 'Dados de login incompletos',
-    };
+// Thunk para login
+export const login = createAsyncThunk(
+  'profile/login',
+  async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      return {
+        userUID: data.user.id,
+        email: data.user.email,
+        token: data.session.access_token,
+      };
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Erro ao fazer login');
+    }
   }
-  localStorage.setItem('userToken', userData.token);
-  localStorage.setItem('email', userData.email);
-  localStorage.setItem('userUID', userData.user.uid);
-  return {
-    type: LOGIN_SUCCESS,
-    payload: userData,
-  };
-};
+);
 
-// Ação de falha no login
-export const loginFailure = (error: string) => ({
-  type: LOGIN_FAILURE,
-  payload: error,
-});
+// Thunk para logout
+export const logout = createAsyncThunk<
+  void, // Tipo de retorno
+  void, // Tipo dos argumentos
+  { rejectValue: string } // Tipo do erro
+>(
+  'profile/logout',
+  async (_, { dispatch, rejectWithValue }) => {
+    const { error } = await supabase.auth.signOut();
+    if (error) return rejectWithValue(error.message);
+    dispatch(logoutAction());
+  }
+);
 
-export const logout = () => ({
-  type: LOGOUT,
-});
+// Thunk para registro
+export const register = createAsyncThunk<
+  { email: string; userUID: string }, // Tipo de retorno
+  { email: string; password: string }, // Tipo dos argumentos
+  { rejectValue: string } // Tipo do erro
+>(
+  'profile/register',
+  async ({ email, password }, { rejectWithValue }) => {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) return rejectWithValue(error.message);
+    if (!data.user) return rejectWithValue('Nenhum utilizador retornado após registo');
 
+    const userProfileData: UserProfileData = {
+      userUID: data.user.id,
+      email: data.user.email || email,
+      nome: '',
+      idade: '',
+      tarifa: '',
+      altura: '',
+      cabelo: '',
+      corpo: '',
+      olhos: '',
+      origem: '',
+      seios: '',
+      tatuagem: '',
+      mamas: '',
+      pelos: '',
+      signo: '',
+      distrito: '',
+      cidade: '',
+      address: '',
+      longitude: '',
+      latitude: '',
+      telefone: '',
+      pagamento: '',
+      servico: '',
+      lingua: '',
+      description: '',
+      certificado: false,
+      status: null,
+      premium: false,
+    };
 
+    const profileError = await profileDataService.createProfile(userProfileData);
+    if (profileError) return rejectWithValue('Erro ao criar perfil no banco de dados');
+    return { userUID: data.user.id, email: data.user.email || email };
+  }
+);
 
-// Ação para registrar utilizador
-export const registerUser = (userUID: string, email: string) => ({
-  type: REGISTER_USER,
-  payload: {
-    userUID,
-    email,
-  },
-});
+// Thunk para atualizar o status premium
+export const updatePremiumStatus = createAsyncThunk(
+  'profile/updatePremiumStatus',
+  async ({ userUID, premium }: { userUID: string; premium: boolean }, { dispatch, rejectWithValue }) => {
+    try {
+      const { error } = await supabase.from('ProfilesData').update({ premium }).eq('userUID', userUID);
+      if (error) throw new Error(error.message);
+      dispatch(updatePremium(premium));
+      return premium;
+    } catch (error: any) {
+      console.error('Erro ao atualizar premium:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
-// Ação para adicionar dados ao perfil
-export const addProfileData = (profileData: any) => ({
-  type: ADD_PROFILE_DATA,
-  payload: profileData,
-});
+// Thunk genérico para atualizar um campo individual
+export const updateProfileField = createAsyncThunk(
+  'profile/updateField',
+  async ({ field, value }: { field: string; value: any }, { getState, dispatch, rejectWithValue }) => {
+    const state = getState() as any;
+    const userUID = state.profile.userUID;
+    if (!userUID) return rejectWithValue('Usuário não identificado');
 
-// Ações de atualização de campos específicos
-export const updateNome = (nome: string | null) => ({
-  type: UPDATE_NOME,
-  payload: nome,
-});
+    try {
+      const updateData = { [field]: value };
+      const { error } = await supabase.from('ProfilesData').update(updateData).eq('userUID', userUID);
+      if (error) throw new Error(error.message);
 
-export const updateuserUID = (userUID: string) => ({
-  type: UPDATE_USER_ID,
-  payload: userUID,
-});
+      switch (field) {
+        case 'nome': dispatch(updateNome(value)); break;
+        case 'email': dispatch(updateEmail(value)); break;
+        case 'idade': dispatch(updateIdade(value)); break;
+        case 'telefone': dispatch(updateTelefone(value)); break;
+        case 'origem': dispatch(updateOrigem(value)); break;
+        case 'distrito': dispatch(updateDistrito(value)); break;
+        case 'cidade': dispatch(updateCidade(value)); break;
+        case 'altura': dispatch(updateAltura(value)); break;
+        case 'cabelo': dispatch(updateCabelo(value)); break;
+        case 'corpo': dispatch(updateCorpo(value)); break;
+        case 'olhos': dispatch(updateOlhos(value)); break;
+        case 'seios': dispatch(updateSeios(value)); break;
+        case 'tatuagem': dispatch(updateTatuagem(value)); break;
+        case 'mamas': dispatch(updateMamas(value)); break;
+        case 'pelos': dispatch(updatePelos(value)); break;
+        case 'signo': dispatch(updateSigno(value)); break;
+        case 'tarifa': dispatch(updateTarifa(value)); break;
+        case 'description': dispatch(updateDescription(value)); break;
+        case 'certificado': dispatch(updateCertificado(value)); break;
+        case 'live': dispatch(updateLive(value)); break;
+        case 'peso': dispatch(updatePeso(value)); break;
+        case 'address': dispatch(updateAddress(value)); break;
+        case 'latitude': dispatch(updateLatitude(value)); break;
+        case 'longitude': dispatch(updateLongitude(value)); break;
+        default: break;
+      }
+      return { field, value };
+    } catch (error: any) {
+      console.error('Erro no thunk updateProfileField:', error.message);
+      return rejectWithValue(error.message || 'Erro ao atualizar o campo');
+    }
+  }
+);
 
-export const updateIdade = (idade: number | null) => ({
-  type: UPDATE_IDADE,
-  payload: idade,
-});
+// Thunk para atualizar arrays (ex.: photos, stories, lingua)
+export const updateProfileArrayField = createAsyncThunk(
+  'profile/updateArrayField',
+  async ({ field, value }: { field: string; value: string[] }, { getState, dispatch, rejectWithValue }) => {
+    const state = getState() as any;
+    const userUID = state.profile.userUID;
+    if (!userUID) return rejectWithValue('Usuário não identificado');
 
-export const updateAltura = (altura: number | null) => ({
-  type: UPDATE_ALTURA,
-  payload: altura,
-});
+    try {
+      const { error } = await supabase.from('ProfilesData').update({ [field]: value }).eq('userUID', userUID);
+      if (error) throw new Error(error.message);
 
-export const updateCabelo = (cabelo: string | null) => ({
-  type: UPDATE_CABELO,
-  payload: cabelo,
-});
+      switch (field) {
+        case 'photos': dispatch(updatePhotos(value)); break;
+        case 'stories': dispatch(updateStories(value)); break;
+        case 'lingua': dispatch(updateLingua(value)); break;
+        case 'pagamento': dispatch(updatePagamento(value)); break;
+        case 'servico': dispatch(updateServico(value)); break;
+        case 'comment': dispatch(updateComment(value)); break;
+        default: break;
+      }
+      return { field, value };
+    } catch (error: any) {
+      console.error('Erro no updateProfileArrayField:', error.message);
+      return rejectWithValue(error.message || 'Erro ao atualizar o array');
+    }
+  }
+);
 
-export const updateCorpo = (corpo: string | null) => ({
-  type: UPDATE_CORPO,
-  payload: corpo,
-});
+// Thunk para buscar perfil selecionado por profileName
+export const fetchSelectedProfile = createAsyncThunk(
+  'profile/fetchSelectedProfile',
+  async (profileName: string, { dispatch, rejectWithValue }) => {
+    try {
+      const { profile, isCertified } = await profileDataService.fetchProfile(profileName);
+      const profileWithExtras = { ...profile, isCertified };
+      dispatch(setSelectedProfile(profileWithExtras));
+      return profileWithExtras;
+    } catch (error: any) {
+      console.error('Erro ao buscar perfil selecionado:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
-export const updateMamas = (mamas: string | null) => ({
-  type: UPDATE_MAMAS,
-  payload: mamas,
-});
+// Thunk para atualização em lote de múltiplos campos
+export const updateProfileFields = createAsyncThunk(
+  'profile/updateFields',
+  async (fields: Record<string, any>, { getState, dispatch, rejectWithValue }) => {
+    const state = getState() as any;
+    const userUID = state.profile.userUID;
+    if (!userUID) return rejectWithValue('Usuário não identificado');
+    try {
+      const { error } = await supabase.from('ProfilesData').update(fields).eq('userUID', userUID);
+      if (error) throw new Error(error.message);
+      Object.entries(fields).forEach(([field, value]) => {
+        switch (field) {
+          case 'nome': dispatch(updateNome(value)); break;
+          case 'email': dispatch(updateEmail(value)); break;
+          case 'idade': dispatch(updateIdade(value)); break;
+          case 'telefone': dispatch(updateTelefone(value)); break;
+          case 'origem': dispatch(updateOrigem(value)); break;
+          case 'distrito': dispatch(updateDistrito(value)); break;
+          case 'cidade': dispatch(updateCidade(value)); break;
+          case 'altura': dispatch(updateAltura(value)); break;
+          case 'cabelo': dispatch(updateCabelo(value)); break;
+          case 'corpo': dispatch(updateCorpo(value)); break;
+          case 'olhos': dispatch(updateOlhos(value)); break;
+          case 'seios': dispatch(updateSeios(value)); break;
+          case 'tatuagem': dispatch(updateTatuagem(value)); break;
+          case 'mamas': dispatch(updateMamas(value)); break;
+          case 'pelos': dispatch(updatePelos(value)); break;
+          case 'signo': dispatch(updateSigno(value)); break;
+          case 'tarifa': dispatch(updateTarifa(value)); break;
+          case 'description': dispatch(updateDescription(value)); break;
+          case 'certificado': dispatch(updateCertificado(value)); break;
+          case 'live': dispatch(updateLive(value)); break;
+          case 'photos': dispatch(updatePhotos(value)); break;
+          case 'stories': dispatch(updateStories(value)); break;
+          case 'lingua': dispatch(updateLingua(value)); break;
+          case 'pagamento': dispatch(updatePagamento(value)); break;
+          case 'servico': dispatch(updateServico(value)); break;
+          case 'peso': dispatch(updatePeso(value)); break;
+          case 'address': dispatch(updateAddress(value)); break;
+          case 'latitude': dispatch(updateLatitude(value)); break;
+          case 'longitude': dispatch(updateLongitude(value)); break;
+          case 'comment': dispatch(updateComment(value)); break;
+          case 'premium': dispatch(updatePremium(value)); break;
+          default: break;
+        }
+      });
+      return fields;
+    } catch (error: any) {
+      console.error('Erro no updateProfileFields:', error.message);
+      return rejectWithValue('Erro ao atualizar os campos');
+    }
+  }
+);
 
-export const updateOlhos = (olhos: string | null) => ({
-  type: UPDATE_OLHOS,
-  payload: olhos,
-});
+// Thunk para carregar os dados do perfil do usuário logado
+export const fetchProfileData = createAsyncThunk(
+  'profile/fetchProfileData',
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    const state = getState() as any;
+    const userUID = state.profile.userUID;
+    if (!userUID) return rejectWithValue('Usuário não identificado');
 
-export const updateOrigem = (origem: string | null) => ({
-  type: UPDATE_ORIGEM,
-  payload: origem,
-});
+    try {
+      const { data: profileData, error: profileError } = await supabase
+        .from('ProfilesData')
+        .select('*')
+        .eq('userUID', userUID)
+        .single();
 
-export const updateSeios = (seios: string | null) => ({
-  type: UPDATE_SEIOS,
-  payload: seios,
-});
+      if (profileError) throw new Error(profileError.message);
+      if (!profileData) return rejectWithValue('Nenhum dado encontrado para o usuário');
 
-export const updateTatuagem = (tatuagem: string | null) => ({
-  type: UPDATE_TATUAGEM,
-  payload: tatuagem,
-});
+      const { data: photoData, error: photoError } = await supabase
+        .from('profilephoto')
+        .select('imageurl')
+        .eq('userUID', userUID);
 
-export const updateTelefone = (telefone: string | null) => ({
-  type: UPDATE_TELEFONE,
-  payload: telefone,
-});
+      if (photoError) throw new Error(photoError.message);
 
-export const updatePelos = (pelos: string | null) => ({
-  type: UPDATE_PELOS,
-  payload: pelos,
-});
+      const { data: storyData, error: storyError } = await supabase
+        .from('stories')
+        .select('storyurl')
+        .eq('userUID', userUID);
 
-export const updateSigno = (signo: string | null) => ({
-  type: UPDATE_SIGNO,
-  payload: signo,
-});
+      if (storyError) throw new Error(storyError.message);
 
-export const updateDistrito = (distrito: string | null) => ({
-  type: UPDATE_DISTRITO,
-  payload: distrito,
-});
+      const { data: vPhotoData, error: vPhotoError } = await supabase
+        .from('VPhoto')
+        .select('imageurl')
+        .eq('userUID', userUID);
 
-export const updatePhotos = (photos: string[]) => ({
-  type: UPDATE_PHOTOS,
-  payload: photos,
-});
+      if (vPhotoError) throw new Error(vPhotoError.message);
 
-export const updateVPhotos = (vphotos: string[]) => ({
-  type: UPDATE_VPHOTOS,
-  payload: vphotos,
-});
+      const { data: commentsData, error: commentsError } = await supabase
+        .from('comments')
+        .select('*')
+        .eq('profileuid', userUID);
 
-export const updateStories = (stories: string[]) => ({
-  type: UPDATE_STORIES,
-  payload: stories,
-});
+      if (commentsError) throw new Error(commentsError.message);
 
-export const updateTarifa = (tarifa: string | null) => ({
-  type: UPDATE_TARIFA,
-  payload: tarifa,
-});
+      const profileWithExtras: Profile = {
+        ...profileData,
+        photos: photoData?.map((photo) => photo.imageurl) || [],
+        stories: storyData?.map((story) => story.storyurl) || [],
+        vphotos: vPhotoData?.map((vphoto) => vphoto.imageurl) || [],
+        photoURL: photoData?.map((photo) => photo.imageurl) || [],
+        vphotoURL: vPhotoData?.map((vphoto) => vphoto.imageurl) || [],
+        storyURL: storyData?.map((story) => story.storyurl) || [],
+        comment: commentsData?.map((comment) => comment.comment) || [],
+        id: profileData.id,
+        tarifa: profileData.tarifa || 0,
+        lingua: profileData.lingua || [],
+        telefone: profileData.telefone || '',
+        email: profileData.email || '',
+        idade: profileData.idade || 0,
+        altura: profileData.altura || '',
+        distrito: profileData.distrito || '',
+        origem: profileData.origem || '',
+        cidade: profileData.cidade || '',
+        address: profileData.address || '',
+        latitude: profileData.latitude || 0,
+        longitude: profileData.longitude || 0,
+        peso: profileData.peso || '',
+        tatuagem: profileData.tatuagem || '',
+        pelos: profileData.pelos || '',
+        olhos: profileData.olhos || '',
+        seios: profileData.seios || '',
+        mamas: profileData.mamas || '',
+        signo: profileData.signo || '',
+        pagamento: profileData.pagamento || [],
+        inactive: profileData.status === false,
+        certificado: profileData.certificado || false,
+        live: profileData.live || false,
+        premium: profileData.premium || false,
+      };
 
-export const setuserUID = (userUID: string) => ({
-  type: SET_USER_ID,
-  payload: userUID,
-});
+      dispatch(updateNome(profileWithExtras.nome || null));
+      dispatch(updateEmail(profileWithExtras.email || null));
+      dispatch(updateIdade(profileWithExtras.idade || null));
+      dispatch(updateTelefone(profileWithExtras.telefone || null));
+      dispatch(updateCidade(profileWithExtras.cidade || null));
+      dispatch(updateDistrito(profileWithExtras.distrito || null));
+      dispatch(updateOrigem(profileWithExtras.origem || null));
+      dispatch(updateAltura(profileWithExtras.altura || null));
+      dispatch(updateMamas(profileWithExtras.mamas || null));
+      dispatch(updateCorpo(profileWithExtras.corpo || null));
+      dispatch(updateCabelo(profileWithExtras.cabelo || null));
+      dispatch(updateOlhos(profileWithExtras.olhos || null));
+      dispatch(updateSeios(profileWithExtras.seios || null));
+      dispatch(updatePelos(profileWithExtras.pelos || null));
+      dispatch(updateTatuagem(profileWithExtras.tatuagem || null));
+      dispatch(updateSigno(profileWithExtras.signo || null));
+      dispatch(updateTarifa(profileWithExtras.tarifa || null));
+      dispatch(updateDescription(profileWithExtras.description || null));
+      dispatch(updateLive(profileWithExtras.live || false));
+      dispatch(updateAddress(profileWithExtras.address || null));
+      dispatch(updateLatitude(profileWithExtras.latitude || null));
+      dispatch(updateLongitude(profileWithExtras.longitude || null));
+      dispatch(updatePhotos(profileWithExtras.photos || []));
+      dispatch(updateStories(profileWithExtras.stories || []));
+      dispatch(updateLingua(profileWithExtras.lingua || null));
+      dispatch(updatePagamento(profileWithExtras.pagamento || null));
+      dispatch(updateServico(profileWithExtras.servico || null));
+      dispatch(updatePeso(profileWithExtras.peso || null));
+      dispatch(updateComment(profileWithExtras.comment || null));
+      dispatch(updateCertificado(profileWithExtras.certificado || false));
+      dispatch(updatePremium(profileWithExtras.premium || false));
 
-export const updatePagamento = (pagamento: string | null) => ({
-  type: UPDATE_PAGAMENTO,
-  payload: pagamento,
-});
-
-export const updateServico = (servico: string | null) => ({
-  type: UPDATE_SERVICO,
-  payload: servico,
-});
-
-export const updateLingua = (lingua: string | null) => ({
-  type: UPDATE_LINGUA,
-  payload: lingua,
-});
-
-export const updateCidade = (cidade: string | null) => ({
-  type: UPDATE_CIDADE,
-  payload: cidade,
-});
-
-export const updateAddress = (address: string | null) => ({
-  type: UPDATE_ADDRESS, // Corrigido para usar a constante correta
-  payload: address,
-});
-
-export const updateLatitude = (latitude: number | null) => ({
-  type: UPDATE_LATITUDE,
-  payload: latitude,
-});
-
-export const updateLongitude = (longitude: number | null) => ({
-  type: UPDATE_LONGITUDE,
-  payload: longitude,
-});
-
-export const updateTag = (tag: string | null) => ({
-  type: UPDATE_TAG,
-  payload: tag,
-});
-
-export const updateDescription = (description: string | null) => ({
-  type: UPDATE_DESCRIPTION,
-  payload: description,
-});
-
-export const setPhotoURL = (url: string[]) => ({
-  type: SET_PHOTO_URL,
-  payload: url,
-});
-
-export const setVPhotoURL = (url: string[]) => ({
-  type: SET_VPHOTO_URL,
-  payload: url,
-});
-
-export const setStoryURL = (url: string[]) => ({
-  type: SET_STORY_URL,
-  payload: url,
-});
-
-export const setPremium = (isPremium: boolean) => ({
-  type: SET_PREMIUM, // Usando a constante definida
-  payload: isPremium,
-});
-
-export const updateProfiles = (profiles: Profile[]) => {
-  console.log('Atualizando perfis com:', profiles);
-  const enhancedProfiles = profiles.map((profile) => ({
-    ...profile,
-    photoURL: profile.photoURL || '',
-    storyURL: profile.storyURL || '',
-    vphotoURL: profile.vphotoURL || '',
-  }));
-  return {
-    type: UPDATE_PROFILES,
-    payload: enhancedProfiles,
-  };
-};
-
-export const setSelectedProfile = (profile: Profile) => ({
-  type: SET_SELECTED_PROFILE,
-  payload: profile,
-});
+      return profileWithExtras;
+    } catch (error: any) {
+      console.error('Erro ao carregar dados do perfil:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);

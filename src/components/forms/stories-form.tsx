@@ -2,67 +2,64 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateStories } from '@/backend/actions/ProfileActions';
+import { fetchProfileData, updateProfileArrayField } from '@/backend/actions/ProfileActions';
 import supabase from '@/backend/database/supabase';
 import { Button } from '@/components/ui/button';
 import { Separator } from '../ui/separator';
 import { IoTrashBin } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import SubscriptionPlan from '@/components/subscriptionPlan';
 
 export const StoriesForm = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   // Dados do Redux
-  const storyURLsRedux = useSelector((state: any) => state.profile?.profile?.stories || []);
-  const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
+  const storyURLsRedux = useSelector((state: { profile: { stories?: string[] } }) => state.profile.stories || []);
+  const userUID = useSelector((state: { profile: { userUID?: string } }) => state.profile.userUID);
+  const isPremiumUser = useSelector((state: { profile: { premium: boolean } }) => state.profile.premium || false);
+  const loading = useSelector((state: { profile: { loading: boolean } }) => state.profile.loading);
+  const error = useSelector((state: { profile: { error?: string | null } }) => state.profile.error);
 
-  // Estado para usuário premium (pode ser conectado à lógica real do seu sistema)
-  const [isPremiumUser] = useState(false); // Substitua por lógica real de premium
-  const maxStories = isPremiumUser ? 10 : 5;
+  const maxStories = 5; // Sempre 5 para premium, 0 para free
 
-  // Estado para stories locais (sincronizado com Redux)
+  // Estado local
   const [stories, setStories] = useState<string[]>(storyURLsRedux);
-  const [loading, setLoading] = useState(false);
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
 
-  // Sincronizar stories locais com Redux ao carregar
+  // Carregar dados iniciais e sincronizar com Redux
   useEffect(() => {
+    if (userUID) {
+      console.log('Carregando dados iniciais para userUID:', userUID);
+      dispatch(fetchProfileData());
+    } else {
+      console.error('userUID está indefinido - verifique a autenticação');
+    }
+  }, [dispatch, userUID]);
+
+  // Sincronizar stories locais com o Redux
+  useEffect(() => {
+    console.log('Sincronizando stories com Redux. storyURLsRedux:', storyURLsRedux);
     setStories(storyURLsRedux);
   }, [storyURLsRedux]);
 
-  // Buscar stories do banco de dados ao carregar
-  useEffect(() => {
-    const fetchStories = async () => {
-      setLoading(true);
-      try {
-        const { data: storyData, error: storyError } = await supabase
-          .from('stories')
-          .select('storyurl')
-          .eq('userUID', userUID);
-
-        if (storyError) throw new Error(storyError.message);
-
-        const fetchedStories = storyData.map((story) => story.storyurl);
-        dispatch(updateStories(fetchedStories));
-      } catch (error: any) {
-        console.error('Erro ao buscar stories:', error.message);
-        toast.error(t('messages.fetchError'), { position: 'top-right', autoClose: 1000 });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userUID) fetchStories();
-  }, [userUID, dispatch, t]);
-
-  // Função de upload de stories
+  // Função de upload de stories (apenas para premium)
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
+    if (!isPremiumUser) {
+      setShowSubscriptionPopup(true);
+      return;
+    }
+
+    if (stories.length >= maxStories) {
+      toast.error(t('messages.maxStoriesReached'));
+      return;
+    }
+
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
       const remainingSlots = maxStories - stories.length;
-      const selected = files.slice(0, remainingSlots); // Limitar ao número máximo permitido
+      const selected = files.slice(0, remainingSlots);
       const uploadedStoryURLs: string[] = [];
 
       const uploadPromises = selected.map(async (file) => {
@@ -78,40 +75,38 @@ export const StoriesForm = () => {
           uploadedStoryURLs.push(publicURLStory);
         } catch (error: any) {
           console.error('Erro durante o upload:', error.message);
-          toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
+          toast.error(t('messages.uploadError'));
         }
       });
 
       await Promise.all(uploadPromises);
 
       if (uploadedStoryURLs.length > 0) {
-        const storyInsertionsProfile = uploadedStoryURLs.map((storyURL) => ({
-          userUID,
-          storyurl: storyURL,
-        }));
-
+        const newStoryURLs = [...stories, ...uploadedStoryURLs];
         try {
-          const { error: storyError } = await supabase
-            .from('stories')
-            .insert(storyInsertionsProfile);
-
-          if (storyError) throw new Error(storyError.message);
-
-          const newStoryURLs = [...stories, ...uploadedStoryURLs];
+          console.log('Atualizando stories com:', newStoryURLs);
+          // Persistir URLs no Supabase (tabela stories)
+          const storyInsertions = uploadedStoryURLs.map((storyURL) => ({
+            userUID,
+            storyurl: storyURL,
+          }));
+          await supabase.from('stories').insert(storyInsertions);
+          // Atualizar o Redux
+          await dispatch(updateProfileArrayField({ field: 'stories', value: newStoryURLs })).unwrap();
           setStories(newStoryURLs);
-          dispatch(updateStories(newStoryURLs));
-          toast.success(t('messages.storyUploaded'), { position: 'top-right', autoClose: 1000 });
+          toast.success(t('messages.storyUploaded'));
         } catch (error: any) {
-          console.error('Erro ao inserir URLs na tabela:', error.message);
-          toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
+          console.error('Erro ao atualizar stories:', error);
+          toast.error(t('messages.uploadError'));
         }
       }
     }
-    setLoading(false);
   };
 
-  // Função para excluir story
+  // Função para excluir story (apenas para premium)
   const handleDeleteStory = async (index: number) => {
+    if (!isPremiumUser) return;
+
     try {
       const updatedStoriesArray = [...stories];
       const storyURLToDelete = updatedStoriesArray[index];
@@ -124,165 +119,185 @@ export const StoriesForm = () => {
 
       if (storageError) throw new Error(storageError.message);
 
-      const { error: dbError } = await supabase
-        .from('stories')
-        .delete()
-        .match({ storyurl: storyURLToDelete, userUID });
-
-      if (dbError) throw new Error(dbError.message);
+      // Remover do Supabase (tabela stories)
+      await supabase.from('stories').delete().match({ storyurl: storyURLToDelete, userUID });
 
       updatedStoriesArray.splice(index, 1);
+      console.log('Excluindo story. Novo array:', updatedStoriesArray);
+      await dispatch(updateProfileArrayField({ field: 'stories', value: updatedStoriesArray })).unwrap();
       setStories(updatedStoriesArray);
-      dispatch(updateStories(updatedStoriesArray));
-      toast.success(t('messages.storyDeleted'), { position: 'top-right', autoClose: 1000 });
+      toast.success(t('messages.storyDeleted'));
     } catch (error: any) {
       console.error('Erro ao excluir story:', error.message);
-      toast.error(t('messages.deleteError'), { position: 'top-right', autoClose: 1000 });
+      toast.error(t('messages.deleteError'));
     }
   };
 
   // Handle discard button click
   const handleDiscard = () => {
-    setStories(storyURLsRedux); // Reverter para o estado do Redux
-    toast.info(t('messages.changesDiscarded'), { position: 'top-right', autoClose: 1000 });
+    console.log('Descartando alterações. Restaurando para:', storyURLsRedux);
+    setStories(storyURLsRedux);
+    toast.info(t('messages.changesDiscarded'));
   };
 
   // Handle save button click
-  const handleSave = () => {
-    dispatch(updateStories(stories));
-    toast.success(t('messages.changesSaved'), { position: 'top-right', autoClose: 1000 });
+  const handleSave = async () => {
+    try {
+      console.log('Salvando stories:', stories);
+      await dispatch(updateProfileArrayField({ field: 'stories', value: stories })).unwrap();
+      toast.success(t('messages.changesSaved'));
+    } catch (error: any) {
+      console.error('Erro ao salvar stories:', error);
+      toast.error(t('messages.saveError'));
+    }
   };
 
+  // Renderizar as 5 cards
+  const renderStoryCards = () => {
+    const storyCards = [];
+    const totalCards = 5;
+
+    console.log('Renderizando cards. Stories:', stories);
+
+    if (isPremiumUser) {
+      stories.forEach((storyURL, index) => {
+        storyCards.push(
+          <div
+            key={index}
+            className="relative group aspect-[2/3] rounded-3xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+          >
+            <IoTrashBin
+              size={26}
+              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 cursor-pointer text-white bg-red-600 rounded-full p-1 transition-opacity duration-300"
+              onClick={() => handleDeleteStory(index)}
+            />
+            <video
+              src={storyURL || '/logo.webp'}
+              className="w-full h-full object-cover rounded-3xl border border-gray-600"
+              controls={false}
+              muted
+              playsInline
+            />
+          </div>
+        );
+      });
+
+      const remainingSlots = maxStories - stories.length;
+      for (let i = 0; i < remainingSlots && storyCards.length < maxStories; i++) {
+        storyCards.push(
+          <label
+            key={`placeholder-${i}`}
+            htmlFor="upload-story"
+            className="aspect-[2/3] border-2 border-dashed dark:hover:border-darkpink border-gray-200 dark:border-gray-800 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:border-darkpink transition-colors"
+          >
+            <div className="text-darkpink mb-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 19H3C1.89543 19 1 18.1046 1 17V7C1 5.89543 1.89543 5 3 5H7L9 3H15L17 5H21C22.1046 5 23 5.89543 23 7V17C23 18.1046 22.1046 19 21 19Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <span className="text-sm text-black dark:text-white font-medium underline">
+              {t('stories.addStory')}
+            </span>
+          </label>
+        );
+      }
+    } else {
+      // Para não premium, sempre 5 cards bloqueados
+      for (let i = 0; i < totalCards; i++) {
+        storyCards.push(
+          <div
+            key={`locked-${i}`}
+            className="aspect-[2/3] bg-[#fff4de] dark:bg-[#27191f] rounded-3xl flex flex-col items-center justify-center"
+          >
+            <div className="text-yellow-500 mb-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#fdb315">
+                <path d="M12 17C10.89 17 10 16.1 10 15C10 13.89 10.89 13 12 13C13.11 13 14 13.89 14 15C14 16.1 13.11 17 12 17M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.89 8 4 8.89 4 10V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V10C20 8.89 19.11 8 18 8M8.9 6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8H8.9V6Z" />
+              </svg>
+            </div>
+            <h3>{t('stories.locked')}</h3>
+            <span className="text-sm text-gray-500 text-center px-4">
+              {t('stories.lockedMessage')}
+            </span>
+            <button
+              className="mt-2 bg-[#fdb315] text-white dark:text-black px-4 py-1 rounded-full text-sm hover:bg-yellow-600"
+              onClick={() => setShowSubscriptionPopup(true)}
+            >
+              {t('stories.buyNow')}
+            </button>
+          </div>
+        );
+      }
+    }
+
+    return storyCards;
+  };
+
+  if (loading) return <div>{t('loading')}</div>;
+  if (error) return <div>{t('error')}: {error}</div>;
+
   return (
-    <div className="w-full bg-white dark:bg-transparent dark:border dark:border-gray-800 dark:border-opacity-50 rounded-3xl p-8">
-      {/* Header with title and buttons */}
+    <div className="w-full bg-white dark:border dark:border-gray-800 dark:border-opacity-50 dark:bg-transparent rounded-3xl p-8">
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
           <h1 className="text-2xl font-bold">{t('stories.title')}</h1>
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
-          <Button
-            className="rounded-full"
-            variant="outline"
-            onClick={handleDiscard}
-            disabled={loading}
-          >
-            {t('button.discard')}
+          <Button className="rounded-full" variant="outline" onClick={handleDiscard}>
+          {t('buttonSave.discard')}          
           </Button>
           <Button
             className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
             onClick={handleSave}
-            disabled={loading}
           >
-            {t('button.saveChanges')}
+          {t('buttonSave.saveChanges')}          
           </Button>
         </div>
       </div>
       <Separator className="my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 hidden md:block" />
 
-      {/* Body section */}
       <div className="space-y-8">
-        {/* Profile Stories Section */}
         <div>
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-lg font-semibold">{t('stories.profileStories')}</h2>
             <span className="text-gray-500 text-sm">(Max {maxStories})</span>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {/* Existing Stories */}
-            {stories.map((storyURL, index) => (
-              <div
-                key={index}
-                className="relative group border-2 border-dashed dark:border-gray-800 border-gray-200 dark:hover:border-darkpink rounded-3xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
-                style={{ paddingTop: '150%' }} // Aspect ratio 2:3
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <IoTrashBin
-                    size={26}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 cursor-pointer text-white bg-red-600 rounded-full p-1 transition-opacity duration-300 z-10"
-                    onClick={() => handleDeleteStory(index)}
-                  />
-                  <video
-                    src={storyURL || '/logo.webp'}
-                    className="absolute inset-0 w-full h-full object-cover rounded-3xl"
-                    controls={false}
-                    muted
-                    playsInline
-                  />
-                </div>
-              </div>
-            ))}
-
-            {/* Upload Story Boxes */}
-            {stories.length < maxStories &&
-              [...Array(maxStories - stories.length)].map((_, index) => (
-                <label
-                  key={index}
-                  htmlFor="upload-story"
-                  className="relative border-2 border-dashed dark:border-gray-800 border-gray-200 dark:hover:border-darkpink rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:border-darkpink transition-colors"
-                  style={{ paddingTop: '150%' }} // Aspect ratio 2:3
-                >
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                    <div className="text-darkpink mb-2">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M21 19H3C1.89543 19 1 18.1046 1 17V7C1 5.89543 1.89543 5 3 5H7L9 3H15L17 5H21C22.1046 5 23 5.89543 23 7V17C23 18.1046 22.1046 19 21 19Z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    </div>
-                    <span className="text-sm text-black dark:text-white underline font-medium">
-                      {t('stories.addStory')}
-                    </span>
-                  </div>
-                  <input
-                    type="file"
-                    id="upload-story"
-                    style={{ display: 'none' }}
-                    onChange={handleFileUpload}
-                    multiple
-                    accept=".mp4,.mov"
-                    disabled={loading}
-                  />
-                </label>
-              ))}
-
-            {/* Locked Box */}
-            {!isPremiumUser && stories.length >= 5 && (
-              <div
-                className="relative bg-[#fff4de] dark:bg-[#27191f] rounded-3xl flex flex-col items-center justify-center"
-                style={{ paddingTop: '150%' }} // Aspect ratio 2:3
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                  <div className="text-yellow-500 mb-2">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="#fdb315"
-                    >
-                      <path d="M12 17C10.89 17 10 16.1 10 15C10 13.89 10.89 13 12 13C13.11 13 14 13.89 14 15C14 16.1 13.11 17 12 17M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.89 8 4 8.89 4 10V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V10C20 8.89 19.11 8 18 8M8.9 6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8H8.9V6Z" />
-                    </svg>
-                  </div>
-                  <h3>{t('stories.locked')}</h3>
-                  <span className="text-sm text-gray-500 text-center px-4">
-                    {t('stories.lockedMessage')}
-                  </span>
-                  <button className="mt-2 bg-[#fdb315] text-white px-4 py-1 rounded-full text-sm hover:bg-yellow-600">
-                    {t('stories.buyNow')}
-                  </button>
-                </div>
-              </div>
-            )}
+          <div className="grid grid-cols-5 gap-4">
+            {renderStoryCards()}
+            <input
+              type="file"
+              id="upload-story"
+              style={{ display: 'none' }}
+              onChange={handleFileUpload}
+              multiple
+              accept=".mp4,.mov"
+            />
           </div>
         </div>
+
+        {showSubscriptionPopup && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-[#100007] rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <Button
+                className="absolute top-2 right-2"
+                variant="ghost"
+                onClick={() => setShowSubscriptionPopup(false)}
+              >
+                X
+              </Button>
+              <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

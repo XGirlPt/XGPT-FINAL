@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateServico, updatePagamento, updateLingua } from '@/backend/actions/ProfileActions';
-import { updateProfileData } from '@/backend/services/profileService';
+import { updateProfileArrayField, fetchProfileData } from '@/backend/actions/ProfileActions';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '../ui/separator';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import SubscriptionPlan from '@/components/subscriptionPlan';
 
 interface PreferenceOption {
   id: string;
@@ -28,10 +28,15 @@ export const ServicePreferencesForm = () => {
   const { t } = useTranslation();
 
   // Dados do Redux
-  const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
-  const servicoRedux = useSelector((state: any) => state.profile?.profile?.servico || []);
-  const pagamentoRedux = useSelector((state: any) => state.profile?.profile?.pagamento || []);
-  const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || []);
+  const userUID = useSelector((state: { profile: { userUID?: string } }) => state.profile.userUID);
+  const servicoRedux = useSelector((state: { profile: { servico?: string[] } }) => state.profile.servico || []);
+  const pagamentoRedux = useSelector((state: { profile: { pagamento?: string[] } }) => state.profile.pagamento || []);
+  const linguaRedux = useSelector((state: { profile: { lingua?: string[] } }) => state.profile.lingua || []);
+  const isPremiumUser = useSelector((state: { profile: { premium: boolean } }) => state.profile.premium || false);
+  const loading = useSelector((state: { profile: { loading: boolean } }) => state.profile.loading);
+  const error = useSelector((state: { profile: { error?: string | null } }) => state.profile.error);
+
+  const maxServicesFree = 4; // Limite de serviços para plano free
 
   // Estado inicial sincronizado com o Redux
   const [categories, setCategories] = useState<PreferenceCategory[]>([
@@ -42,7 +47,7 @@ export const ServicePreferencesForm = () => {
         { id: 'Euro', label: 'Euro', checked: pagamentoRedux.includes('Euro') },
         { id: 'Dollars', label: 'Dollars', checked: pagamentoRedux.includes('Dollars') },
         { id: 'Mbway', label: 'Mbway', checked: pagamentoRedux.includes('Mbway') },
-        { id: 'visa', label: 'Visa', checked: pagamentoRedux.includes('Visa') },
+        { id: 'Visa', label: 'Visa', checked: pagamentoRedux.includes('Visa') },
         { id: 'Mastercard', label: 'Mastercard', checked: pagamentoRedux.includes('Mastercard') },
         { id: 'Paypal', label: 'Paypal', checked: pagamentoRedux.includes('Paypal') },
         { id: 'Maestro', label: 'Maestro', checked: pagamentoRedux.includes('Maestro') },
@@ -53,14 +58,14 @@ export const ServicePreferencesForm = () => {
       id: 'languages',
       title: t('languages.title'),
       options: [
-        { id: 'pt', label: t('profile.linguas.portuguese'), checked: linguaRedux.includes('Portuguese') },
-        { id: 'en', label: t('profile.linguas.english'), checked: linguaRedux.includes('English') },
-        { id: 'fr', label: t('profile.linguas.french'), checked: linguaRedux.includes('French') },
-        { id: 'es', label: t('profile.linguas.spanish'), checked: linguaRedux.includes('Spanish') },
-        { id: 'de', label: t('profile.linguas.german'), checked: linguaRedux.includes('German') },
-        { id: 'it', label: t('profile.linguas.italian'), checked: linguaRedux.includes('Italian') },
-        { id: 'ru', label: t('profile.linguas.russian'), checked: linguaRedux.includes('Russian') },
-        { id: 'ar', label: t('profile.linguas.arabic'), checked: linguaRedux.includes('Arab') },
+        { id: 'Portuguese', label: t('profile.linguas.portuguese'), checked: linguaRedux.includes('Portuguese') },
+        { id: 'English', label: t('profile.linguas.english'), checked: linguaRedux.includes('English') },
+        { id: 'French', label: t('profile.linguas.french'), checked: linguaRedux.includes('French') },
+        { id: 'Spanish', label: t('profile.linguas.spanish'), checked: linguaRedux.includes('Spanish') },
+        { id: 'German', label: t('profile.linguas.german'), checked: linguaRedux.includes('German') },
+        { id: 'Italian', label: t('profile.linguas.italian'), checked: linguaRedux.includes('Italian') },
+        { id: 'Russian', label: t('profile.linguas.russian'), checked: linguaRedux.includes('Russian') },
+        { id: 'Arabic', label: t('profile.linguas.arabic'), checked: linguaRedux.includes('Arabic') },
       ],
     },
     {
@@ -100,11 +105,23 @@ export const ServicePreferencesForm = () => {
     },
   ]);
 
-  // Active tab state
+  // Estado da aba ativa e popup de subscrição
   const [activeTab, setActiveTab] = useState('payment');
+  const [showSubscriptionPopup, setShowSubscriptionPopup] = useState(false);
 
-  // Sincronizar o estado inicial com o Redux ao carregar
+  // Carregar dados iniciais do perfil ao montar
   useEffect(() => {
+    if (userUID) {
+      console.log('Carregando dados iniciais para userUID:', userUID);
+      dispatch(fetchProfileData());
+    } else {
+      console.error('userUID está indefinido - verifique a autenticação');
+    }
+  }, [dispatch, userUID]);
+
+  // Sincronizar o estado local com o Redux sempre que os valores mudarem
+  useEffect(() => {
+    console.log('Sincronizando categorias com Redux. servicoRedux:', servicoRedux);
     setCategories((prevCategories) =>
       prevCategories.map((category) => ({
         ...category,
@@ -121,8 +138,20 @@ export const ServicePreferencesForm = () => {
     );
   }, [pagamentoRedux, linguaRedux, servicoRedux]);
 
-  // Handle checkbox changes
+  // Handle checkbox changes com limite para serviços no plano free
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
+    if (categoryId === 'services' && !isPremiumUser) {
+      const currentServicesCount = categories
+        .find((cat) => cat.id === 'services')!
+        .options.filter((opt) => opt.checked).length;
+
+      if (checked && currentServicesCount >= maxServicesFree) {
+        toast.error(t('messages.maxServicesReached'));
+        setShowSubscriptionPopup(true);
+        return;
+      }
+    }
+
     const updatedCategories = categories.map((category) => {
       if (category.id === categoryId) {
         return {
@@ -135,25 +164,11 @@ export const ServicePreferencesForm = () => {
       return category;
     });
     setCategories(updatedCategories);
-
-    // Atualizar o Redux com base na categoria
-    const selectedOptions = updatedCategories
-      .find((cat) => cat.id === categoryId)!
-      .options.filter((opt) => opt.checked)
-      .map((opt) => opt.id);
-
-    if (categoryId === 'payment') {
-      dispatch(updatePagamento(selectedOptions));
-    } else if (categoryId === 'languages') {
-      dispatch(updateLingua(selectedOptions));
-    } else if (categoryId === 'services') {
-      dispatch(updateServico(selectedOptions));
-    }
   };
 
   // Handle discard button click
   const handleDiscard = () => {
-    // Reverter para os valores do Redux
+    console.log('Descartando alterações. Restaurando para:', { servicoRedux, pagamentoRedux, linguaRedux });
     setCategories((prevCategories) =>
       prevCategories.map((category) => ({
         ...category,
@@ -168,7 +183,7 @@ export const ServicePreferencesForm = () => {
         })),
       }))
     );
-    toast.info('Changes discarded', { position: 'top-right', autoClose: 1000 });
+    toast.info(t('button.discard'));
   };
 
   // Handle save button click
@@ -186,21 +201,21 @@ export const ServicePreferencesForm = () => {
     };
 
     if (!userUID) {
-      toast.error('Erro: usuário não identificado.', { position: 'top-right', autoClose: 1000 });
+      toast.error(t('messages.userNotIdentified'));
       return;
     }
 
     try {
-      await updateProfileData(dataToUpdate, userUID);
-      toast.success(t('messages.preferencesUpdated'), { position: 'top-right', autoClose: 1000 });
-
-      // Atualizar Redux
-      dispatch(updatePagamento(dataToUpdate.pagamento));
-      dispatch(updateLingua(dataToUpdate.lingua));
-      dispatch(updateServico(dataToUpdate.servico));
-    } catch (error) {
+      console.log('Salvando preferências:', dataToUpdate);
+      await Promise.all([
+        dispatch(updateProfileArrayField({ field: 'pagamento', value: dataToUpdate.pagamento })).unwrap(),
+        dispatch(updateProfileArrayField({ field: 'lingua', value: dataToUpdate.lingua })).unwrap(),
+        dispatch(updateProfileArrayField({ field: 'servico', value: dataToUpdate.servico })).unwrap(),
+      ]);
+      toast.success(t('messages.preferencesUpdated'));
+    } catch (error: any) {
       console.error('Erro ao atualizar preferências:', error);
-      toast.error(t('messages.preferencesUpdateError'), { position: 'top-right', autoClose: 1000 });
+      toast.error(t('messages.preferencesUpdateError'));
     }
   };
 
@@ -210,7 +225,7 @@ export const ServicePreferencesForm = () => {
     if (!category) return null;
 
     return (
-      <div className="bg-[#f2ebee] bg-opacity-40 rounded-3xl p-6">
+      <div className="bg-[#f2ebee] dark:bg-[#27191f] bg-opacity-40 rounded-3xl p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {category.options.map((option) => (
             <div key={option.id} className="flex items-center space-x-2">
@@ -258,6 +273,9 @@ export const ServicePreferencesForm = () => {
     </button>
   );
 
+  if (loading) return <div>{t('loading')}</div>;
+  if (error) return <div>{t('error')}: {error}</div>;
+
   return (
     <div className="p-8 bg-white dark:bg-[#100007] dark:border-gray-800 dark:border-opacity-50 dark:border rounded-3xl">
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
@@ -266,18 +284,14 @@ export const ServicePreferencesForm = () => {
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
-          <Button
-            className="rounded-full"
-            variant="outline"
-            onClick={handleDiscard}
-          >
-            {t('button.discard')}
+          <Button className="rounded-full" variant="outline" onClick={handleDiscard}>
+          {t('buttonSave.discard')}          
           </Button>
           <Button
             className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
             onClick={handleSave}
           >
-            {t('button.saveChanges')}
+          {t('buttonSave.saveChanges')}          
           </Button>
         </div>
       </div>
@@ -285,7 +299,6 @@ export const ServicePreferencesForm = () => {
 
       {/* Desktop View - Vertical tabs on left */}
       <div className="hidden md:flex gap-8">
-        {/* Left side vertical tabs */}
         <div className="w-64 flex flex-col">
           {categories.map((category) => (
             <TabButton
@@ -297,14 +310,11 @@ export const ServicePreferencesForm = () => {
             />
           ))}
         </div>
-
-        {/* Right side content */}
         <div className="flex-1">{getActiveCategoryContent()}</div>
       </div>
 
       {/* Mobile View - Horizontal tabs on top */}
       <div className="md:hidden">
-        {/* Horizontal tabs */}
         <div className="flex border-b overflow-x-auto">
           {categories.map((category) => (
             <button
@@ -320,10 +330,24 @@ export const ServicePreferencesForm = () => {
             </button>
           ))}
         </div>
-
-        {/* Content */}
         <div className="mt-4">{getActiveCategoryContent()}</div>
       </div>
+
+      {/* Popup de subscrição */}
+      {showSubscriptionPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-[#100007] rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <Button
+              className="absolute top-2 right-2"
+              variant="ghost"
+              onClick={() => setShowSubscriptionPopup(false)}
+            >
+              X
+            </Button>
+            <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

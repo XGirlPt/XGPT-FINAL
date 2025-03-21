@@ -1,254 +1,248 @@
+// src/backend/services/profileService.ts
 import supabase from '../../backend/database/supabase';
-import { updateStories } from '@/backend/actions/ProfileActions';
+import { Profile, UserProfileData, UpdateTagResponse } from '@/backend/types';
 import { Dispatch } from 'redux';
+import { updateStories } from '@/backend/reducers/profileSlice';
 
-// FETCH PROFILE START
-export async function fetchProfiles() {
+// FETCH PROFILES
+export async function fetchProfiles(): Promise<Profile[]> {
   try {
-    // Buscar perfis com status ativo
     const { data: profilesData, error: profilesError } = await supabase
       .from('ProfilesData')
       .select('*')
       .eq('status', true);
 
-    if (profilesError) {
-      throw profilesError;
-    }
+    if (profilesError) throw profilesError;
 
-    // Buscar comentários de todos os perfis
-    const { data: commentsData, error: commentsError } = await supabase
-      .from('comments')
-      .select('*');
-
-    if (commentsError) {
-      throw commentsError;
-    }
-
-    // Buscar fotos de perfis
     const { data: photosData, error: photosError } = await supabase
       .from('profilephoto')
       .select('*');
 
-    if (photosError) {
-      throw photosError;
-    }
+    if (photosError) throw photosError;
 
-    // Buscar stories de perfis
     const { data: storiesData, error: storiesError } = await supabase
       .from('stories')
       .select('*');
 
-    if (storiesError) {
-      throw storiesError;
-    }
+    if (storiesError) throw storiesError;
 
-    // Buscar fotos de verificação
-    const { data: VphotosData, error: VphotosError } = await supabase
+    const { data: vPhotosData, error: vPhotosError } = await supabase
       .from('VPhoto')
       .select('*');
 
-    if (VphotosError) {
-      throw VphotosError;
-    }
+    if (vPhotosError) throw vPhotosError;
 
-    // Combinar dados dos perfis
+    const { data: commentsData, error: commentsError } = await supabase
+      .from('comments')
+      .select('*');
+
+    if (commentsError) throw commentsError;
+
     const combinedProfiles = profilesData.map((profile) => {
-      const photos = photosData.filter(
-        (photo) => photo.userUID === profile.userUID
-      );
-      const stories = storiesData.filter(
-        (story) => story.userUID === profile.userUID
-      );
-      const Vphotos = VphotosData.filter(
-        (Vphoto) => Vphoto.userUID === profile.userUID
-      );
-      const comments = commentsData.filter(
-        (comment) => comment.userUID === profile.userUID
-      );
+      const photos = photosData.filter((photo) => photo.userUID === profile.userUID);
+      const stories = storiesData.filter((story) => story.userUID === profile.userUID);
+      const vphotos = vPhotosData.filter((vphoto) => vphoto.userUID === profile.userUID);
+      const comments = commentsData.filter((comment) => comment.profileuid === profile.userUID);
 
       return {
         ...profile,
-        photos: photos.map((photo) => photo.imageurl), // URLs das fotos
-        Vphotos: Vphotos.map((Vphoto) => Vphoto.imageurl), // URLs das fotos de verificação
-        stories: stories.map((story) => story.storyurl), // URLs dos stories
-        comments: comments, // Associar comentários ao perfil
+        photos: photos.map((photo) => photo.imageurl) || [],
+        vphotos: vphotos.map((vphoto) => vphoto.imageurl) || [],
+        stories: stories.map((story) => story.storyurl) || [],
+        photoURL: photos.map((photo) => photo.imageurl) || [],
+        vphotoURL: vphotos.map((vphoto) => vphoto.imageurl) || [],
+        storyURL: stories.map((story) => story.storyurl) || [],
+        comment: comments.map((comment) => comment.comment) || [],
+        id: profile.id,
+        tarifa: profile.tarifa || 0,
+        lingua: profile.lingua || [],
+        telefone: profile.telefone || '',
+        email: profile.email || '',
+        idade: profile.idade || 0,
+        altura: profile.altura || '',
+        distrito: profile.distrito || '',
+        origem: profile.origem || '',
+        cidade: profile.cidade || '',
+        address: profile.address || '',
+        latitude: profile.latitude || 0,
+        longitude: profile.longitude || 0,
+        peso: profile.peso || '',
+        tatuagem: profile.tatuagem || '',
+        pelos: profile.pelos || '',
+        olhos: profile.olhos || '',
+        seios: profile.seios || '',
+        mamas: profile.mamas || '',
+        signo: profile.signo || '',
+        pagamento: profile.pagamento || [],
+        inactive: profile.status === false,
+        certificado: profile.certificado || false,
+        live: profile.live || false,
+        premium: profile.premium || false,
       };
     });
 
-    console.log('Perfis combinados:', combinedProfiles);
-    return combinedProfiles; // Retorna perfis combinados
-  } catch (error) {
+    return combinedProfiles;
+  } catch (error: any) {
     console.error('Erro ao buscar perfis:', error.message);
     throw error;
   }
 }
-// END FETCH PROFILE
 
-// FETCH PHOTOS PROFILE START
-export async function fetchProfilePhotos() {
+// FETCH PROFILE PHOTOS
+export async function fetchProfilePhotos(): Promise<any[]> {
   try {
     const { data: photosData, error: photosError } = await supabase
       .from('profilephoto')
       .select('*');
 
-    if (photosError) {
-      throw photosError;
-    }
-
+    if (photosError) throw photosError;
     return photosData;
-  } catch (error) {
-    console.error('Error fetching profile photos:', error.message);
+  } catch (error: any) {
+    console.error('Erro ao buscar fotos de perfil:', error.message);
     throw error;
   }
 }
-// END FETCH PHOTOS PROFILE
 
-// FETCH PROFILE BY USER UID START
-export async function fetchProfileFromDatabase(userUID: string) {
+// FETCH PROFILE BY USER UID
+export async function fetchProfileFromDatabase(userUID: string): Promise<Profile> {
   try {
-    // Recupera os dados do perfil do usuário
     const { data: profileData, error: profileError } = await supabase
       .from('ProfilesData')
       .select('*')
       .eq('userUID', userUID)
       .single();
 
-    if (profileError) {
-      throw new Error('Erro ao buscar dados do perfil');
-    }
+    if (profileError) throw new Error('Erro ao buscar dados do perfil');
 
-    // Recupera os URLs das fotos do perfil do usuário
     const { data: photoData, error: photoError } = await supabase
       .from('profilephoto')
       .select('imageurl')
       .eq('userUID', userUID);
 
-    if (photoError) {
-      throw new Error('Erro ao buscar URLs das fotos do perfil');
-    }
+    if (photoError) throw new Error('Erro ao buscar URLs das fotos do perfil');
 
-    // Recupera os URLs das stories do perfil do usuário
     const { data: storyData, error: storyError } = await supabase
       .from('stories')
       .select('storyurl')
       .eq('userUID', userUID);
 
-    if (storyError) {
-      throw new Error('Erro ao buscar URLs das stories do perfil');
-    }
+    if (storyError) throw new Error('Erro ao buscar URLs das stories do perfil');
 
-    // Recupera os URLs das fotos de verificação do perfil do usuário
-    const { data: VPhotoData, error: VPhotoError } = await supabase
+    const { data: vPhotoData, error: vPhotoError } = await supabase
       .from('VPhoto')
       .select('imageurl')
       .eq('userUID', userUID);
 
-    if (VPhotoError) {
-      throw new Error('Erro ao buscar URLs das fotos de verificação do perfil');
-    }
+    if (vPhotoError) throw new Error('Erro ao buscar URLs das fotos de verificação do perfil');
 
-    // Recupera os comentários associados ao perfil do usuário
     const { data: commentsData, error: commentsError } = await supabase
       .from('comments')
       .select('*')
       .eq('profileuid', userUID);
 
-    if (commentsError) {
-      throw new Error('Erro ao buscar comentários do perfil');
-    }
+    if (commentsError) throw new Error('Erro ao buscar comentários do perfil');
 
-    // Combina os dados do perfil do usuário com os URLs das fotos, stories, fotos de verificação e comentários
-    const profileWithPhotos = {
+    const profileWithPhotos: Profile = {
       ...profileData,
-      photos: photoData.map((photo) => photo.imageurl),
-      stories: storyData.map((story) => story.storyurl),
-      vphotos: VPhotoData.map((vphoto) => vphoto.imageurl),
-      comments: commentsData.map((comment) => ({
-        id: comment.id,
-        authorName: comment.authorName,
-        comment: comment.comment,
-        rating: comment.rating,
-        created_at: comment.created_at,
-      })),
+      photos: photoData.map((photo) => photo.imageurl) || [],
+      stories: storyData.map((story) => story.storyurl) || [],
+      vphotos: vPhotoData.map((vphoto) => vphoto.imageurl) || [],
+      photoURL: photoData.map((photo) => photo.imageurl) || [],
+      vphotoURL: vPhotoData.map((vphoto) => vphoto.imageurl) || [],
+      storyURL: storyData.map((story) => story.storyurl) || [],
+      comment: commentsData.map((comment) => comment.comment) || [],
+      id: profileData.id,
+      tarifa: profileData.tarifa || 0,
+      lingua: profileData.lingua || [],
+      telefone: profileData.telefone || '',
+      email: profileData.email || '',
+      idade: profileData.idade || 0,
+      altura: profileData.altura || '',
+      distrito: profileData.distrito || '',
+      origem: profileData.origem || '',
+      cidade: profileData.cidade || '',
+      address: profileData.address || '',
+      latitude: profileData.latitude || 0,
+      longitude: profileData.longitude || 0,
+      peso: profileData.peso || '',
+      tatuagem: profileData.tatuagem || '',
+      pelos: profileData.pelos || '',
+      olhos: profileData.olhos || '',
+      seios: profileData.seios || '',
+      mamas: profileData.mamas || '',
+      signo: profileData.signo || '',
+      pagamento: profileData.pagamento || [],
+      inactive: profileData.status === false,
+      certificado: profileData.certificado || false,
+      live: profileData.live || false,
+      premium: profileData.premium || false,
     };
 
-    console.log('Dados do perfil recuperados:', profileWithPhotos);
     return profileWithPhotos;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao buscar dados do perfil:', error.message);
     throw error;
   }
 }
 
-// UPDATE DATA PERFIL START
-
-export async function updateProfileData(dataToUpdate, userUID) {
+// UPDATE PROFILE DATA
+export async function updateProfileData(dataToUpdate: Partial<UserProfileData>, userUID: string) {
   try {
-    console.log('Data to update:', dataToUpdate);
-    console.log('User UID:', userUID);
-
     const { data, error } = await supabase
       .from('ProfilesData')
       .update(dataToUpdate)
       .eq('userUID', userUID);
 
-    console.log('Response from Supabase:', data, error);
-
-    if (error) {
-      console.error('Erro ao atualizar o perfil:', Error);
-    } else {
-      console.log('Perfil atualizado com sucesso:', data);
-      // Aqui você pode adicionar qualquer ação que deseja executar após a atualização do perfil
-    }
-  } catch (error) {
-    console.error('Erro ao atualizar o perfil:', Error);
+    if (error) throw new Error(`Erro ao atualizar o perfil: ${error.message}`);
+    console.log('Perfil atualizado com sucesso:', data);
+    return data;
+  } catch (error: any) {
+    console.error('Erro ao atualizar o perfil:', error.message);
+    throw error;
   }
 }
-// END UPDATE DATA PERFIL
 
-// UPDATE PROFILE TAG START
-export async function updateProfileTag(userUID, newTagValue) {
+// UPDATE PROFILE TAG
+export async function updateProfileTag(userUID: string, newTagValue: string) {
   try {
     const { data, error } = await supabase
       .from('ProfilesData')
       .update({
-        tag: newTagValue, // Sua nova "tag"
-        tagTimestamp: new Date().toISOString(), // Atualiza o timestamp para agora
+        tag: newTagValue,
+        tagtimestamp: new Date().toISOString(),
       })
       .eq('userUID', userUID);
 
-    if (error) {
-      console.error('Erro ao atualizar a tag do perfil:', Error);
-    } else {
-      console.log('Tag do perfil atualizada com sucesso:', data);
-    }
-  } catch (error) {
-    console.error('Erro ao atualizar a tag do perfil:', Error);
+    if (error) throw new Error(`Erro ao atualizar a tag do perfil: ${error.message}`);
+    console.log('Tag do perfil atualizada com sucesso:', data);
+    return data;
+  } catch (error: any) {
+    console.error('Erro ao atualizar a tag do perfil:', error.message);
+    throw error;
   }
 }
-// END UPDATE PROFILE TAG
 
-// Função para buscar stories do Supabase
+// FETCH STORIES
 export const fetchStories = async (userUID: string, dispatch: Dispatch) => {
   try {
     const { data: storyData, error: storyError } = await supabase
       .from('stories')
-      .select('*')
+      .select('storyurl')
       .eq('userUID', userUID);
 
-    if (storyError) throw new Error();
+    if (storyError) throw new Error(storyError.message);
 
-    // Atualiza o estado no Redux
     if (storyData) {
       dispatch(updateStories(storyData.map((story) => story.storyurl)));
     }
+    return storyData;
   } catch (error: any) {
-    console.error('Erro ao buscar stories:', Error);
+    console.error('Erro ao buscar stories:', error.message);
     throw error;
   }
 };
 
-// Função para fazer upload das stories
+// UPLOAD STORIES
 export const uploadStories = async (files: File[], userUID: string) => {
   const uploadedStoryURLs: string[] = [];
 
@@ -256,16 +250,18 @@ export const uploadStories = async (files: File[], userUID: string) => {
     const filePath = `${userUID}/${file.name.toLowerCase().replace(/ /g, '_').replace(/\./g, '_')}`;
 
     try {
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('storyStorage')
         .upload(filePath, file);
 
-      if (error) throw new Error();
+      if (error) throw new Error(error.message);
 
       const publicURLStory = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/storyStorage/${filePath}`;
       uploadedStoryURLs.push(publicURLStory);
+
+      await supabase.from('stories').insert({ userUID, storyurl: publicURLStory });
     } catch (error: any) {
-      console.error('Erro durante o upload:', Error);
+      console.error('Erro durante o upload:', error.message);
       throw error;
     }
   });
@@ -274,7 +270,7 @@ export const uploadStories = async (files: File[], userUID: string) => {
   return uploadedStoryURLs;
 };
 
-// Função para deletar uma story
+// DELETE STORY
 export const deleteStory = async (storyURL: string, userUID: string) => {
   const fileName = storyURL.split('/').pop();
   if (!fileName) throw new Error('Nome do arquivo não encontrado no URL.');
@@ -282,14 +278,12 @@ export const deleteStory = async (storyURL: string, userUID: string) => {
   const filePath = `${userUID}/${fileName}`;
 
   try {
-    // Remove do storage do Supabase
     const { error: storageError } = await supabase.storage
       .from('storyStorage')
       .remove([filePath]);
 
     if (storageError) throw new Error(storageError.message);
 
-    // Remove do banco de dados
     const { error: dbError } = await supabase
       .from('stories')
       .delete()
@@ -302,54 +296,41 @@ export const deleteStory = async (storyURL: string, userUID: string) => {
   }
 };
 
-// START FECTH LANDING PAGE
-
-export async function fetchProfilesMain() {
+// FETCH PROFILES FOR LANDING PAGE
+export async function fetchProfilesMain(): Promise<any[]> {
   try {
-    // Buscar apenas os dados principais do perfil (nome, cidade, foto, verificação)
     const { data: profilesData, error: profilesError } = await supabase
       .from('ProfilesData')
-      .select('userUID, nome, cidade, certificado, tag, tagtimestamp, live') // Buscar apenas os dados necessários
+      .select('userUID, nome, cidade, certificado, tag, tagtimestamp, live')
       .eq('status', true)
-      .limit(10); // Filtro de status
+      .limit(10);
 
-    if (profilesError) {
-      throw profilesError;
-    }
+    if (profilesError) throw profilesError;
 
-    // Buscar apenas a foto principal
     const { data: photosData, error: photosError } = await supabase
       .from('profilephoto')
       .select('userUID, imageurl');
 
-    if (photosError) {
-      throw photosError;
-    }
+    if (photosError) throw photosError;
 
-    // Buscar stories (assumindo que há uma tabela 'stories' com 'userUID' e 'storyUrl')
     const { data: storiesData, error: storiesError } = await supabase
       .from('stories')
       .select('userUID, storyurl');
 
-    if (storiesError) {
-      throw storiesError;
-    }
+    if (storiesError) throw storiesError;
 
-    // Combinar os dados
     const combinedProfiles = profilesData.map((profile) => {
-      const mainPhoto = photosData.find(
-        (photo) => photo.userUID === profile.userUID
-      );
+      const mainPhoto = photosData.find((photo) => photo.userUID === profile.userUID);
       const userStories = storiesData
         .filter((story) => story.userUID === profile.userUID)
-        .map((story) => story.storyurl); // Extrair apenas os URLs dos stories
+        .map((story) => story.storyurl);
 
       return {
         nome: profile.nome,
         cidade: profile.cidade,
         certificado: profile.certificado,
-        photos: mainPhoto ? [mainPhoto.imageurl] : [], // Convertendo foto para um array
-        stories: userStories || [], // Adicionando os stories
+        photos: mainPhoto ? [mainPhoto.imageurl] : [],
+        stories: userStories || [],
         tag: profile.tag,
         tagtimestamp: profile.tagtimestamp,
         userUID: profile.userUID,
@@ -361,17 +342,12 @@ export async function fetchProfilesMain() {
     combinedProfiles.sort((a, b) => {
       const timeA = new Date(a.tagtimestamp).getTime();
       const timeB = new Date(b.tagtimestamp).getTime();
-      return timeB - timeA; // Ordena do mais recente para o mais antigo
+      return timeB - timeA;
     });
 
-    console.log(
-      'Perfis combinados com fotos principais e stories:',
-      combinedProfiles
-    );
     return combinedProfiles;
-  } catch (error) {
-    console.error('Error fetching profiles:', Error);
+  } catch (error: any) {
+    console.error('Erro ao buscar perfis para a landing page:', error.message);
     throw error;
   }
 }
-// END FECTH LANDING PAGE

@@ -37,7 +37,7 @@ import {
   updateAddress,
   updateLatitude,
   updateLongitude,
-} from '@/backend/actions/ProfileActions';
+} from '@/backend/reducers/profileSlice';
 import { Switch } from '@/components/ui/switch';
 import supabase from '@/backend/database/supabase';
 import { useTranslation } from 'react-i18next';

@@ -3,6 +3,7 @@
 ├── README.md
 ├── components.json
 ├── estrutura-projeto.txt
+├── estrutura_projetooo.txt
 ├── next-env.d.ts
 ├── next-sitemap.config.js
 ├── next.config.mjs
@@ -12,9 +13,9 @@
 ├── public
 │   ├── Flags
 │   │   ├── Policies _ Supabase.html
-│   │   ├── ale.png
-│   │   ├── ale.svg
-│   │   ├── ar.png
+│   │   ├── ar.svg
+│   │   ├── de.svg
+│   │   ├── en.svg
 │   │   ├── es.svg
 │   │   ├── fr.svg
 │   │   ├── ing.png
@@ -25,10 +26,59 @@
 │   │   └── ru.svg
 │   ├── MBWay.svg
 │   ├── favicon.ico
+│   ├── fonts
+│   │   └── mofugu.otf
+│   ├── icons
+│   │   ├── ads-dark.png
+│   │   ├── ads.png
+│   │   ├── bitcoin.png
+│   │   ├── check.png
+│   │   ├── clock.png
+│   │   ├── dollar.png
+│   │   ├── escort-dark.png
+│   │   ├── escort.png
+│   │   ├── euro.png
+│   │   ├── home-dark.png
+│   │   ├── home.png
+│   │   ├── location.png
+│   │   ├── master-card.png
+│   │   ├── paypal.png
+│   │   ├── stories-dark.png
+│   │   ├── stories.png
+│   │   ├── verify.png
+│   │   └── visa.png
+│   ├── logo-mini.png
+│   ├── logo-white.png
 │   ├── logo.png
 │   ├── logo.webp
 │   ├── logoxg.png
 │   ├── mastercard.svg
+│   ├── models
+│   │   ├── 1.png
+│   │   ├── 2.png
+│   │   ├── 3.png
+│   │   ├── 4.png
+│   │   ├── adds
+│   │   │   ├── 1.png
+│   │   │   ├── 2.png
+│   │   │   ├── 3.png
+│   │   │   ├── 4.png
+│   │   │   ├── 5.png
+│   │   │   ├── 6.png
+│   │   │   ├── 7.png
+│   │   │   └── 8.png
+│   │   ├── card
+│   │   │   ├── 1.png
+│   │   │   ├── 2.png
+│   │   │   ├── 3.png
+│   │   │   └── 4.png
+│   │   ├── image.png
+│   │   └── stories
+│   │       ├── 1.png
+│   │       ├── 2.png
+│   │       ├── 3.png
+│   │       ├── 4.png
+│   │       └── 5.png
 │   ├── photos
 │   │   ├── btc.png
 │   │   ├── icon_paiement.webp
@@ -44,13 +94,7 @@
 │   ├── sitemap-0.xml
 │   └── sitemap.xml
 ├── src
-│   ├── actions
-│   │   ├── ClubsActions.ts
-│   │   ├── ProfileActions.ts
-│   │   └── userAndClubActions.ts
 │   ├── app
-│   │   ├── Destaques
-│   │   │   └── page.tsx
 │   │   ├── Privacidade
 │   │   │   ├── _ui
 │   │   │   │   └── Privacidade.tsx
@@ -60,9 +104,16 @@
 │   │   │   │   └── Termos.tsx
 │   │   │   └── page.tsx
 │   │   ├── _ui
-│   │   │   ├── carosel-g.tsx
-│   │   │   ├── last-announce.tsx
-│   │   │   └── map.tsx
+│   │   │   ├── featured-ads.tsx
+│   │   │   ├── hero-image-container.tsx
+│   │   │   ├── hero-section.tsx
+│   │   │   ├── map-section.tsx
+│   │   │   ├── map.tsx
+│   │   │   ├── newest-add.tsx
+│   │   │   ├── publish-ad-banner.tsx
+│   │   │   ├── recent-stories.tsx
+│   │   │   ├── statistics.tsx
+│   │   │   └── theme-toggle.tsx
 │   │   ├── admin
 │   │   │   ├── _ui
 │   │   │   │   └── side-bar-admin.tsx
@@ -82,14 +133,6 @@
 │   │   │   ├── _ui
 │   │   │   │   └── Contacto.tsx
 │   │   │   └── page.tsx
-│   │   ├── definicoes
-│   │   │   ├── _ui
-│   │   │   │   ├── AccountSettings.tsx
-│   │   │   │   ├── Billing.tsx
-│   │   │   │   ├── Email.tsx
-│   │   │   │   ├── ModalConfirmation.tsx
-│   │   │   │   └── Password.tsx
-│   │   │   └── page.tsx
 │   │   ├── escort
 │   │   │   ├── [profileName]
 │   │   │   │   ├── _ui
@@ -105,18 +148,13 @@
 │   │   │   ├── _ui
 │   │   │   │   └── InputWithIcon.tsx
 │   │   │   └── page.tsx
-│   │   ├── minha-conta
-│   │   │   ├── _ui
-│   │   │   │   ├── BarConta.tsx
-│   │   │   │   ├── Definicoes.tsx
-│   │   │   │   ├── ModificarContacto.tsx
-│   │   │   │   ├── ModificarFotos.tsx
-│   │   │   │   ├── ModificarPerfil.tsx
-│   │   │   │   └── ModificarStories.tsx
+│   │   ├── my-account
 │   │   │   └── page.tsx
 │   │   ├── not-found.tsx
 │   │   ├── page.tsx
 │   │   ├── registo
+│   │   │   ├── confirmar-email
+│   │   │   │   └── page.tsx
 │   │   │   ├── regista2
 │   │   │   │   ├── _ui
 │   │   │   │   │   └── FeaturedList.tsx
@@ -129,8 +167,13 @@
 │   │   │   │   └── page.tsx
 │   │   │   ├── registo-fotos
 │   │   │   │   └── page.tsx
-│   │   │   └── registo-pagamento
+│   │   │   ├── registo-pagamento
+│   │   │   │   └── page.tsx
+│   │   │   └── subscriptionPlan
 │   │   │       └── page.tsx
+│   │   ├── settings
+│   │   │   ├── ModalConfirmation.tsx
+│   │   │   └── page.tsx
 │   │   ├── stories
 │   │   │   ├── _ui
 │   │   │   │   ├── CitySelector.tsx
@@ -143,10 +186,51 @@
 │   │       │   └── page.tsx
 │   │       └── sucess
 │   │           └── page.tsx
-│   ├── auth
-│   │   └── auth.ts
+│   ├── backend
+│   │   ├── actions
+│   │   │   ├── ClubsActions.ts
+│   │   │   ├── ProfileActions.ts
+│   │   │   └── userAndClubActions.ts
+│   │   ├── auth
+│   │   │   └── auth.ts
+│   │   ├── context
+│   │   │   └── LanguageContext.tsx
+│   │   ├── database
+│   │   │   ├── i18n
+│   │   │   │   └── i18n.js
+│   │   │   ├── schema.ts
+│   │   │   └── supabase.ts
+│   │   ├── lib
+│   │   │   ├── fonts.ts
+│   │   │   ├── payement-history.tsx
+│   │   │   ├── utils.ts
+│   │   │   └── verotel.ts
+│   │   ├── locales
+│   │   │   ├── en
+│   │   │   │   └── en.json
+│   │   │   ├── fr
+│   │   │   │   └── fr.json
+│   │   │   └── pt
+│   │   │       └── pt.json
+│   │   ├── middleware.ts
+│   │   ├── reducers
+│   │   │   ├── clubsReducer.ts
+│   │   │   ├── profileSlice.ts
+│   │   │   ├── rootReducer.ts
+│   │   │   └── userAndClubReducer.ts
+│   │   ├── services
+│   │   │   ├── authService.ts
+│   │   │   ├── geocodeService.tsx
+│   │   │   ├── profileDataService.ts
+│   │   │   ├── profileService.ts
+│   │   │   └── supabaseSync.ts
+│   │   ├── storage.ts
+│   │   ├── store.ts
+│   │   └── types
+│   │       └── index.ts
 │   ├── components
 │   │   ├── MobileModal.tsx
+│   │   ├── ProfileCard.tsx
 │   │   ├── ThemeSwitcher.tsx
 │   │   ├── filtros
 │   │   │   ├── common-filter.tsx
@@ -164,6 +248,14 @@
 │   │   │   ├── filtro-signo.tsx
 │   │   │   ├── filtro-tarifa.tsx
 │   │   │   └── filtro-tatuagem.tsx
+│   │   ├── forms
+│   │   │   ├── account-settings-form.tsx
+│   │   │   ├── general-information-form.tsx
+│   │   │   ├── my-card-form.tsx
+│   │   │   ├── photos-form.tsx
+│   │   │   ├── service-preferences-form.tsx
+│   │   │   ├── stories-form.tsx
+│   │   │   └── subscription-form.tsx
 │   │   ├── header-filter
 │   │   │   ├── filter-list.tsx
 │   │   │   ├── header-g.tsx
@@ -182,40 +274,49 @@
 │   │   │   ├── Liga.tsx
 │   │   │   ├── Partilha.tsx
 │   │   │   ├── ProfileStories.tsx
-│   │   │   ├── Sobre.tsx
-│   │   │   ├── Tarifas.tsx
+│   │   │   ├── about-profile.tsx
+│   │   │   ├── description.tsx
 │   │   │   ├── foto-big.tsx
 │   │   │   ├── idioma.tsx
 │   │   │   ├── left-side.tsx
+│   │   │   ├── photo-grid.tsx
 │   │   │   ├── photos-and-certificado.tsx
 │   │   │   ├── servicos-prestados.tsx
 │   │   │   ├── story-big-conta.tsx
-│   │   │   └── story-big.tsx
+│   │   │   ├── story-big.tsx
+│   │   │   └── tarifs-a-language.tsx
 │   │   ├── register
 │   │   │   ├── check-contacto.tsx
 │   │   │   ├── check-deslocacoes.tsx
 │   │   │   ├── check-linguas.tsx
 │   │   │   ├── check-pagamento.tsx
 │   │   │   ├── check-servico.tsx
-│   │   │   ├── header-loged.tsx
 │   │   │   ├── list-categoria-bar.tsx
 │   │   │   ├── list-register.tsx
 │   │   │   ├── my-editor.tsx
 │   │   │   └── water-mark.tsx
+│   │   ├── subscriptionPlan.tsx
+│   │   ├── theme-toggle.tsx
 │   │   └── ui
 │   │       ├── Search.tsx
 │   │       ├── address-autocomplete.tsx
+│   │       ├── avatar.tsx
 │   │       ├── badge.tsx
 │   │       ├── blur-image.tsx
+│   │       ├── breadcrumb.tsx
 │   │       ├── button.tsx
 │   │       ├── card-content.tsx
 │   │       ├── card-footer.tsx
 │   │       ├── card.tsx
 │   │       ├── cards-girl.tsx
 │   │       ├── carosel-round.tsx
+│   │       ├── carousel.tsx
+│   │       ├── checkbox.tsx
 │   │       ├── common-input.tsx
 │   │       ├── dialog.tsx
+│   │       ├── dropdown-menu.tsx
 │   │       ├── filter-input.tsx
+│   │       ├── form.tsx
 │   │       ├── info-card.tsx
 │   │       ├── input.tsx
 │   │       ├── label.tsx
@@ -224,50 +325,31 @@
 │   │       ├── maiores.tsx
 │   │       ├── mini-card.tsx
 │   │       ├── mobile-modal.tsx
+│   │       ├── number-ticker.tsx
+│   │       ├── pagination.tsx
 │   │       ├── saved.tsx
-│   │       └── search-modal.tsx
-│   ├── context
-│   │   └── LanguageContext.tsx
-│   ├── database
-│   │   ├── schema.ts
-│   │   └── supabase.ts
-│   ├── i18n
-│   │   └── i18n.js
-│   ├── lib
-│   │   ├── generateMetadata.ts
-│   │   ├── utils.ts
-│   │   └── verotel.ts
-│   ├── locales
-│   │   ├── en
-│   │   │   └── en.json
-│   │   ├── fr
-│   │   │   └── fr.json
-│   │   └── pt
-│   │       └── pt.json
-│   ├── middleware.ts
+│   │       ├── search-modal.tsx
+│   │       ├── select.tsx
+│   │       ├── separator.tsx
+│   │       ├── sheet.tsx
+│   │       ├── switch.tsx
+│   │       ├── table.tsx
+│   │       ├── tabs.tsx
+│   │       ├── textarea.tsx
+│   │       └── tooltip.tsx
 │   ├── provider
 │   │   ├── MainProvider.tsx
-│   │   └── ReduxProvider.tsx
-│   ├── reducers
-│   │   ├── clubsReducer.ts
-│   │   ├── profileReducer.ts
-│   │   ├── rootReducer.ts
-│   │   └── userAndClubReducer.ts
-│   ├── services
-│   │   ├── authService.ts
-│   │   ├── commentsService.ts
-│   │   ├── geocodeService.tsx
-│   │   ├── profileDataService.ts
-│   │   └── profileService.ts
-│   ├── storage.ts
-│   ├── store.ts
-│   ├── styles
-│   │   ├── globals.css
-│   │   └── globals.min.css
-│   └── types
-│       └── index.ts
+│   │   ├── ReduxProvider.tsx
+│   │   └── theme-provider.tsx
+│   └── styles
+│       ├── globals.css
+│       └── globals.min.css
 ├── tailwind.config.ts
 ├── todo.md
 └── tsconfig.json
 
-67 directories, 204 files
+74 directories, 275 files
+
+
+tree -I 'node_modules' > estrutura_projeto.txt
+code estrutura_projeto.txt
