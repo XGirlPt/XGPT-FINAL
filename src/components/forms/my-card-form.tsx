@@ -209,7 +209,7 @@ export const MyCardForm = () => {
                   <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                     <div className="flex items-start justify-between gap-2">
                       <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
-                        "{newTag}"
+                      &quot;{newTag}&quot;
                       </span>
                       <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                     </div>
@@ -230,7 +230,7 @@ export const MyCardForm = () => {
               <div>
                 <p className="text-gray-500 dark:text-gray-400 mb-2">{t('myCard.currentTag')}</p>
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-3 mb-6 text-sm opacity-60 cursor-not-allowed select-none w-[70%]">
-                  <p className="text-gray-600 dark:text-gray-400">"{currentTag}"</p> {/* Usar currentTag */}
+                  <p className="text-gray-600 dark:text-gray-400">&quot;{currentTag}&quot;</p> {/* Usar currentTag */}
                 </div>
               </div>
 

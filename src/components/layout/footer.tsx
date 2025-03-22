@@ -86,7 +86,7 @@ const Footer = () => {
             theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
           )}
         >
-          Don't worry! We don't spam you!
+          Don&apos;t worry! We don&apos;t spam you!
         </p>
       </div>
 
@@ -181,7 +181,7 @@ const Footer = () => {
                 theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
               )}
             >
-              Don't worry! We don't spam you!
+              Don&apos;t worry! We don&apos;t spam you!
             </p>
           </div>
         </div>
