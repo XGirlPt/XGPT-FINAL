@@ -702,8 +702,26 @@
     "servicePreferences": "Preferências de Serviço",
     "photos": "Fotos",
     "stories": "Histórias",
-    "myCard": "Meu Cartão"
+    "myCard": "Meu Cartão",
+    "myProfile": "O Meu Perfil"
+  },
+
+  "myCard": {
+  "title": "Meu Cartão",
+  "stateInfo": "Minha Tag Atual",
+  "currentTag": "Minha tag atual",
+  "updateTag": "Atualizar minha Tag"
+},
+"cookieConsent": {
+    "title": "Nós usamos cookies",
+    "message": "Usamos cookies essenciais para o funcionamento do site e cookies analíticos opcionais (ex.: Google Analytics: _ga, _gid) para entender como você usa nosso site. Escolha quais cookies permitir:",
+    "essential": "Cookies Essenciais (sempre necessários)",
+    "analytics": "Cookies Analíticos (ex.: Google Analytics)",
+    "decline": "Recusar Tudo",
+    "save": "Salvar",
+    "learnMore": "Saiba mais sobre nossa Política de Privacidade"
   }
+
 
 
 }

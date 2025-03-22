@@ -658,7 +658,23 @@
     "servicePreferences": "Service Preferences",
     "photos": "Photos",
     "stories": "Stories",
-    "myCard": "My Card"
+    "myCard": "My Card",
+    "myProfile": "My Profile"
+  },
+  "myCard": {
+    "title": "My Card",
+    "stateInfo": "My current Tag",
+    "currentTag": "My current tag",
+    "updateTag": "Update my Tag"
+  },
+"cookieConsent": {
+    "title": "We use cookies",
+    "message": "We use essential cookies for site functionality and optional analytics cookies (e.g., Google Analytics: _ga, _gid) to understand how you use our site. Choose which cookies to allow:",
+    "essential": "Essential Cookies (always required)",
+    "analytics": "Analytics Cookies (e.g., Google Analytics)",
+    "decline": "Decline All",
+    "save": "Save",
+    "learnMore": "Learn more about our Privacy Policy"
   }
 
   }

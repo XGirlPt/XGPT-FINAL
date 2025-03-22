@@ -3,13 +3,13 @@ TO DO
 Landing page:
 
  - Cards:
-[] - stories em cima quando nao é premium
+[X] - stories em cima quando nao é premium
 [] - melhorar a card - tirar o tipo de letra
 [X] - icon certificado
 
  - Stories:
 [] - melhorar design stories
-[] - foto quando storie esta aberto
+[X] - foto quando storie esta aberto
 [] - passar ao proximo story - seta 
 
  - Featured Add:
@@ -23,8 +23,8 @@ Landing page:
  [X] - colocar componente maps a funcionar
 
  - Newest adds:
- [] - melhorar card
- [] - espacamento bottom
+ [X] - melhorar card
+ [X] - espacamento bottom
 
  - Adicionar mais efeitos rosa
 
@@ -37,7 +37,7 @@ Landing page:
  Profile Page: 
 
   [] - primeiro scroll 
-  [] - left side, sempre icon texto sempre no mesmo sitio e do mesmo tamanho
+  [X] - left side, sempre icon texto sempre no mesmo sitio e do mesmo tamanho
   [] - certificado, tirar aquele tipo de letra
   [] - modais de perfil consistestes em design e cores e font
   [] - traducao correcta de todos os campos
@@ -73,3 +73,15 @@ Landing page:
 
  [] - Translate all project
 
+
+
+
+
+
+
+DONE: 
+
+- watter mark 
+- my settings foto working
+- login working
+- 

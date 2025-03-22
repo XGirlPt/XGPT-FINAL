@@ -128,10 +128,14 @@ export function GeneralInformationForm() {
         'tattoos',
         'sign',
         'selectRate',
-        'briefBio',
         'liveCam',
         'attends',
       ],
+    },
+    {
+      id: 'description',
+      title: 'Descrição',
+      fields: ['briefBio'],
     },
   ];
 
@@ -398,7 +402,13 @@ export function GeneralInformationForm() {
       case 'selectRate':
         return <FiltroTarifa value={field.value} onChange={field.onChange} />;
       case 'briefBio':
-        return <Textarea {...field} />;
+        return (
+          <Textarea
+            {...field}
+            className="w-full min-h-[150px] bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm p-4 rounded-xl border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-200 resize-y"
+            placeholder="Escreva uma breve descrição sobre você..."
+          />
+        );
       case 'liveCam':
         return <Switch checked={field.value} onCheckedChange={field.onChange} />;
       case 'attends':
@@ -436,9 +446,14 @@ export function GeneralInformationForm() {
     const category = categories.find((cat) => cat.id === activeTab);
     if (!category) return null;
 
+    // Define as classes de grid dinamicamente com base na aba ativa
+    const gridClass = activeTab === 'description'
+      ? 'grid grid-cols-1 md:grid-cols-1 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl'
+      : 'grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl';
+
     return (
       <div className="bg-opacity-40 rounded-3xl p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
+        <div className={gridClass}>
           {category.fields.map((fieldName) => (
             <FormField
               key={fieldName}
@@ -520,10 +535,10 @@ export function GeneralInformationForm() {
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
           <Button className="rounded-full dark:bg-transparent dark:text-white" variant="outline" onClick={handleClear}>
-             {t('buttonSave.discard')}
+            {t('buttonSave.discard')}
           </Button>
           <Button onClick={handleGuardar} className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full">
-          {t('buttonSave.saveChanges')}
+            {t('buttonSave.saveChanges')}
           </Button>
         </div>
       </div>

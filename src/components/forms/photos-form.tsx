@@ -15,59 +15,69 @@ import toast, { Toaster } from 'react-hot-toast';
 // Função para adicionar marca d'água à imagem
 const addWatermark = (file: File): Promise<File> => {
   return new Promise((resolve, reject) => {
+    console.log('[WATERMARK] Iniciando processo para arquivo:', file.name, 'Tamanho:', file.size);
+
     const img = new Image();
     const logo = new Image();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    console.log('Iniciando processo de watermark para o arquivo:', file.name);
+    if (!ctx) {
+      console.error('[WATERMARK] Erro: Contexto do canvas não disponível');
+      reject(new Error('Contexto do canvas não disponível'));
+      return;
+    }
 
     // Carregar a imagem original
     img.onload = () => {
-      console.log('Imagem original carregada. Dimensões:', img.width, 'x', img.height);
-      
+      console.log('[WATERMARK] Imagem original carregada. Dimensões:', img.width, 'x', img.height);
+
       // Carregar o logo
-      logo.src = '/logo.webp'; // Certifique-se de que está em public/logo.webp
+      logo.src = '/logo.webp'; // Caminho relativo ao public/
       logo.onload = () => {
-        if (!ctx) {
-          console.error('Contexto do canvas não disponível');
-          reject(new Error('Contexto do canvas não disponível'));
-          return;
-        }
+        console.log('[WATERMARK] Logo carregado. Dimensões:', logo.width, 'x', logo.height);
 
-        console.log('Logo carregado. Dimensões:', logo.width, 'x', logo.height);
-
-        // Definir dimensões do canvas com base na imagem original
+        // Definir dimensões do canvas
         canvas.width = img.width;
         canvas.height = img.height;
+        console.log('[WATERMARK] Canvas configurado com dimensões:', canvas.width, 'x', canvas.height);
 
         // Desenhar a imagem original
         ctx.drawImage(img, 0, 0);
-        console.log('Imagem original desenhada no canvas');
+        console.log('[WATERMARK] Imagem original desenhada no canvas');
 
-        // Definir tamanho do logo (20% da largura da imagem)
-        const logoWidth = img.width * 0.2;
+        // Definir tamanho e posição do logo (50% da largura, centralizado)
+        const logoWidth = img.width * 0.5; // Aumentado para 50%
         const logoHeight = (logo.height / logo.width) * logoWidth;
+        const logoX = (img.width - logoWidth) / 2; // Centralizado horizontalmente
+        const logoY = (img.height - logoHeight) / 2; // Centralizado verticalmente
 
-        // Posição do logo (canto inferior direito com margem)
-        const margin = 20;
-        const logoX = img.width - logoWidth - margin;
-        const logoY = img.height - logoHeight - margin;
+        // Adicionar transparência ao logo (50% de opacidade)
+        ctx.globalAlpha = 0.5; // Define a opacidade (0.0 = totalmente transparente, 1.0 = opaco)
+        console.log('[WATERMARK] Opacidade definida para:', ctx.globalAlpha);
 
         // Desenhar o logo como marca d'água
         ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
-        console.log('Logo desenhado no canvas em:', logoX, logoY, 'com tamanho:', logoWidth, 'x', logoHeight);
+        console.log('[WATERMARK] Logo desenhado no canvas em:', logoX, logoY, 'com tamanho:', logoWidth, 'x', logoHeight);
 
-        // Converter o canvas para Blob
+        // Restaurar a opacidade padrão para evitar afetar outras operações (opcional)
+        ctx.globalAlpha = 1.0;
+
+        // Verificar o resultado no DOM (para depuração, remova após teste)
+        const previewURL = canvas.toDataURL('image/jpeg', 0.9);
+        console.log('[WATERMARK] URL de pré-visualização do canvas:', previewURL);
+
+        // Converter para Blob
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              console.log('Canvas convertido em Blob com tamanho:', blob.size);
+              console.log('[WATERMARK] Canvas convertido em Blob. Tamanho:', blob.size);
               const fileName = file.name.replace(/\.[^/.]+$/, '') + '_watermarked.jpg';
               const watermarkedFile = new File([blob], fileName, { type: 'image/jpeg' });
+              console.log('[WATERMARK] Arquivo com watermark criado:', watermarkedFile.name, 'Tamanho:', watermarkedFile.size);
               resolve(watermarkedFile);
             } else {
-              console.error('Falha ao converter canvas para Blob');
+              console.error('[WATERMARK] Falha ao converter canvas para Blob');
               reject(new Error('Falha ao converter canvas para Blob'));
             }
           },
@@ -76,15 +86,16 @@ const addWatermark = (file: File): Promise<File> => {
         );
       };
       logo.onerror = () => {
-        console.error('Erro ao carregar o logo em /logo.webp');
+        console.error('[WATERMARK] Erro ao carregar o logo em /logo.webp');
         reject(new Error('Erro ao carregar o logo'));
       };
     };
     img.onerror = () => {
-      console.error('Erro ao carregar a imagem original');
+      console.error('[WATERMARK] Erro ao carregar a imagem original');
       reject(new Error('Erro ao carregar a imagem'));
     };
 
+    console.log('[WATERMARK] Configurando src da imagem original');
     img.src = URL.createObjectURL(file);
   });
 };
@@ -107,15 +118,15 @@ export const PhotosForm = () => {
 
   useEffect(() => {
     if (userUID) {
-      console.log('Carregando dados iniciais para userUID:', userUID);
+      console.log('[INITIAL] Carregando dados iniciais para userUID:', userUID);
       dispatch(fetchProfileData());
     } else {
-      console.error('userUID está indefinido - verifique a autenticação');
+      console.error('[INITIAL] userUID está indefinido - verifique a autenticação');
     }
   }, [dispatch, userUID]);
 
   useEffect(() => {
-    console.log('Sincronizando photos com Redux. photoURLsRedux:', photoURLsRedux);
+    console.log('[SYNC] Sincronizando photos com Redux. photoURLsRedux:', photoURLsRedux);
     setPhotos(photoURLsRedux);
   }, [photoURLsRedux]);
 
@@ -138,7 +149,7 @@ export const PhotosForm = () => {
       setPendingFiles((prev) => [...prev, ...selectedFiles]);
       const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
       setPhotos((prev) => [...prev, ...previewURLs]);
-      console.log('Atualizando estado local com pré-visualização:', previewURLs);
+      console.log('[UPLOAD] Atualizando estado local com pré-visualização:', previewURLs);
     }
   };
 
@@ -175,14 +186,14 @@ export const PhotosForm = () => {
         dispatch({ type: 'profile/setPhotos', payload: updatedPhotosArray });
         toast.success(t('messages.photoDeleted'));
       } catch (error: any) {
-        console.error('Erro ao excluir foto:', error.message);
+        console.error('[DELETE] Erro ao excluir foto:', error.message);
         toast.error(t('messages.deleteError'));
       }
     }
   };
 
   const handleDiscard = () => {
-    console.log('Descartando alterações. Restaurando para:', photoURLsRedux);
+    console.log('[DISCARD] Descartando alterações. Restaurando para:', photoURLsRedux);
     photos.forEach((url) => {
       if (url.startsWith('blob:')) URL.revokeObjectURL(url);
     });
@@ -197,35 +208,38 @@ export const PhotosForm = () => {
       return;
     }
 
-    console.log('Salvando photos:', photos);
+    console.log('[SAVE] Iniciando salvamento. Photos atuais:', photos);
+    console.log('[SAVE] Arquivos pendentes:', pendingFiles.map((f) => f.name));
 
     try {
       const uploadPromises = pendingFiles.map(async (file) => {
-        console.log('Processando arquivo para upload:', file.name);
+        console.log('[SAVE] Processando arquivo:', file.name);
         const watermarkedFile = await addWatermark(file);
-        console.log('Arquivo com watermark gerado:', watermarkedFile.name, 'Tamanho:', watermarkedFile.size);
+        console.log('[SAVE] Arquivo com watermark gerado:', watermarkedFile.name, 'Tamanho:', watermarkedFile.size);
 
         const fileName = watermarkedFile.name;
         const filePath = `${userUID}/${fileName}`;
 
+        console.log('[SAVE] Fazendo upload para Supabase. Caminho:', filePath);
         const { error: uploadError } = await supabase.storage
           .from('profileFoto')
           .upload(filePath, watermarkedFile);
 
         if (uploadError) {
-          console.error('Erro ao fazer upload do arquivo:', uploadError.message);
+          console.error('[SAVE] Erro ao fazer upload do arquivo:', uploadError.message);
           throw new Error(uploadError.message);
         }
 
         const publicURLFoto = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/profileFoto/${filePath}`;
-        console.log('URL pública gerada:', publicURLFoto);
+        console.log('[SAVE] URL pública gerada:', publicURLFoto);
 
+        console.log('[SAVE] Inserindo no banco de dados');
         const { error: insertError } = await supabase
           .from('profilephoto')
           .insert({ userUID, imageurl: publicURLFoto });
 
         if (insertError) {
-          console.error('Erro ao inserir no banco de dados:', insertError.message);
+          console.error('[SAVE] Erro ao inserir no banco de dados:', insertError.message);
           throw new Error(insertError.message);
         }
 
@@ -233,13 +247,13 @@ export const PhotosForm = () => {
       });
 
       const uploadedURLs = await Promise.all(uploadPromises);
-      console.log('URLs das fotos enviadas:', uploadedURLs);
+      console.log('[SAVE] URLs das fotos enviadas:', uploadedURLs);
 
       const savedPhotos = photos.filter((url) => !url.startsWith('blob:'));
       const newPhotos = [...savedPhotos, ...uploadedURLs];
 
+      console.log('[SAVE] Atualizando Redux com novas fotos:', newPhotos);
       dispatch({ type: 'profile/setPhotos', payload: newPhotos });
-      console.log('Redux atualizado com novas fotos:', newPhotos);
 
       photos.forEach((url) => {
         if (url.startsWith('blob:')) URL.revokeObjectURL(url);
@@ -248,7 +262,7 @@ export const PhotosForm = () => {
       setPendingFiles([]);
       toast.success(t('messages.photoSaved'));
     } catch (error: any) {
-      console.error('Erro ao salvar fotos:', error.message);
+      console.error('[SAVE] Erro ao salvar fotos:', error.message);
       toast.error(t('messages.saveError'));
     }
   };
@@ -257,7 +271,7 @@ export const PhotosForm = () => {
     const photoCards = [];
     const totalCards = 10;
 
-    console.log('Renderizando cards. Photos:', photos);
+    console.log('[RENDER] Renderizando cards. Photos:', photos);
 
     photos.forEach((photoURL, index) => {
       photoCards.push(

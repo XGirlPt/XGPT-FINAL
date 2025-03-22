@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import LeftSide from '@/components/profile/left-side';
-import  PhotosAndCertificado  from '@/components/profile/photos-and-certificado'; // Importação nomeada
+import PhotosAndCertificado from '@/components/profile/photos-and-certificado'; // Importação nomeada corrigida
 import { ProvidedServices } from '@/components/profile/servicos-prestados';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';

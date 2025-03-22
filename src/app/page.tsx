@@ -20,7 +20,7 @@ import { PublishAdBanner } from './_ui/publish-ad-banner';
 import { useLanguage } from '../backend/context/LanguageContext'; // Importe o contexto de idioma
 import { useTranslation } from 'react-i18next';
 import type { Profile } from '@/backend/types/index';
-
+import Maiores from "@/components/ui/maiores";
 
 async function fetchCoordinates(
   address: string
@@ -96,8 +96,7 @@ async function fetchCoordinates(
 const Dashboard: React.FC = () => {
   const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [showMaiores, setShowMaiores] = useState(false);
-
+  const [showMaiores, setShowMaiores] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [darkMode, setDarkMode] = useState(false);
@@ -162,8 +161,8 @@ const Dashboard: React.FC = () => {
   }));
 
   return (
-  
-
+    <>
+    {showMaiores && <Maiores setShowMaiores={setShowMaiores} />}
     <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-6">
       <div
         className="absolute rounded-full z-30 bg-[#f2cadb] dark:bg-[#2e0415]"
@@ -188,6 +187,7 @@ const Dashboard: React.FC = () => {
       <Statistics />
       <PublishAdBanner />
     </main>
+    </>
   );
 };
 

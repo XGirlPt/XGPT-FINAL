@@ -6,7 +6,6 @@ import { fetchProfileData, updateProfileField } from '@/backend/actions/ProfileA
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -16,13 +15,30 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 
-// Variantes para animação da card
+interface ProfileState {
+  userUID: string;
+  nome: string;
+  photos: string[];
+  premium: boolean;
+  live: boolean;
+  stories: string[];
+  certificado: boolean;
+  cidade: string;
+  tag: string;
+  tagtimestamp: string;
+  loading: boolean;
+  error: string | null;
+}
+
+interface RootState {
+  profile: ProfileState;
+}
+
 const cardVariants = {
   hover: { scale: 1.03, transition: { duration: 0.2 } },
   tap: { scale: 0.98 },
 };
 
-// Função para calcular o tempo decorrido
 const timeAgo = (timestamp: string) => {
   const now = new Date();
   const past = new Date(timestamp);
@@ -42,7 +58,7 @@ export const MyCardForm = () => {
   const { t } = useTranslation();
 
   // Dados do Redux
-  const profile = useSelector((state: { profile: any }) => state.profile);
+  const profile = useSelector((state: RootState) => state.profile);
   const userUID = profile.userUID;
   const nome = profile.nome || 'User';
   const photos = profile.photos || [];
@@ -51,13 +67,15 @@ export const MyCardForm = () => {
   const stories = profile.stories || [];
   const certificado = profile.certificado || false;
   const cidade = profile.cidade || 'Unknown';
-  const tag = profile.tag || "I'm available!";
-  const tagTimestamp = profile.tagtimestamp || new Date().toISOString();
+  const initialTag = profile.tag || "I'm available!";
+  const initialTagTimestamp = profile.tagtimestamp || new Date().toISOString();
   const loading = profile.loading;
   const error = profile.error;
 
-  // Estado local para a tag
-  const [newTag, setNewTag] = useState(tag);
+  // Estado local para a tag, timestamp e currentTag
+  const [newTag, setNewTag] = useState<string>(initialTag);
+  const [newTagTimestamp, setNewTagTimestamp] = useState<string>(initialTagTimestamp);
+  const [currentTag, setCurrentTag] = useState<string>(initialTag); // Novo estado para currentTag
 
   // Carregar dados do perfil ao montar o componente
   useEffect(() => {
@@ -69,19 +87,27 @@ export const MyCardForm = () => {
     }
   }, [dispatch, userUID]);
 
-  // Sincronizar a tag local com o Redux
-  useEffect(() => {
-    console.log('Sincronizando tag com Redux. Tag:', tag);
-    setNewTag(tag);
-  }, [tag]);
-
   // Função para salvar as alterações
   const handleSave = async () => {
+    if (newTag.length > 60) {
+      toast.error(t('messages.tagTooLong'));
+      return;
+    }
     try {
+      const currentTimestamp = new Date().toISOString();
       console.log('Salvando tag:', newTag);
-      await dispatch(updateProfileField({ field: 'tag', value: newTag })).unwrap();
-      await dispatch(updateProfileField({ field: 'tagtimestamp', value: new Date().toISOString() })).unwrap();
-      toast.success(t('messages.changesSaved'));
+
+      // Atualiza o estado local imediatamente
+      setNewTagTimestamp(currentTimestamp);
+      setCurrentTag(newTag); // Atualiza o currentTag localmente
+
+      // Dispara as ações assíncronas para o Redux
+      await Promise.all([
+        dispatch(updateProfileField({ field: 'tag', value: newTag })).unwrap(),
+        dispatch(updateProfileField({ field: 'tagtimestamp', value: currentTimestamp })).unwrap(),
+      ]);
+
+      toast.success(t('messages.tagUpdated'));
     } catch (error: any) {
       console.error('Erro ao salvar tag:', error);
       toast.error(t('messages.saveError'));
@@ -90,14 +116,21 @@ export const MyCardForm = () => {
 
   // Função para descartar alterações
   const handleDiscard = () => {
-    console.log('Descartando alterações. Restaurando para:', tag);
-    setNewTag(tag);
+    console.log('Descartando alterações. Restaurando para:', initialTag);
+    setNewTag(initialTag);
+    setNewTagTimestamp(initialTagTimestamp);
+    setCurrentTag(initialTag); // Restaura o currentTag também
     toast.info(t('messages.changesDiscarded'));
   };
 
-  // Função para atualizar a tag ao clicar no botão "Update"
-  const handleUpdateTag = async () => {
-    await handleSave();
+  // Handler para limitar o input a 60 caracteres
+  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= 60) {
+      setNewTag(value);
+    } else {
+      toast.warn(t('messages.tagLimitReached'));
+    }
   };
 
   if (loading) return <div>{t('loading')}</div>;
@@ -108,18 +141,18 @@ export const MyCardForm = () => {
       {/* Header com título e botões */}
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
-          <h1 className="text-2xl font-bold">{t('myCard.title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('myCard.title')}</h1>
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
           <Button className="rounded-full" variant="outline" onClick={handleDiscard}>
-            {t('button.discard')}
+            {t('buttonSave.discard')}
           </Button>
           <Button
             className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
             onClick={handleSave}
           >
-            {t('button.saveChanges')}
+            {t('buttonSave.saveChanges')}
           </Button>
         </div>
       </div>
@@ -176,45 +209,42 @@ export const MyCardForm = () => {
                   <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                     <div className="flex items-start justify-between gap-2">
                       <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
-                      &quot;{tag}&quot;
+                        "{newTag}"
                       </span>
                       <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                     </div>
                     <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-2">
                       <FaClock className="text-yellow-500 h-4 w-4 font-normal" />
-                      {timeAgo(tagTimestamp)}
+                      {timeAgo(newTagTimestamp)}
                     </div>
                   </div>
                 </motion.div>
               </Link>
             </Card>
 
-            {/* Right side (tag update) */}
+            {/* Right side (tag display and update) */}
             <div className="flex-1">
-              <h3 className="text-2xl font-bold mb-6 sm:mt-0 mt-6">{t('myCard.stateInfo')}</h3>
+              <h3 className="text-2xl font-bold mb-6 sm:mt-0 mt-6 text-gray-900 dark:text-gray-100">{t('myCard.stateInfo')}</h3>
 
+              {/* Current Tag */}
               <div>
-                <p className="text-gray-500 mb-2">{t('myCard.currentTag')}</p>
-                <div className="bg-[#f2ebee] dark:bg-[#271a1f] dark:border dark:border-gray-800 dark:border-opacity-50 rounded-full p-3 mb-6 text-sm">
-                  <p>&quot;{tag}&quot;</p>
+                <p className="text-gray-500 dark:text-gray-400 mb-2">{t('myCard.currentTag')}</p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-3 mb-6 text-sm opacity-60 cursor-not-allowed select-none w-[70%]">
+                  <p className="text-gray-600 dark:text-gray-400">"{currentTag}"</p> {/* Usar currentTag */}
                 </div>
               </div>
 
+              {/* Input para nova tag */}
               <div>
-                <p className="text-gray-500 mb-2">{t('myCard.updateTag')}</p>
-                <div className="flex gap-2 rounded-full bg-[#f2ebee] dark:bg-[#271a1f] dark:border dark:border-gray-800 dark:border-opacity-50 p-1">
+                <p className="text-gray-500 dark:text-gray-400 mb-2">{t('myCard.updateTag')}</p>
+                <div className="flex gap-2 rounded-full bg-gray-50 dark:bg-gray-900/20 p-1 border border-gray-200 dark:border-gray-700 w-[70%]">
                   <Input
                     value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    className="flex-1 bg-transparent border-none rounded-full"
+                    onChange={handleTagChange}
+                    maxLength={60}
+                    className="flex-1 bg-transparent border-none rounded-full text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-gray-500"
                     placeholder={t('myCard.enterTag')}
                   />
-                  <Button
-                    className="bg-darkpink hover:bg-darkpink/20 text-white rounded-full px-6"
-                    onClick={handleUpdateTag}
-                  >
-                    {t('myCard.update')}
-                  </Button>
                 </div>
               </div>
             </div>
