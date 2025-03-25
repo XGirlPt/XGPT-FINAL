@@ -210,6 +210,7 @@ const Footer = () => {
               theme === 'dark' ? 'text-zinc-400' : 'text-gray-600'
             )}
           >
+            
             Privacy Policy
           </Link>
           <Link
@@ -232,6 +233,7 @@ const Footer = () => {
             Manage Cookies
           </Button>
         </div>
+    
       </div>
     </footer>
   );

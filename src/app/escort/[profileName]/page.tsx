@@ -1,10 +1,10 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import LeftSide from '@/components/profile/left-side';
-import PhotosAndCertificado from '@/components/profile/photos-and-certificado'; // Importação nomeada corrigida
+import PhotosAndCertificado from '@/components/profile/photos-and-certificado';
 import { ProvidedServices } from '@/components/profile/servicos-prestados';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
@@ -15,6 +15,7 @@ import { Description } from '@/components/profile/description';
 import HeaderG from '@/components/header-filter/header-g';
 import FotoBig from '@/components/profile/foto-big';
 import Certificado from '../_ui/certificado';
+import StoryBig from '@/components/profile/story-big'; // Adicionado o import de StoryBig
 import { fetchSelectedProfile } from '@/backend/actions/ProfileActions';
 import { fetchProfiles } from '@/backend/services/profileService';
 import { AppDispatch, RootState } from '@/store';
@@ -23,8 +24,10 @@ function UserProfile() {
   const dispatch = useDispatch<AppDispatch>();
   const { profileName } = useParams<{ profileName: string }>();
   const [showLargePhoto, setShowLargePhoto] = useState(false);
+  const [showLargeStory, setShowLargeStory] = useState(false);
   const [showCertificado, setShowCertificado] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [storyIndex, setStoryIndex] = useState(0);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   const [profiles, setProfiles] = useState<any[]>([]);
   const { t } = useTranslation();
@@ -35,9 +38,9 @@ function UserProfile() {
 
   useEffect(() => {
     if (profileName) {
-      console.log('Despachando fetchSelectedProfile para:', profileName);
+      console.log('[UserProfile] Despachando fetchSelectedProfile para:', profileName);
       dispatch(fetchSelectedProfile(profileName)).then((result) => {
-        console.log('Resultado do fetchSelectedProfile:', result);
+        console.log('[UserProfile] Resultado do fetchSelectedProfile:', result);
       });
     }
   }, [dispatch, profileName]);
@@ -46,18 +49,20 @@ function UserProfile() {
     const loadProfiles = async () => {
       try {
         const data = await fetchProfiles();
-        console.log('Perfis carregados:', data);
+        console.log('[UserProfile] Perfis carregados via fetchProfiles:', data);
         setProfiles(data);
       } catch (err) {
-        console.error('Erro ao carregar perfis:', err);
+        console.error('[UserProfile] Erro ao carregar perfis:', err);
       }
     };
     loadProfiles();
   }, []);
 
   useEffect(() => {
-    console.log('Estado atual de selectedProfile:', selectedProfile);
-    console.log('Fotos de selectedProfile:', selectedProfile?.photos);
+    console.log('[UserProfile] Estado atual de selectedProfile:', selectedProfile);
+    console.log('[UserProfile] Fotos de selectedProfile:', selectedProfile?.photos);
+    console.log('[UserProfile] StoryURL de selectedProfile:', selectedProfile?.storyURL);
+    console.log('[UserProfile] selectedProfile tem storyURL?', selectedProfile?.storyURL?.length > 0);
   }, [selectedProfile]);
 
   const handleCertificadoClick = () => setShowCertificado(!showCertificado);
@@ -65,9 +70,18 @@ function UserProfile() {
     setShowLargePhoto(true);
     setPhotoIndex(index);
   };
+  const handleStoryClick = (index: number) => {
+    console.log('[UserProfile] Clicado no story, índice:', index);
+    setShowLargeStory(true);
+    setStoryIndex(index);
+  };
 
   const findProfileIndex = useCallback(
-    (profileId: number) => profiles.findIndex((profile) => profile.id === profileId),
+    (profileId: number) => {
+      const index = profiles.findIndex((profile) => profile.id === profileId);
+      console.log('[UserProfile] Índice encontrado para profileId', profileId, ':', index);
+      return index;
+    },
     [profiles]
   );
 
@@ -136,6 +150,14 @@ function UserProfile() {
             />
           )}
 
+          {showLargeStory && (
+            <StoryBig
+              selectedProfile={selectedProfile}
+              onClose={() => setShowLargeStory(false)}
+              currentIndex={storyIndex}
+            />
+          )}
+
           {showCertificado && (
             <Certificado
               selectedProfile={selectedProfile}
@@ -149,6 +171,7 @@ function UserProfile() {
               isCertified={selectedProfile.isCertified}
               handleCertificadoClick={handleCertificadoClick}
               handlePhotoClick={handlePhotoClick}
+              handleStoryClick={handleStoryClick}
               loading={loading}
             />
             <AboutProfile selectedProfile={selectedProfile} />

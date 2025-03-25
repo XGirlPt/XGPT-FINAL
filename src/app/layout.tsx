@@ -12,16 +12,18 @@ import { interTight, mofugu } from '@/backend/lib/fonts';
 import Script from 'next/script';
 import "../backend/context/i18n/i18n";
 import CookieConsent from '@/components/ui/CookieConsent';
+import Maiores from '@/components/ui/maiores';
 import { useState, useEffect } from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [consent, setConsent] = useState({ analytics: false });
+  const [consent, setConsent] = useState({ analytics: false, timestamp: "" });
+  const [showMaiores, setShowMaiores] = useState(true);
 
   useEffect(() => {
     const savedConsent = localStorage.getItem("cookieConsent");
@@ -31,24 +33,27 @@ export default function RootLayout({
         setConsent(parsedConsent);
       } catch (error) {
         if (savedConsent === "accepted") {
-          const legacyConsent = { analytics: true };
+          const legacyConsent = { analytics: true, timestamp: new Date().toISOString() };
           localStorage.setItem("cookieConsent", JSON.stringify(legacyConsent));
           setConsent(legacyConsent);
         } else if (savedConsent === "declined") {
-          const legacyConsent = { analytics: false };
+          const legacyConsent = { analytics: false, timestamp: new Date().toISOString() };
           localStorage.setItem("cookieConsent", JSON.stringify(legacyConsent));
           setConsent(legacyConsent);
         }
       }
     }
+
+    const ageConfirmed = localStorage.getItem("ageConfirmed");
+    if (ageConfirmed === "true") {
+      setShowMaiores(false);
+    }
   }, []);
 
   return (
-    <html lang="pt">
+    <html lang="pt" className={inter.variable}>
       <head>
-        <title>
-          XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal
-        </title>
+        <title>XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal</title>
         <meta
           name="description"
           content="Descubra os melhores anúncios eróticos em Portugal com XGirl. Explore uma ampla gama de serviços eróticos e encontre as melhores escorts e acompanhantes de luxo em Portugal."
@@ -96,9 +101,7 @@ export default function RootLayout({
         />
         <meta name="twitter:image" content="/logoxg.png" />
       </head>
-      <body
-        className={`${mofugu.variable} ${interTight.variable} bg-[#f2ebee] dark:bg-[#100007]`}
-      >
+      <body className="bg-[#f2ebee] dark:bg-[#100007]">
         {consent.analytics && (
           <>
             <Script
@@ -125,6 +128,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light">
               <NextUIProvider>
                 <MainProvider>
+                  {showMaiores && <Maiores setShowMaiores={setShowMaiores} />}
                   {children}
                   <CookieConsent onConsentChange={setConsent} />
                 </MainProvider>

@@ -47,7 +47,7 @@ const addWatermark = (file: File): Promise<File> => {
         console.log('[WATERMARK] Imagem original desenhada no canvas');
 
         // Definir tamanho e posição do logo (50% da largura, centralizado)
-        const logoWidth = img.width * 0.5; // Aumentado para 50%
+        const logoWidth = img.width * 0.7; // Aumentado para 50%
         const logoHeight = (logo.height / logo.width) * logoWidth;
         const logoX = (img.width - logoWidth) / 2; // Centralizado horizontalmente
         const logoY = (img.height - logoHeight) / 2; // Centralizado verticalmente

@@ -1,88 +1,47 @@
-/* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
+import { FaFire } from 'react-icons/fa';
+import { Profile } from '@/backend/types';
+import { FaCrown } from 'react-icons/fa';
 
-interface Profile {
-  nome: string;
-  photos: string[];
+interface RoundAvatarProps {
+  profile: Profile;
 }
 
-interface CaroselRoundProps {
-  profiles: Profile[];
-}
-
-// Função para embaralhar um array
-const shuffleArray = (array: Profile[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]]; // Troca os elementos
-  }
-  return array;
-};
-
-const CaroselRound: React.FC<CaroselRoundProps> = ({ profiles }) => {
-  // Embaralhar perfis
-  const profilesToDisplay = shuffleArray([...profiles]);
-
+const RoundAvatar: React.FC<RoundAvatarProps> = ({ profile }) => {
   return (
-    <div className="flex mx-4 md:mx-28 flex-wrap justify-center gap-4 mt-4 mb-4">
-      {/* Exibir 5 avatares em telas pequenas */}
-      <div className="sm:flex md:hidden flex gap-4">
-        {profilesToDisplay.slice(0, 5).map((profile, index) => (
-          <Link key={index} href={`/escort/${profile.nome}`} passHref>
-            <div className="relative flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105">
-              <div className="relative w-12 md:w-24 h-12 md:h-24 rounded-full overflow-hidden border-2 border-pink-800 transition duration-300 ease-in-out">
-                {profile.photos && profile.photos.length > 0 ? (
-                  <Image
-                    src={profile.photos[0] || '/logo.webp'}
-                    alt={profile.nome}
-                    className="w-full h-full object-cover rounded-full border-2 border-white"
-                    loading="lazy"
-                    width={100}
-                    height={100}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-300 rounded-full"></div>
-                )}
-                <div className="absolute inset-0 hover:bg-pink-800 hover:opacity-40 duration-300"></div>
-              </div>
-              <p className="text-white text-xs mt-2 whitespace-nowrap">
-                {profile.nome}
-              </p>
-            </div>
-          </Link>
-        ))}
+    <Link href={`/escort/${profile.nome}`} passHref>
+      <div className="relative flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105">
+        <div className="relative w-16 md:w-20 h-16 md:h-20 rounded-full overflow-hidden border-2 border-pink-800 transition duration-300 ease-in-out">
+          {profile.photos && profile.photos.length > 0 ? (
+            <Image
+              src={profile.photos[0] || '/logo.webp'}
+              alt={profile.nome}
+              className="w-full h-full object-cover rounded-full border-2 border-white"
+              loading="lazy"
+              width={80}
+              height={80}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300 rounded-full" />
+          )}
+          <div className="absolute inset-0 hover:bg-pink-800 hover:opacity-40 duration-300 z-10" />
+          <FaFire
+            className="absolute -top-2 -right-2 text-red-500 w-6 h-6 md:w-7 md:h-7 animate-pulse drop-shadow-md z-20"
+          />
+        </div>
+        <p className="text-white text-xs mt-2 whitespace-nowrap">{profile.nome}</p>
+        {profile.premium && (
+          <span className="absolute -bottom-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-20 flex items-center">
+            <FaCrown className="text-white mr-1" />
+            Premium
+          </span>
+        )}
       </div>
-
-      {/* Exibir 10 avatares em telas médias ou grandes */}
-      <div className="hidden md:flex">
-        {profilesToDisplay.slice(0, 10).map((profile, index) => (
-          <Link key={index} href={`/escort/${profile.nome}`} passHref>
-            <div className="relative flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105">
-              <div className="relative w-12 md:w-24 h-12 md:h-24 rounded-full  mx-2 overflow-hidden border-2 border-pink-800 transition duration-300 ease-in-out">
-                {profile.photos && profile.photos.length > 0 ? (
-                  <Image
-                    src={profile.photos[0] || '/logo.webp'}
-                    alt={profile.nome}
-                    className="w-full h-full object-cover rounded-full border-2 border-white "
-                    loading="lazy"
-                    width={100}
-                    height={100}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-300 rounded-full"></div>
-                )}
-                <div className="absolute inset-0 hover:bg-pink-800 hover:opacity-40 duration-300"></div>
-              </div>
-              <p className="text-white text-xs mt-2 whitespace-nowrap">
-                {profile.nome}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    </Link>
   );
 };
 
-export default CaroselRound;
+export default RoundAvatar;

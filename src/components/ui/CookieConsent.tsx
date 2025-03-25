@@ -57,7 +57,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({ onConsentChange }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 md:max-w-md md:left-auto md:right-4">
+    <div className="fixed bottom-4 left-4 right-4 z-50 bg-[#f2ebee] dark:bg-[#100007] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 md:max-w-md md:left-auto md:right-4">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
         {t("cookieConsent.title") || "We use cookies"}
       </h3>

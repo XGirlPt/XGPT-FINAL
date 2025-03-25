@@ -1,225 +1,314 @@
 'use client';
+
+import { Metadata } from 'next';
 import { useState, useEffect } from 'react';
-
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
 import { fetchProfiles } from '@/backend/services/profileService';
-import { useSearchParams } from 'next/navigation';
-
-import { Listbox } from '@headlessui/react';
-import { FiChevronDown } from 'react-icons/fi';
-
+import { formatDistanceToNow } from 'date-fns';
+import { pt } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
-import MainCard from '@/components/ui/main-card';
-import CaroselRound from '@/components/ui/carosel-round';
-import { Button } from '@/components/ui/button';
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from 'react-icons/fa';
+import { MdVerified } from 'react-icons/md';
+import { Profile } from '@/backend/types';
+import { X } from 'lucide-react';
+import RoundAvatar from '@/components/ui/carosel-round'; // Import correto
+// import FiltroDistrito from '@/components/filtros/filtro-distrito'; // Filtro de distrito
 
-export interface Profile {
-  nome: string;
-  cidade: string;
-  photos: string[];
-  stories: string[];
-  tag: string;
-  tagtimestamp: string;
-  certificado: boolean;
-  distrito: string;
-  live: boolean;
-}
-
-const distritos = [
-  'Distrito',
-  'Aveiro',
-  'Beja',
-  'Braga',
-  'Bragança',
-  'Castelo Branco',
-  'Coimbra',
-  'Évora',
-  'Faro',
-  'Guarda',
-  'Leiria',
-  'Lisboa',
-  'Portalegre',
-  'Porto',
-  'Santarém',
-  'Setúbal',
-  'Viana do Castelo',
-  'Vila Real',
-  'Viseu',
-];
-function GirlsPage() {
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDistrito, setSelectedDistrito] = useState('Distrito');
-
-  const searchParams = useSearchParams();
-  const itemsPerPage = 15;
-
-  const { t, i18n } = useTranslation();
-  // const { language, changeLanguage } = useLanguage();
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const fetchedProfiles: Profile[] = await fetchProfiles();
-        setProfiles(fetchedProfiles);
-
-        const distrito = searchParams.get('distrito');
-        // Filtra os perfis com base no distrito da URL, se estiver presente
-        const profilesToDisplay = distrito
-          ? fetchedProfiles.filter((profile) => profile.distrito === distrito)
-          : fetchedProfiles;
-
-        setFilteredProfiles(profilesToDisplay);
-      } catch (error) {
-        console.error('Erro ao buscar perfis:', error);
-      }
+// Componente CaroselRound usando RoundAvatar
+const CaroselRound: React.FC<{ profiles: Profile[] }> = ({ profiles }) => {
+  const shuffleArray = (array: Profile[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
-    fetchData();
-  }, [searchParams]);
-
-  useEffect(() => {
-    const filtered = profiles.filter(
-      (profile) =>
-        profile.nome?.toLowerCase().includes(searchTerm.toLowerCase()) // Usando encadeamento opcional
-    );
-    setFilteredProfiles(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, profiles]);
-
-  const totalPages = Math.ceil(filteredProfiles.length / itemsPerPage);
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    return array;
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleDistritoSelect = (distrito: string) => {
-    setSelectedDistrito(distrito);
-  };
-
-  useEffect(() => {
-    const filtered = profiles.filter(
-      (profile) =>
-        profile.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedDistrito === 'Distrito' ||
-          profile.distrito === selectedDistrito)
-    );
-    setFilteredProfiles(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, selectedDistrito, profiles]);
-
-  const totalProfiles = profiles.length;
+  const profilesToDisplay = shuffleArray([...profiles]).slice(0, 15);
 
   return (
-    <div className=" text-gray-900 dark:text-white w-screen">
-      <div className="px-4 md:px-36 py-4">
-        <h1 className="text-3xl md:text-4xl pink-500 font-bold text-center">
-          {t('escort.title')}
-        </h1>
-        <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 text-center mt-2">
-          {t('escort.subtitle')}
-        </p>
-      </div>
-
-      <CaroselRound profiles={filteredProfiles} />
-
-      <div className="px-4 md:px-36 mb-2">
-        <h2 className="text-xl md:text-2xl pink-500 mb-2">
-          {t('escort.search_title')}
-        </h2>
-      </div>
-
-      <div className="px-4 md:px-36 w-full md:w-2/4 mb-4 flex flex-col md:flex-row items-center gap-2">
-        <div className="relative w-full md:w-1/3">
-          <Listbox value={selectedDistrito} onChange={handleDistritoSelect}>
-            <Listbox.Button className="w-full py-2 px-3 bg-pink-500 text-white rounded-md shadow-md flex justify-between items-center">
-              {selectedDistrito === 'Distrito' || !selectedDistrito
-                ? t('escort.select_district', { total: totalProfiles })
-                : selectedDistrito}
-              <FiChevronDown className="w-5 h-5 ml-2" />
-            </Listbox.Button>
-            <Listbox.Options className="absolute w-full mt-2 bg-white rounded-md shadow-lg z-20 max-h-60 overflow-auto">
-              <Listbox.Option
-                key="Distrito"
-                value="Distrito"
-                className={({ active }) =>
-                  `cursor-pointer select-none relative p-2 ${active ? 'bg-pink-100 text-pink-900' : 'text-gray-900'}`
-                }
-              >
-                Distrito ({totalProfiles})
-              </Listbox.Option>
-              {distritos.map((distrito, index) => (
-                <Listbox.Option
-                  key={index}
-                  value={distrito}
-                  className={({ active }) =>
-                    `cursor-pointer select-none relative p-2 ${active ? 'bg-pink-100 text-pink-900' : 'text-gray-900'}`
-                  }
-                >
-                  {distrito}{' '}
-                  <span className="text-sm text-gray-500">
-                    (
-                    {
-                      profiles.filter(
-                        (profile) => profile.distrito === distrito
-                      ).length
-                    }
-                    )
-                  </span>
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Listbox>
-        </div>
-
-        <div className="flex-1">
-          <input
-            type="text"
-            className="w-full py-2 pl-4 bg-gray-700  text-white rounded-md shadow-md focus:outline-none focus:ring-4 focus:ring-pink-500"
-            placeholder="Buscar por nome ou tag..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="px-4 md:px-36">
-        <MainCard
-          profiles={filteredProfiles}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-        />
-
-        <div className="flex justify-center items-center mt-4 mb-10">
-          <Button
-            onClick={goToPreviousPage}
-            disabled={currentPage === 1}
-            variant={'guarder'}
-          >
-            {t('escort.previous_page')}
-          </Button>
-          <span className="mx-4 text-lg">
-            {t('escort.current_page', { currentPage, totalPages })}
-          </span>{' '}
-          <Button
-            onClick={goToNextPage}
-            disabled={currentPage === totalPages}
-            variant="guarder"
-          >
-            {t('escort.next_page')}
-          </Button>
+    <div className="mx-4 md:mx-8 mb-8 relative z-10">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 text-center">
+        Destaques da Semana
+      </h2>
+      <div className="w-full overflow-x-auto">
+        <div className="flex gap-4 justify-start">
+          {profilesToDisplay.map((profile, index) => (
+            <RoundAvatar key={index} profile={profile} />
+          ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default GirlsPage;
+// Exportação de metadados
+export const metadata: Metadata = {
+  title: 'XGirl - Acompanhantes',
+  description: 'Bem-vindo a XGirl, o melhor site de classificados eróticos, Acompanhantes e Escort em Portugal.',
+  keywords: 'Acompanhantes, Acompanhantes Luxo, Escort, Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos, massagistas Eróticas, anúncios, Portugal, serviços',
+  authors: [{ name: 'Xgirl' }],
+  openGraph: {
+    title: 'Acompanhantes de luxo e Escort Eróticas em Portugal',
+    description: 'Encontre as melhores acompanhantes e massagistas eróticas em Portugal. Consulte os nossos anúncios e as novidades.',
+    url: 'https://xgirl.pt',
+    type: 'website',
+    images: ['/public/photos/logo.webp'],
+  },
+};
+
+// Variantes de animação para as cards
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+  hover: { scale: 1.03, boxShadow: '0 10px 20px rgba(0,0,0,0.2)', transition: { duration: 0.2 } },
+};
+
+// Função para formatar o tempo decorrido
+const timeAgo = (timestamp: string | Date) => {
+  const date = new Date(timestamp);
+  return formatDistanceToNow(date, { addSuffix: true, locale: pt });
+};
+
+export default function PagePage() {
+  const { t } = useTranslation();
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [selectedStory, setSelectedStory] = useState<{ profile: Profile; story: string } | null>(null);
+  const [searchDistrict, setSearchDistrict] = useState('');
+
+  // Carregar perfis
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const fetchedProfiles = await fetchProfiles();
+        console.log('[PagePage] Perfis carregados:', fetchedProfiles);
+        const sortedProfiles = fetchedProfiles.sort(
+          (a, b) => new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime()
+        );
+        setProfiles(sortedProfiles);
+      } catch (error) {
+        console.error('[PagePage] Erro ao carregar perfis:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // Filtrar e ordenar perfis
+  const filteredProfiles = profiles
+    .filter((profile) => profile.tag && profile.tag.trim() !== '') // Apenas perfis com tags
+    .filter((profile) =>
+      searchDistrict ? profile.distrito?.toLowerCase() === searchDistrict.toLowerCase() : true
+    ) // Filtro por distrito
+    .sort((a, b) => {
+      // Ordenar por premium primeiro
+      if (a.premium && !b.premium) return -1;
+      if (!a.premium && b.premium) return 1;
+      // Dentro de premium/não-premium, ordenar por timestamp
+      return new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime();
+    });
+
+  // Função para abrir story
+  const openStory = (profile: Profile, story: string) => {
+    setSelectedStory({ profile, story });
+  };
+
+  // Função para fechar story
+  const closeStory = () => {
+    setSelectedStory(null);
+  };
+
+  return (
+    <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
+      {/* Seção Principal */}
+      <section className="container mx-auto px-4 py-8 relative">
+        {/* Fundo Gradiente Superior */}
+        <div
+          className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
+          style={{
+            height: '500px',
+            width: '500px',
+            borderRadius: '250px',
+            top: '-100px',
+            left: '-100px',
+            filter: 'blur(80px)',
+            zIndex: 0,
+          }}
+        />
+
+        {/* CaroselRound */}
+        <CaroselRound profiles={profiles} />
+
+        {/* Cabeçalho */}
+        <motion.div
+          className="text-center mb-8 relative z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="bg-[#f1c0d3] text-pink-600 px-4 py-1 rounded-full text-xs font-medium">
+            ESCORTS EM PORTUGAL
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mt-4">
+            Acompanhantes e Massagistas Eróticas
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-2">
+            {t('dashboard.meta_description')}
+          </p>
+        </motion.div>
+
+        {/* Filtro de Distrito */}
+        <div className="flex justify-center mb-12 relative z-10">
+          <div className="w-full max-w-md">
+            {/* <FiltroDistrito
+              value={searchDistrict}
+              onChange={(value) => setSearchDistrict(value)}
+              bgColor="bg-white dark:bg-[#1a0a10]"
+            /> */}
+          </div>
+        </div>
+
+        {/* Grid de Cards */}
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 relative z-10"
+          initial="hidden"
+          animate="visible"
+          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        >
+          {filteredProfiles.map((profile) =>
+            Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] ? (
+              <Link key={profile.nome} href={`/escort/${profile.nome}`} passHref>
+                <motion.div
+                  variants={cardVariants}
+                  whileHover="hover"
+                  whileTap={{ scale: 0.98 }}
+                  className="relative bg-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
+                >
+                  <motion.div className="relative w-full h-[65%] rounded-xl overflow-hidden">
+                    <Image
+                      src={profile.photos[0]}
+                      alt={profile.nome}
+                      fill
+                      className="object-cover w-full h-full"
+                    />
+                    {profile.premium && (
+                      <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
+                        <FaCrown className="text-white mr-1" />
+                        <span className="text-xs">Premium</span>
+                      </div>
+                    )}
+                    {profile.live && (
+                      <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
+                        <span className="text-xs">Live Cam</span>
+                      </div>
+                    )}
+                    {Array.isArray(profile.stories) && profile.stories.length > 0 && (
+                      <div
+                        className="absolute top-10 right-2 md:right-3 bg-pink-800 text-white text-xs font-semibold py-1 px-2 rounded-full z-50 flex items-center cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openStory(profile, profile.stories[0]);
+                        }}
+                      >
+                        <FaVideo className="text-white mr-1" />
+                        <span className="text-xs">Stories</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                      <h3 className="text-base md:text-lg font-semibold text-white leading-tight flex items-center gap-1">
+                        {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
+                      </h3>
+                      <div className="flex items-center gap-1 text-white text-sm">
+                        <FaMapMarkerAlt className="text-pink-600" />
+                        {profile.cidade}
+                      </div>
+                    </div>
+                  </motion.div>
+                  <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
+                      &ldquo;{profile.tag}&ldquo;
+                      </span>
+                      <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
+                    </div>
+                    <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-2">
+                      <FaClock className="text-yellow-500 h-4 w-4 font-normal" />
+                      {timeAgo(profile.tagtimestamp)}
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ) : null
+          )}
+        </motion.div>
+
+        {/* Modal de Story */}
+        {selectedStory && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <video
+              src={selectedStory.story}
+              className="max-w-[90%] max-h-[90%] rounded-lg z-0"
+              autoPlay
+              controls
+            />
+            <motion.div
+              className="absolute top-4 right-4 flex items-center gap-3 z-50"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link href={`/escort/${selectedStory.profile.nome}`} passHref>
+                <motion.div
+                  className="w-12 h-12 rounded-full overflow-hidden cursor-pointer border-2 border-pink-500 bg-black"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Image
+                    src={selectedStory.profile.photos[0]}
+                    alt={selectedStory.profile.nome}
+                    width={48}
+                    height={48}
+                    className="object-cover rounded-full"
+                  />
+                </motion.div>
+              </Link>
+              <div className="text-white">
+                <p className="font-semibold text-lg">{selectedStory.profile.nome}</p>
+                <p className="text-sm text-gray-300 flex items-center gap-1">
+                  <FaMapMarkerAlt className="text-pink-600" />
+                  {selectedStory.profile.cidade}
+                </p>
+              </div>
+            </motion.div>
+            <button
+              onClick={closeStory}
+              className="absolute top-4 left-4 text-white z-50 p-2 bg-black/50 rounded-full"
+            >
+              <X size={32} />
+            </button>
+          </motion.div>
+        )}
+
+        {/* Fundo Gradiente Inferior */}
+        <div
+          className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
+          style={{
+            height: '400px',
+            width: '400px',
+            borderRadius: '200px',
+            bottom: '-100px',
+            right: '-100px',
+            filter: 'blur(80px)',
+            zIndex: 0,
+          }}
+        />
+      </section>
+    </main>
+  );
+}

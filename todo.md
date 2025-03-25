@@ -76,6 +76,14 @@ Landing page:
 
 
 
+- maior watermark - ok 
+- watermark em stories - ok 
+- resolver fonts
+- renderizar story em perfil (se houver) - ok 
+- cores bg 
+- "certificado" position quando ha story ou nao em perfil --- ok 
+- melhorar Stories component na pagina de perfil 
+- upload em webp
 
 
 
@@ -85,3 +93,5 @@ DONE:
 - my settings foto working
 - login working
 - 
+
+

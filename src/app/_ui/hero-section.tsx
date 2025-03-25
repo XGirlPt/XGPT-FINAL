@@ -146,7 +146,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
           </motion.div>
 
           <motion.h1
-            className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white"
+            className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white "
             variants={fadeInUp}
           >
             Escort Girls & Erotic

@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import MainCard from './main-card';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { fetchProfiles } from '@/backend/services/profileService';
 import { Dialog, DialogContent, DialogTitle } from './dialog';
 import Link from 'next/link';
 import { VscVerifiedFilled } from 'react-icons/vsc';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Image from 'next/image';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { cn } from '@/backend/lib/utils';
+import { useTheme } from 'next-themes';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -15,21 +19,8 @@ interface SearchModalProps {
 }
 
 const districts = [
-  'Aveiro',
-  'Beja',
-  'Braga',
-  'Coimbra',
-  'Évora',
-  'Faro',
-  'Madeira',
-  'Açores',
-  'Leiria',
-  'Lisboa',
-  'Portalegre',
-  'Porto',
-  'Santarém',
-  'Setúbal',
-  'Viseu',
+  'Aveiro', 'Beja', 'Braga', 'Coimbra', 'Évora', 'Faro', 'Madeira', 'Açores',
+  'Leiria', 'Lisboa', 'Portalegre', 'Porto', 'Santarém', 'Setúbal', 'Viseu',
 ];
 
 const SearchModal: React.FC<SearchModalProps> = ({
@@ -38,38 +29,60 @@ const SearchModal: React.FC<SearchModalProps> = ({
   searchQuery,
   setSearchQuery,
 }) => {
+  const { theme } = useTheme();
   const [profiles, setProfiles] = useState<any[]>([]);
   const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showMoreDistricts, setShowMoreDistricts] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const itemsPerPage = 5;
 
+  // Buscar perfis
   useEffect(() => {
     if (!isOpen) return;
-    async function fetchData() {
+    const fetchData = async () => {
+      setLoading(true);
       try {
         const fetchedProfiles = await fetchProfiles();
         setProfiles(Array.isArray(fetchedProfiles) ? fetchedProfiles : []);
       } catch (error) {
         console.error('Erro ao buscar perfis:', error);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
     fetchData();
   }, [isOpen]);
 
-  useEffect(() => {
+  // Filtrar perfis com debounce
+  const debounce = (func: Function, delay: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const filterProfiles = useCallback((query: string) => {
     const filtered = profiles.filter((acompanhante) => {
       const nome = acompanhante?.nome?.toLowerCase() || '';
       const distrito = acompanhante?.distrito?.toLowerCase() || '';
-      return (
-        nome.includes(searchQuery.toLowerCase()) ||
-        distrito.includes(searchQuery.toLowerCase())
-      );
+      const cidade = acompanhante?.cidade?.toLowerCase() || '';
+      const q = query.toLowerCase();
+      return nome.includes(q) || distrito.includes(q) || cidade.includes(q);
     });
     setFilteredProfiles(filtered);
-  }, [searchQuery, profiles]);
+    setCurrentPage(1); // Resetar página ao filtrar
+  }, [profiles]);
 
-  const startIndex = (currentPage - 1) * 5;
-  const paginatedProfiles = filteredProfiles.slice(startIndex, startIndex + 5);
+  useEffect(() => {
+    const debouncedFilter = debounce(filterProfiles, 300);
+    debouncedFilter(searchQuery);
+  }, [searchQuery, filterProfiles]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProfiles = filteredProfiles.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(filteredProfiles.length / itemsPerPage);
 
   const filterByDistrict = (district: string) => setSearchQuery(district);
 
@@ -78,74 +91,108 @@ const SearchModal: React.FC<SearchModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="w-full  max-w-[70%] max-h-[90vh] bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6 md:pb-10"
+        className={cn(
+          'w-full max-w-[90%] md:max-w-[70%] max-h-[90vh] bg-[#f2ebee] dark:bg-[#100007] rounded-3xl shadow-lg p-4 md:p-6 overflow-y-auto',
+          theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'
+        )}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <DialogTitle className="text-lg md:text-2xl font-semibold text-gray-800 dark:text-white">
+          <DialogTitle className="text-2xl md:text-3xl font-semibold font-body">
             Buscar
           </DialogTitle>
-          {/* <button
-				onClick={onClose}
-				className="text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white"
-			  >
-				✕
-			  </button> */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-gray-500 hover:text-pink-600 dark:hover:text-pink-400"
+          >
+            ✕
+          </Button>
         </div>
-        <div className="border-t border-gray-300 dark:border-gray-600 mb-4"></div>
+        <div className="border-t border-gray-200 dark:border-gray-800 mb-6" />
 
         {/* Search Input */}
-        <div className="flex flex-col gap-4 mb-4">
-          <input
+        <div className="mb-6">
+          <Input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-            placeholder="Digite o nome ou cidade"
+            placeholder="Digite o nome, cidade ou distrito"
+            className={cn(
+              'w-full px-4 py-3 rounded-full font-body text-base',
+              theme === 'dark'
+                ? 'bg-[#2b1a21] border-zinc-700 text-white placeholder:text-zinc-400'
+                : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-400'
+            )}
           />
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            {filteredProfiles.length} resultados encontrados
+          </p>
         </div>
 
         {/* Distritos Section */}
         <div className="mb-6">
-          <h2 className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-4">
-            Distritos
-          </h2>
-          <div className="flex flex-wrap gap-3 text-sm">
-            {districts
-              .slice(0, showMoreDistricts ? districts.length : 16)
-              .map((district) => (
-                <button
-                  key={district}
-                  onClick={() => filterByDistrict(district)}
-                  className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2 px-4 rounded-lg hover:bg-pink-500 hover:text-white transition-colors"
-                >
-                  {district}
-                </button>
-              ))}
-          </div>
+          <h2 className="text-lg font-medium font-body mb-4">Distritos</h2>
+          <motion.div
+            initial={{ height: 'auto' }}
+            animate={{ height: showMoreDistricts ? 'auto' : '4rem' }}
+            className="flex flex-wrap gap-3 text-sm overflow-hidden"
+          >
+            {districts.map((district) => (
+              <Button
+                key={district}
+                onClick={() => filterByDistrict(district)}
+                className={cn(
+                  'rounded-full py-2 px-4 font-body transition-colors',
+                  theme === 'dark'
+                    ? 'bg-[#2b1a21] text-gray-200 hover:bg-pink-600 hover:text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-pink-600 hover:text-white'
+                )}
+              >
+                {district}
+              </Button>
+            ))}
+          </motion.div>
+          {districts.length > 8 && (
+            <Button
+              variant="link"
+              onClick={() => setShowMoreDistricts(!showMoreDistricts)}
+              className="mt-2 text-pink-600 hover:text-pink-700 font-body"
+            >
+              {showMoreDistricts ? 'Ver menos' : 'Ver mais'}
+            </Button>
+          )}
         </div>
 
         {/* Profiles Section */}
-        <div className="overflow-x-auto max-w-full">
-          {paginatedProfiles.length > 0 ? (
+        <div className="overflow-x-auto">
+          {loading ? (
+            <p className="text-center text-gray-500 dark:text-gray-400">Carregando...</p>
+          ) : paginatedProfiles.length > 0 ? (
             <div className="flex gap-6">
-              {profiles.map((profile, index) => (
-                <div
+              {paginatedProfiles.map((profile, index) => (
+                <motion.div
                   key={index}
-                  className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden flex-shrink-0 w-[250px] md:w-[200px]"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={cn(
+                    'bg-white dark:bg-[#1a0a10] rounded-3xl shadow-lg overflow-hidden flex-shrink-0 w-[250px] md:w-[200px]'
+                  )}
                 >
                   <Link href={`/escort/${profile.nome}`}>
                     <div className="relative">
                       <Image
                         src={profile.photos[0] || '/logo.webp'}
                         alt={profile.nome}
-                        className="w-full h-48 object-cover"
-                        priority
                         width={300}
                         height={180}
+                        className="w-full h-48 object-cover"
+                        loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-4">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
                         <p className="text-lg font-bold text-white flex items-center">
                           {profile.nome}
                           {profile.certificado && (
@@ -159,15 +206,38 @@ const SearchModal: React.FC<SearchModalProps> = ({
                       </div>
                     </div>
                   </Link>
-                </div>
+                </motion.div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center">
+            <p className="text-center text-gray-500 dark:text-gray-400">
               Nenhum resultado encontrado
             </p>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-4 mt-6">
+            <Button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="rounded-full bg-pink-600 hover:bg-pink-700 text-white font-body"
+            >
+              Anterior
+            </Button>
+            <span className="text-sm font-body">
+              Página {currentPage} de {totalPages}
+            </span>
+            <Button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="rounded-full bg-pink-600 hover:bg-pink-700 text-white font-body"
+            >
+              Próximo
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

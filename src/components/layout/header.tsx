@@ -46,7 +46,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
   const [selectedLanguage, setSelectedLanguage] = useState<string>('PT');
 
-  // Sincronizar o estado com a sessão do Supabase ao carregar
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
@@ -68,7 +67,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     };
     checkSession();
 
-    // Escutar mudanças na autenticação
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         dispatch(setUserUID(session.user.id));
@@ -88,8 +86,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     };
   }, [dispatch]);
 
-  console.log('Header - isLoggedIn:', isLoggedIn, 'userUID:', userUID);
-
   const handleLanguageChange = (lang: string) => {
     changeLanguage(lang);
     setSelectedLanguage(lang.toUpperCase());
@@ -97,14 +93,12 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
   const handleLogout = async () => {
     try {
-      // Verificar se há uma sessão ativa antes de tentar o logout
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) {
         console.error('Erro ao verificar sessão antes do logout:', sessionError.message);
       }
 
       if (session) {
-        // Se houver uma sessão, tentar fazer logout
         const { error } = await supabase.auth.signOut();
         if (error) {
           console.error('Erro ao fazer logout no Supabase:', error.message);
@@ -115,30 +109,24 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         console.log('Nenhuma sessão ativa encontrada para logout');
       }
 
-      // Independentemente do resultado do Supabase, limpar o estado local
       dispatch(setLoggedIn(false));
       dispatch(setUserUID(null));
       localStorage.removeItem('email');
       localStorage.removeItem('authToken');
       localStorage.removeItem('userUID');
-
-      console.log('Estado local limpo, redirecionando para /');
       router.push('/');
     } catch (error) {
       console.error('Falha no logout:', error);
-      // Limpar o estado local mesmo em caso de erro no Supabase
       dispatch(setLoggedIn(false));
       dispatch(setUserUID(null));
       localStorage.removeItem('email');
       localStorage.removeItem('authToken');
       localStorage.removeItem('userUID');
-      console.log('Estado local limpo após erro, redirecionando para /');
       router.push('/');
     }
   };
 
   const handleMyAccountClick = () => {
-    console.log('Header - Clicou em My Account, isLoggedIn:', isLoggedIn, 'userUID:', userUID);
     if (isLoggedIn && userUID) {
       router.push('/my-account');
     } else {
@@ -184,6 +172,9 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               <Input
                 type="search"
                 placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onClick={() => setModalOpen(true)}
                 className={cn(
                   'pl-10 py-2 text-base rounded-full border w-full',
                   theme === 'dark'

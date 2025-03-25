@@ -75,8 +75,8 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       fontFamily: {
-        sans: ['var(--font-mofugu)', 'sans-serif'],
-        body: ['var(--font-inter-tight)', 'sans-serif'],
+        inter: ["var(--font-inter)"],
+        mofugu: ["var(--font-mofugu)"],
       },
     },
   },

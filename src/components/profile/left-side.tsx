@@ -21,8 +21,6 @@ interface LeftSideProps {
   certificado?: boolean;
 }
 
-
-
 const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
   const [showLiga, setShowLiga] = useState(false);
   const [showPartilha, setShowPartilha] = useState(false);
@@ -39,42 +37,40 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
   return (
     <Card className="w-full lg:w-[370px] bg-white dark:bg-[#1a0a10] rounded-3xl p-4 mt-10 relative">
       <div className="space-y-4">
-
         {/* Foto de Perfil */}
         <div className="relative aspect-square rounded-2xl overflow-hidden">
-      <Image
-      alt={selectedProfile.nome}
-src={selectedProfile?.photos?.[0] || '/logo.webp'} // Usar photos em vez de photoURL        alt={selectedProfile?.nome || 'Profile'}
-        fill
-        className="object-cover"
-        sizes="(max-width: 300px) 100vw, 300px"
-      />
+          <Image
+            alt={selectedProfile.nome}
+            src={selectedProfile?.photos?.[0] || '/logo.webp'}
+            fill
+            className="object-cover"
+            sizes="(max-width: 300px) 100vw, 300px"
+          />
 
-      {/* Gradiente de sombra no fundo */}
-      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent"></div>
+          {/* Gradiente de sombra no fundo */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent"></div>
 
-      {/* Nome e Verificação */}
-      <div className="absolute bottom-6 left-3 text-white px-4 py-2 flex items-center gap-2">
-        <h3 className="text-2xl font-semibold">{selectedProfile?.nome}</h3>
-        {selectedProfile?.certificado && <MdVerified className="text-green-500" size={20} />}
-      </div>
+          {/* Nome e Verificação */}
+          <div className="absolute bottom-6 left-3 text-white px-4 py-2 flex items-center gap-2">
+            <h3 className="text-2xl font-semibold">{selectedProfile?.nome}</h3>
+            {selectedProfile?.certificado && <MdVerified className="text-green-500" size={20} />}
+          </div>
 
-      {/* Localização */}
-      {selectedProfile?.cidade && (
-        <div className="absolute bottom-2 left-3 text-white px-3 py-1 flex items-center gap-1">
-          <FaLocationDot className="text-red-500" size={14} />
-          <span className="text-md">{selectedProfile?.cidade}</span>
+          {/* Localização */}
+          {selectedProfile?.cidade && (
+            <div className="absolute bottom-2 left-3 text-white px-3 py-1 flex items-center gap-1">
+              <FaLocationDot className="text-red-500" size={14} />
+              <span className="text-md">{selectedProfile?.cidade}</span>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-
 
         {/* Nome, Status e Tempo */}
         {selectedProfile?.tag && (
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <p className="text-lg italic text-gray-600 dark:text-gray-300">
-                &quot;{selectedProfile.tag}&quot;
+              &ldquo;{selectedProfile.tag}&ldquo;
                 <RiMessage2Fill className="text-yellow-600 dark:text-yellow-500" size={16} />
               </p>
             </div>
@@ -89,11 +85,13 @@ src={selectedProfile?.photos?.[0] || '/logo.webp'} // Usar photos em vez de phot
         {/* Botões de Ação */}
         <div className="space-y-2">
           <Button
-            className="w-full rounded-full bg-pink-600 hover:bg-pink-700 text-white font-body flex items-center justify-center gap-2"
+            className="w-full rounded-full bg-pink-600 hover:bg-pink-700 text-white font-body flex items-center justify-center gap-2 relative overflow-hidden"
             onClick={handleLigaClick}
           >
-            <FiPhone />
-            {t('profile.call_me')}
+            {/* Fundo animado mais acentuado */}
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-sweep w-1/3"></span>
+            <FiPhone className="relative z-10" />
+            <span className="relative z-10">{t('profile.call_me')}</span>
           </Button>
           <Button
             variant="outline"
@@ -109,6 +107,21 @@ src={selectedProfile?.photos?.[0] || '/logo.webp'} // Usar photos em vez de phot
       {/* Renderizar Liga e Partilha */}
       {showLiga && <Liga selectedProfile={selectedProfile} setShowLiga={setShowLiga} />}
       {showPartilha && <Partilha selectedProfile={selectedProfile} setShowPartilha={setShowPartilha} />}
+
+      {/* Estilos personalizados */}
+      <style jsx>{`
+        @keyframes sweep {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(300%);
+          }
+        }
+        .animate-sweep {
+          animation: sweep 1s infinite linear;
+        }
+      `}</style>
     </Card>
   );
 };

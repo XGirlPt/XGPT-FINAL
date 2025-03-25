@@ -61,23 +61,15 @@
   }
 
   html {
-    font-family: var(--font-mofugu), system-ui, sans-serif;
+    @apply font-inter; /* Inter como fonte padrão */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-mofugu; /* Mofugu para títulos */
   }
 
   body {
-    @apply bg-[#f2ebee] text-foreground font-sans dark:bg-[#100007];
+    @apply bg-[#f2ebee] text-foreground dark:bg-[#100007]; /* Sem font-sans */
   }
 
-  .body-text {
-    @apply font-body;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }

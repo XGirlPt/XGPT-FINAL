@@ -1,14 +1,18 @@
+import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
-import { Inter_Tight } from 'next/font/google';
 
-export const mofugu = localFont({
-  src: '../../../public/fonts/mofugu.otf',
-  variable: '--font-mofugu',
-  display: 'swap',
+export const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
-export const interTight = Inter_Tight({
-  subsets: ['latin'],
-  variable: '--font-inter-tight',
-  display: 'swap',
+export const mofugu = localFont({
+  src: [
+    {
+      path: '../../public/fonts/mofugu.otf', // Caminho relativo a src/backend/lib/
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-mofugu',
 });

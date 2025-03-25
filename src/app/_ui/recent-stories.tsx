@@ -12,9 +12,9 @@ interface Profile {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-  hover: { scale: 1.05, boxShadow: '0 8px 16px rgba(0,0,0,0.15)' },
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+  hover: { scale: 1.1, boxShadow: '0 10px 20px rgba(0,0,0,0.2)' },
 };
 
 export function RecentStories() {
@@ -42,38 +42,35 @@ export function RecentStories() {
         Stories Recentes
       </h2>
 
-      {/* Carrossel de Stories */}
       <motion.div
-        className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
         initial="hidden"
         animate="visible"
-        variants={{
-          visible: { transition: { staggerChildren: 0.1 } },
-        }}
+        variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
       >
         {profiles.map((profile, index) => (
           profile.stories && profile.stories.length > 0 && (
             <motion.div
               key={index}
-              className="flex-shrink-0 w-64 h-96 rounded-2xl overflow-hidden shadow-md cursor-pointer bg-white dark:bg-[#300d1b]"
+              className="relative rounded-2xl overflow-hidden shadow-lg cursor-pointer bg-gradient-to-r from-pink-500 to-red-500 p-1"
               variants={cardVariants}
               whileHover="hover"
               onClick={() => openStory(profile.stories[0])}
             >
-              <video
-                src={profile.stories[0]}
-                className="object-cover w-full h-[70%] rounded-t-2xl"
-                autoPlay
-                loop
-                muted
-              />
-              <div className="p-4 flex flex-col justify-between h-[30%]">
-                <div>
-                  <p className="text-gray-900 dark:text-white text-sm font-semibold">{profile.nome}</p>
-                  <p className="text-gray-600 dark:text-gray-300 text-xs">{profile.cidade}</p>
+              <div className="relative w-full h-80 rounded-2xl overflow-hidden">
+                <video
+                  src={profile.stories[0]}
+                  className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                  autoPlay
+                  loop
+                  muted
+                />
+                <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white rounded-b-2xl">
+                  <p className="font-semibold text-lg">{profile.nome}</p>
+                  <p className="text-sm opacity-80">{profile.cidade}</p>
                 </div>
-                <div className="flex justify-end">
-                  <PlayCircle className="text-pink-600" size={24} />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                  <PlayCircle className="text-white/80" size={50} />
                 </div>
               </div>
             </motion.div>
@@ -81,7 +78,6 @@ export function RecentStories() {
         ))}
       </motion.div>
 
-      {/* Modal de Story em Tela Cheia */}
       {selectedStory && (
         <motion.div
           className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
@@ -103,9 +99,6 @@ export function RecentStories() {
           </button>
         </motion.div>
       )}
-
-      {/* Fundo Gradiente */}
-      <div className="absolute inset-0 bg-gradient-to-b from-pink-100/50 to-transparent z-[-1]" />
     </section>
   );
 }

@@ -2,7 +2,7 @@
 ├── Dockerfile
 ├── README.md
 ├── components.json
-├── estrutura-projeto.txt
+├── estrutura_projeto.txt
 ├── estrutura_projetooo.txt
 ├── next-env.d.ts
 ├── next-sitemap.config.js
@@ -99,6 +99,7 @@
 │   │   │   ├── _ui
 │   │   │   │   └── Privacidade.tsx
 │   │   │   └── page.tsx
+│   │   ├── RootLayoutClient.tsx
 │   │   ├── Termos
 │   │   │   ├── _ui
 │   │   │   │   └── Termos.tsx
@@ -194,10 +195,10 @@
 │   │   ├── auth
 │   │   │   └── auth.ts
 │   │   ├── context
-│   │   │   └── LanguageContext.tsx
+│   │   │   ├── LanguageContext.tsx
+│   │   │   └── i18n
+│   │   │       └── i18n.js
 │   │   ├── database
-│   │   │   ├── i18n
-│   │   │   │   └── i18n.js
 │   │   │   ├── schema.ts
 │   │   │   └── supabase.ts
 │   │   ├── lib
@@ -253,6 +254,7 @@
 │   │   │   ├── general-information-form.tsx
 │   │   │   ├── my-card-form.tsx
 │   │   │   ├── photos-form.tsx
+│   │   │   ├── profile-form.tsx
 │   │   │   ├── service-preferences-form.tsx
 │   │   │   ├── stories-form.tsx
 │   │   │   └── subscription-form.tsx
@@ -298,6 +300,7 @@
 │   │   ├── subscriptionPlan.tsx
 │   │   ├── theme-toggle.tsx
 │   │   └── ui
+│   │       ├── CookieConsent.tsx
 │   │       ├── Search.tsx
 │   │       ├── address-autocomplete.tsx
 │   │       ├── avatar.tsx
@@ -348,8 +351,4 @@
 ├── todo.md
 └── tsconfig.json
 
-74 directories, 275 files
-
-
-tree -I 'node_modules' > estrutura_projeto.txt
-code estrutura_projeto.txt
+74 directories, 278 files

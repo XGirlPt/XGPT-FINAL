@@ -94,15 +94,9 @@ async function fetchCoordinates(
 }
 
 const Dashboard: React.FC = () => {
-  const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [showMaiores, setShowMaiores] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const [darkMode, setDarkMode] = useState(false);
 
-  const { t, i18n } = useTranslation();
-  const { language, changeLanguage } = useLanguage();
 
   useEffect(() => {
     console.log('useEffect');
@@ -164,23 +158,10 @@ const Dashboard: React.FC = () => {
     <>
     {showMaiores && <Maiores setShowMaiores={setShowMaiores} />}
     <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-6">
-      <div
-        className="absolute rounded-full z-30 bg-[#f2cadb] dark:bg-[#2e0415]"
-        style={{
-          height: '300px',
-          width: '300px',
-          borderRadius: '200px',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%) rotate(-45deg)',
-          filter: 'blur(80px)',
-          zIndex: 0,
-        }}
-      />
+   
 
       <HeroSection profiles={profiles as Profile[]} />
       <RecentStories />
-
       <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
       <MapSection profiles={profiles} />
       <NewestAdds  profiles={profiles as Profile[]}/>

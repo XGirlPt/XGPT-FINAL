@@ -43,7 +43,7 @@ const Maiores: React.FC<MaioresProps> = ({ setShowMaiores }) => {
   if (!mostrarMaiores) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-75 backdrop-blur-sm transition-opacity duration-300">
+    <div className="fixed inset-0 z-50 flex justify-center items-center bg-[#f2ebee] dark:bg-[#100007] bg-opacity-75 backdrop-blur-sm transition-opacity duration-300">
       <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg transform transition-transform duration-300 scale-100">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Aviso de Conteúdo Adulto
