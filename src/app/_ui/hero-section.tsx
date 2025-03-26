@@ -222,7 +222,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
 <CarouselContent className="flex pb-4" style={{ gap: '1px' }}>
       {profilesWithTag.map((profile) => (
       Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] && (
-<CarouselItem key={profile.nome} className="basis-1/2 md:basis-1/6 px-0 mx-0">
+<CarouselItem key={profile.nome} className="basis-1/2 md:basis-1/6 ">
           <Link href={`/escort/${profile.nome}`} passHref>
             <motion.div
               variants={cardVariants}
@@ -268,7 +268,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                 <div className="flex items-start justify-between gap-2">
                   <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
-                    "{profile.tag}"
+                  &quot;{profile.tag}&quot;
                   </span>
                   <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                 </div>
