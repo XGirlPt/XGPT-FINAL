@@ -8,10 +8,19 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '../ui/separator';
 import { IoTrashBin } from 'react-icons/io5';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Importar CSS do react-toastify
+import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
 import SubscriptionPlan from '@/components/subscriptionPlan';
 import { updateStories } from '@/backend/reducers/profileSlice';
+import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
+
+// Variantes para animação do popup
+const popupVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.3 } },
+};
 
 export const StoriesForm = () => {
   const dispatch = useDispatch();
@@ -187,7 +196,7 @@ export const StoriesForm = () => {
       dispatch(updateStories(newStories));
       setStories(newStories);
       setPendingFiles([]);
-      
+
       toast.success(t('messages.storyUploaded'), {
         position: "top-right",
         autoClose: 3000,
@@ -274,7 +283,7 @@ export const StoriesForm = () => {
   if (error) return <div>{t('error')}: {error}</div>;
 
   return (
-    <div className="w-full bg-white dark:border dark:border-gray-800 dark:border-opacity-50 dark:bg-transparent rounded-3xl p-8">
+    <div className="w-full bg-white dark:border dark:border-gray-800 dark:border-opacity-50 dark:bg-transparent rounded-3xl p-8 relative">
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
           <h1 className="text-2xl font-bold">{t('stories.title')}</h1>
@@ -311,22 +320,30 @@ export const StoriesForm = () => {
             />
           </div>
         </div>
-        {showSubscriptionPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-[#100007] rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <Button
-                className="absolute top-2 right-2"
-                variant="ghost"
-                onClick={() => setShowSubscriptionPopup(false)}
-              >
-                X
-              </Button>
-              <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
-            </div>
-          </div>
-        )}
       </div>
-      <ToastContainer /> {/* Adicionado para garantir que os toasts sejam exibidos */}
+
+      {/* Popup do SubscriptionPlan */}
+      {showSubscriptionPopup && (
+        <motion.div
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={popupVariants}
+        >
+          <div className="relative bg-[#f2ebee] dark:bg-[#100007] rounded-3xl p-6 max-w-4xl w-full mx-4">
+            <Button
+              className="absolute top-4 right-4 bg-transparent text-white hover:bg-gray-700 rounded-full p-2"
+              onClick={() => setShowSubscriptionPopup(false)}
+            >
+         
+            </Button>
+            <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
+          </div>
+        </motion.div>
+      )}
+
+      <ToastContainer />
     </div>
   );
 };

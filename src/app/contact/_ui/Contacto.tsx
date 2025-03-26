@@ -1,38 +1,53 @@
 'use client';
-import { useState, useRef } from 'react';
-import emailjs from 'emailjs-com'; // Importando o EmailJS
+
+import React, { useState, useRef } from 'react';
+import emailjs from 'emailjs-com';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
-import CommonInput from '@/components/ui/common-input';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/backend/lib/utils';
+import { useTheme } from 'next-themes';
+
+// Variantes de animação
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 },
+};
+
+const staggerChildren = {
+  animate: { transition: { staggerChildren: 0.2 } },
+};
 
 function Contacto() {
   const { t } = useTranslation();
+  const { theme } = useTheme();
 
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
 
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  const handleRecaptchaChange = (value) => {
-    setRecaptchaValue(value); // Atualiza o estado do reCAPTCHA
+  const handleRecaptchaChange = (value: string | null) => {
+    setRecaptchaValue(value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Previne o envio padrão do formulário
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    // Validação do reCAPTCHA
     if (!recaptchaValue) {
-      toast.error('Por favor, complete o reCAPTCHA antes de enviar.');
+      toast.error(t('contact.recaptcha_error'), { position: 'top-right' });
       return;
     }
 
     const templateParams = {
-      from_email: email, // Certifique-se que o nome da variável no template do EmailJS é o mesmo
+      from_email: email,
       subject: subject,
       message: message,
     };
@@ -46,102 +61,146 @@ function Contacto() {
       )
       .then((response) => {
         console.log('SUCCESS!', response.status, response.text);
-        toast.success('Mensagem enviada com sucesso!');
-
-        // Limpa os campos após envio
+        toast.success(t('contact.success_message'), { position: 'top-right' });
         setEmail('');
         setSubject('');
         setMessage('');
-
         setRecaptchaValue(null);
         if (recaptchaRef.current) {
-          recaptchaRef.current.reset(); // Reseta a aparência do reCAPTCHA
+          recaptchaRef.current.reset();
         }
       })
       .catch((err) => {
         console.error('FAILED...', err);
-        toast.error('Falha no envio da mensagem. Tente novamente mais tarde.');
+        toast.error(t('contact.error_message'), { position: 'top-right' });
       });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <section className="bg-gray-800 w-2/5 align-middle justify-between rounded-lg p-6 md:p-8 flex-col m-10 shadow-lg">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-pink-500 mb-4">
+    <motion.div
+      className="min-h-screen flex items-center justify-center bg-[#f2ebee] dark:bg-[#100007] p-4 md:p-8"
+      initial="initial"
+      animate="animate"
+      variants={staggerChildren}
+    >
+      <motion.section
+        className={cn(
+          'w-full max-w-lg bg-white dark:bg-[#1a0a10] rounded-3xl shadow-lg p-6 md:p-8',
+          theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'
+        )}
+        variants={fadeInUp}
+      >
+        <motion.h1
+          className="text-3xl md:text-4xl font-bold text-center text-pink-600 mb-4"
+          variants={fadeInUp}
+        >
           {t('contact.title')}
-        </h1>
-        <h2 className="text-sm font-light text-center text-gray-400 mb-6">
+        </motion.h1>
+        <motion.h2
+          className="text-sm font-light text-center text-gray-500 dark:text-gray-400 mb-6"
+          variants={fadeInUp}
+        >
           {t('contact.subtitle')}
-        </h2>
+        </motion.h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <CommonInput
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            label={t('contact.email_label')}
-            placeholder={t('contact.email_placeholder')}
-            required
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.div variants={fadeInUp}>
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+              {t('contact.email_label')}
+            </label>
+            <Input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={t('contact.email_placeholder')}
+              required
+              className={cn(
+                'w-full px-4 py-3 rounded-full border shadow-sm focus:ring-2 focus:ring-pink-500',
+                theme === 'dark'
+                  ? 'bg-[#2b1a21] border-zinc-700 text-white placeholder:text-zinc-400'
+                  : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-400'
+              )}
+            />
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeInUp}>
             <label
               htmlFor="subject"
-              className="block mb-2 text-sm font-medium text-gray-300"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               {t('contact.subject_label')}
             </label>
-            <input
+            <Input
               type="text"
               id="subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="block p-2 w-full text-sm text-white bg-gray-700 rounded-lg border border-gray-600 shadow-sm focus:ring-pink-500 focus:border-pink-500"
               placeholder={t('contact.subject_placeholder')}
               required
+              className={cn(
+                'w-full px-4 py-3 rounded-full border shadow-sm focus:ring-2 focus:ring-pink-500',
+                theme === 'dark'
+                  ? 'bg-[#2b1a21] border-zinc-700 text-white placeholder:text-zinc-400'
+                  : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-400'
+              )}
             />
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeInUp}>
             <label
               htmlFor="message"
-              className="block mb-2 text-sm font-medium text-gray-300"
+              className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
               {t('contact.message_label')}
             </label>
             <textarea
               id="message"
-              rows="4"
+              rows={4}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="block p-2 w-full text-sm text-white bg-gray-700 rounded-lg border border-gray-600 focus:ring-pink-500 focus:border-pink-500"
               placeholder={t('contact.message_placeholder')}
               required
-            ></textarea>
-          </div>
+              className={cn(
+                'w-full px-4 py-3 rounded-lg border shadow-sm focus:ring-2 focus:ring-pink-500 resize-none',
+                theme === 'dark'
+                  ? 'bg-[#2b1a21] border-zinc-700 text-white placeholder:text-zinc-400'
+                  : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-400'
+              )}
+            />
+          </motion.div>
 
-          {/* Botão desativado enquanto o reCAPTCHA não é preenchido */}
-          <Button type="submit" className="py-2 md:py-3" variant="guarder">
-            {t('contact.send_button')}
-          </Button>
+          <motion.div variants={fadeInUp} className="flex justify-center">
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || 'defaultSiteKey'}
+              onChange={handleRecaptchaChange}
+              ref={recaptchaRef}
+            />
+          </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <Button
+              type="submit"
+              className="w-full rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-bold py-3 shadow-md transition-all duration-300"
+            >
+              {t('contact.send_button')}
+            </Button>
+          </motion.div>
         </form>
 
-        <ReCAPTCHA
-          sitekey={
-            process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || 'defaultSiteKey'
-          }
-          onChange={handleRecaptchaChange}
-          ref={recaptchaRef}
-          className="mt-4"
-        />
-        <ToastContainer />
-
-        <p className="mt-6 text-center text-gray-400 text-sm">
+        <motion.p
+          className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400"
+          variants={fadeInUp}
+        >
           {t('contact.thank_you_message')}
-        </p>
-      </section>
-    </div>
+        </motion.p>
+      </motion.section>
+
+      <ToastContainer position="top-right" />
+    </motion.div>
   );
 }
 

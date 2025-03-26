@@ -153,16 +153,26 @@
     }
   },
 
-  "loginPage": {
-    "title": "Login",
-    "email": "Email",
-    "password": "Password",
-    "email_placeholder": "Enter your email",
-    "password_placeholder": "Enter your password",
-    "login_button": "Login",
-    "register_link": "Don't have an account? Register here",
-    "description": "Login to X-Girl to discover unique and confidential experiences."
-  },
+
+    "loginPage": {
+      "title": "Login",
+      "subtitle": "Enter with your credentials",
+      "description": "Log in to X-Girl to discover unique and confidential experiences."
+    },
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "email_placeholder": "Enter your email",
+      "password_placeholder": "Enter your password",
+      "login_button": "Log In",
+      "register_link": "Don't have an account? Register here",
+      "email_label": "Email",
+      "password_label": "Password",
+      "success_message": "Login successful!",
+      "error_message": "Error logging in. Check your credentials.",
+      "forgot_password": "Forgot your password?"
+    },
+
   "RegisterPage": {
     "title": "XGirl.fr is the reference for exclusive escort listings in Portugal",
     "description_1": "Discover thousands of escorts on XGirl.fr",
@@ -177,7 +187,9 @@
     "password_placeholder": "Enter your password",
     "confirm_password_label": "Confirm your password*",
     "confirm_password_placeholder": "Confirm your password",
-    "register_button": "Create your account"
+    "register_button": "Create your account",
+    "viewPlans": "View Plans",
+    "howItWorks": "How It Works"
   },
   "contact": {
     "title": "Contact",
@@ -675,7 +687,13 @@
     "decline": "Decline All",
     "save": "Save",
     "learnMore": "Learn more about our Privacy Policy"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backButton": "Back to Home"
   }
+
 
   }
     

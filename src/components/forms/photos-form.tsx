@@ -11,6 +11,14 @@ import { useTranslation } from 'react-i18next';
 import SubscriptionPlan from '@/components/subscriptionPlan';
 import supabase from '@/backend/database/supabase';
 import toast, { Toaster } from 'react-hot-toast';
+import { motion } from 'framer-motion';
+
+const popupVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.3 } },
+};
+
 
 // Função para adicionar marca d'água à imagem
 const addWatermark = (file: File): Promise<File> => {
@@ -384,20 +392,22 @@ export const PhotosForm = () => {
             />
           </div>
         </div>
-
         {showSubscriptionPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-[#100007] rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <Button
-                className="absolute top-2 right-2"
-                variant="ghost"
-                onClick={() => setShowSubscriptionPopup(false)}
-              >
-                X
-              </Button>
-              <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
-            </div>
-          </div>
+          <motion.div
+            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={popupVariants}
+          >
+            <SubscriptionPlan userUID={userUID} onPlanoSelect={() => setShowSubscriptionPopup(false)} />
+            <Button
+              className="absolute top-4 right-4 bg-transparent text-white hover:bg-gray-700 rounded-full p-2"
+              onClick={() => setShowSubscriptionPopup(false)}
+            >
+          
+            </Button>
+          </motion.div>
         )}
         <Toaster position="top-right" />
       </div>

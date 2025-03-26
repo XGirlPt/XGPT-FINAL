@@ -1,4 +1,3 @@
-// src/backend/reducers/profileSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   login,
@@ -58,6 +57,20 @@ export interface ProfileState {
   certificado: boolean;
   status: null | boolean;
   live: boolean | null;
+  appliedFilters: {
+    idade?: number[];
+    tarifa?: number[];
+    lingua?: string[];
+    altura?: string;
+    distrito?: string;
+    origem?: string;
+    olhos?: string;
+    seios?: string;
+    mamas?: string;
+    pelos?: boolean;
+    tatuagem?: boolean;
+    certificado?: boolean;
+  };
 }
 
 const initialState: ProfileState = {
@@ -105,11 +118,12 @@ const initialState: ProfileState = {
   certificado: false,
   status: null,
   live: null,
+  appliedFilters: {},
 };
 
 const profileSlice = createSlice({
   name: 'profile',
-  initialState, // Usamos o initialState completo definido acima
+  initialState,
   reducers: {
     setUserUID: (state, action: PayloadAction<string>) => {
       state.userUID = action.payload;
@@ -260,7 +274,10 @@ const profileSlice = createSlice({
     },
     setSelectedProfile: (state, action: PayloadAction<Profile | null>) => {
       state.selectedProfile = action.payload;
-      console.log('Estado updated com setSelectedProfile:', state.selectedProfile);
+      console.log('Estado atualizado com setSelectedProfile:', state.selectedProfile);
+    },
+    setAppliedFilters: (state, action: PayloadAction<ProfileState['appliedFilters']>) => {
+      state.appliedFilters = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -431,6 +448,7 @@ export const {
   registerUser,
   addProfileData,
   setSelectedProfile,
+  setAppliedFilters, // Exportando a nova ação
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

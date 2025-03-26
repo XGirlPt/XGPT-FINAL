@@ -1,32 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUserUID, setLoggedIn } from '@/backend/reducers/profileSlice';
+import { setUserUID, setLoggedIn, setAppliedFilters } from '@/backend/reducers/profileSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaUser, FaCog, FaSignOutAlt, FaSearch, FaHome, FaBook, FaPenAlt } from 'react-icons/fa';
+import { FaUser, FaCog, FaSignOutAlt, FaSearch, FaHome, FaBook, FaPenAlt, FaFilter } from 'react-icons/fa';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/backend/context/LanguageContext';
 import SearchModal from '../ui/search-modal';
+import Filtro from '../layout/filtro';
 import { useTheme } from 'next-themes';
-import { BiSolidMoviePlay } from "react-icons/bi";
+import { BiSolidMoviePlay } from 'react-icons/bi';
 import { Search, Globe, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { cn } from '@/backend/lib/utils';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { ThemeToggle } from '../theme-toggle';
 import supabase from '@/backend/database/supabase';
 
 interface HeaderProps {
   blur?: boolean;
+}
+
+interface FiltrosState {
+  idade?: number[];
+  tarifa?: number[];
+  lingua?: string[];
+  altura?: string;
+  distrito?: string;
+  origem?: string;
+  olhos?: string;
+  seios?: string;
+  mamas?: string;
+  pelos?: boolean;
+  tatuagem?: boolean;
+  certificado?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ blur }) => {
@@ -36,17 +47,38 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { theme } = useTheme();
-
   const userUID = useSelector((state: any) => state.profile.userUID);
   const email = useSelector((state: any) => state.profile.email || '');
   const photoUID = useSelector((state: any) => state.profile.photos?.[0]);
   const isLoggedIn = useSelector((state: any) => state.profile.isLoggedIn);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
   const [selectedLanguage, setSelectedLanguage] = useState<string>('PT');
 
+  const handleApplyFiltersInHeader = useCallback(
+    (filters: FiltrosState) => {
+      console.log('Attempting to dispatch filters:', filters);
+      try {
+        const action = setAppliedFilters(filters);
+        console.log('Action object:', action);
+        dispatch(action);
+        console.log('Dispatch successful');
+      } catch (error) {
+        console.error('Dispatch failed:', error);
+      }
+    },
+    [dispatch]
+  );
+
+  // useEffect no nível superior, sem condições antes dele
   useEffect(() => {
+    // Verificação de dispatch dentro do useEffect, se necessário
+    if (!dispatch) {
+      console.error('Dispatch is not available');
+      return;
+    }
+
     const checkSession = async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
       if (error) {
@@ -138,11 +170,16 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     { href: '/', label: 'Home', Icon: FaHome },
     { href: '/escort', label: 'Escort', Icon: FaUser },
     { href: '/stories', label: 'Stories', Icon: BiSolidMoviePlay },
-    { href: '/blog', label: 'Blog', Icon: FaPenAlt },
+    { href: '#', label: 'Filtros', Icon: FaFilter, onClick: () => setFilterModalOpen(true) },
     { href: '/Pub', label: 'Pub', Icon: FaPenAlt },
   ];
 
   const isActive = (path: string) => pathname === path;
+
+  // Renderização condicional após todos os hooks
+  if (!dispatch) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-[#f2ebee] dark:bg-[#100007]/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
@@ -258,10 +295,11 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             />
           </div>
           <div className="flex items-center justify-center gap-6">
-            {navigationLinks.map(({ href, label, Icon }) => (
+            {navigationLinks.map(({ href, label, Icon, onClick }) => (
               <Link
                 key={href}
                 href={href}
+                onClick={onClick}
                 className={`flex items-center gap-1 text-sm font-body text-center py-2 ${
                   isActive(href)
                     ? 'text-pink-600 border-b-2 border-pink-600'
@@ -306,6 +344,11 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
         onClose={() => setModalOpen(false)}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+      />
+      <Filtro
+        open={filterModalOpen}
+        onOpenChange={setFilterModalOpen}
+        onApplyFilters={handleApplyFiltersInHeader}
       />
     </div>
   );

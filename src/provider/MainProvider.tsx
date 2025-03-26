@@ -15,7 +15,7 @@ export function MainProvider(props: MainProviderProps) {
     <>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 pt-[100px] mx-24 ">{children}</main>
+        <main className="flex-1 pt-[100px]  ">{children}</main>
         <Footer />
       </div>
     </>

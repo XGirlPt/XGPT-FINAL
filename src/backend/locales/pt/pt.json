@@ -143,33 +143,53 @@
       "Striptease": "Striptease"
     }
   },
+  
+  
   "loginPage": {
     "title": "Login",
+    "subtitle": "Entre com suas credenciais",
+    "description": "Faça login no X-Girl para descobrir experiências únicas e confidenciais."
+  },
+  "login": {
     "email": "Email",
     "password": "Senha",
     "email_placeholder": "Digite seu email",
     "password_placeholder": "Digite sua senha",
     "login_button": "Entrar",
     "register_link": "Não tem conta? Registre-se aqui",
-    "description": "Faça login no X-Girl para descobrir experiências únicas e confidenciais."
+    "email_label": "Email",
+    "password_label": "Senha",
+    "success_message": "Login realizado com sucesso!",
+    "error_message": "Erro ao fazer login. Verifique suas credenciais.",
+    "forgot_password": "Esqueceu sua senha?"
   },
 
-  "RegisterPage": {
-    "title": "XGirl.pt é a referência para anúncios de acompanhantes exclusivos em Portugal",
-    "description_1": "Descubra milhares de acompanhantes no XGirl.pt",
-    "description_2": "O processo de inscrição é simples e rápido.",
-    "description_3": "Aumente seus ganhos significativamente! Atraia entre 30 e 450 clientes por mês.",
-    "description_4": "Aproveite destaques mensais sem custos adicionais.",
-    "advantages_link": "Clique aqui para ver todas as vantagens",
-    "create_account_title": "Crie uma nova conta",
-    "email_label": "Email*",
+"register": {
+    "title": "Comece Agora",
+    "welcome": "Torne-se uma Estrela",
+    "subtitle": "Registre-se no site mais moderno de classificados eróticos em Portugal e alcance novos patamares.",
+    "email_label": "Email",
     "email_placeholder": "Digite seu email",
-    "password_label": "Senha*",
-    "password_placeholder": "Digite sua senha",
-    "confirm_password_label": "Confirme sua senha*",
-    "confirm_password_placeholder": "Confirme sua senha",
-    "register_button": "Crie sua conta"
+    "password_label": "Senha",
+    "password_placeholder": "Crie uma senha segura",
+    "confirm_password_label": "Confirmar Senha",
+    "confirm_password_placeholder": "Repita sua senha",
+    "option_label": "Tipo de Conta",
+    "register_button": "Entrar no Jogo",
+    "benefit1": "Mais visibilidade com uma página de perfil dedicada e sexy",
+    "benefit2": "Aumente seus contatos e conquiste mais clientes",
+    "benefit3": "Tecnologia Next.js: rápido, moderno e à frente da concorrência",
+    "benefit4": "Design jovem e intuitivo que atrai olhares",
+    "benefit5": "Benefícios premium: destaque-se como rainha",
+    "benefit6": "Ferramentas exclusivas para gerenciar e brilhar",
+    "benefit7": "Estatísticas detalhadas para maximizar seus ganhos",
+    "passwordMismatch": "As senhas não correspondem",
+    "error": "Erro ao registrar",
+    "viewPlans": "Ver Planos",
+    "howItWorks": "Como Funciona"
   },
+
+
   "contact": {
     "title": "Contato",
     "subtitle": "Tem alguma dúvida? Envie-nos uma mensagem e responderemos em até 24 horas.",
@@ -721,7 +741,11 @@
     "save": "Salvar",
     "learnMore": "Saiba mais sobre nossa Política de Privacidade"
   }
-
+,"notFound": {
+    "title": "Página não encontrada",
+    "description": "Desculpe, a página que você está procurando não existe.",
+    "backButton": "Voltar para a página inicial"
+  }
 
 
 }

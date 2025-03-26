@@ -2,6 +2,7 @@
 
 import { Metadata } from 'next';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,8 +14,8 @@ import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from 'react-
 import { MdVerified } from 'react-icons/md';
 import { Profile } from '@/backend/types';
 import { X } from 'lucide-react';
-import RoundAvatar from '@/components/ui/carosel-round'; // Import correto
-// import FiltroDistrito from '@/components/filtros/filtro-distrito'; // Filtro de distrito
+import RoundAvatar from '@/components/ui/carosel-round';
+import { setAppliedFilters } from '@/backend/reducers/profileSlice'; // Importação da ação
 
 // Componente CaroselRound usando RoundAvatar
 const CaroselRound: React.FC<{ profiles: Profile[] }> = ({ profiles }) => {
@@ -72,58 +73,72 @@ const timeAgo = (timestamp: string | Date) => {
   return formatDistanceToNow(date, { addSuffix: true, locale: pt });
 };
 
+// Função para aplicar filtros
+const applyFilters = (profiles: Profile[], filters: any) => {
+  return profiles.filter((profile) => {
+    if (filters.idade && (profile.idade < filters.idade[0] || profile.idade > filters.idade[1])) return false;
+    if (filters.tarifa && (profile.tarifa < filters.tarifa[0] || profile.tarifa > filters.tarifa[1])) return false;
+    if (filters.lingua && !filters.lingua.some((lang: string) => profile.lingua?.includes(lang))) return false;
+    if (filters.altura && profile.altura !== filters.altura) return false;
+    if (filters.distrito && filters.distrito !== profile.distrito) return false;
+    if (filters.origem && filters.origem !== profile.origem) return false;
+    if (filters.olhos && filters.olhos !== profile.olhos) return false;
+    if (filters.seios && filters.seios !== profile.seios) return false;
+    if (filters.mamas && filters.mamas !== profile.mamas) return false;
+    if (filters.pelos !== undefined && filters.pelos !== (profile.pelos === 'Sim')) return false;
+    if (filters.tatuagem !== undefined && filters.tatuagem !== (profile.tatuagem === 'Sim')) return false;
+    if (filters.certificado !== undefined && filters.certificado !== profile.certificado) return false;
+    return true;
+  });
+};
+
 export default function PagePage() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedStory, setSelectedStory] = useState<{ profile: Profile; story: string } | null>(null);
   const [searchDistrict, setSearchDistrict] = useState('');
+  const appliedFilters = useSelector((state: any) => state.profile.appliedFilters || {});
 
-  // Carregar perfis
   useEffect(() => {
-    async function fetchData() {
+    const loadProfiles = async () => {
       try {
         const fetchedProfiles = await fetchProfiles();
         console.log('[PagePage] Perfis carregados:', fetchedProfiles);
-        const sortedProfiles = fetchedProfiles.sort(
-          (a, b) => new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime()
-        );
+        const filtered = applyFilters(fetchedProfiles, appliedFilters);
+        const sortedProfiles = filtered
+          .filter((profile) => profile.tag && profile.tag.trim() !== '') // Apenas perfis com tags
+          .sort((a, b) => {
+            // Ordenar por premium primeiro
+            if (a.premium && !b.premium) return -1;
+            if (!a.premium && b.premium) return 1;
+            // Dentro de premium/não-premium, ordenar por timestamp
+            return new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime();
+          });
         setProfiles(sortedProfiles);
       } catch (error) {
         console.error('[PagePage] Erro ao carregar perfis:', error);
       }
-    }
-    fetchData();
-  }, []);
+    };
+    loadProfiles();
+  }, [appliedFilters]);
 
-  // Filtrar e ordenar perfis
-  const filteredProfiles = profiles
-    .filter((profile) => profile.tag && profile.tag.trim() !== '') // Apenas perfis com tags
-    .filter((profile) =>
-      searchDistrict ? profile.distrito?.toLowerCase() === searchDistrict.toLowerCase() : true
-    ) // Filtro por distrito
-    .sort((a, b) => {
-      // Ordenar por premium primeiro
-      if (a.premium && !b.premium) return -1;
-      if (!a.premium && b.premium) return 1;
-      // Dentro de premium/não-premium, ordenar por timestamp
-      return new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime();
-    });
-
-  // Função para abrir story
   const openStory = (profile: Profile, story: string) => {
     setSelectedStory({ profile, story });
   };
 
-  // Função para fechar story
   const closeStory = () => {
     setSelectedStory(null);
   };
 
+  const filteredProfiles = profiles
+    .filter((profile) =>
+      searchDistrict ? profile.distrito?.toLowerCase() === searchDistrict.toLowerCase() : true
+    );
+
   return (
     <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
-      {/* Seção Principal */}
       <section className="container mx-auto px-4 py-8 relative">
-        {/* Fundo Gradiente Superior */}
         <div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
           style={{
@@ -137,10 +152,8 @@ export default function PagePage() {
           }}
         />
 
-        {/* CaroselRound */}
         <CaroselRound profiles={profiles} />
 
-        {/* Cabeçalho */}
         <motion.div
           className="text-center mb-8 relative z-10"
           initial={{ opacity: 0, y: 20 }}
@@ -158,18 +171,17 @@ export default function PagePage() {
           </p>
         </motion.div>
 
-        {/* Filtro de Distrito */}
-        <div className="flex justify-center mb-12 relative z-10">
+        {/* Filtro de Distrito (opcional, mantive comentado) */}
+        {/* <div className="flex justify-center mb-12 relative z-10">
           <div className="w-full max-w-md">
-            {/* <FiltroDistrito
+            <FiltroDistrito
               value={searchDistrict}
               onChange={(value) => setSearchDistrict(value)}
               bgColor="bg-white dark:bg-[#1a0a10]"
-            /> */}
+            />
           </div>
-        </div>
+        </div> */}
 
-        {/* Grid de Cards */}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 relative z-10"
           initial="hidden"
@@ -228,13 +240,13 @@ export default function PagePage() {
                   <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                     <div className="flex items-start justify-between gap-2">
                       <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
-                      &ldquo;{profile.tag}&ldquo;
+                        “{profile.tag}“
                       </span>
                       <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                     </div>
                     <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-2">
                       <FaClock className="text-yellow-500 h-4 w-4 font-normal" />
-                      {timeAgo(profile.tagtimestamp)}
+                      {timeAgo(profile.tagtimestamp ?? new Date())}
                     </div>
                   </div>
                 </motion.div>
@@ -243,7 +255,6 @@ export default function PagePage() {
           )}
         </motion.div>
 
-        {/* Modal de Story */}
         {selectedStory && (
           <motion.div
             className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
@@ -295,7 +306,6 @@ export default function PagePage() {
           </motion.div>
         )}
 
-        {/* Fundo Gradiente Inferior */}
         <div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
           style={{

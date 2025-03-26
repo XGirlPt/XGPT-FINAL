@@ -149,18 +149,27 @@
       "Sodomia Activa": "Sodomie Active",
       "Sodomia Passiva": "Sodomie Passive",
       "Striptease": "Striptease"
-    }
-  },
-  "loginPage": {
-    "title": "Connexion",
-    "email": "Email",
-    "password": "Mot de passe",
-    "email_placeholder": "Entrez votre email",
-    "password_placeholder": "Entrez votre mot de passe",
-    "login_button": "Se connecter",
-    "register_link": "Vous n'avez pas de compte ? Inscrivez-vous ici",
-    "description": "Connectez-vous à X-Girl pour découvrir des expériences uniques et confidentielles."
-  },
+    },
+      "loginPage": {
+        "title": "Connexion",
+        "subtitle": "Entrez avec vos identifiants",
+        "description": "Connectez-vous à X-Girl pour découvrir des expériences uniques et confidentielles."
+      }
+    },
+      "login": {
+        "email": "Email",
+        "password": "Mot de passe",
+        "email_placeholder": "Entrez votre email",
+        "password_placeholder": "Entrez votre mot de passe",
+        "login_button": "Se connecter",
+        "register_link": "Vous n'avez pas de compte ? Inscrivez-vous ici",
+        "email_label": "Email",
+        "password_label": "Mot de passe",
+        "success_message": "Connexion réussie !",
+        "error_message": "Erreur lors de la connexion. Vérifiez vos identifiants.",
+        "forgot_password": "Mot de passe oublié ?"
+      },
+
 
   "RegisterPage": {
     "title": "XGirl.fr est la référence pour les annonces descort exclusives en Portugal",
@@ -176,7 +185,9 @@
     "password_placeholder": "Entrez votre mot de passe",
     "confirm_password_label": "Confirmez votre mot de passe*",
     "confirm_password_placeholder": "Confirmez votre mot de passe",
-    "register_button": "Créez votre compte"
+    "register_button": "Créez votre compte",
+    "viewPlans": "Voir les Plans",
+    "howItWorks": "Comment Ça Marche"
   },
   "contact": {
     "title": "Contact",
@@ -709,6 +720,11 @@
     "decline": "Tout refuser",
     "save": "Enregistrer",
     "learnMore": "En savoir plus sur notre Politique de Confidentialité"
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "Désolé, la page que vous cherchez n'existe pas.",
+    "backButton": "Retour à la page d'accueil"
   }
   }
   

@@ -37,27 +37,24 @@ const staggerChildren = {
   },
 };
 
-// Variantes para os círculos flutuantes dos stories com movimento dinâmico
+// Variantes para os círculos flutuantes dos stories com pulsação e brilho
 const storyCircleVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.8, rotate: -10 },
+  hidden: { opacity: 0, y: 30, scale: 0.9 },
   visible: {
     opacity: 1,
-    y: [0, -35, 0],
-    scale: 1,
-    rotate: 1,
+    y: [0, -20, 0],
+    scale: [1, 1.05, 1],
     transition: {
-      y: { repeat: Infinity, repeatType: 'loop', duration: 2, ease: 'easeInOut' },
-      opacity: { duration: 0.8 },
-      scale: { duration: 0.8 },
-      rotate: { duration: 0.8 },
+      y: { repeat: Infinity, repeatType: 'loop', duration: 3, ease: 'easeInOut' },
+      scale: { repeat: Infinity, repeatType: 'loop', duration: 1.5, ease: 'easeInOut' },
+      opacity: { duration: 0.6 },
     },
   },
   hover: {
-    scale: 1.2,
-    boxShadow: '0px 0px 20px rgba(236, 72, 153, 1)',
+    scale: 1.15,
     transition: { duration: 0.3 },
   },
-  exit: { opacity: 0, y: -50, scale: 0.8, rotate: 10, transition: { duration: 0.6, ease: 'easeIn' } },
+  exit: { opacity: 0, y: -30, scale: 0.9, transition: { duration: 0.5 } },
 };
 
 // Interface para os dados dos perfis
@@ -91,10 +88,10 @@ const timeAgo = (timestamp: string) => {
 
 // Posições predefinidas para os círculos flutuantes
 const storyPositions = [
-  '-top-10 lg:top-0 left-0 lg:left-20 w-16 h-16',
-  '-top-10 lg:top-0 right-0 lg:right-20 w-16 h-16',
-  '-bottom-20 lg:bottom-0 left-0 lg:-left-10 w-32 h-32',
-  '-bottom-20 lg:bottom-0 right-0 lg:-right-10 w-24 h-24',
+  '-top-12 lg:top-2 left-4 lg:left-24 w-20 h-20',
+  '-top-12 lg:top-2 right-4 lg:right-24 w-20 h-20',
+  '-bottom-24 lg:bottom-4 left-4 lg:-left-12 w-28 h-28',
+  '-bottom-24 lg:bottom-4 right-4 lg:-right-12 w-24 h-24',
 ];
 
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
@@ -146,7 +143,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
           </motion.div>
 
           <motion.h1
-            className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white "
+            className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white"
             variants={fadeInUp}
           >
             Escort Girls & Erotic
@@ -161,10 +158,10 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
             {t('dashboard.meta_description')}
           </motion.p>
 
-          {/* Círculos flutuantes com stories */}
+          {/* Círculos flutuantes com stories aprimorados */}
           {displayedStories.map((profile, index) => (
             <motion.div
-              key={`${profile.nome}-${index}`} // Chave única combinando nome e índice
+              key={`${profile.nome}-${index}`}
               initial="hidden"
               animate="visible"
               exit="exit"
@@ -173,19 +170,43 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               className={`absolute ${storyPositions[index]} cursor-pointer group`}
               onClick={() => openStory(profile.stories[0], profile)}
             >
-              <div className="relative rounded-full overflow-hidden border-4 border-pink-500 shadow-lg">
-                <div className="absolute inset-0 rounded-full border-2 border-pink-400 opacity-70 animate-[pulse_1.5s_infinite]" />
+              <div className="relative rounded-full overflow-hidden w-full h-full">
+                {/* Anel de gradiente dinâmico com pulsação */}
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-[3px]"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.8, 1, 0.8],
+                  }}
+                  transition={{
+                    scale: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' },
+                    opacity: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' },
+                  }}
+                >
+                  <div className="bg-white dark:bg-gray-900 rounded-full w-full h-full" />
+                </motion.div>
+                {/* Vídeo do story */}
                 <video
                   src={profile.stories[0]}
-                  className="object-cover w-full h-full"
+                  className="relative object-cover w-full h-full rounded-full z-10"
                   autoPlay
                   loop
                   muted
                 />
+                {/* Efeito de glow sutil */}
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100"
+                  animate={{ opacity: [0, 0.5, 0] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                />
               </div>
-              <div className="mt-2 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p>{profile.nome}</p>
-                <p className="text-gray-300">{profile.cidade}</p>
+              {/* Informações do perfil com fundo elegante */}
+              <div className="mt-3 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/70 rounded-lg py-1 px-2 shadow-md">
+                <p className="text-pink-300">{profile.nome}</p>
+                <p className="text-gray-300 flex items-center justify-center gap-1">
+                  <FaMapMarkerAlt className="text-pink-500" />
+                  {profile.cidade}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -207,7 +228,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                           variants={cardVariants}
                           whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
                           whileTap={{ scale: 0.98 }}
-                          className="relative bg-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
+                          className="relative bg was-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col w-[200px] md:w-[220px] h-[340px]"
                         >
                           <motion.div className="relative w-full h-[65%] rounded-xl overflow-hidden">
                             <Image
