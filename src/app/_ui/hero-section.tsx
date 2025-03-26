@@ -219,11 +219,11 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
   opts={{ align: 'center', loop: true }}
   plugins={[Autoplay({ delay: 2000 })]}
 >
-<CarouselContent className="flex pb-4" style={{ gap: '1px' }}>
+<CarouselContent className="flex pb-4" style={{ gap: '0px' }}>
       {profilesWithTag.map((profile) => (
       Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] && (
-<CarouselItem key={profile.nome} className="basis-1/2 md:basis-1/6 ">
-          <Link href={`/escort/${profile.nome}`} passHref>
+<CarouselItem key={profile.nome} className="basis-[45%] md:basis-[15%] pl-0.7">
+            <Link href={`/escort/${profile.nome}`} passHref>
             <motion.div
               variants={cardVariants}
               whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
@@ -265,15 +265,15 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                   </div>
                 </div>
               </motion.div>
-              <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
+              <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-1 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                 <div className="flex items-start justify-between gap-2">
-                  <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
+                  <span className="block break-words italic text-xs md:text-sm max-h-[70px] overflow-hidden font-arial animate-flash">
                   &quot;{profile.tag}&quot;
                   </span>
                   <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                 </div>
-                <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-2">
-                  <FaClock className="text-yellow-500 h-4 w-4 font-normal" />
+                <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-1 mb-1">
+                  <FaClock className="text-yellow-500 h-4 w-4 font-normal text-xs" />
                   {timeAgo(profile.tagtimestamp)}
                 </div>
               </div>
