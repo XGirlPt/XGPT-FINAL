@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Privacidade from './_ui/Privacidade';
+import Privacidade from './_ui/politica-privacidade';
 
 export const metadata: Metadata = {
   title: 'XGirl - Acompanhantes',

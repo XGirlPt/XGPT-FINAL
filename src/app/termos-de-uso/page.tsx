@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Termos from './_ui/Termos';
+import Termos from './_ui/termos-de-uso';
 
 export const metadata: Metadata = {
   title: 'XGirl - Acompanhantes',

@@ -30,7 +30,7 @@ const ListRegister: React.FC<ListRegisterProps> = ({ handleOptionSelect }) => {
 
   return (
     <CommonFilter
-      label="Tipo de Conta"
+      label=""
       options={TipoConta}
       value={selectedOption?.name || null}
       onChange={handleChange}

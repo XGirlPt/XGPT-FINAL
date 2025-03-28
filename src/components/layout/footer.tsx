@@ -13,20 +13,20 @@ const Footer = () => {
   const { theme } = useTheme();
 
   const footerLinks = {
-    features: [
-      { href: '/', label: 'Home' },
-      { href: '/about', label: 'About' },
-      { href: '/product', label: 'Product' },
+    explore: [
+      { href: '/', label: t('footer.home') || 'Home' },
+      { href: '/escort', label: t('footer.escorts') || 'Acompanhantes' },
+      { href: '/stories', label: t('footer.stories') || 'Histórias' },
     ],
-    solutions: [
-      { href: '/pricing', label: 'Pricing' },
-      { href: '/blog', label: 'Blog' },
-      { href: '/blog-article', label: 'Blog Article' },
+    anunciantes: [
+      { href: '/registo', label: t('footer.createAd') || 'Criar Anúncio' },
+      { href: '/my-account', label: t('footer.myAccount') || 'Minha Conta' },
+      { href: '/registo-pagamento', label: t('footer.payments') || 'Pagamentos' },
     ],
-    company: [
-      { href: '/contact', label: 'Contact' },
-      { href: '/login', label: 'Login' },
-      { href: '/signup', label: 'Signup' },
+    suporte: [
+      { href: '/contact', label: t('footer.contact') || 'Contato' },
+      { href: '/about', label: t('footer.about') || 'Sobre Nós' },
+      { href: '/blog', label: t('footer.blog') || 'Blog' },
     ],
   };
 
@@ -55,13 +55,13 @@ const Footer = () => {
         </Link>
       </div>
 
-      {/* Newsletter Section - Moved up for mobile */}
+      {/* Newsletter Section - Mobile */}
       <div className="mb-8 px-4 md:hidden">
-        <h3 className="font-semibold mb-2 text-center">Email Address</h3>
+        <h3 className="font-semibold mb-2 text-center">{t('footer.newsletter') || 'Receba Novidades'}</h3>
         <div className="flex flex-col gap-2">
           <Input
             type="email"
-            placeholder="Hello@Xgirl.pt"
+            placeholder="seuemail@xgirl.pt"
             className={cn(
               'rounded-full',
               theme === 'dark'
@@ -77,7 +77,7 @@ const Footer = () => {
                 : 'bg-pink-500 hover:bg-pink-600'
             )}
           >
-            Subscribe Now
+            {t('footer.subscribe') || 'Inscrever-se'}
           </Button>
         </div>
         <p
@@ -86,17 +86,17 @@ const Footer = () => {
             theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
           )}
         >
-          Don&apos;t worry! We don&apos;t spam you!
+          {t('footer.noSpam') || 'Sem spam, apenas atualizações!'}
         </p>
       </div>
 
       {/* Links Grid */}
       <div className="grid grid-cols-3 md:grid-cols-5 gap-8 font-body">
-        {/* Features Column */}
+        {/* Explore Column */}
         <div className="text-center md:text-left">
-          <h3 className="font-semibold mb-4">Features</h3>
+          <h3 className="font-semibold mb-4">{t('footer.explore') || 'Explorar'}</h3>
           <div className="flex flex-col gap-2">
-            {footerLinks.features.map((link) => (
+            {footerLinks.explore.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -111,11 +111,11 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Solutions Column */}
+        {/* Anunciantes Column */}
         <div className="text-center md:text-left">
-          <h3 className="font-semibold mb-4">Solutions</h3>
+          <h3 className="font-semibold mb-4">{t('footer.advertisers') || 'Anunciantes'}</h3>
           <div className="flex flex-col gap-2">
-            {footerLinks.solutions.map((link) => (
+            {footerLinks.anunciantes.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -130,11 +130,11 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Company Column */}
+        {/* Suporte Column */}
         <div className="text-center md:text-left">
-          <h3 className="font-semibold mb-4">Company</h3>
+          <h3 className="font-semibold mb-4">{t('footer.support') || 'Suporte'}</h3>
           <div className="flex flex-col gap-2">
-            {footerLinks.company.map((link) => (
+            {footerLinks.suporte.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -152,11 +152,11 @@ const Footer = () => {
         {/* Newsletter Section - Desktop */}
         <div className="hidden md:flex items-center justify-between col-span-2">
           <div className="flex-1 max-w-md">
-            <h3 className="font-semibold mb-2">Email Address</h3>
+            <h3 className="font-semibold mb-2">{t('footer.newsletter') || 'Receba Novidades'}</h3>
             <div className="relative flex">
               <Input
                 type="email"
-                placeholder="Hello@Xgirl.pt"
+                placeholder="seuemail@xgirl.pt"
                 className={cn(
                   'pr-32 rounded-full',
                   theme === 'dark'
@@ -172,7 +172,7 @@ const Footer = () => {
                     : 'bg-pink-500 hover:bg-pink-600'
                 )}
               >
-                Register Now
+                {t('footer.subscribe') || 'Inscrever-se'}
               </Button>
             </div>
             <p
@@ -181,7 +181,7 @@ const Footer = () => {
                 theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
               )}
             >
-              Don&apos;t worry! We don&apos;t spam you!
+              {t('footer.noSpam') || 'Sem spam, apenas atualizações!'}
             </p>
           </div>
         </div>
@@ -200,27 +200,44 @@ const Footer = () => {
             theme === 'dark' ? 'text-zinc-400' : 'text-gray-500'
           )}
         >
-          Xgirl ©2025
+          XGirl.pt © 2025 - Todos os direitos reservados
         </p>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 text-center">
           <Link
-            href="/Privacidade"
+            href="/politica-privacidade"
             className={cn(
               'text-sm hover:underline',
               theme === 'dark' ? 'text-zinc-400' : 'text-gray-600'
             )}
           >
-            
-            Privacy Policy
+            {t('footer.privacy') || 'Política de Privacidade'}
           </Link>
           <Link
-            href="/Termos"
+            href="/termos-de-uso"
             className={cn(
               'text-sm hover:underline',
               theme === 'dark' ? 'text-zinc-400' : 'text-gray-600'
             )}
           >
-            Terms of Service
+            {t('footer.terms') || 'Termos e Condições'}
+          </Link>
+          <Link
+            href="/cookies"
+            className={cn(
+              'text-sm hover:underline',
+              theme === 'dark' ? 'text-zinc-400' : 'text-gray-600'
+            )}
+          >
+            {t('footer.cookies') || 'Política de Cookies'}
+          </Link>
+          <Link
+            href="/registo-pagamento"
+            className={cn(
+              'text-sm hover:underline',
+              theme === 'dark' ? 'text-zinc-400' : 'text-gray-600'
+            )}
+          >
+            {t('footer.payments') || 'Pagamentos'}
           </Link>
           <Button
             variant="link"
@@ -230,10 +247,9 @@ const Footer = () => {
               theme === 'dark' ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-600 hover:text-gray-800'
             )}
           >
-            Manage Cookies
+            {t('footer.manageCookies') || 'Gerenciar Cookies'}
           </Button>
         </div>
-    
       </div>
     </footer>
   );

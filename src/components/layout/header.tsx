@@ -171,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     { href: '/escort', label: 'Escort', Icon: FaUser },
     { href: '/stories', label: 'Stories', Icon: BiSolidMoviePlay },
     { href: '#', label: 'Filtros', Icon: FaFilter, onClick: () => setFilterModalOpen(true) },
-    { href: '/Pub', label: 'Pub', Icon: FaPenAlt },
+    { href: '/blog', label: 'Blog', Icon: FaPenAlt },
   ];
 
   const isActive = (path: string) => pathname === path;

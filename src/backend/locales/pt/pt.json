@@ -16,31 +16,27 @@
     "PT": "Português"
   },
 
-  "Footer": {
-    "services_description": "Descubra os melhores serviços de acompanhantes nas principais regiões de Portugal.",
-    "quick_links_title": "LINKS RÁPIDOS",
-    "escort_lisboa": "Acompanhantes em Lisboa",
-    "escort_porto": "Acompanhantes no Porto",
-    "escort_braga": "Acompanhantes em Braga",
-    "escort_faro": "Acompanhantes em Faro",
-    "escort_madeira": "Acompanhantes na Madeira",
-    "top_categories_title": "CATEGORIAS PRINCIPAIS",
-    "vip_escorts": "Acompanhantes VIP",
-    "bdsm": "BDSM",
-    "salons": "Salões",
+"footer": {
+    "home": "Home",
+    "escorts": "Acompanhantes",
     "stories": "Histórias",
-    "erotic_massage": "Massagem Erótica",
-    "about_title": "SOBRE",
-    "faq": "Perguntas Frequentes",
-    "dmca": "DMCA",
-    "report": "Denunciar",
-    "terms_conditions": "Termos e Condições",
-    "privacy_policy": "Política de Privacidade",
-    "xgirl_history": "A História da XGIRL",
+    "createAd": "Criar Anúncio",
+    "myAccount": "Minha Conta",
+    "payments": "Pagamentos",
     "contact": "Contato",
-    "join_us": "Junte-se a Nós",
-    "disclaimer": "Este site é um recurso de publicidade e informação e, como tal, não tem nenhuma conexão ou responsabilidade com os sites ou indivíduos aqui mencionados. Vendemos APENAS espaços publicitários, não somos uma agência de acompanhantes e não estamos de forma alguma envolvidos em atividades de acompanhantes ou prostituição. Não assumimos responsabilidade pelo conteúdo ou ações de sites de terceiros ou indivíduos que você possa acessar através de links, e-mails ou contatos telefônicos deste portal.",
-    "copyright": "© {year} XGirl. Todos os direitos reservados."
+    "about": "Sobre Nós",
+    "blog": "Blog",
+    "newsletter": "Receba Novidades",
+    "subscribe": "Inscrever-se",
+    "noSpam": "Sem spam, apenas atualizações!",
+    "explore": "Explorar",
+    "advertisers": "Anunciantes",
+    "support": "Suporte",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos e Condições",
+    "cookies": "Política de Cookies",
+    "manageCookies": "Gerenciar Cookies"
+  
   },
 
   "dashboard": {
@@ -732,14 +728,17 @@
   "currentTag": "Minha tag atual",
   "updateTag": "Atualizar minha Tag"
 },
-"cookieConsent": {
-    "title": "Nós usamos cookies",
-    "message": "Usamos cookies essenciais para o funcionamento do site e cookies analíticos opcionais (ex.: Google Analytics: _ga, _gid) para entender como você usa nosso site. Escolha quais cookies permitir:",
+
+  "cookieConsent": {
+    "title": "Gerencie suas preferências de cookies",
+    "message": "Utilizamos cookies essenciais para o funcionamento do XGirl.pt e cookies opcionais de análise (ex.: Google Analytics: _ga, _gid) para melhorar sua experiência e entender como você usa o site. Escolha suas preferências:",
     "essential": "Cookies Essenciais (sempre necessários)",
-    "analytics": "Cookies Analíticos (ex.: Google Analytics)",
+    "analytics": "Cookies de Análise (ex.: Google Analytics)",
     "decline": "Recusar Tudo",
-    "save": "Salvar",
-    "learnMore": "Saiba mais sobre nossa Política de Privacidade"
+    "save": "Salvar Preferências",
+    "accept": "Aceitar Tudo",
+    "learnMorePrivacy": "Política de Privacidade",
+    "learnMoreCookies": "Política de Cookies"
   }
 ,"notFound": {
     "title": "Página não encontrada",
