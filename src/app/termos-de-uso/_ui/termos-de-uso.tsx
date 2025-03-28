@@ -15,7 +15,7 @@ function Termos() {
             1. Introdução
           </h2>
           <p>
-            Bem-vindo ao XGirl.pt, uma plataforma online dedicada à publicação de anúncios de serviços de entretenimento para adultos. Estes Termos e Condições ("T&C") regulam a utilização do site XGirl.pt, propriedade da XGirl.pt, LDA., e aplicam-se a todos os visitantes e anunciantes (coletivamente "Usuários"). Ao acessar ou utilizar o site, você aceita plenamente e sem reservas estes T&C. Caso não concorde com qualquer parte deste documento, recomendamos que não utilize nossos serviços.
+            Bem-vindo ao XGirl.pt, uma plataforma online dedicada à publicação de anúncios de serviços de entretenimento para adultos. Estes Termos e Condições (&quot;T&C&quot;) regulam a utilização do site XGirl.pt, propriedade da XGirl.pt, LDA., e aplicam-se a todos os visitantes e anunciantes (coletivamente &quot;Usuários&quot;). Ao acessar ou utilizar o site, você aceita plenamente e sem reservas estes T&C. Caso não concorde com qualquer parte deste documento, recomendamos que não utilize nossos serviços.
           </p>
           <p>
             O XGirl.pt reserva-se o direito de modificar estes T&C a qualquer momento, sem aviso prévio, para adequá-los à legislação aplicável ou às necessidades operacionais. As alterações serão publicadas nesta página, e o uso contínuo do site após tais mudanças constitui aceitação das mesmas.
@@ -78,14 +78,14 @@ function Termos() {
             <li>Incluir atos sexuais explícitos ou nudez total em categorias como massagens.</li>
             <li>Publicar anúncios de menores de 18 anos ou com linguagem que sugira menores.</li>
             <li>Promover práticas sexuais não seguras ou o uso de drogas/álcool.</li>
-            <li>Colocar links externos fora dos campos designados ou cidades fora do campo "local".</li>
+            <li>Colocar links externos fora dos campos designados ou cidades fora do campo &quot;local&quot;.</li>
           </ul>
           <h3 className="text-xl font-medium">4.2. Planos e Vantagens</h3>
           <p>
             - <strong>Plano Free:</strong> Publicação gratuita de até 3 anúncios por categoria com fotos reais ou sem fotos. Limitações incluem menor visibilidade e ausência de selos de destaque.
           </p>
           <p>
-            - <strong>Plano Premium:</strong> Mediante mensalidade, oferece vantagens como selo "Fotos Reais", destaque na lista de anúncios, fundo colorido, opção "Voltar ao Início" e acesso prioritário em dispositivos móveis. A mensalidade é fixa e renovada automaticamente até cancelamento.
+            - <strong>Plano Premium:</strong> Mediante mensalidade, oferece vantagens como selo &quot;Fotos Reais&quot;, destaque na lista de anúncios, fundo colorido, opção &quot;Voltar ao Início&quot; e acesso prioritário em dispositivos móveis. A mensalidade é fixa e renovada automaticamente até cancelamento.
           </p>
         </section>
 
@@ -172,7 +172,7 @@ function Termos() {
             9. Exclusão de Garantias e Responsabilidade
           </h2>
           <p>
-            O XGirl.pt oferece seus serviços "como estão", sem garantias de exatidão ou disponibilidade contínua. Não nos responsabilizamos por:
+            O XGirl.pt oferece seus serviços &quot;como estão&quot;, sem garantias de exatidão ou disponibilidade contínua. Não nos responsabilizamos por:
           </p>
           <ul className="list-disc list-inside space-y-2">
             <li>Erros ou omissões no conteúdo dos anúncios.</li>

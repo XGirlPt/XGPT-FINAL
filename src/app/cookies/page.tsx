@@ -141,7 +141,7 @@ function Cookies() {
             Desativar cookies pode limitar sua experiência no XGirl.pt. Alguns exemplos:
           </p>
           <ul className="list-disc list-inside space-y-2">
-            <li>Não será possível manter-se logado ou acessar áreas pessoais como "Meu Perfil".</li>
+            <li>Não será possível manter-se logado ou acessar áreas pessoais como &quot;Meu Perfil&quot;.</li>
             <li>O site não adaptará conteúdos às suas preferências (ex.: tema ou idioma).</li>
             <li>Não poderemos analisar o tráfego para melhorar o site.</li>
             <li>Funcionalidades de compartilhamento em redes sociais podem não funcionar.</li>
@@ -178,9 +178,9 @@ function Cookies() {
             Para excluir cookies específicos no Google Chrome, por exemplo:
           </p>
           <ol className="list-decimal list-inside ml-6 space-y-2">
-            <li>Vá para "Configurações" > "Privacidade e Segurança" > "Cookies e outros dados do site".</li>
-            <li>Clique em "Ver todos os cookies e dados do site".</li>
-            <li>Pesquise por "xgirl.pt" e exclua os cookies desejados.</li>
+            <li>Vá para &quot;Configurações&quot; - &quot;Privacidade e Segurança&quot; - &quot;Cookies e outros dados do site&quot;.</li>
+            <li>Clique em &quot;Ver todos os cookies e dados do site&quot;.</li>
+            <li>Pesquise por &quot;xgirl.pt&quot; e exclua os cookies desejados.</li>
           </ol>
         </section>
 
