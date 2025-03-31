@@ -1,13 +1,16 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { FaFire } from 'react-icons/fa';
-import { Profile } from '@/backend/types';
-import { FaCrown } from 'react-icons/fa';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Profile } from "@/backend/types";
 
 interface RoundAvatarProps {
   profile: Profile;
+}
+
+interface CaroselRoundProps {
+  profiles?: Profile[]; // Tornar profiles opcional
 }
 
 const RoundAvatar: React.FC<RoundAvatarProps> = ({ profile }) => {
@@ -17,31 +20,58 @@ const RoundAvatar: React.FC<RoundAvatarProps> = ({ profile }) => {
         <div className="relative w-16 md:w-20 h-16 md:h-20 rounded-full overflow-hidden border-2 border-pink-800 transition duration-300 ease-in-out">
           {profile.photos && profile.photos.length > 0 ? (
             <Image
-              src={profile.photos[0] || '/logo.webp'}
+              src={profile.photos[0]}
               alt={profile.nome}
-              className="w-full h-full object-cover rounded-full border-2 border-white"
-              loading="lazy"
-              width={80}
-              height={80}
+              fill
+              className="object-cover rounded-full"
             />
           ) : (
-            <div className="w-full h-full bg-gray-300 rounded-full" />
+            <Image
+              src="/logo.webp"
+              alt="Default Avatar"
+              fill
+              className="object-cover rounded-full"
+            />
           )}
-          <div className="absolute inset-0 hover:bg-pink-800 hover:opacity-40 duration-300 z-10" />
-          <FaFire
-            className="absolute -top-2 -right-2 text-red-500 w-6 h-6 md:w-7 md:h-7 animate-pulse drop-shadow-md z-20"
-          />
         </div>
-        <p className="text-white text-xs mt-2 whitespace-nowrap">{profile.nome}</p>
-        {profile.premium && (
-          <span className="absolute -bottom-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-20 flex items-center">
-            <FaCrown className="text-white mr-1" />
-            Premium
-          </span>
-        )}
+        <p className="mt-2 text-xs md:text-sm text-gray-100 text-center">
+          {profile.nome}
+        </p>
       </div>
     </Link>
   );
 };
 
-export default RoundAvatar;
+const CaroselRound: React.FC<CaroselRoundProps> = ({ profiles = [] }) => { // Valor padrão como array vazio
+  const shuffleArray = (array: Profile[]) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const profilesToDisplay = shuffleArray(profiles).slice(0, 15);
+
+  return (
+    <div className="mx-4 md:mx-8 mb-8 relative z-10">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 text-center">
+        Destaques da Semana
+      </h2>
+      <div className="w-full overflow-x-auto">
+        <div className="flex gap-4 justify-start">
+          {profilesToDisplay.length > 0 ? (
+            profilesToDisplay.map((profile, index) => (
+              <RoundAvatar key={index} profile={profile} />
+            ))
+          ) : (
+            <p className="text-gray-100">Nenhum perfil disponível</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CaroselRound;

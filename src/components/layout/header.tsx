@@ -27,6 +27,7 @@ interface HeaderProps {
 
 interface FiltrosState {
   idade?: number[];
+  nome?: string[];
   tarifa?: number[];
   lingua?: string[];
   altura?: string;
@@ -49,6 +50,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
   const { theme } = useTheme();
   const userUID = useSelector((state: any) => state.profile.userUID);
   const email = useSelector((state: any) => state.profile.email || '');
+  const nome = useSelector((state: any) => state.profile.nome || '');
   const photoUID = useSelector((state: any) => state.profile.photos?.[0]);
   const isLoggedIn = useSelector((state: any) => state.profile.isLoggedIn);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -246,7 +248,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                     ) : (
                       <FaUser className="w-10 h-10 text-gray-500 dark:text-gray-300" />
                     )}
-                    <span className="text-gray-700 dark:text-white text-base">{email}</span>
+                    <span className="text-gray-700 dark:text-white text-sm">Bem-vinda, {nome}</span>
                     <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-300" />
                   </button>
                 </DropdownMenuTrigger>
@@ -265,7 +267,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
             ) : (
               <>
                 <Button
-                  onClick={() => router.push('/registo/regista2')}
+                  onClick={() => router.push('/registo')}
                   className={cn('rounded-full !px-6 bg-pink-600 hover:bg-pink-700 dark:text-white font-body')}
                 >
                   {t('Header.register')}

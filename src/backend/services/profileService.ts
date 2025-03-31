@@ -1,6 +1,6 @@
 // src/backend/services/profileService.ts
 import supabase from '../../backend/database/supabase';
-import { Profile, UserProfileData, UpdateTagResponse } from '@/backend/types';
+import { Profile, UserProfileData, UpdateTagResponse, HeroProfile } from '@/backend/types';
 import { Dispatch } from 'redux';
 import { updateStories } from '@/backend/reducers/profileSlice';
 
@@ -144,13 +144,13 @@ export async function fetchProfileFromDatabase(userUID: string): Promise<Profile
 
     const profileWithPhotos: Profile = {
       ...profileData,
-      photos: photoData.map((photo) => photo.imageurl) || [],
-      stories: storyData.map((story) => story.storyurl) || [],
-      vphotos: vPhotoData.map((vphoto) => vphoto.imageurl) || [],
-      photoURL: photoData.map((photo) => photo.imageurl) || [],
-      vphotoURL: vPhotoData.map((vphoto) => vphoto.imageurl) || [],
-      storyURL: storyData.map((story) => story.storyurl) || [],
-      comment: commentsData.map((comment) => comment.comment) || [],
+      photos: photoData?.map((photo) => photo.imageurl) || [],
+      stories: storyData?.map((story) => story.storyurl) || [],
+      vphotos: vPhotoData?.map((vphoto) => vphoto.imageurl) || [],
+      photoURL: photoData?.map((photo) => photo.imageurl) || [],
+      vphotoURL: vPhotoData?.map((vphoto) => vphoto.imageurl) || [],
+      storyURL: storyData?.map((story) => story.storyurl) || [],
+      comment: commentsData?.map((comment) => comment.comment) || [],
       id: profileData.id,
       tarifa: profileData.tarifa || 0,
       lingua: profileData.lingua || [],
@@ -297,7 +297,7 @@ export const deleteStory = async (storyURL: string, userUID: string) => {
 };
 
 // FETCH PROFILES FOR LANDING PAGE
-export async function fetchProfilesMain(): Promise<any[]> {
+export async function fetchProfilesMain(): Promise<HeroProfile[]> { // Ajustada a tipagem
   try {
     const { data: profilesData, error: profilesError } = await supabase
       .from('ProfilesData')
@@ -326,16 +326,16 @@ export async function fetchProfilesMain(): Promise<any[]> {
         .map((story) => story.storyurl);
 
       return {
+        userUID: profile.userUID,
         nome: profile.nome,
         cidade: profile.cidade,
-        certificado: profile.certificado,
+        certificado: profile.certificado || false,
         photos: mainPhoto ? [mainPhoto.imageurl] : [],
         stories: userStories || [],
-        tag: profile.tag,
-        tagtimestamp: profile.tagtimestamp,
-        userUID: profile.userUID,
-        photo: mainPhoto ? mainPhoto.imageurl : '',
+        tag: profile.tag || '',
+        tagtimestamp: profile.tagtimestamp || '',
         live: profile.live || false,
+        premium: false, // Não está na query, padrão false
       };
     });
 
@@ -348,6 +348,77 @@ export async function fetchProfilesMain(): Promise<any[]> {
     return combinedProfiles;
   } catch (error: any) {
     console.error('Erro ao buscar perfis para a landing page:', error.message);
+    throw error;
+  }
+}
+
+// FETCH PROFILES FOR HERO SECTION
+export async function fetchProfilesForHeroSection(limit: number = 0): Promise<{
+  profiles: HeroProfile[];
+  badges: Record<string, boolean>;
+}> {
+  try {
+    const { data: profilesData, error: profilesError } = await supabase
+      .from('ProfilesData')
+      .select('userUID, nome, cidade, tag, tagtimestamp, live, premium, certificado')
+      .eq('status', true)
+      .neq('tag', '')
+      .neq('tag', null)
+      .order('tagtimestamp', { ascending: false })
+
+    if (profilesError) throw profilesError;
+    if (!profilesData) throw new Error('Nenhum perfil encontrado');
+
+    const { data: photosData, error: photosError } = await supabase
+      .from('profilephoto')
+      .select('userUID, imageurl')
+      .in('userUID', profilesData.map((p) => p.userUID))
+      .order('created_at', { ascending: true });
+
+    if (photosError) throw photosError;
+
+    const { data: storiesData, error: storiesError } = await supabase
+      .from('stories')
+      .select('userUID, storyurl')
+      .in('userUID', profilesData.map((p) => p.userUID));
+
+    if (storiesError) throw storiesError;
+
+    const profiles: HeroProfile[] = profilesData.map((profile) => {
+      const mainPhoto = photosData.find((photo) => photo.userUID === profile.userUID);
+      const userStories = storiesData
+        .filter((story) => story.userUID === profile.userUID)
+        .map((story) => story.storyurl);
+
+      return {
+        userUID: profile.userUID,
+        nome: profile.nome,
+        cidade: profile.cidade,
+        photos: mainPhoto ? [mainPhoto.imageurl] : [],
+        stories: userStories || [],
+        tag: profile.tag,
+        tagtimestamp: profile.tagtimestamp || '',
+        live: profile.live || false,
+        premium: profile.premium || false,
+        certificado: profile.certificado || false,
+      };
+    });
+
+    const badges: Record<string, boolean> = {};
+    for (const profile of profiles) {
+      const { data: blogData, error: blogError } = await supabase
+        .from('blog_posts')
+        .select('status')
+        .eq('author_id', profile.userUID)
+        .eq('status', 'approved')
+        .limit(1);
+
+      badges[profile.userUID] = !blogError && blogData && blogData.length > 0;
+    }
+
+    return { profiles, badges };
+  } catch (error: any) {
+    console.error('Erro ao buscar perfis para o HeroSection:', error.message);
     throw error;
   }
 }

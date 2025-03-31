@@ -1,4 +1,4 @@
-// services/profileService.ts
+// src/backend/services/profileService.ts
 import { Profile, UpdateTagResponse, UserProfileData } from '@/backend/types';
 import { supabase } from '../../backend/database/supabase';
 

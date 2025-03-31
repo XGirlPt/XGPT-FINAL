@@ -159,7 +159,18 @@ const Dashboard: React.FC = () => {
     {showMaiores && <Maiores setShowMaiores={setShowMaiores} />}
     <main className="bg-[#f2ebee] dark:bg-[#100007] container mx-auto relative mt-6">
    
-
+    <div
+          className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415] z-0"
+          style={{
+            height: "500px",
+            width: "500px",
+            borderRadius: "250px",
+            top: "-100px",
+            left: "-100px",
+            filter: "blur(80px)",
+            zIndex: 0,
+          }}
+        />
       <HeroSection profiles={profiles as Profile[]} />
       <RecentStories />
       <FeaturedAds    profiles={profiles} currentPage={1} itemsPerPage={10} onProfileClick={() => {}} />
@@ -168,6 +179,18 @@ const Dashboard: React.FC = () => {
       <Statistics />
       <PublishAdBanner />
     </main>
+    <div
+          className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
+          style={{
+            height: "400px",
+            width: "400px",
+            borderRadius: "200px",
+            bottom: "-100px",
+            right: "-100px",
+            filter: "blur(80px)",
+            zIndex: 0,
+          }}
+        />
     </>
   );
 };

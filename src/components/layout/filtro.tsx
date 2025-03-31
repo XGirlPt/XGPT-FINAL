@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Importação para redirecionamento
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { fetchProfiles } from '@/backend/services/profileService';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/backend/lib/utils';
 import { useTheme } from 'next-themes';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaTimes } from 'react-icons/fa';
 import FiltroAge from '@/components/filtros/filtro-age';
 import FiltroTarifa from '@/components/filtros/filtro-tarifa';
 import FiltroLingua from '@/components/filtros/filtro-lingua';
@@ -48,13 +48,21 @@ interface FiltroProps {
   onApplyFilters?: (filters: FiltrosState) => void;
 }
 
+// Variantes de animação para o modal
+const modalVariants = {
+  hidden: { opacity: 0, y: -50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
+  exit: { opacity: 0, y: -50, transition: { duration: 0.2 } },
+};
+
 const Filtro: React.FC<FiltroProps> = ({ open, onOpenChange, onApplyFilters }) => {
   const { theme } = useTheme();
-  const router = useRouter(); // Hook para redirecionamento
+  const router = useRouter();
   const [filtros, setFiltros] = useState<FiltrosState>({});
   const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
   const [totalProfiles, setTotalProfiles] = useState<number>(0);
 
+  // Carregar perfis ao abrir o modal
   useEffect(() => {
     const loadProfiles = async () => {
       const profiles = await fetchProfiles();
@@ -64,6 +72,7 @@ const Filtro: React.FC<FiltroProps> = ({ open, onOpenChange, onApplyFilters }) =
     if (open) loadProfiles();
   }, [open]);
 
+  // Aplicar filtros dinamicamente
   useEffect(() => {
     const applyFilters = (profiles: any[], filters: FiltrosState) => {
       return profiles.filter((profile) => {
@@ -92,128 +101,230 @@ const Filtro: React.FC<FiltroProps> = ({ open, onOpenChange, onApplyFilters }) =
   }, [filtros, open]);
 
   const handleApplyFilters = () => {
-    onApplyFilters?.(filtros); // Atualiza os filtros no Redux via Header
-    onOpenChange(false); // Fecha o modal
-    router.push('/escort'); // Redireciona para a página /escort
+    onApplyFilters?.(filtros);
+    onOpenChange(false);
+    router.push('/escort');
   };
 
   const handleResetFilters = () => {
-    setFiltros({}); // Reseta os filtros locais
+    setFiltros({});
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          'w-full max-w-[90%] md:max-w-[75%] max-h-[90vh] bg-[#f2ebee] dark:bg-[#100007] rounded-3xl shadow-xl p-6 md:p-8 overflow-y-auto',
+          'w-full max-w-[90%] md:max-w-[75%] max-h-[90vh] bg-[#faf3f6] dark:bg-[#13040b] rounded-3xl shadow-xl p-6 md:p-8 overflow-y-auto border-none',
           theme === 'dark' ? 'text-zinc-50' : 'text-gray-900'
         )}
       >
-        <DialogHeader>
-          <DialogTitle className="text-2xl md:text-3xl font-semibold font-body">
-            Filtros
-          </DialogTitle>
-        </DialogHeader>
-        <div className="border-t border-gray-200 dark:border-gray-800 my-6" />
+        <motion.div
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <DialogHeader className="relative">
+            <DialogTitle className="text-3xl md:text-4xl font-semibold font-body text-gray-900 dark:text-white">
+              Filtros
+            </DialogTitle>
+            <Button
+              variant="ghost"
+              className="absolute top-0 right-0 p-2 hover:bg-pink-100 dark:hover:bg-[#2b1a21]"
+              onClick={() => onOpenChange(false)}
+            >
+              <FaTimes className="text-gray-600 dark:text-gray-300" size={20} />
+            </Button>
+          </DialogHeader>
 
-        <form className="space-y-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <FiltroAge
-              value={filtros.idade || [18, 100]}
-              onChange={(value: number[]) => setFiltros({ ...filtros, idade: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroTarifa
-              value={filtros.tarifa || [0, 1000]}
-              onChange={(value: number[]) => setFiltros({ ...filtros, tarifa: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroLingua
-              value={filtros.lingua || []}
-              onChange={(value: string[]) => setFiltros({ ...filtros, lingua: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroAltura
-              value={filtros.altura || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, altura: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroDistrito
-              value={filtros.distrito || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, distrito: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroOrigem
-              value={filtros.origem || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, origem: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroOlhos
-              value={filtros.olhos || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, olhos: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroPeito
-              value={filtros.seios || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, seios: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroMamas
-              value={filtros.mamas || ''}
-              onChange={(value: string) => setFiltros({ ...filtros, mamas: value })}
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroPelos
-              value={filtros.pelos === undefined ? '' : filtros.pelos ? 'Sim' : 'Não'}
-              onChange={(value: string) =>
-                setFiltros({ ...filtros, pelos: value === 'Sim' ? true : value === 'Não' ? false : undefined })
-              }
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <FiltroTatuagem
-              value={filtros.tatuagem === undefined ? '' : filtros.tatuagem ? 'Sim' : 'Não'}
-              onChange={(value: string) =>
-                setFiltros({ ...filtros, tatuagem: value === 'Sim' ? true : value === 'Não' ? false : undefined })
-              }
-              bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
-            />
-            <div>
-              <label className="text-sm font-body mb-2 block">Certificado</label>
-              <Button
-                onClick={() => setFiltros({ ...filtros, certificado: filtros.certificado === undefined ? true : !filtros.certificado })}
-                className={cn(
-                  'w-full h-10 rounded-full font-body transition-all duration-300',
-                  filtros.certificado === true
-                    ? 'bg-gradient-to-r from-pink-600 to-rose-500 text-white'
-                    : filtros.certificado === false
-                      ? 'bg-gray-200 dark:bg-[#2b1a21] text-gray-700 dark:text-gray-200'
-                      : 'bg-white dark:bg-[#2b1a21] border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-200'
-                )}
+          <div className="border-t border-gray-200 dark:border-gray-800 my-6" />
+
+          <form className="space-y-10">
+            {/* Seção de Filtros */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
-                {filtros.certificado === true ? 'Sim' : filtros.certificado === false ? 'Não' : 'Qualquer'}
-              </Button>
+                <FiltroAge
+                  value={filtros.idade || [18, 100]}
+                  onChange={(value: number[]) => setFiltros({ ...filtros, idade: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <FiltroTarifa
+                  value={filtros.tarifa || [0, 1000]}
+                  onChange={(value: number[]) => setFiltros({ ...filtros, tarifa: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <FiltroLingua
+                  value={filtros.lingua || []}
+                  onChange={(value: string[]) => setFiltros({ ...filtros, lingua: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <FiltroAltura
+                  value={filtros.altura || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, altura: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <FiltroDistrito
+                  value={filtros.distrito || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, distrito: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <FiltroOrigem
+                  value={filtros.origem || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, origem: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                <FiltroOlhos
+                  value={filtros.olhos || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, olhos: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <FiltroPeito
+                  value={filtros.seios || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, seios: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+              >
+                <FiltroMamas
+                  value={filtros.mamas || ''}
+                  onChange={(value: string) => setFiltros({ ...filtros, mamas: value })}
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.0 }}
+              >
+                <FiltroPelos
+                  value={filtros.pelos === undefined ? '' : filtros.pelos ? 'Sim' : 'Não'}
+                  onChange={(value: string) =>
+                    setFiltros({
+                      ...filtros,
+                      pelos: value === 'Sim' ? true : value === 'Não' ? false : undefined,
+                    })
+                  }
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+              >
+                <FiltroTatuagem
+                  value={filtros.tatuagem === undefined ? '' : filtros.tatuagem ? 'Sim' : 'Não'}
+                  onChange={(value: string) =>
+                    setFiltros({
+                      ...filtros,
+                      tatuagem: value === 'Sim' ? true : value === 'Não' ? false : undefined,
+                    })
+                  }
+                  bgColor={theme === 'dark' ? 'bg-[#2b1a21]' : 'bg-white'}
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+              >
+                <div className="space-y-2">
+                  <label className="text-sm font-body text-gray-700 dark:text-gray-300">
+                    Certificado
+                  </label>
+                  <Button
+                    onClick={() =>
+                      setFiltros({
+                        ...filtros,
+                        certificado: filtros.certificado === undefined ? true : !filtros.certificado,
+                      })
+                    }
+                    className={cn(
+                      'w-full h-10 rounded-full font-body transition-all duration-300 shadow-md',
+                      filtros.certificado === true
+                        ? 'bg-gradient-to-r from-pink-600 to-rose-500 text-white'
+                        : filtros.certificado === false
+                        ? 'bg-gray-200 dark:bg-[#2b1a21] text-gray-700 dark:text-gray-200'
+                        : 'bg-white dark:bg-[#2b1a21] border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:bg-pink-100 dark:hover:bg-[#3b2a31]'
+                    )}
+                  >
+                    {filtros.certificado === true ? 'Sim' : filtros.certificado === false ? 'Não' : 'Qualquer'}
+                  </Button>
+                </div>
+              </motion.div>
             </div>
-          </div>
 
-          <DialogFooter className="flex justify-between">
-            <Button
-              type="button"
-              onClick={handleResetFilters}
-              variant="outline"
-              className="rounded-full py-2 px-6 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:bg-pink-600 hover:text-white font-body"
-            >
-              Limpar Filtros
-            </Button>
-            <Button
-              type="button"
-              onClick={handleApplyFilters}
-              className="rounded-full py-2 px-6 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-body"
-            >
-              <FaFilter className="mr-2" size={18} />
-              Aplicar ({filteredProfiles.length})
-            </Button>
-          </DialogFooter>
-        </form>
+            {/* Rodapé com botões */}
+            <DialogFooter className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+              <Button
+                type="button"
+                onClick={handleResetFilters}
+                variant="outline"
+                className="w-full sm:w-auto rounded-full py-2 px-6 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:bg-pink-600 hover:text-white font-body transition-all duration-300"
+              >
+                Limpar Filtros
+              </Button>
+              <Button
+                type="button"
+                onClick={handleApplyFilters}
+                className="w-full sm:w-auto rounded-full py-2 px-6 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-body flex items-center justify-center gap-2 shadow-md transition-all duration-300"
+              >
+                <FaFilter size={18} />
+                Aplicar ({filteredProfiles.length})
+              </Button>
+            </DialogFooter>
+          </form>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );

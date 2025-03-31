@@ -16,8 +16,8 @@ Landing page:
  [X] - melhorar card : nome e cidade dentro da foto
  [] - icon texto sempre do mesmo tamanho
  [X] - icon certificado
- [] - icon premmium
- [] - cores icon tempo
+ [X] - icon premmium
+ []X - cores icon tempo
 
  - Maps: 
  [X] - colocar componente maps a funcionar
@@ -38,7 +38,7 @@ Landing page:
 
   [] - primeiro scroll 
   [X] - left side, sempre icon texto sempre no mesmo sitio e do mesmo tamanho
-  [] - certificado, tirar aquele tipo de letra
+  [X] - certificado, tirar aquele tipo de letra
   [] - modais de perfil consistestes em design e cores e font
   [] - traducao correcta de todos os campos
   [] - bandeira arabe

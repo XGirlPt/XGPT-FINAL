@@ -1,16 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import * as React from 'react';
-import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, Clock, Star, Video, Share2, Crown } from 'lucide-react';
-import { MdVerified } from 'react-icons/md'; // Ícone de certificado
-import { FaMapMarkerAlt } from 'react-icons/fa'; // Ícone de localização
-import { motion } from 'framer-motion';
-import { useLanguage } from '../../backend/context/LanguageContext';
-import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Clock } from "lucide-react";
+import { MdVerified } from "react-icons/md";
+import { FaCrown, FaMapMarkerAlt, FaVideo, FaClock, FaPen} from "react-icons/fa";
+import { MdFiberManualRecord } from "react-icons/md";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../backend/context/LanguageContext";
+import Link from "next/link";
+import { supabase } from "@/backend/database/supabase";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,7 +30,7 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      type: 'spring',
+      type: "spring",
       stiffness: 100,
       damping: 15,
     },
@@ -42,7 +43,7 @@ const badgeVariants = {
     opacity: 1,
     scale: 1,
     transition: {
-      type: 'spring',
+      type: "spring",
       stiffness: 200,
       damping: 20,
     },
@@ -59,23 +60,25 @@ interface Profile {
   certificado: boolean;
   live: boolean | string;
   premium: boolean | string;
+  featured_until?: string;
+  userUID?: string;
 }
 
-export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], currentPage: number, itemsPerPage: number }) {
+export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[]; currentPage: number }) {
   const [timeElapsedList, setTimeElapsedList] = useState<string[]>([]);
-
-  const ITEMS_PER_PAGE = 12; // Definindo o número fixo de perfis a exibir
+  const [authorBadges, setAuthorBadges] = useState<Record<string, boolean>>({});
+  const ITEMS_PER_PAGE = 12;
 
   const formatTimeElapsed = useCallback((minutesElapsed: number): string => {
     const hoursElapsed = minutesElapsed / 60;
     if (hoursElapsed > 48) {
-      return 'Há mais de 48 horas';
+      return "Há mais de 48 horas";
     } else if (minutesElapsed < 60) {
-      return `Há ${minutesElapsed} minuto${minutesElapsed !== 1 ? 's' : ''}`;
+      return `Há ${minutesElapsed} minuto${minutesElapsed !== 1 ? "s" : ""}`;
     } else {
       const hours = Math.floor(hoursElapsed);
       const minutes = minutesElapsed % 60;
-      return `Há ${hours} hora${hours !== 1 ? 's' : ''}${minutes > 0 ? ` ${minutes} minuto${minutes !== 1 ? 's' : ''}` : ''}`;
+      return `Há ${hours} hora${hours !== 1 ? "s" : ""}${minutes > 0 ? ` ${minutes} minuto${minutes !== 1 ? "s" : ""}` : ""}`;
     }
   }, []);
 
@@ -83,7 +86,7 @@ export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], cu
     (tagTimestamp: string): string => {
       const timestampDate = new Date(tagTimestamp);
       if (isNaN(timestampDate.getTime())) {
-        return 'Tempo indeterminado';
+        return "Tempo indeterminado";
       }
       const currentTime = Date.now();
       const elapsedTime = currentTime - timestampDate.getTime();
@@ -93,30 +96,65 @@ export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], cu
     [formatTimeElapsed]
   );
 
+  // Função para verificar se o usuário tem artigos aprovados
+  const checkAuthorBadge = useCallback(async (userUID: string | undefined) => {
+    if (!userUID) return false;
+
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("id")
+      .eq("author_id", userUID) // Corrigido para author_id
+      .eq("status", "approved")
+      .limit(1);
+
+    if (error) {
+      console.error("Erro ao verificar artigos aprovados:", error.message, error.details);
+      return false;
+    }
+    console.log(`Artigos aprovados para userUID ${userUID}:`, data.length > 0);
+    return data.length > 0;
+  }, []);
+
   useEffect(() => {
     if (!profiles || profiles.length === 0) return;
 
-    const timeElapsed = profiles.map((profile) =>
-      calculateTimeElapsed(profile.tagtimestamp)
-    );
+    console.log("Perfis recebidos no FeaturedAds:", profiles);
+
+    const timeElapsed = profiles.map((profile) => calculateTimeElapsed(profile.tagtimestamp));
     setTimeElapsedList(timeElapsed);
 
+    // Verifica badges para todos os perfis
+    const fetchBadges = async () => {
+      const badgeStatus: Record<string, boolean> = {};
+      for (const profile of profiles) {
+        if (profile.userUID) {
+          badgeStatus[profile.userUID] = await checkAuthorBadge(profile.userUID);
+        }
+      }
+      console.log("Badge status:", badgeStatus);
+      setAuthorBadges(badgeStatus);
+    };
+    fetchBadges();
+
     const interval = setInterval(() => {
-      const updatedTimeElapsed = profiles.map((profile) =>
-        calculateTimeElapsed(profile.tagtimestamp)
-      );
+      const updatedTimeElapsed = profiles.map((profile) => calculateTimeElapsed(profile.tagtimestamp));
       setTimeElapsedList(updatedTimeElapsed);
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [profiles, calculateTimeElapsed]);
+  }, [profiles, calculateTimeElapsed, checkAuthorBadge]);
 
-  // Ordenação dos perfis por tagtimestamp (da mais recente para a mais antiga)
   const sortedProfiles = profiles
     ? [...profiles].sort((a, b) => {
+        const aFeatured = a.featured_until && new Date(a.featured_until) > new Date();
+        const bFeatured = b.featured_until && new Date(b.featured_until) > new Date();
+
+        if (aFeatured && !bFeatured) return -1;
+        if (!aFeatured && bFeatured) return 1;
+
         const dateA = new Date(a.tagtimestamp).getTime();
         const dateB = new Date(b.tagtimestamp).getTime();
-        return dateB - dateA; // Ordena do mais recente para o mais antigo
+        return dateB - dateA;
       })
     : [];
 
@@ -150,70 +188,89 @@ export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], cu
         className="relative z-10"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
+        viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <motion.div
-          className="flex items-center justify-between mb-4"
-          variants={itemVariants}
-        >
+        <motion.div className="flex items-center justify-between mb-4" variants={itemVariants}>
           <h2 className="lg:text-5xl text-3xl">Featured Ads</h2>
-          <Link
-            href="/ads"
-            className="text-sm text-white px-4 py-2 rounded-full bg-pink-600 font-body hidden md:block"
-          >
+          <Link href="/ads" className="text-sm text-white px-4 py-2 rounded-full bg-pink-600 font-body hidden md:block">
             View All
           </Link>
         </motion.div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-4">
-          {paginatedProfiles.map((profile, index) => (
-            <Link href={`/escort/${profile.nome}`} passHref key={index}>
-              <motion.div
-                variants={itemVariants}
-                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-                className="relative bg-white dark:bg-[#300d1b] rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all"
-              >
-                {/* Imagem do perfil com Nome e Localidade sobrepostos */}
-                {profile.photos?.[0] ? (
-                  <div className="relative rounded-3xl overflow-hidden w-full h-48">
-                    <Image
-                      src={profile.photos[0] || '/logo.webp'}
-                      alt={profile.nome}
-                      width={500}
-                      height={500}
-                      className="object-cover rounded-3xl w-full h-full"
-                    />
-                    {/* Gradiente e Nome + Localidade */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-                      <h3 className="text-base font-semibold text-white flex items-center gap-1">
-                        {profile.nome}
-                        {profile.certificado && <MdVerified className="text-green-500" />}
-                      </h3>
-                      <div className="flex items-center gap-1 text-white text-sm">
-                        <FaMapMarkerAlt className="text-pink-600" />
-                        {profile.cidade}
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
+  {paginatedProfiles.map((profile, index) => (
+    <Link href={`/escort/${profile.nome}`} passHref key={index}>
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+        className="relative bg-white dark:bg-[#300d1b] rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all"
+      >
+        {profile.photos?.[0] ? (
+          <div className="relative rounded-3xl overflow-hidden w-full h-48">
+            <Image
+              src={profile.photos[0] || "/logo.webp"}
+              alt={profile.nome}
+              width={500}
+              height={500}
+              className="object-cover rounded-3xl w-full h-full"
+            />
 
-                {/* Conteúdo da Card (Tag e Timestamp) */}
-                <div className="p-3 flex flex-col gap-2">
-                  <motion.p
-                    className="text-sm text-gray-700 dark:text-gray-300 italic px-3 py-1 rounded-lg"
-                    variants={badgeVariants}
-                  >
-                    {'"' + profile.tag + '"'}
-                  </motion.p>
-                  <div className="text-xs flex items-center gap-1">
-                    <Clock size={14} /> {timeElapsedList[index]}
-                  </div>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
+            {profile.premium && (
+              <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
+                <FaCrown className="text-white mr-1" />
+                <span className="text-xs">Premium</span>
+              </div>
+            )}
+
+            {profile.live && (
+              <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
+                <MdFiberManualRecord className="text-white mr-1" />
+                <span className="text-xs">Live Cam</span>
+              </div>
+            )}
+
+            {Array.isArray(profile.stories) && profile.stories.length > 0 && (
+              <div className="absolute top-10 right-2 md:right-3 bg-pink-800 text-white text-xs font-semibold py-1 px-2 rounded-full z-50 flex items-center">
+                <FaVideo className="text-white mr-1" />
+                <span className="text-xs">Stories</span>
+              </div>
+            )}
+
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+              <h3 className="text-base font-semibold text-white flex items-center gap-1">
+                {profile.nome}
+                {profile.certificado && <MdVerified className="text-green-500" />}
+                {profile.userUID && authorBadges[profile.userUID] && (
+                  <span className="ml-2 bg-yellow-200 text-yellow-800 text-xs font-semibold py-0.5 px-1.5 rounded-full flex items-center">
+                    <FaPen className="text-yellow-800 mr-1" size={10} />
+                    Autora em Blog
+                  </span>
+                )}
+              </h3>
+              <div className="flex items-center gap-1 text-white text-sm">
+                <FaMapMarkerAlt className="text-pink-600" />
+                {profile.cidade}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="p-3 flex flex-col gap-2">
+          <motion.p
+            className="text-sm text-gray-700 dark:text-gray-300 italic px-3 py-1 rounded-lg"
+            variants={badgeVariants}
+          >
+            {'"' + profile.tag + '"'}
+          </motion.p>
+          <div className="text-xs flex items-center gap-1">
+            <FaClock className="text-yellow-500 h-4 w-4" /> {timeElapsedList[index]}
+          </div>
         </div>
+      </motion.div>
+    </Link>
+  ))}
+</div>
+
 
         <Link
           href="/ads"
@@ -226,14 +283,14 @@ export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[], cu
         className="absolute rounded-full z-30 bg-[#f2cadb] dark:bg-[#2e0415]"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         style={{
-          height: '400px',
-          width: '400px',
-          borderRadius: '200px',
-          bottom: '-100px',
-          left: '-100px',
-          filter: 'blur(80px)',
+          height: "400px",
+          width: "400px",
+          borderRadius: "200px",
+          bottom: "-100px",
+          left: "-100px",
+          filter: "blur(80px)",
           zIndex: 0,
         }}
       />

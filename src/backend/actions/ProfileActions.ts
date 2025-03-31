@@ -37,8 +37,12 @@ import {
   updateLongitude,
   updateComment,
   setSelectedProfile,
+  updateFeaturedUntil,
+  updateArticleAuthorBadge,
 } from '../reducers/profileSlice';
 import { Profile, UserProfileData } from '@/backend/types';
+
+
 
 // Thunk para login
 export const login = createAsyncThunk(
@@ -60,9 +64,9 @@ export const login = createAsyncThunk(
 
 // Thunk para logout
 export const logout = createAsyncThunk<
-  void, // Tipo de retorno
-  void, // Tipo dos argumentos
-  { rejectValue: string } // Tipo do erro
+  void,
+  void,
+  { rejectValue: string }
 >(
   'profile/logout',
   async (_, { dispatch, rejectWithValue }) => {
@@ -74,9 +78,9 @@ export const logout = createAsyncThunk<
 
 // Thunk para registro
 export const register = createAsyncThunk<
-  { email: string; userUID: string }, // Tipo de retorno
-  { email: string; password: string }, // Tipo dos argumentos
-  { rejectValue: string } // Tipo do erro
+  { email: string; userUID: string },
+  { email: string; password: string },
+  { rejectValue: string }
 >(
   'profile/register',
   async ({ email, password }, { rejectWithValue }) => {
@@ -132,6 +136,32 @@ export const updatePremiumStatus = createAsyncThunk(
       return premium;
     } catch (error: any) {
       console.error('Erro ao atualizar premium:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Thunk para atualizar article_author_badge
+
+
+// Thunk para atualizar featured_until
+export const updateFeaturedUntilThunk = createAsyncThunk(
+  'profile/updateFeaturedUntil',
+  async (featuredUntil: string | null, { getState, dispatch, rejectWithValue }) => {
+    const state = getState() as any;
+    const userUID = state.profile.userUID;
+    if (!userUID) return rejectWithValue('Usuário não identificado');
+
+    try {
+      const { error } = await supabase
+        .from('ProfilesData')
+        .update({ featured_until: featuredUntil })
+        .eq('userUID', userUID);
+      if (error) throw new Error(error.message);
+      dispatch(updateFeaturedUntil(featuredUntil));
+      return featuredUntil;
+    } catch (error: any) {
+      console.error('Erro ao atualizar featured_until:', error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -229,6 +259,9 @@ export const fetchSelectedProfile = createAsyncThunk(
     }
   }
 );
+
+
+
 
 // Thunk para atualização em lote de múltiplos campos
 export const updateProfileFields = createAsyncThunk(
@@ -364,6 +397,8 @@ export const fetchProfileData = createAsyncThunk(
         certificado: profileData.certificado || false,
         live: profileData.live || false,
         premium: profileData.premium || false,
+        article_author_badge: profileData.article_author_badge || false,
+        featured_until: profileData.featured_until || null,
       };
 
       dispatch(updateNome(profileWithExtras.nome || null));
@@ -397,6 +432,7 @@ export const fetchProfileData = createAsyncThunk(
       dispatch(updateComment(profileWithExtras.comment || null));
       dispatch(updateCertificado(profileWithExtras.certificado || false));
       dispatch(updatePremium(profileWithExtras.premium || false));
+      dispatch(updateFeaturedUntil(profileWithExtras.featured_until));
 
       return profileWithExtras;
     } catch (error: any) {

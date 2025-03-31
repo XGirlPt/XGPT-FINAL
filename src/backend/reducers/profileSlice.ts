@@ -57,6 +57,8 @@ export interface ProfileState {
   certificado: boolean;
   status: null | boolean;
   live: boolean | null;
+  article_author_badge: boolean; 
+  featured_until: string | null;
   appliedFilters: {
     idade?: number[];
     tarifa?: number[];
@@ -118,6 +120,8 @@ const initialState: ProfileState = {
   certificado: false,
   status: null,
   live: null,
+  article_author_badge: false, // Valor inicial
+  featured_until: null,
   appliedFilters: {},
 };
 
@@ -278,6 +282,12 @@ const profileSlice = createSlice({
     },
     setAppliedFilters: (state, action: PayloadAction<ProfileState['appliedFilters']>) => {
       state.appliedFilters = action.payload;
+    },
+    updateArticleAuthorBadge: (state, action: PayloadAction<boolean>) => {
+      state.article_author_badge = action.payload;
+    },
+    updateFeaturedUntil: (state, action: PayloadAction<string | null>) => {
+      state.featured_until = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -448,7 +458,9 @@ export const {
   registerUser,
   addProfileData,
   setSelectedProfile,
-  setAppliedFilters, // Exportando a nova ação
+  setAppliedFilters,
+  updateArticleAuthorBadge,
+  updateFeaturedUntil, // Exportando a nova ação
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

@@ -1,79 +1,48 @@
-'use client';
+"use client";
 
-import { Metadata } from 'next';
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import { fetchProfiles } from '@/backend/services/profileService';
-import { formatDistanceToNow } from 'date-fns';
-import { pt } from 'date-fns/locale';
-import { useTranslation } from 'react-i18next';
-import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from 'react-icons/fa';
-import { MdVerified } from 'react-icons/md';
-import { Profile } from '@/backend/types';
-import { X } from 'lucide-react';
-import RoundAvatar from '@/components/ui/carosel-round';
-import { setAppliedFilters } from '@/backend/reducers/profileSlice'; // Importação da ação
+import { Metadata } from "next";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { fetchProfiles } from "@/backend/services/profileService";
+import { formatDistanceToNow } from "date-fns";
+import { pt } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
+import { Profile } from "@/backend/types";
+import { X } from "lucide-react";
+import CaroselRound from "@/components/ui/carosel-round";
+import { setAppliedFilters } from "@/backend/reducers/profileSlice";
 
-// Componente CaroselRound usando RoundAvatar
-const CaroselRound: React.FC<{ profiles: Profile[] }> = ({ profiles }) => {
-  const shuffleArray = (array: Profile[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-
-  const profilesToDisplay = shuffleArray([...profiles]).slice(0, 15);
-
-  return (
-    <div className="mx-4 md:mx-8 mb-8 relative z-10">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 text-center">
-        Destaques da Semana
-      </h2>
-      <div className="w-full overflow-x-auto">
-        <div className="flex gap-4 justify-start">
-          {profilesToDisplay.map((profile, index) => (
-            <RoundAvatar key={index} profile={profile} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Exportação de metadados
 export const metadata: Metadata = {
-  title: 'XGirl - Acompanhantes',
-  description: 'Bem-vindo a XGirl, o melhor site de classificados eróticos, Acompanhantes e Escort em Portugal.',
-  keywords: 'Acompanhantes, Acompanhantes Luxo, Escort, Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos, massagistas Eróticas, anúncios, Portugal, serviços',
-  authors: [{ name: 'Xgirl' }],
+  title: "XGirl - Acompanhantes",
+  description: "Bem-vindo a XGirl, o melhor site de classificados eróticos, Acompanhantes e Escort em Portugal.",
+  keywords:
+    "Acompanhantes, Acompanhantes Luxo, Escort, Escort Portugal, Escort Lisboa, Escort Porto, Escort Faro, Escort Lisboa, Acompanhantes, Anuncios Eróticos, massagistas Eróticas, anúncios, Portugal, serviços",
+  authors: [{ name: "Xgirl" }],
   openGraph: {
-    title: 'Acompanhantes de luxo e Escort Eróticas em Portugal',
-    description: 'Encontre as melhores acompanhantes e massagistas eróticas em Portugal. Consulte os nossos anúncios e as novidades.',
-    url: 'https://xgirl.pt',
-    type: 'website',
-    images: ['/public/photos/logo.webp'],
+    title: "Acompanhantes de luxo e Escort Eróticas em Portugal",
+    description: "Encontre as melhores acompanhantes e massagistas eróticas em Portugal. Consulte os nossos anúncios e as novidades.",
+    url: "https://xgirl.pt",
+    type: "website",
+    images: ["/public/photos/logo.webp"],
   },
 };
 
-// Variantes de animação para as cards
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
-  hover: { scale: 1.03, boxShadow: '0 10px 20px rgba(0,0,0,0.2)', transition: { duration: 0.2 } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  hover: { scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.2)", transition: { duration: 0.2 } },
 };
 
-// Função para formatar o tempo decorrido
 const timeAgo = (timestamp: string | Date) => {
   const date = new Date(timestamp);
   return formatDistanceToNow(date, { addSuffix: true, locale: pt });
 };
 
-// Função para aplicar filtros
 const applyFilters = (profiles: Profile[], filters: any) => {
   return profiles.filter((profile) => {
     if (filters.idade && (profile.idade < filters.idade[0] || profile.idade > filters.idade[1])) return false;
@@ -85,8 +54,8 @@ const applyFilters = (profiles: Profile[], filters: any) => {
     if (filters.olhos && filters.olhos !== profile.olhos) return false;
     if (filters.seios && filters.seios !== profile.seios) return false;
     if (filters.mamas && filters.mamas !== profile.mamas) return false;
-    if (filters.pelos !== undefined && filters.pelos !== (profile.pelos === 'Sim')) return false;
-    if (filters.tatuagem !== undefined && filters.tatuagem !== (profile.tatuagem === 'Sim')) return false;
+    if (filters.pelos !== undefined && filters.pelos !== (profile.pelos === "Sim")) return false;
+    if (filters.tatuagem !== undefined && filters.tatuagem !== (profile.tatuagem === "Sim")) return false;
     if (filters.certificado !== undefined && filters.certificado !== profile.certificado) return false;
     return true;
   });
@@ -97,27 +66,29 @@ export default function PagePage() {
   const dispatch = useDispatch();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedStory, setSelectedStory] = useState<{ profile: Profile; story: string } | null>(null);
-  const [searchDistrict, setSearchDistrict] = useState('');
+  const [searchDistrict, setSearchDistrict] = useState("");
+  const [loading, setLoading] = useState(true); // Adicionado estado de carregamento
   const appliedFilters = useSelector((state: any) => state.profile.appliedFilters || {});
 
   useEffect(() => {
     const loadProfiles = async () => {
       try {
+        setLoading(true);
         const fetchedProfiles = await fetchProfiles();
-        console.log('[PagePage] Perfis carregados:', fetchedProfiles);
+        console.log("[PagePage] Perfis carregados:", fetchedProfiles);
         const filtered = applyFilters(fetchedProfiles, appliedFilters);
         const sortedProfiles = filtered
-          .filter((profile) => profile.tag && profile.tag.trim() !== '') // Apenas perfis com tags
+          .filter((profile) => profile.tag && profile.tag.trim() !== "")
           .sort((a, b) => {
-            // Ordenar por premium primeiro
             if (a.premium && !b.premium) return -1;
             if (!a.premium && b.premium) return 1;
-            // Dentro de premium/não-premium, ordenar por timestamp
             return new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime();
           });
         setProfiles(sortedProfiles);
       } catch (error) {
-        console.error('[PagePage] Erro ao carregar perfis:', error);
+        console.error("[PagePage] Erro ao carregar perfis:", error);
+      } finally {
+        setLoading(false);
       }
     };
     loadProfiles();
@@ -131,10 +102,19 @@ export default function PagePage() {
     setSelectedStory(null);
   };
 
-  const filteredProfiles = profiles
-    .filter((profile) =>
-      searchDistrict ? profile.distrito?.toLowerCase() === searchDistrict.toLowerCase() : true
+  const filteredProfiles = profiles.filter((profile) =>
+    searchDistrict ? profile.distrito?.toLowerCase() === searchDistrict.toLowerCase() : true
+  );
+
+  if (loading) {
+    return (
+      <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
+        <section className="container mx-auto px-4 py-8 relative">
+          <p className="text-center text-gray-900 dark:text-white text-2xl">Carregando...</p>
+        </section>
+      </main>
     );
+  }
 
   return (
     <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
@@ -142,12 +122,12 @@ export default function PagePage() {
         <div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
           style={{
-            height: '500px',
-            width: '500px',
-            borderRadius: '250px',
-            top: '-100px',
-            left: '-100px',
-            filter: 'blur(80px)',
+            height: "500px",
+            width: "500px",
+            borderRadius: "250px",
+            top: "-100px",
+            left: "-100px",
+            filter: "blur(80px)",
             zIndex: 0,
           }}
         />
@@ -167,20 +147,9 @@ export default function PagePage() {
             Acompanhantes e Massagistas Eróticas
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-2">
-            {t('dashboard.meta_description')}
+            {t("dashboard.meta_description")}
           </p>
         </motion.div>
-
-        {/* Filtro de Distrito (opcional, mantive comentado) */}
-        {/* <div className="flex justify-center mb-12 relative z-10">
-          <div className="w-full max-w-md">
-            <FiltroDistrito
-              value={searchDistrict}
-              onChange={(value) => setSearchDistrict(value)}
-              bgColor="bg-white dark:bg-[#1a0a10]"
-            />
-          </div>
-        </div> */}
 
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 relative z-10"
@@ -309,12 +278,12 @@ export default function PagePage() {
         <div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
           style={{
-            height: '400px',
-            width: '400px',
-            borderRadius: '200px',
-            bottom: '-100px',
-            right: '-100px',
-            filter: 'blur(80px)',
+            height: "400px",
+            width: "400px",
+            borderRadius: "200px",
+            bottom: "-100px",
+            right: "-100px",
+            filter: "blur(80px)",
             zIndex: 0,
           }}
         />
