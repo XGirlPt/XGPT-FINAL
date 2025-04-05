@@ -95,8 +95,9 @@ const ChatFloatingButton: React.FC = () => {
     if (chatRooms.length > 0) {
       fetchProfiles();
     }
-  }, [chatRooms, userUID]);
-
+  }, [chatRooms, userUID, profiles]); 
+  
+  // Adicionado 'profiles' às dependências
   const totalUnread = chatRooms.reduce((sum, room) => sum + (room.unread_count || 0), 0);
 
   const handleOpenChat = (chatRoomId: string) => {

@@ -104,7 +104,6 @@ export function RegistoContacto() {
     {
       id: 'languages',
       title: t('languages.title'),
-
       options: [
         { id: 'pt', label: t('language.pt'), checked: linguaRedux.includes('pt') },
         { id: 'en', label: t('language.en'), checked: linguaRedux.includes('en') },
@@ -194,7 +193,7 @@ export function RegistoContacto() {
         })),
       }))
     );
-  }, [servicoRedux, pagamentoRedux, linguaRedux]); // Dependências fixas
+  }, [servicoRedux, pagamentoRedux, linguaRedux]);
 
   // Atualizar traduções apenas quando o idioma muda
   useEffect(() => {
@@ -215,7 +214,8 @@ export function RegistoContacto() {
         })),
       }))
     );
-  }, [i18n.language, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language, t]); // serviceIdToTranslationKey é uma constante estática, não precisa ser dependência
 
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
     if (categoryId === 'services' && !isPremium && checked) {
@@ -339,7 +339,6 @@ export function RegistoContacto() {
           <p className="text-sm text-gray-500">{t('contactData.subtitle')}</p>
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
           <div className="w-44 mt-4">
-            <FiltroPrice />
           </div>
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">

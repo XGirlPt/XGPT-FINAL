@@ -199,7 +199,8 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
         payload: { userId: userUID },
       });
     }
-  }, [newMessage, chatRoomId, userUID]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newMessage, chatRoomId, userUID]); // 'otherUserProfile' não é necessário aqui
 
   const handleSend = async () => {
     if (!newMessage.trim() || !userUID) return;

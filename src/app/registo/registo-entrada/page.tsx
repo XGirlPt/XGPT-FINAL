@@ -98,7 +98,7 @@ export function RegistoEntrada() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: profile.nome || '',
-      age: profile.idade || '',
+      age: profile.idade?.toString() || '', // Convertido para string
       phone: profile.telefone || '',
       city: profile.cidade || '',
       district: profile.distrito || '',
@@ -129,8 +129,8 @@ export function RegistoEntrada() {
     getSession();
 
     setUseAddress(form.getValues('useaddress'));
-    setAddressInput(form.getValues('address'));
-  }, []); // Dependências vazias para evitar loops
+    setAddressInput(form.getValues('address') || ''); // Valor padrão para evitar undefined
+  }, [form]); // Adicionado 'form' como dependência
 
   const fetchSuggestions = async (query: string) => {
     if (!query || query.length < 3) {
@@ -155,14 +155,14 @@ export function RegistoEntrada() {
     const city = suggestion.context.find((c: any) => c.id.includes('place'))?.text || '';
     const district = suggestion.context.find((c: any) => c.id.includes('region'))?.text || '';
     const address = suggestion.place_name || '';
-    const [longitude, latitude] = suggestion.center || [0, 0];
+    const [longitude, latitude] = suggestion.center || [0, 0]; // Já são números do Mapbox
 
     form.setValue('city', city);
     form.setValue('district', district);
     form.setValue('address', address);
-    dispatch(updateCidade(city));
-    dispatch(updateDistrito(district));
-    dispatch(updateAddress(address));
+    dispatch(updateCidade(city || null));
+    dispatch(updateDistrito(district || null));
+    dispatch(updateAddress(address || null));
     dispatch(updateLatitude(latitude));
     dispatch(updateLongitude(longitude));
     setAddressInput(address);
@@ -175,14 +175,14 @@ export function RegistoEntrada() {
     if (checked) {
       form.setValue('city', '');
       form.setValue('district', '');
-      dispatch(updateCidade(''));
-      dispatch(updateDistrito(''));
+      dispatch(updateCidade(null));
+      dispatch(updateDistrito(null));
     } else {
       form.setValue('address', '');
-      dispatch(updateAddress(''));
+      dispatch(updateAddress(null));
       dispatch(updateLatitude(0));
       dispatch(updateLongitude(0));
-      setAddressInput('');
+      setAddressInput(''); // Garantir que seja string
       setSuggestions([]);
     }
   };
@@ -288,7 +288,7 @@ export function RegistoEntrada() {
                         onChange={(e) => {
                           field.onChange(e);
                           if (fieldName === 'name') dispatch(updateNome(e.target.value));
-                          if (fieldName === 'age') dispatch(updateIdade(e.target.value));
+                          if (fieldName === 'age') dispatch(updateIdade(parseInt(e.target.value) || 0));
                           if (fieldName === 'phone') dispatch(updateTelefone(e.target.value));
                         }}
                       />
@@ -304,7 +304,7 @@ export function RegistoEntrada() {
                         className={commonInputClass}
                         onChange={(e) => {
                           field.onChange(e);
-                          dispatch(updateCidade(e.target.value));
+                          dispatch(updateCidade(e.target.value || null));
                         }}
                       />
                     ) : fieldName === 'district' && useAddress ? (
@@ -318,7 +318,7 @@ export function RegistoEntrada() {
                         value={field.value || ''}
                         onChange={(value) => {
                           form.setValue('district', value);
-                          dispatch(updateDistrito(value));
+                          dispatch(updateDistrito(value || null));
                         }}
                         disabled={useAddress}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
@@ -332,7 +332,7 @@ export function RegistoEntrada() {
                               setAddressInput(e.target.value);
                               fetchSuggestions(e.target.value);
                               field.onChange(e.target.value);
-                              dispatch(updateAddress(e.target.value));
+                              dispatch(updateAddress(e.target.value || null));
                             }
                           }}
                           disabled={!useAddress}
@@ -455,13 +455,13 @@ export function RegistoEntrada() {
     const data = form.getValues();
     try {
       dispatch(updateNome(data.name));
-      dispatch(updateIdade(data.age));
+      dispatch(updateIdade(parseInt(data.age) || 0)); // Conversão para número
       dispatch(updateTelefone(data.phone));
       if (!data.useaddress) {
-        dispatch(updateCidade(data.city));
-        dispatch(updateDistrito(data.district));
+        dispatch(updateCidade(data.city || null));
+        dispatch(updateDistrito(data.district || null));
       } else {
-        dispatch(updateAddress(data.address));
+        dispatch(updateAddress(data.address || null));
       }
       toast.success('Dados salvos localmente com sucesso!');
       router.push('/registo/registo-contacto');

@@ -128,8 +128,6 @@ const mamasEmPortugues = {
 export function AboutProfile({ selectedProfile }: AboutProfileProps) {
   const { t } = useTranslation();
 
-  if (!selectedProfile) return null;
-
   // Função para verificar se um valor é válido (não é null, undefined ou vazio)
   const isValidValue = (value: any): boolean => {
     return value !== null && value !== undefined && value !== '';
@@ -231,78 +229,88 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
   };
 
   const details = useMemo(
-    () => [
-      {
-        label: t('input.age'),
-        value: isValidValue(selectedProfile.idade) ? selectedProfile.idade : null,
-        icon: <LiaBirthdayCakeSolid className="text-pink-500" />,
-      },
-      {
-        label: t('filter.height'),
-        value: isValidValue(selectedProfile.altura) ? selectedProfile.altura : null,
-        icon: <GiBodyHeight className="text-pink-500" />,
-      },
-      {
-        label: t('filterOlhos.eye_color'),
-        value: isValidValue(selectedProfile.olhos) ? translateValue('olhos', selectedProfile.olhos) : null,
-        icon: <FaEye className="text-pink-500" />,
-      },
-      {
-        label: t('filter.hair_color'),
-        value: isValidValue(selectedProfile.cabelo) ? translateValue('cabelo', selectedProfile.cabelo) : null,
-        icon: <FaCheck className="text-pink-500" />,
-      },
-      {
-        label: t('filterT.tattoos'),
-        value: isValidValue(selectedProfile.tatuagens) ? translateValue('tatuagens', selectedProfile.tatuagens) : null,
-        icon: <FaCheck className="text-pink-500" />,
-      },
-      {
-        label: t('filterT.body'),
-        value: isValidValue(selectedProfile.corpo) ? translateValue('corpo', selectedProfile.corpo) : null,
-        icon: <FaCheck className="text-pink-500" />,
-      },
-      {
-        label: t('filterPelos.hair_removal'),
-        value: isValidValue(selectedProfile.pelos) ? translateValue('pelos', selectedProfile.pelos) : null,
-        icon: <AiOutlineScissor className="text-pink-500" />,
-      },
-      {
-        label: t('filterB.breast_size'),
-        value: isValidValue(selectedProfile.seios) ? translateValue('seios', selectedProfile.seios) : null,
-        icon: <FaCheck className="text-pink-500" />,
-      },
-      {
-        label: t('filterB.breasts'),
-        value: isValidValue(selectedProfile.mamas) ? translateValue('mamas', selectedProfile.mamas) : null,
-        icon: <FaCheck className="text-pink-500" />,
-      },
-      {
-        label: 'Distrito',
-        value: isValidValue(selectedProfile.distrito) ? selectedProfile.distrito : null,
-        icon: <FaMapMarkerAlt className="text-pink-500" />,
-      },
-      {
-        label: t('input.city'),
-        value: isValidValue(selectedProfile.cidade) ? selectedProfile.cidade : null,
-        icon: <FaMapMarkerAlt className="text-pink-500" />,
-      },
-      {
-        label: t('filter.origin'),
-        value: isValidValue(selectedProfile.origem) ? translateValue('origem', selectedProfile.origem) : null,
-        icon: <FaFlag className="text-pink-500" />,
-      },
-      {
-        label: t('filterTa.signo'),
-        value: isValidValue(selectedProfile.signo) ? translateValue('signo', selectedProfile.signo) : null,
-        icon: signoIcons[selectedProfile.signo] || <TbZodiacPisces className="text-pink-500" />,
-      },
-    ],
-    [selectedProfile, t]
+    () =>
+      selectedProfile
+        ? [
+            {
+              label: t('input.age'),
+              value: isValidValue(selectedProfile.idade) ? selectedProfile.idade : null,
+              icon: <LiaBirthdayCakeSolid className="text-pink-500" />,
+            },
+            {
+              label: t('filter.height'),
+              value: isValidValue(selectedProfile.altura) ? selectedProfile.altura : null,
+              icon: <GiBodyHeight className="text-pink-500" />,
+            },
+            {
+              label: t('filterOlhos.eye_color'),
+              value: isValidValue(selectedProfile.olhos) ? translateValue('olhos', selectedProfile.olhos) : null,
+              icon: <FaEye className="text-pink-500" />,
+            },
+            {
+              label: t('filter.hair_color'),
+              value: isValidValue(selectedProfile.cabelo) ? translateValue('cabelo', selectedProfile.cabelo) : null,
+              icon: <FaCheck className="text-pink-500" />,
+            },
+            {
+              label: t('filterT.tattoos'),
+              value: isValidValue(selectedProfile.tatuagens) ? translateValue('tatuagens', selectedProfile.tatuagens) : null,
+              icon: <FaCheck className="text-pink-500" />,
+            },
+            {
+              label: t('filterT.body'),
+              value: isValidValue(selectedProfile.corpo) ? translateValue('corpo', selectedProfile.corpo) : null,
+              icon: <FaCheck className="text-pink-500" />,
+            },
+            {
+              label: t('filterPelos.hair_removal'),
+              value: isValidValue(selectedProfile.pelos) ? translateValue('pelos', selectedProfile.pelos) : null,
+              icon: <AiOutlineScissor className="text-pink-500" />,
+            },
+            {
+              label: t('filterB.breast_size'),
+              value: isValidValue(selectedProfile.seios) ? translateValue('seios', selectedProfile.seios) : null,
+              icon: <FaCheck className="text-pink-500" />,
+            },
+            {
+              label: t('filterB.breasts'),
+              value: isValidValue(selectedProfile.mamas) ? translateValue('mamas', selectedProfile.mamas) : null,
+              icon: <FaCheck className="text-pink-500" />,
+            },
+            {
+              label: 'Distrito',
+              value: isValidValue(selectedProfile.distrito) ? selectedProfile.distrito : null,
+              icon: <FaMapMarkerAlt className="text-pink-500" />,
+            },
+            {
+              label: t('input.city'),
+              value: isValidValue(selectedProfile.cidade) ? selectedProfile.cidade : null,
+              icon: <FaMapMarkerAlt className="text-pink-500" />,
+            },
+            {
+              label: t('filter.origin'),
+              value: isValidValue(selectedProfile.origem) ? translateValue('origem', selectedProfile.origem) : null,
+              icon: <FaFlag className="text-pink-500" />,
+            },
+            {
+              label: t('filterTa.signo'),
+              value: isValidValue(selectedProfile.signo) ? translateValue('signo', selectedProfile.signo) : null,
+              icon: signoIcons[selectedProfile.signo] || <TbZodiacPisces className="text-pink-500" />,
+            },
+          ]
+        : [],
+    [selectedProfile, t, translateValue] // Adicionado 'translateValue' como dependência
   );
 
   // Filtra detalhes para remover aqueles com valores null, undefined ou vazio
-  const filteredDetails = details.filter((detail) => isValidValue(detail.value));
+  const filteredDetails = useMemo(
+    () => details.filter((detail) => isValidValue(detail.value)),
+    [details]
+  );
+
+  if (!selectedProfile) {
+    return null;
+  }
 
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
