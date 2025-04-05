@@ -126,3 +126,21 @@ export interface HeroProfile {
   premium: boolean;
   certificado: boolean;
 }
+
+export interface ChatRoom {
+  id: string;
+  user_id: string; // UUID do utilizador que iniciou o chat
+  advertiser_id: string; // UUID da acompanhante
+  created_at: string;
+  last_message_at: string;
+}
+
+// Interface para uma mensagem
+export interface Message {
+  id: string;
+  chat_room_id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
+  is_read: boolean;
+}

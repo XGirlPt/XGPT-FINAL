@@ -39,25 +39,31 @@ const FiltroOlhos: React.FC<FiltroOlhosProps> = ({ value, onChange, bgColor }) =
 
   const handleOlhosChange = (selectedId: string) => {
     console.log('Olhos selecionados:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (eyes):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux (apenas para depuração)
   const displayedValue = value
     ? olhosTraduzidos[
         Object.keys(olhosEmPortugues).find(
           (key) => olhosEmPortugues[key as OlhosKey] === value
         ) as OlhosKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
+  console.log('Valor exibido (displayedValue):', displayedValue);
 
   return (
     <CommonFilter
       label={t('filterOlhos.eye_color')}
       options={olhosOptions}
-      value={displayedValue}
+      value={value} // Passa o valor bruto do Redux diretamente
       onChange={handleOlhosChange}
       bgColor={bgColor}
-      placeholder={t('filter.select_eye_color')}
+      placeholder={t('filterOlhos.select_eye_color')}
     />
   );
 };

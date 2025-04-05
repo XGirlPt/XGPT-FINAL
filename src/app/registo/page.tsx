@@ -30,7 +30,7 @@ const staggerChildren = {
 
 // Função para determinar a URL de redirecionamento dinâmica
 const getRedirectUrl = () => {
-  if (typeof window === 'undefined') return 'https://www.xgirl.pt/registo/confirmar-email';
+  if (typeof window === 'undefined') return 'https://www.xgirl.pt/registo/entrada';
   const host = window.location.host;
   if (host.includes('localhost')) return 'http://localhost:3000/registo/confirmar-email';
   if (host.includes('vercel.app')) return `${window.location.origin}/registo/confirmar-email`;

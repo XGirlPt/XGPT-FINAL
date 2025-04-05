@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ChatRoom, Message, Profile } from '@/backend/types';
 import {
   login,
   logout,
@@ -10,8 +11,9 @@ import {
   updateProfileArrayField,
   updateProfileFields,
 } from '../actions/ProfileActions';
-import { Profile } from '@/backend/types';
+import { startChat, sendMessage, fetchChatMessages, fetchChatRooms } from '../actions/ChatActions'; // Corrigido aqui
 
+// Interface do estado do perfil
 export interface ProfileState {
   userUID: string | null;
   photos: string[];
@@ -57,7 +59,7 @@ export interface ProfileState {
   certificado: boolean;
   status: null | boolean;
   live: boolean | null;
-  article_author_badge: boolean; 
+  article_author_badge: boolean;
   featured_until: string | null;
   appliedFilters: {
     idade?: number[];
@@ -73,8 +75,12 @@ export interface ProfileState {
     tatuagem?: boolean;
     certificado?: boolean;
   };
+  chatRooms: ChatRoom[] | null;
+  currentChatRoomId: string | null;
+  messages: { [chatRoomId: string]: Message[] };
 }
 
+// Estado inicial
 const initialState: ProfileState = {
   userUID: null,
   photos: [],
@@ -120,11 +126,15 @@ const initialState: ProfileState = {
   certificado: false,
   status: null,
   live: null,
-  article_author_badge: false, // Valor inicial
+  article_author_badge: false,
   featured_until: null,
   appliedFilters: {},
+  chatRooms: null,
+  currentChatRoomId: null,
+  messages: {},
 };
 
+// Criação do slice
 const profileSlice = createSlice({
   name: 'profile',
   initialState,
@@ -289,6 +299,9 @@ const profileSlice = createSlice({
     updateFeaturedUntil: (state, action: PayloadAction<string | null>) => {
       state.featured_until = action.payload;
     },
+    setCurrentChatRoom: (state, action: PayloadAction<string | null>) => {
+      state.currentChatRoomId = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -312,7 +325,9 @@ const profileSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(logout.fulfilled, () => initialState)
+      .addCase(logout.fulfilled, () => {
+        return initialState; // Resetar o estado completamente no logout
+      })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -408,10 +423,42 @@ const profileSlice = createSlice({
       .addCase(updateProfileFields.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(startChat.fulfilled, (state, action) => {
+        if (!state.chatRooms) state.chatRooms = [];
+        const existingRoom = state.chatRooms.find((room) => room.id === action.payload.id);
+        if (!existingRoom) state.chatRooms.push(action.payload);
+        state.currentChatRoomId = action.payload.id;
+      })
+      .addCase(startChat.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      .addCase(sendMessage.fulfilled, (state, action) => {
+        const chatRoomId = action.payload.chat_room_id;
+        if (!state.messages[chatRoomId]) state.messages[chatRoomId] = [];
+        state.messages[chatRoomId].push(action.payload);
+        const room = state.chatRooms?.find((r) => r.id === chatRoomId);
+        if (room) room.last_message_at = action.payload.created_at;
+      })
+      .addCase(sendMessage.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      .addCase(fetchChatMessages.fulfilled, (state, action) => {
+        state.messages[action.payload.chatRoomId] = action.payload.messages;
+      })
+      .addCase(fetchChatMessages.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      .addCase(fetchChatRooms.fulfilled, (state, action) => { // Corrigido aqui
+        state.chatRooms = action.payload;
+      })
+      .addCase(fetchChatRooms.rejected, (state, action) => { // Corrigido aqui
+        state.error = action.payload as string;
       });
   },
 });
 
+// Exportar ações
 export const {
   setUserUID,
   setLoggedIn,
@@ -460,7 +507,8 @@ export const {
   setSelectedProfile,
   setAppliedFilters,
   updateArticleAuthorBadge,
-  updateFeaturedUntil, // Exportando a nova ação
+  updateFeaturedUntil,
+  setCurrentChatRoom,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

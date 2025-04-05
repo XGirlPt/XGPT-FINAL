@@ -50,7 +50,7 @@ const FiltroTatuagem: React.FC<FiltroTatuagemProps> = ({ value, onChange, bgColo
     <CommonFilter
       label={t('filterT.tattoos')}
       options={tatuagemOptions}
-      value={displayedValue}
+      value={value}
       onChange={handleTatuagemChange}
       bgColor={bgColor}
       placeholder={t('filterT.select_tattoos')}

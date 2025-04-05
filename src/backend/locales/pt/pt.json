@@ -104,42 +104,57 @@
     "anonymous": "Anônimo",
     "leave_comment": "Deixe seu comentário",
     "write_comment_placeholder": "Escreva seu comentário aqui...",
-    "send_comment": "Enviar comentário",
+    "send_comment": "Enviar comentário"
 
-
-    "servico": {
-      "69": "69",
-      "AnulingusActivo": "Anulingus (Ativo)",
-      "AnulingusPassivo": "Anulingus (Passivo)",
-      "Champagne Dourado Activo": "Champanhe Dourado Ativo",
-      "Champagne Dourado Passivo": "Champanhe Dourado Passivo",
-      "Atende Casais": "Atende Casais",
-      "Dedos Anal": "Dedos Anais",
-      "Dedos Vagina": "Dedos Vaginal",
-      "Dominacao soft": "Dominação Suave",
-      "Dupla Penetracao": "Dupla Penetração",
-      "Duo": "Duo",
-      "Ejaculacao Corporal": "Ejaculação Corporal",
-      "Ejacular na Facial": "Ejaculação no Rosto",
-      "Multipla Ejeculacao": "Ejaculação Múltipla",
-      "Face Sitting": "Face Sitting",
-      "Fetichismo": "Fetichismo",
-      "BeijoFrances": "Beijo Francês",
-      "Garganta Profunda": "Garganta Profunda",
-      "Jogos Eroticos": "Jogos Eróticos",
-      "Lingerie": "Lingerie",
-      "Massagem Erotica": "Massagem Erótica",
-      "Masturbacao": "Masturbação",
-      "Experiencia Porn Star": "Experiência Porn Star",
-      "Servico VIP": "Serviço VIP",
-      "Sexo em Grupo": "Sexo em Grupo (Orgia)",
-      "Sex Toys": "Brinquedos Sexuais",
-      "Sodomia Activa": "Sodomia Ativa",
-      "Sodomia Passiva": "Sodomia Passiva",
-      "Striptease": "Striptease"
-    }
   },
-  
+
+  "servico": {
+    "69": "69",
+    "AnulingusActivo": "Anulingus Ativo",
+    "AnulingusPassivo": "Anulingus Passivo",
+    "ChampagneDouradoActivo": "Champanhe Dourado Ativo",
+    "ChampagneDouradoPassivo": "Champanhe Dourado Passivo",
+    "AtendeCasais": "Atende Casais",
+    "DedosAnal": "Dedos Anal",
+    "DedosVagina": "Dedos Vagina",
+    "DominacaoSoft": "Dominação Suave",
+    "DuplaPenetracao": "Dupla Penetração",
+    "Duo": "Duo",
+    "EjaculacaoCorporal": "Ejaculação Corporal",
+    "EjacularNaFacial": "Ejacular no Rosto",
+    "MultiplaEjaculacao": "Múltipla Ejaculação",
+    "FaceSitting": "Face Sitting",
+    "Fetichismo": "Fetichismo",
+    "BeijoFrances": "Beijo Francês",
+    "GargantaProfunda": "Garganta Profunda",
+    "JogosEroticos": "Jogos Eróticos",
+    "Lingerie": "Lingerie",
+    "MassagemErotica": "Massagem Erótica",
+    "Masturbacao": "Masturbação",
+    "ExperienciaPornStar": "Experiência Porn Star",
+    "ServicoVIP": "Serviço VIP",
+    "SexoEmGrupo": "Sexo em Grupo",
+    "SexToys": "Brinquedos Sexuais",
+    "SodomiaActiva": "Sodomia Ativa",
+    "SodomiaPassiva": "Sodomia Passiva",
+    "Striptease": "Striptease",
+    "JogoDePapeis": "Jogo de Papéis",
+    "FetichePorPes": "Fetiche por Pés",
+    "MassagemTantrica": "Massagem Tântrica",
+    "BDSM": "BDSM",
+    "BanhoJuntos": "Banho Juntos",
+    "ExperienciaNamorada": "Experiência de Namorada",
+    "ServicoWebcam": "Serviço por Webcam",
+    "Trio": "Trio",
+    "DancaErotica": "Dança Erótica",
+    "MassagemProstatica": "Massagem Prostática",
+    "Spanking": "Spanking",
+    "Cuckold": "Cuckold",
+    "Voyeurismo": "Voyeurismo",
+    "SexoTelefonico": "Sexo Telefónico",
+    "Fisting": "Fisting",
+    "Swing": "Swing"
+  },
   
   "loginPage": {
     "title": "Login",
@@ -267,14 +282,19 @@
     "xxl": "Seios XXL (E+)"
   },
 
-  "filterP": {
+
+"filterPelos": {
     "hair_removal": "Depilação",
-    "select_hair_removal": "Selecionar preferência"
+    "select_hair_removal": "Selecionar preferência "
   },
-  "hair_removal": {
-    "smooth": "Sem Pelos",
-    "partially_smooth": "Parcialmente Sem Pelos",
+  "hair_removalPelos": {
+    "smooth": "Rapadinha",
+    "partially_smooth": "Parcialmente Rapada",
     "natural": "Natural"
+  },
+  "messagesPelos": {
+    "pelosUpdated": "Poils corporels mis à jour avec succès !",
+    "pelosUpdateError": "Erreur lors de la mise à jour des poils corporels."
   },
   "filterT": {
     "tattoos": "Tatuagens",
@@ -333,7 +353,7 @@
       },
 
   "filter.origin": "Origem",
-
+"filter.select_origin": "Seleciona uma Origem",
   "filterTa.signo": "Signo",
 
   "filterTa.tarifa": "tarifa",
@@ -447,19 +467,7 @@
     "seiosUpdateError": "Erro ao atualizar o tamanho do peito."
   },
 
-    "filterPelos": {
-      "hair_removal": "Pelos",
-      "select_hair_removal": "Selecionar preferência de pelos"
-    },
-    "hair_removalPelos": {
-      "smooth": "rapadinha",
-      "partially_smooth": "Parcialmente rapado",
-      "natural": "Natural"
-    },
-    "messagesPelos": {
-      "pelosUpdated": "Pelos atualizados com sucesso!",
-      "pelosUpdateError": "Erro ao atualizar os pelos."
-    },
+
 
     "photos": {
     "title": "Fotos",
@@ -744,7 +752,42 @@
     "title": "Página não encontrada",
     "description": "Desculpe, a página que você está procurando não existe.",
     "backButton": "Voltar para a página inicial"
+  },
+
+  "time_elapsed": {
+    "more_than_48_hours": "Há mais de 48 horas",
+    "ago": "Há",
+    "hour": "hora",
+    "hours": "horas",
+    "minute": "minuto",
+    "minutes": "minutos"
+  },
+  "publishAdBanner": {
+    "title": "Publique Seu Anúncio Agora!",
+    "description": "Publique seu anúncio gratuitamente no Seu Desire. Site erótico nº 1 em Portugal",
+    "button": "Registre-se Agora"
+  },
+  "newestAdds": {
+    "title": "Novos Anúncios"
+  },
+  "mapSection": {
+    "title": "Procura Companhia Perto de Si?",
+    "description": "Explore uma gama de opções para encontrar alguém que corresponda às suas preferências e interesses."
+  },
+  "featuredAds": {
+    "title": "Anúncios em Destaque"
+    }  ,
+    "StoriesComponent": {
+      "title": "Últimos Stories"
+      }  ,
+      "heroSection": {
+    "badge": "O Melhor do Prazer",
+    "title": {
+      "line1": "Encontros Sensuais",
+      "line2": "em Portugal"
+    }
   }
+
 
 
 }

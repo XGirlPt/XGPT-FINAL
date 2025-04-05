@@ -250,6 +250,10 @@ export const fetchSelectedProfile = createAsyncThunk(
   async (profileName: string, { dispatch, rejectWithValue }) => {
     try {
       const { profile, isCertified } = await profileDataService.fetchProfile(profileName);
+      if (!profile.userUID) {
+        console.error('Erro: Perfil não tem userUID', profile);
+        throw new Error('Perfil não associado a um utilizador válido');
+      }
       const profileWithExtras = { ...profile, isCertified };
       dispatch(setSelectedProfile(profileWithExtras));
       return profileWithExtras;

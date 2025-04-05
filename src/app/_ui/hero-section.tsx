@@ -145,17 +145,17 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
     <section className="relative md:px-4 ">
       <motion.div className="text-center" initial="initial" animate="animate" variants={staggerChildren}>
         <div className="relative">
-          <motion.div className="mb-8" variants={fadeInUp}>
-            <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
-              BEST ESCORT SERVICES
-            </span>
-          </motion.div>
+        <motion.div className="mb-8" variants={fadeInUp}>
+        <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
+          {t('heroSection.badge')}
+        </span>
+      </motion.div>
 
-          <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
-            Escort Girls & Erotic
-            <br />
-            Masseuses In Portugal
-          </motion.h1>
+      <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
+        {t('heroSection.title.line1')}
+        <br />
+        {t('heroSection.title.line2')}
+      </motion.h1>
 
           <motion.p className="text-xl font-body text-gray-600 dark:text-gray-300 mb-12" variants={fadeInUp}>
             {t("dashboard.meta_description")}

@@ -1,4 +1,3 @@
-// registo-pagamento/page.tsx
 'use client';
 
 import { useSelector } from 'react-redux';
@@ -6,80 +5,105 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ProfileDataService } from '@/backend/services/profileDataService';
 import { toast } from 'react-toastify';
+import { shallowEqual } from 'react-redux';
+import { useEffect } from 'react';
 
 const RegistoPagamento: React.FC = () => {
   const router = useRouter();
-  const userUID = useSelector((state: any) => state.profile?.profile.userUID);
-  const nomeRedux = useSelector((state: any) => state.profile?.profile.nome);
-  const photoURLredux = useSelector((state: any) => state.profile?.profile.photos || []);
-  const VphotoURLredux = useSelector((state: any) => state.profile?.profile.vphotos || []);
-  const telefoneRedux = useSelector((state: any) => state.profile?.profile.telefone);
-  const alturaRedux = useSelector((state: any) => state.profile?.profile.altura);
-  const cabeloRedux = useSelector((state: any) => state.profile?.profile.cabelo);
-  const corpoRedux = useSelector((state: any) => state.profile?.profile.corpo);
-  const mamasRedux = useSelector((state: any) => state.profile?.profile.mamas);
-  const olhosRedux = useSelector((state: any) => state.profile?.profile.olhos);
-  const origemRedux = useSelector((state: any) => state.profile?.profile.origem);
-  const seiosRedux = useSelector((state: any) => state.profile?.profile.seios);
-  const tatuagemRedux = useSelector((state: any) => state.profile?.profile.tatuagem);
-  const tarifaredux = useSelector((state: any) => state.profile?.profile.tarifa);
-  const pelosRedux = useSelector((state: any) => state.profile?.profile.pelos);
-  const idadeRedux = useSelector((state: any) => state.profile?.profile.idade);
-  const signoRedux = useSelector((state: any) => state.profile?.profile.signo);
-  const addressRedux = useSelector((state: any) => state.profile?.profile.address);
-  const pagamentoRedux = useSelector((state: any) => state.profile?.profile.pagamento);
-  const linguaRedux = useSelector((state: any) => state.profile?.profile.lingua);
-  const servicoRedux = useSelector((state: any) => state.profile?.profile.servico);
-  const descriptionRedux = useSelector((state: any) => state.profile?.profile.description);
-  const cidadeRedux = useSelector((state: any) => state.profile?.profile.cidade);
-  const distritoRedux = useSelector((state: any) => state.profile?.profile.distrito);
-  const latitudeRedux = useSelector((state: any) => state.profile?.profile.latitude);
-  const longitudeRedux = useSelector((state: any) => state.profile?.profile.longitude);
-  const premiumRedux =  useSelector((state: any) => state.profile?.profile.premium);
+
+  // Selecionar dados do Redux com shallowEqual
+  const profile = useSelector((state: any) => state.profile?.profile || {}, shallowEqual);
+  const {
+    userUID,
+    nome,
+    photos,
+    vphotos,
+    telefone,
+    altura,
+    cabelo,
+    corpo,
+    mamas,
+    olhos,
+    origem,
+    seios,
+    tatuagem,
+    tarifa,
+    pelos,
+    idade,
+    signo,
+    address,
+    pagamento,
+    lingua,
+    servico,
+    description,
+    cidade,
+    distrito,
+    latitude,
+    longitude,
+    premium,
+  } = profile;
+
+  // Verificar se o perfil está preenchido na montagem
+  useEffect(() => {
+    if (!userUID) {
+      toast.error('Perfil incompleto. Por favor, complete as etapas anteriores.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+      router.push('/registo/registo-entrada');
+    }
+  }, [userUID, router]);
 
   const handleSubmit = async (event: React.MouseEvent) => {
+    event.preventDefault(); // Evitar comportamento padrão, se necessário
+
+    if (!userUID) {
+      toast.error('Erro: UID do usuário não encontrado.', { position: 'top-right', autoClose: 3000 });
+      return;
+    }
+
     try {
       const userData = {
         userUID,
-        nome: nomeRedux,
-        idade: idadeRedux,
-        tarifa: tarifaredux,
-        altura: alturaRedux,
-        cabelo: cabeloRedux,
-        corpo: corpoRedux,
-        olhos: olhosRedux,
-        origem: origemRedux,
-        seios: seiosRedux,
-        tatuagem: tatuagemRedux,
-        mamas: mamasRedux,
-        pelos: pelosRedux,
-        signo: signoRedux,
-        distrito: distritoRedux,
-        cidade: cidadeRedux,
-        address: addressRedux,
-        longitude: longitudeRedux,
-        latitude: latitudeRedux,
-        telefone: telefoneRedux,
-        pagamento: pagamentoRedux,
-        servico: servicoRedux,
-        lingua: linguaRedux,
-        description: descriptionRedux,
+        nome,
+        idade,
+        tarifa,
+        altura,
+        cabelo,
+        corpo,
+        olhos,
+        origem,
+        seios,
+        tatuagem,
+        mamas,
+        pelos,
+        signo,
+        distrito,
+        cidade,
+        address,
+        longitude,
+        latitude,
+        telefone,
+        pagamento,
+        servico,
+        lingua,
+        description,
         certificado: false,
         status: null,
-        premium: premiumRedux
+        premium: premium || false,
       };
 
       // Criar ou atualizar perfil
       await ProfileDataService.createProfile(userData);
 
-      // Upload profile photos
-      if (photoURLredux.length > 0) {
-        await ProfileDataService.uploadProfilePhotos(userUID, photoURLredux);
+      // Upload de fotos de perfil
+      if (photos?.length > 0) {
+        await ProfileDataService.uploadProfilePhotos(userUID, photos);
       }
 
-      // Upload verification photos
-      if (VphotoURLredux.length > 0) {
-        await ProfileDataService.uploadVerificationPhotos(userUID, VphotoURLredux);
+      // Upload de fotos de verificação
+      if (vphotos?.length > 0) {
+        await ProfileDataService.uploadVerificationPhotos(userUID, vphotos);
       }
 
       toast.success('Perfil criado/atualizado com sucesso!', { position: 'top-right', autoClose: 1000 });
@@ -92,6 +116,11 @@ const RegistoPagamento: React.FC = () => {
       });
     }
   };
+
+  // Renderizar apenas se userUID existir
+  if (!userUID) {
+    return <div>Redirecionando...</div>; // Mensagem temporária enquanto redireciona
+  }
 
   return (
     <div className="text-gray-600 pb-20 min-h-[60vh] bg-[#1b1b1b]">
@@ -127,7 +156,11 @@ const RegistoPagamento: React.FC = () => {
 
         <div className="bg-[#1E2427] w-full h-full mb-10 mt-0 border border-zinc-600 rounded-sm">
           <div className="px-10 mt-4">
-            <a href="https://controlcenter.verotel.com/register-reseller?website=znjiu4xie868d5ndojpu1slddnb64o4kuznt4h1x">
+            <a
+              href="https://controlcenter.verotel.com/register-reseller?website=znjiu4xie868d5ndojpu1slddnb64o4kuznt4h1x"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Sign me up!
             </a>
           </div>

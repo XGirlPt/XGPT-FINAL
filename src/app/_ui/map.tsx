@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Profile } from '@/backend/types';
@@ -32,7 +32,7 @@ const Map = ({ profiles = [] }: MapProps) => {
   const markersRef = useRef<L.Marker[]>([]);
 
   const defaultCenter: [number, number] = [38.7, -10.13];
-  const validCoordinates = profiles.filter(
+  const validCoordinates = useMemo(() => profiles.filter(
     (profile) =>
       typeof profile.latitude === 'number' &&
       typeof profile.longitude === 'number' &&
@@ -40,12 +40,16 @@ const Map = ({ profiles = [] }: MapProps) => {
       profile.longitude !== 0 &&
       !isNaN(profile.latitude) &&
       !isNaN(profile.longitude)
-  );
-  const center: [number, number] =
+  ), [profiles]);
+
+  const center = useMemo((): [number, number] => 
     validCoordinates.length > 0
       ? [validCoordinates[0].latitude, validCoordinates[0].longitude]
-      : defaultCenter;
-  const zoom = validCoordinates.length > 0 ? 10 : 8;
+      : defaultCenter,
+    [validCoordinates]
+  );
+
+  const zoom = useMemo(() => validCoordinates.length > 0 ? 10 : 8, [validCoordinates]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -104,7 +108,7 @@ const Map = ({ profiles = [] }: MapProps) => {
         mapRef.current = null;
       }
     };
-  }, [profiles, center, zoom]);
+  }, [profiles, center, zoom, validCoordinates]);
 
   return (
     <div
@@ -113,6 +117,6 @@ const Map = ({ profiles = [] }: MapProps) => {
       className='rounded-2xl'
     />
   );
-};
+}
 
 export default Map;

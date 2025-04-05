@@ -57,7 +57,7 @@ const FiltroPeito: React.FC<FiltroPeitoProps> = ({ value, onChange, bgColor }) =
     <CommonFilter
       label={t('filterB.breast_size')}
       options={peitoOptions}
-      value={displayedValue}
+      value={value}
       onChange={handlePeitoChange}
       bgColor={bgColor}
       placeholder={t('filterB.select_breast_size')}

@@ -13,17 +13,23 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import { shallowEqual } from 'react-redux';
 
 export function RegistoFotos() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const router = useRouter();
 
-  // Dados do Redux
-  const userUID = useSelector((state: any) => state.profile?.profile?.userUID);
-  const photosFromRedux = useSelector((state: any) => state.profile?.profile?.photos || []);
-  const vphotosFromRedux = useSelector((state: any) => state.profile?.profile?.vphotos || []);
-  const isPremium = useSelector((state: any) => state.profile?.profile?.premium || false);
+  // Dados do Redux com shallowEqual para estabilizar referências
+  const { userUID, photosFromRedux, vphotosFromRedux, isPremium } = useSelector(
+    (state: any) => ({
+      userUID: state.profile?.profile?.userUID,
+      photosFromRedux: state.profile?.profile?.photos || [],
+      vphotosFromRedux: state.profile?.profile?.vphotos || [],
+      isPremium: state.profile?.profile?.premium || false,
+    }),
+    shallowEqual
+  );
 
   // Estado local sincronizado com Redux
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>(photosFromRedux);
@@ -35,71 +41,76 @@ export function RegistoFotos() {
   const maxProfilePhotos = isPremium ? 10 : 3;
   const maxVerificationPhotos = 1;
 
-  // Sincronizar com Redux na montagem
+  // Sincronizar com Redux apenas quando os valores mudam
   useEffect(() => {
-    setSelectedPhotos(photosFromRedux);
-    setVSelectedPhotos(vphotosFromRedux);
-  }, [photosFromRedux, vphotosFromRedux]);
+    // Verificar se os arrays são diferentes antes de atualizar o estado
+    if (JSON.stringify(selectedPhotos) !== JSON.stringify(photosFromRedux)) {
+      setSelectedPhotos(photosFromRedux);
+    }
+    if (JSON.stringify(vSelectedPhotos) !== JSON.stringify(vphotosFromRedux)) {
+      setVSelectedPhotos(vphotosFromRedux);
+    }
+  }, [photosFromRedux, vphotosFromRedux, selectedPhotos, vSelectedPhotos]);
 
   // Função para upload de fotos de perfil
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const files = Array.from(event.target.files);
-      const remainingSlots = maxProfilePhotos - selectedPhotos.length;
+    if (!event.target.files || event.target.files.length === 0) return;
 
-      if (remainingSlots <= 0) {
-        setShowUpgradeModal(true);
-        return;
+    const files = Array.from(event.target.files);
+    const remainingSlots = maxProfilePhotos - selectedPhotos.length;
+
+    if (remainingSlots <= 0) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    const filesToUpload = files.slice(0, remainingSlots);
+    const uploadedPhotoURLs: string[] = [];
+
+    const uploadPromises = filesToUpload.map(async (file) => {
+      const filePath = `${userUID}/${file.name.toLowerCase().replace(/ /g, '_').replace(/\./g, '_')}.webp`;
+      try {
+        const { error } = await supabase.storage.from('profileFoto').upload(filePath, file);
+        if (error) throw new Error(error.message);
+
+        const publicURLFoto = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/profileFoto/${filePath}`;
+        uploadedPhotoURLs.push(publicURLFoto);
+        console.log('Foto de perfil carregada:', publicURLFoto);
+      } catch (error: any) {
+        console.error('Erro durante o upload:', error.message);
+        toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
       }
+    });
 
-      const filesToUpload = files.slice(0, remainingSlots);
-      const uploadedPhotoURLs: string[] = [];
-
-      const uploadPromises = filesToUpload.map(async (file) => {
-        const filePath = `${userUID}/${file.name.toLowerCase().replace(/ /g, '_').replace(/\./g, '_')}.webp`;
-        try {
-          const { error } = await supabase.storage.from('profileFoto').upload(filePath, file);
-          if (error) throw new Error(error.message);
-
-          const publicURLFoto = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/profileFoto/${filePath}`;
-          uploadedPhotoURLs.push(publicURLFoto);
-          console.log('Foto de perfil carregada:', publicURLFoto);
-        } catch (error: any) {
-          console.error('Erro durante o upload:', error.message);
-          toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
-        }
-      });
-
-      await Promise.all(uploadPromises);
-      if (uploadedPhotoURLs.length > 0) {
-        const newSelectedPhotos = [...selectedPhotos, ...uploadedPhotoURLs];
-        setSelectedPhotos(newSelectedPhotos);
-        dispatch(updatePhotos(newSelectedPhotos));
-        toast.success(t('messages.photoUploaded'), { position: 'top-right', autoClose: 1000 });
-      }
+    await Promise.all(uploadPromises);
+    if (uploadedPhotoURLs.length > 0) {
+      const newSelectedPhotos = [...selectedPhotos, ...uploadedPhotoURLs];
+      setSelectedPhotos(newSelectedPhotos);
+      dispatch(updatePhotos(newSelectedPhotos));
+      toast.success(t('messages.photoUploaded'), { position: 'top-right', autoClose: 1000 });
     }
   };
 
   // Função para upload de foto de verificação
   const handleVerificationPhotoUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      const fileName = file.name.toLowerCase().replace(/ /g, '_').replace(/[^a-z0-9_]/g, '') + '.webp';
-      const filePath = `${userUID}/${fileName}`;
+    if (!event.target.files || event.target.files.length === 0) return;
 
-      try {
-        const { error } = await supabase.storage.from('verificationFoto').upload(filePath, file);
-        if (error) throw new Error(error.message);
+    const file = event.target.files[0];
+    const fileName = file.name.toLowerCase().replace(/ /g, '_').replace(/[^a-z0-9_]/g, '') + '.webp';
+    const filePath = `${userUID}/${fileName}`;
 
-        const publicURLFotoV = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/verificationFoto/${filePath}`;
-        setVSelectedPhotos([publicURLFotoV]);
-        dispatch(updateVPhotos([publicURLFotoV]));
-        toast.success(t('messages.photoUploaded'), { position: 'top-right', autoClose: 1000 });
-        console.log('Foto de verificação carregada:', publicURLFotoV);
-      } catch (error: any) {
-        console.error('Erro durante o upload:', error.message);
-        toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
-      }
+    try {
+      const { error } = await supabase.storage.from('verificationFoto').upload(filePath, file);
+      if (error) throw new Error(error.message);
+
+      const publicURLFotoV = `https://ulcggrutwonkxbiuigdu.supabase.co/storage/v1/object/public/verificationFoto/${filePath}`;
+      setVSelectedPhotos([publicURLFotoV]);
+      dispatch(updateVPhotos([publicURLFotoV]));
+      toast.success(t('messages.photoUploaded'), { position: 'top-right', autoClose: 1000 });
+      console.log('Foto de verificação carregada:', publicURLFotoV);
+    } catch (error: any) {
+      console.error('Erro durante o upload:', error.message);
+      toast.error(t('messages.uploadError'), { position: 'top-right', autoClose: 1000 });
     }
   };
 
@@ -171,8 +182,7 @@ export function RegistoFotos() {
         </div>
       );
     });
-  
-    // Adicionar placeholders até atingir o limite de fotos permitidas (3 para free, 10 para premium)
+
     const placeholdersCount = maxProfilePhotos - selectedPhotos.length;
     for (let i = 0; i < placeholdersCount; i++) {
       photoCards.push(
@@ -192,15 +202,14 @@ export function RegistoFotos() {
           </span>
         </label>
       );
-    };
-  
-    // Se o utilizador for free, adicionar a quarta card "bloqueada" sempre
+    }
+
     if (!isPremium) {
       photoCards.push(
         <div
           key="locked"
           className="aspect-square bg-[#fff4de] dark:bg-[#27191f] rounded-3xl flex flex-col items-center justify-center cursor-pointer"
-          onClick={() => setShowPlanChoiceModal(true)} // Abre o modal de escolha de plano
+          onClick={() => setShowPlanChoiceModal(true)}
         >
           <div className="text-yellow-500 mb-2">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#fdb315">
@@ -217,7 +226,7 @@ export function RegistoFotos() {
         </div>
       );
     }
-  
+
     return photoCards;
   };
 
@@ -235,7 +244,7 @@ export function RegistoFotos() {
             onClick={() => handleDeleteVerificationPhoto(index)}
           />
           <BlurImage
-            srcset={photoURL || '/logo.webp'}
+            src={photoURL || '/logo.webp'} // Corrigido de srcset para src
             alt={`Foto de Verificação ${index}`}
             className="w-full h-full object-cover rounded-3xl border border-gray-600"
           />
@@ -262,15 +271,18 @@ export function RegistoFotos() {
     );
   };
 
-  // Handle continuar (navega para próxima página)
+  // Handle continuar
   const handleContinue = () => {
-    toast.success('Dados salvos localmente com sucesso!');
-    window.location.href = '/registo/registo-pagamento';
+    if (selectedPhotos.length === 0) {
+      toast.error('Por favor, adicione pelo menos uma foto de perfil.', { position: 'top-right', autoClose: 2000 });
+      return;
+    }
+    toast.success('Dados salvos localmente com sucesso!', { position: 'top-right', autoClose: 1000 });
+    router.push('/registo/registo-pagamento');
   };
 
   return (
     <div className="w-full bg-white dark:border dark:border-gray-800 dark:border-opacity-50 dark:bg-transparent rounded-3xl p-8">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
           <h1 className="text-2xl font-bold">{t('photos.title')}</h1>
@@ -282,19 +294,20 @@ export function RegistoFotos() {
               {t('button.back')}
             </Button>
           </Link>
+
+          <Link href="/registo/registo-pagamento">
           <Button
             className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
             onClick={handleContinue}
           >
             {t('button.createAccount')}
           </Button>
+          </Link>
         </div>
       </div>
       <Separator className="my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 hidden md:block" />
 
-      {/* Body */}
       <div className="space-y-8">
-        {/* Profile Photos Section */}
         <div>
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-lg font-semibold">{t('photos.profilePhotos')}</h2>
@@ -308,11 +321,11 @@ export function RegistoFotos() {
               style={{ display: 'none' }}
               onChange={handleFileUpload}
               multiple
+              accept="image/*"
             />
           </div>
         </div>
 
-        {/* Verification Photo Section */}
         <div>
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-lg font-semibold">{t('photos.verifyTitle')}</h2>
@@ -325,12 +338,12 @@ export function RegistoFotos() {
               id="upload-verification-photo"
               style={{ display: 'none' }}
               onChange={handleVerificationPhotoUpload}
+              accept="image/*"
             />
           </div>
         </div>
       </div>
 
-      {/* Modal de Upgrade para Premium */}
       <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
         <DialogContent>
           <DialogHeader>
@@ -354,7 +367,6 @@ export function RegistoFotos() {
         </DialogContent>
       </Dialog>
 
-      {/* Modal de Escolha de Plano */}
       <Dialog open={showPlanChoiceModal} onOpenChange={setShowPlanChoiceModal}>
         <DialogContent>
           <DialogHeader>

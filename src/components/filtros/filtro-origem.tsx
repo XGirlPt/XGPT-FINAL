@@ -1,4 +1,3 @@
-// components/filtros/filtro-origem.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CommonFilter from './common-filter';
@@ -44,22 +43,28 @@ const FiltroOrigem: React.FC<FiltroOrigemProps> = ({ value, onChange, bgColor })
 
   const handleOrigemChange = (selectedId: string) => {
     console.log('Origem selecionada:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (origin):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux (apenas para depuração)
   const displayedValue = value
     ? origensTraduzidas[
         Object.keys(origensEmPortugues).find(
           (key) => origensEmPortugues[key as OrigemKey] === value
         ) as OrigemKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
+  console.log('Valor exibido (displayedValue):', displayedValue);
 
   return (
     <CommonFilter
       label={t('filter.origin')}
       options={origemOptions}
-      value={displayedValue}
+      value={value} // Passa o valor bruto do Redux diretamente
       onChange={handleOrigemChange}
       bgColor={bgColor}
       placeholder={t('filter.select_origin')}

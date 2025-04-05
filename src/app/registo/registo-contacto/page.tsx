@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { updateServico, updatePagamento, updateLingua, updatePremium } from '@/backend/reducers/profileSlice';
@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { SubscriptionPlan } from '../../../components/subscriptionPlan';
+import { shallowEqual } from 'react-redux';
 
 interface PreferenceOption {
   id: string;
@@ -28,15 +29,63 @@ interface PreferenceCategory {
 
 export function RegistoContacto() {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  // Dados do Redux
-  const servicoRedux = useSelector((state: any) => state.profile?.profile?.servico || []);
-  const pagamentoRedux = useSelector((state: any) => state.profile?.profile?.pagamento || []);
-  const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || []);
-  const isPremium = useSelector((state: any) => state.profile?.profile?.premium || false);
+  // Seletor memoizado com shallowEqual para evitar novas referências
+  const profile = useSelector((state: any) => state.profile?.profile || {}, shallowEqual);
+  const servicoRedux = useMemo(() => profile.servico || [], [profile.servico]);
+  const pagamentoRedux = useMemo(() => profile.pagamento || [], [profile.pagamento]);
+  const linguaRedux = useMemo(() => profile.lingua || [], [profile.lingua]);
+  const isPremium = useMemo(() => profile.premium || false, [profile.premium]);
 
-  // Estado inicial das categorias
+  const serviceIdToTranslationKey: { [key: string]: string } = {
+    '69': '69',
+    'analingus-active': 'AnulingusActivo',
+    'analingus-passive': 'AnulingusPassivo',
+    'active-golden': 'ChampagneDouradoActivo',
+    'champagne-golden': 'ChampagneDouradoPassivo',
+    'attends-couples': 'AtendeCasais',
+    'fingers-anus': 'DedosAnal',
+    'fingers-vagina': 'DedosVagina',
+    'smooth-domination': 'DominacaoSoft',
+    'double-penetration': 'DuplaPenetracao',
+    'duo': 'Duo',
+    'body-ejaculation': 'EjaculacaoCorporal',
+    'ejaculate-face': 'EjacularNaFacial',
+    'multiple-ejaculation': 'MultiplaEjaculacao',
+    'face-sitting': 'FaceSitting',
+    'fetishism': 'Fetichismo',
+    'french-kiss': 'BeijoFrances',
+    'deep-throat': 'GargantaProfunda',
+    'erotic-games': 'JogosEroticos',
+    'lingerie': 'Lingerie',
+    'erotic-massage': 'MassagemErotica',
+    'masturbation': 'Masturbacao',
+    'porn-star': 'ExperienciaPornStar',
+    'vip-service': 'ServicoVIP',
+    'group-sex': 'SexoEmGrupo',
+    'sex-toys': 'SexToys',
+    'active-sodomy': 'SodomiaActiva',
+    'passive-sodomy': 'SodomiaPassiva',
+    'striptease': 'Striptease',
+    'roleplay': 'JogoDePapeis',
+    'foot-fetish': 'FetichePorPes',
+    'tantric-massage': 'MassagemTantrica',
+    'bdsm': 'BDSM',
+    'shower-together': 'BanhoJuntos',
+    'girlfriend-experience': 'ExperienciaNamorada',
+    'webcam-service': 'ServicoWebcam',
+    'threesome': 'Trio',
+    'erotic-dance': 'DancaErotica',
+    'prostate-massage': 'MassagemProstatica',
+    'spanking': 'Spanking',
+    'cuckold': 'Cuckold',
+    'voyeurism': 'Voyeurismo',
+    'phone-sex': 'SexoTelefonico',
+    'fisting': 'Fisting',
+    'swing': 'Swing',
+  };
+
   const [categories, setCategories] = useState<PreferenceCategory[]>([
     {
       id: 'payment',
@@ -55,50 +104,67 @@ export function RegistoContacto() {
     {
       id: 'languages',
       title: t('languages.title'),
+
       options: [
-        { id: 'pt', label: t('profile.linguas.portuguese'), checked: false },
-        { id: 'en', label: t('profile.linguas.english'), checked: false },
-        { id: 'fr', label: t('profile.linguas.french'), checked: false },
-        { id: 'es', label: t('profile.linguas.spanish'), checked: false },
-        { id: 'de', label: t('profile.linguas.german'), checked: false },
-        { id: 'it', label: t('profile.linguas.italian'), checked: false },
-        { id: 'ru', label: t('profile.linguas.russian'), checked: false },
-        { id: 'ar', label: t('profile.linguas.arabic'), checked: false },
+        { id: 'pt', label: t('language.pt'), checked: linguaRedux.includes('pt') },
+        { id: 'en', label: t('language.en'), checked: linguaRedux.includes('en') },
+        { id: 'fr', label: t('language.fr'), checked: linguaRedux.includes('fr') },
+        { id: 'es', label: t('language.es'), checked: linguaRedux.includes('es') },
+        { id: 'de', label: t('language.de'), checked: linguaRedux.includes('de') },
+        { id: 'it', label: t('language.it'), checked: linguaRedux.includes('it') },
+        { id: 'ru', label: t('language.ru'), checked: linguaRedux.includes('ru') },
+        { id: 'ar', label: t('language.ar'), checked: linguaRedux.includes('ar') },
       ],
     },
     {
       id: 'services',
       title: t('services.title'),
       options: [
-        { id: '69', label: t('profile.servico.69'), checked: false },
-        { id: 'analingus-active', label: t('profile.servico.Anulingus Activo'), checked: false },
-        { id: 'analingus-passive', label: t('profile.servico.Anulingus Passivo'), checked: false },
-        { id: 'active-golden', label: t('profile.servico.Champagne Dourado Activo'), checked: false },
-        { id: 'champagne-golden', label: t('profile.servico.Champagne Dourado Passivo'), checked: false },
-        { id: 'attends-couples', label: t('profile.servico.Atende Casais'), checked: false },
-        { id: 'fingers-anus', label: t('profile.servico.Dedos Anal'), checked: false },
-        { id: 'fingers-vagina', label: t('profile.servico.Dedos Vagina'), checked: false },
-        { id: 'smooth-domination', label: t('profile.servico.Dominacao soft'), checked: false },
-        { id: 'double-penetration', label: t('profile.servico.Dupla Penetracao'), checked: false },
-        { id: 'duo', label: t('profile.servico.Duo'), checked: false },
-        { id: 'body-ejaculation', label: t('profile.servico.Ejaculacao Corporal'), checked: false },
-        { id: 'ejaculate-face', label: t('profile.servico.Ejaculer na Facial'), checked: false },
-        { id: 'multiple-ejaculation', label: t('profile.servico.Multipla Ejeculacao'), checked: false },
-        { id: 'face-sitting', label: t('profile.servico.Face Sitting'), checked: false },
-        { id: 'fetishism', label: t('profile.servico.Fetichismo'), checked: false },
-        { id: 'french-kiss', label: t('profile.servico.Beijo Portugals'), checked: false },
-        { id: 'deep-throat', label: t('profile.servico.Garganta Profunda'), checked: false },
-        { id: 'erotic-games', label: t('profile.servico.Jogos Eroticos'), checked: false },
-        { id: 'lingerie', label: t('profile.servico.Lingerie'), checked: false },
-        { id: 'erotic-massage', label: t('profile.servico.Massagem Erotica'), checked: false },
-        { id: 'masturbation', label: t('profile.servico.Masturbacao'), checked: false },
-        { id: 'porn-star', label: t('profile.servico.Experiencia Porn Star'), checked: false },
-        { id: 'vip-service', label: t('profile.servico.Servico VIP'), checked: false },
-        { id: 'group-sex', label: t('profile.servico.Sexo em Grupo'), checked: false },
-        { id: 'sex-toys', label: t('profile.servico.Sex Toys'), checked: false },
-        { id: 'active-sodomy', label: t('profile.servico.Sodomia Activa'), checked: false },
-        { id: 'passive-sodomy', label: t('profile.servico.Sodomia Passiva'), checked: false },
-        { id: 'striptease', label: t('profile.servico.Striptease'), checked: false },
+        { id: '69', label: t('servico.69'), checked: false },
+        { id: 'analingus-active', label: t('servico.AnulingusActivo'), checked: false },
+        { id: 'analingus-passive', label: t('servico.AnulingusPassivo'), checked: false },
+        { id: 'active-golden', label: t('servico.ChampagneDouradoActivo'), checked: false },
+        { id: 'champagne-golden', label: t('servico.ChampagneDouradoPassivo'), checked: false },
+        { id: 'attends-couples', label: t('servico.AtendeCasais'), checked: false },
+        { id: 'fingers-anus', label: t('servico.DedosAnal'), checked: false },
+        { id: 'fingers-vagina', label: t('servico.DedosVagina'), checked: false },
+        { id: 'smooth-domination', label: t('servico.DominacaoSoft'), checked: false },
+        { id: 'double-penetration', label: t('servico.DuplaPenetracao'), checked: false },
+        { id: 'duo', label: t('servico.Duo'), checked: false },
+        { id: 'body-ejaculation', label: t('servico.EjaculacaoCorporal'), checked: false },
+        { id: 'ejaculate-face', label: t('servico.EjacularNaFacial'), checked: false },
+        { id: 'multiple-ejaculation', label: t('servico.MultiplaEjaculacao'), checked: false },
+        { id: 'face-sitting', label: t('servico.FaceSitting'), checked: false },
+        { id: 'fetishism', label: t('servico.Fetichismo'), checked: false },
+        { id: 'french-kiss', label: t('servico.BeijoFrances'), checked: false },
+        { id: 'deep-throat', label: t('servico.GargantaProfunda'), checked: false },
+        { id: 'erotic-games', label: t('servico.JogosEroticos'), checked: false },
+        { id: 'lingerie', label: t('servico.Lingerie'), checked: false },
+        { id: 'erotic-massage', label: t('servico.MassagemErotica'), checked: false },
+        { id: 'masturbation', label: t('servico.Masturbacao'), checked: false },
+        { id: 'porn-star', label: t('servico.ExperienciaPornStar'), checked: false },
+        { id: 'vip-service', label: t('servico.ServicoVIP'), checked: false },
+        { id: 'group-sex', label: t('servico.SexoEmGrupo'), checked: false },
+        { id: 'sex-toys', label: t('servico.SexToys'), checked: false },
+        { id: 'active-sodomy', label: t('servico.SodomiaActiva'), checked: false },
+        { id: 'passive-sodomy', label: t('servico.SodomiaPassiva'), checked: false },
+        { id: 'striptease', label: t('servico.Striptease'), checked: false },
+        { id: 'roleplay', label: t('servico.JogoDePapeis'), checked: false },
+        { id: 'foot-fetish', label: t('servico.FetichePorPes'), checked: false },
+        { id: 'tantric-massage', label: t('servico.MassagemTantrica'), checked: false },
+        { id: 'bdsm', label: t('servico.BDSM'), checked: false },
+        { id: 'shower-together', label: t('servico.BanhoJuntos'), checked: false },
+        { id: 'girlfriend-experience', label: t('servico.ExperienciaNamorada'), checked: false },
+        { id: 'webcam-service', label: t('servico.ServicoWebcam'), checked: false },
+        { id: 'threesome', label: t('servico.Trio'), checked: false },
+        { id: 'erotic-dance', label: t('servico.DancaErotica'), checked: false },
+        { id: 'prostate-massage', label: t('servico.MassagemProstatica'), checked: false },
+        { id: 'spanking', label: t('servico.Spanking'), checked: false },
+        { id: 'cuckold', label: t('servico.Cuckold'), checked: false },
+        { id: 'voyeurism', label: t('servico.Voyeurismo'), checked: false },
+        { id: 'phone-sex', label: t('servico.SexoTelefonico'), checked: false },
+        { id: 'fisting', label: t('servico.Fisting'), checked: false },
+        { id: 'swing', label: t('servico.Swing'), checked: false },
       ],
     },
     {
@@ -110,7 +176,7 @@ export function RegistoContacto() {
   const [activeTab, setActiveTab] = useState('payment');
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
 
-  // Sincroniza o estado inicial com Redux apenas na montagem
+  // Sincronização inicial apenas na montagem
   useEffect(() => {
     setCategories((prevCategories) =>
       prevCategories.map((category) => ({
@@ -128,9 +194,29 @@ export function RegistoContacto() {
         })),
       }))
     );
-  }, [linguaRedux, pagamentoRedux, servicoRedux]); // Agora está correto!
+  }, [servicoRedux, pagamentoRedux, linguaRedux]); // Dependências fixas
 
-  // Handle checkbox changes com limitação para serviços
+  // Atualizar traduções apenas quando o idioma muda
+  useEffect(() => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) => ({
+        ...category,
+        title: t(`${category.id === 'payment' ? 'paymentMethods' : category.id === 'languages' ? 'languages' : category.id === 'services' ? 'services' : 'description'}.title`),
+        options: category.options?.map((option) => ({
+          ...option,
+          label:
+            category.id === 'payment'
+              ? option.label
+              : category.id === 'languages'
+              ? t(`profile.linguas.${option.id === 'pt' ? 'portuguese' : option.id === 'en' ? 'english' : option.id === 'fr' ? 'french' : option.id === 'es' ? 'spanish' : option.id === 'de' ? 'german' : option.id === 'it' ? 'italian' : option.id === 'ru' ? 'russian' : 'arabic'}`)
+              : category.id === 'services'
+              ? t(`servico.${serviceIdToTranslationKey[option.id] || option.id}`)
+              : option.label,
+        })),
+      }))
+    );
+  }, [i18n.language, t]);
+
   const handleCheckboxChange = (categoryId: string, optionId: string, checked: boolean) => {
     if (categoryId === 'services' && !isPremium && checked) {
       const selectedServices = categories
@@ -143,34 +229,37 @@ export function RegistoContacto() {
       }
     }
 
-    const updatedCategories = categories.map((category) => {
-      if (category.id === categoryId && category.options) {
-        return {
-          ...category,
-          options: category.options.map((option) =>
-            option.id === optionId ? { ...option, checked } : option
-          ),
-        };
+    setCategories((prevCategories) => {
+      const newCategories = prevCategories.map((category) => {
+        if (category.id === categoryId && category.options) {
+          return {
+            ...category,
+            options: category.options.map((option) =>
+              option.id === optionId ? { ...option, checked } : option
+            ),
+          };
+        }
+        return category;
+      });
+
+      // Calcular selectedOptions apenas uma vez, após a atualização
+      const updatedCategory = newCategories.find((cat) => cat.id === categoryId);
+      const selectedOptions = updatedCategory?.options
+        ?.filter((opt) => opt.checked)
+        .map((opt) => opt.id) || [];
+
+      if (categoryId === 'payment') {
+        dispatch(updatePagamento(selectedOptions));
+      } else if (categoryId === 'languages') {
+        dispatch(updateLingua(selectedOptions));
+      } else if (categoryId === 'services') {
+        dispatch(updateServico(selectedOptions));
       }
-      return category;
+
+      return newCategories;
     });
-    setCategories(updatedCategories);
-
-    const selectedOptions = updatedCategories
-      .find((cat) => cat.id === categoryId)!
-      .options!.filter((opt) => opt.checked)
-      .map((opt) => opt.id);
-
-    if (categoryId === 'payment') {
-      dispatch(updatePagamento(selectedOptions));
-    } else if (categoryId === 'languages') {
-      dispatch(updateLingua(selectedOptions));
-    } else if (categoryId === 'services') {
-      dispatch(updateServico(selectedOptions));
-    }
   };
 
-  // Renderiza o conteúdo da aba ativa
   const getActiveCategoryContent = () => {
     const category = categories.find((cat) => cat.id === activeTab);
     if (!category) return null;
@@ -179,13 +268,7 @@ export function RegistoContacto() {
       <div className="bg-opacity-40 rounded-3xl p-6">
         {category.id === 'description' ? (
           <div className="w-full">
-            {/* <Textarea
-              name="description"
-              value={description}
-              onChange={(e) => handleDescriptionChange(e.target.value)}
-              className="w-full h-32 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800 text-gray-700 dark:bg-[#27191f] dark:text-gray-200 dark:border-gray-700"
-              placeholder={t('description.placeholder')}
-            /> */}
+            {/* Placeholder para descrição, se necessário */}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl">
@@ -212,7 +295,6 @@ export function RegistoContacto() {
     );
   };
 
-  // Componente de botão de aba
   const TabButton = ({
     id,
     title,
@@ -236,19 +318,17 @@ export function RegistoContacto() {
     </button>
   );
 
-  // Handle continuar (salva no Redux e navega)
   const handleContinue = () => {
     toast.success('Dados salvos localmente com sucesso!');
     window.location.href = '/registo/registo-fotos';
   };
 
-  // Handle seleção de plano no pop-up
   const handlePlanoSelect = (plano: 'free' | 'premium') => {
     if (plano === 'premium') {
       dispatch(updatePremium(true));
       toast.success('Plano Premium selecionado! Continue seu registro com todas as opções desbloqueadas.');
     }
-    setShowUpgradePopup(false); // Fecha o pop-up sem redirecionar
+    setShowUpgradePopup(false);
   };
 
   return (
@@ -278,7 +358,6 @@ export function RegistoContacto() {
       </div>
       <Separator className="my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 hidden md:block" />
 
-      {/* Desktop View - Vertical tabs on left */}
       <div className="hidden md:flex gap-8">
         <div className="w-64 flex flex-col">
           {categories.map((category) => (
@@ -294,7 +373,6 @@ export function RegistoContacto() {
         <div className="flex-1">{getActiveCategoryContent()}</div>
       </div>
 
-      {/* Mobile View - Horizontal tabs on top */}
       <div className="md:hidden">
         <div className="flex border-b bg-pink-400 overflow-x-auto">
           {categories.map((category) => (
@@ -314,7 +392,6 @@ export function RegistoContacto() {
         <div className="mt-4">{getActiveCategoryContent()}</div>
       </div>
 
-      {/* Pop-up de Upgrade */}
       <Dialog open={showUpgradePopup} onOpenChange={setShowUpgradePopup}>
         <DialogContent className="sm:max-w-[900px]">
           <DialogHeader>

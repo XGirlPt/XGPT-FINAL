@@ -25,9 +25,9 @@ const FiltroPelos: React.FC<FiltroPelosProps> = ({ value, onChange, bgColor }) =
   };
 
   const pelosTraduzidos: Record<PelosKey, string> = {
-    rapadinha: t('hair_removal.smooth'),
-    parcialmente: t('hair_removal.partially_smooth'),
-    natural: t('hair_removal.natural'),
+    rapadinha: t('filterPelos.hair_removalPelos.smooth'),
+    parcialmente: t('filterPelos.hair_removalPelos.partially_smooth'),
+    natural: t('filterPelos.hair_removalPelos.natural'),
   };
 
   const pelosOptions: FilterOption[] = Object.keys(pelosEmPortugues).map((key) => ({
@@ -50,12 +50,12 @@ const FiltroPelos: React.FC<FiltroPelosProps> = ({ value, onChange, bgColor }) =
 
   return (
     <CommonFilter
-      label={t('filterP.hair_removal')}
+      label={t('filterPelos.hair_removalPelos')}
       options={pelosOptions}
-      value={displayedValue}
+      value={value}
       onChange={handlePelosChange}
       bgColor={bgColor}
-      placeholder={t('filterP.select_hair_removal')}
+      placeholder={t('filterPelos.select_hair_removal')}
     />
   );
 };

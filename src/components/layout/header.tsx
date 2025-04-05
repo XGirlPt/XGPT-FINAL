@@ -20,6 +20,7 @@ import { Input } from '../ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { ThemeToggle } from '../theme-toggle';
 import supabase from '@/backend/database/supabase';
+import { RiMessage2Fill } from 'react-icons/ri';
 
 interface HeaderProps {
   blur?: boolean;
@@ -73,9 +74,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
     [dispatch]
   );
 
-  // useEffect no nível superior, sem condições antes dele
   useEffect(() => {
-    // Verificação de dispatch dentro do useEffect, se necessário
     if (!dispatch) {
       console.error('Dispatch is not available');
       return;
@@ -178,7 +177,6 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
 
   const isActive = (path: string) => pathname === path;
 
-  // Renderização condicional após todos os hooks
   if (!dispatch) {
     return <div>Loading...</div>;
   }
@@ -229,6 +227,15 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
               >
                 <SlidersHorizontal className="w-4 h-4 dark:text-white" />
               </Button>
+              {/* Renderizar o botão de mensagens apenas se o utilizador não estiver logado */}
+              {!isLoggedIn && (
+                <Link href="/messages">
+                  <Button variant="outline">
+                    <RiMessage2Fill size={20} className="mr-2" />
+                    Mensagens
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
@@ -256,6 +263,9 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                   <DropdownMenuItem onClick={handleMyAccountClick}>
                     <FaUser className="mr-2" /> {t('Header.myAccount')}
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/messages')}>
+                    <RiMessage2Fill className="mr-2" /> Mensagens
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
                     <FaCog className="mr-2" /> {t('Header.settings')}
                   </DropdownMenuItem>
@@ -282,6 +292,7 @@ const Header: React.FC<HeaderProps> = ({ blur }) => {
                 >
                   {t('Header.login')}
                 </Button>
+                {/* Botão de mensagens já foi movido para acima, condicionalmente */}
               </>
             )}
           </div>

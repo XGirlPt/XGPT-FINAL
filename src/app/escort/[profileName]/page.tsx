@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,10 +16,13 @@ import { Description } from '@/components/profile/description';
 import HeaderG from '@/components/header-filter/header-g';
 import FotoBig from '@/components/profile/foto-big';
 import Certificado from '../_ui/certificado';
-import StoryBig from '@/components/profile/story-big'; // Adicionado o import de StoryBig
+import StoryBig from '@/components/profile/story-big';
 import { fetchSelectedProfile } from '@/backend/actions/ProfileActions';
 import { fetchProfiles } from '@/backend/services/profileService';
-import { AppDispatch, RootState } from '@/store';
+import { startChat } from '@/backend/actions/ChatActions';
+import ChatWindow from '@/components/profile/ChatWindow';
+import { AppDispatch, RootState } from '@/backend/store';
+import { RiMessage2Fill } from 'react-icons/ri'; // Importar o ícone correto
 
 function UserProfile() {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +30,7 @@ function UserProfile() {
   const [showLargePhoto, setShowLargePhoto] = useState(false);
   const [showLargeStory, setShowLargeStory] = useState(false);
   const [showCertificado, setShowCertificado] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [storyIndex, setStoryIndex] = useState(0);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
@@ -35,6 +40,8 @@ function UserProfile() {
   const selectedProfile = useSelector((state: RootState) => state.profile.selectedProfile);
   const loading = useSelector((state: RootState) => state.profile.loading);
   const error = useSelector((state: RootState) => state.profile.error);
+  const userUID = useSelector((state: RootState) => state.profile.userUID);
+  const currentChatRoomId = useSelector((state: RootState) => state.profile.currentChatRoomId);
 
   useEffect(() => {
     if (profileName) {
@@ -76,6 +83,27 @@ function UserProfile() {
     setStoryIndex(index);
   };
 
+  const handleChatClick = async () => {
+    if (!userUID || !selectedProfile?.userUID) {
+      console.error('Erro: userUID ou selectedProfile.userUID estão indefinidos', {
+        userUID,
+        advertiserId: selectedProfile?.userUID,
+      });
+      alert('É necessário estar logado e o perfil deve ter um UID válido para iniciar um chat.');
+      return;
+    }
+
+    console.log('Iniciando chat com:', { userId: userUID, advertiserId: selectedProfile.userUID });
+    try {
+      const chatRoom = await dispatch(startChat({ userId: userUID, advertiserId: selectedProfile.userUID })).unwrap();
+      setShowChat(true);
+      console.log('showChat atualizado para true, chatRoom:', chatRoom);
+    } catch (error) {
+      console.error('Erro ao iniciar chat:', error);
+      alert('Erro ao iniciar o chat. Por favor, tenta novamente.');
+    }
+  };
+
   const findProfileIndex = useCallback(
     (profileId: number) => {
       const index = profiles.findIndex((profile) => profile.id === profileId);
@@ -91,13 +119,23 @@ function UserProfile() {
     }
   }, [profiles, selectedProfile, findProfileIndex]);
 
+  const renderChatWindow = () => {
+    if (showChat && currentChatRoomId) {
+      return <ChatWindow chatRoomId={currentChatRoomId} onClose={() => setShowChat(false)} />;
+    }
+    if (showChat && !currentChatRoomId) {
+      console.log('ChatWindow não renderizado: currentChatRoomId está indefinido');
+    }
+    return null;
+  };
+
   if (loading) return <div>Carregando perfil...</div>;
   if (error) return <div>Erro: {error}</div>;
   if (!selectedProfile) return <div>Perfil não encontrado</div>;
 
   return (
     <>
-      <div className="sticky top-24 z-50 mt-1 pt-1 backdrop-blur-sm border-b">
+      <div className="sticky top-24 z-10 mt-1 pt-1 backdrop-blur-sm border-b border-gray-700">
         <div className="container mx-auto px-4 py-3">
           <div className="hidden md:flex items-center justify-between z-40">
             <h1 className="text-4xl">Profile Details</h1>
@@ -110,7 +148,7 @@ function UserProfile() {
           <div className="md:hidden">
             <h1 className="text-3xl text-center mb-3">Profile Details</h1>
             <div className="flex gap-2 justify-between">
-              <Button variant="outline" className="flex-1 px-4 py-1 rounded-full border border-gray-300 text-sm bg-transparent font-body">
+              <Button variant="outline" className="flex-1 px-4 py-1 rounded-full border text-sm bg-transparent font-body">
                 <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previous
               </Button>
               <Button variant="outline" className="flex-1 px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body">
@@ -193,7 +231,33 @@ function UserProfile() {
             }}
           />
         </div>
+
+        {/* Botão de mensagem fixo no canto inferior esquerdo */}
+        <Button
+          onClick={handleChatClick}
+          className="fixed bottom-6 right-6 rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-body flex items-center justify-center w-14 h-14 shadow-lg z-50 animate-pulse"
+        >
+          <RiMessage2Fill size={28} />
+        
+        </Button>
+        
+
+        {renderChatWindow()}
       </div>
+
+      <style jsx>{`
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        .animate-bounce {
+          animation: bounce 1s infinite;
+        }
+      `}</style>
     </>
   );
 }

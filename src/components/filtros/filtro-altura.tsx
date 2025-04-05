@@ -8,8 +8,8 @@ interface FilterOption {
 }
 
 interface FiltroAlturaProps {
-  value: string; // Recebe o valor do react-hook-form
-  onChange: (value: string) => void; // Atualiza o valor no react-hook-form
+  value: string;
+  onChange: (value: string) => void;
   bgColor?: string;
 }
 
@@ -37,22 +37,28 @@ const FiltroAltura: React.FC<FiltroAlturaProps> = ({ value, onChange, bgColor })
 
   const handleAlturaChange = (selectedId: string) => {
     console.log('Altura selecionada:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (height):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux
   const displayedValue = value
     ? alturasTraduzidas[
         Object.keys(alturasEmPortugues).find(
           (key) => alturasEmPortugues[key as AlturaKey] === value
         ) as AlturaKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
+  console.log('Valor exibido (displayedValue):', displayedValue);
 
   return (
     <CommonFilter
       label={t('filterAltura.height')}
       options={alturaOptions}
-      value={displayedValue}
+      value={value}
       onChange={handleAlturaChange}
       bgColor={bgColor}
       placeholder={t('filterAltura.select_height')}

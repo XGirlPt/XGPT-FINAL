@@ -35,25 +35,31 @@ const FiltroMamas: React.FC<FiltroMamasProps> = ({ value, onChange, bgColor }) =
 
   const handleMamasChange = (selectedId: string) => {
     console.log('Mamas selecionadas:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (breasts):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux (apenas para depuração)
   const displayedValue = value
     ? mamasTraduzidas[
         Object.keys(mamasEmPortugues).find(
           (key) => mamasEmPortugues[key as MamasKey] === value
         ) as MamasKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
+  console.log('Valor exibido (displayedValue):', displayedValue);
 
   return (
     <CommonFilter
-      label={t('filterMamas.breasts')}
+      label={t('filterBreast.breasts')}
       options={mamasOptions}
-      value={displayedValue}
+      value={value} // Passa o valor bruto do Redux diretamente
       onChange={handleMamasChange}
       bgColor={bgColor}
-      placeholder={t('filterMamas.select_breasts')}
+      placeholder={t('filterBreast.select_breasts')}
     />
   );
 };

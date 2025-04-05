@@ -68,12 +68,12 @@ const FiltroSigno: React.FC<FiltroSignoProps> = ({ value, onChange, bgColor }) =
 
   return (
     <CommonFilter
-      label={t('filterTa.signo')}
+      label={t('filterS.zodiac')}
       options={signoOptions}
-      value={displayedValue}
+      value={value}
       onChange={handleSignoChange}
       bgColor={bgColor}
-      placeholder={t('filterTa.select_signo')}
+      placeholder={t('filterS.select_zodiac')}
     />
   );
 };

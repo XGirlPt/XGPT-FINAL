@@ -79,7 +79,6 @@ export function RegistoEntrada() {
   const [addressInput, setAddressInput] = useState('');
   const [activeTab, setActiveTab] = useState('basicInfo');
 
-  // Carregar valores do Redux como estado inicial
   const profile = useSelector((state: any) => state.profile?.profile || {});
 
   const categories: Category[] = [
@@ -117,6 +116,7 @@ export function RegistoEntrada() {
     },
   });
 
+  // Sincronização inicial apenas na montagem
   useEffect(() => {
     const getSession = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -128,10 +128,9 @@ export function RegistoEntrada() {
     };
     getSession();
 
-    // Sincronizar useAddress com o valor inicial do formulário
     setUseAddress(form.getValues('useaddress'));
     setAddressInput(form.getValues('address'));
-  }, [form]);
+  }, []); // Dependências vazias para evitar loops
 
   const fetchSuggestions = async (query: string) => {
     if (!query || query.length < 3) {
@@ -206,7 +205,6 @@ export function RegistoEntrada() {
               name={fieldName}
               render={({ field }) => (
                 <FormItem>
-                  {/* Labels para todos os campos relevantes */}
                   {fieldName === 'name' && (
                     <FormLabel className="text-md font-medium text-gray-400">
                       {t('input.name') || 'Nome'}
@@ -237,6 +235,51 @@ export function RegistoEntrada() {
                       {t('input.address') || 'Morada Completa'}
                     </FormLabel>
                   )}
+                  {fieldName === 'height' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.height') || 'Altura'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'breasts' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.breasts') || 'Mamas'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'body' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.body') || 'Corpo'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'hair' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.hair') || 'Cabelo'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'eyes' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.eyes') || 'Olhos'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'breastSize' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.breastSize') || 'Tamanho do Peito'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'hairiness' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.hairiness') || 'Pelos'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'tattoos' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.tattoos') || 'Tatuagens'}
+                    </FormLabel>
+                  )}
+                  {fieldName === 'sign' && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t('input.sign') || 'Signo'}
+                    </FormLabel>
+                  )}
                   <FormControl>
                     {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' ? (
                       <Input
@@ -251,7 +294,7 @@ export function RegistoEntrada() {
                       />
                     ) : fieldName === 'city' && useAddress ? (
                       <Input
-                        value={field.value}
+                        value={field.value || ''}
                         readOnly
                         className={`${commonInputClass} ${readOnlyClass}`}
                       />
@@ -266,17 +309,17 @@ export function RegistoEntrada() {
                       />
                     ) : fieldName === 'district' && useAddress ? (
                       <Input
-                        value={field.value}
+                        value={field.value || ''}
                         readOnly
                         className={`${commonInputClass} ${readOnlyClass}`}
                       />
                     ) : fieldName === 'district' ? (
                       <FiltroDistrito
+                        value={field.value || ''}
                         onChange={(value) => {
                           form.setValue('district', value);
                           dispatch(updateDistrito(value));
                         }}
-                        value={field.value}
                         disabled={useAddress}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
@@ -300,11 +343,8 @@ export function RegistoEntrada() {
                         />
                         <div className="flex items-center gap-2">
                           <Switch
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              toggleAddressOption(checked);
-                            }}
+                            checked={useAddress}
+                            onCheckedChange={toggleAddressOption}
                           />
                           <span className="text-sm text-gray-600 dark:text-gray-400">
                             {t('input.useaddress') || 'Morada Completa'}
@@ -326,46 +366,55 @@ export function RegistoEntrada() {
                       </div>
                     ) : fieldName === 'height' ? (
                       <FiltroAltura
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('height', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'breasts' ? (
                       <FiltroMamas
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('breasts', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'body' ? (
                       <FiltroCorpo
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('body', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'hair' ? (
                       <FiltroCabelo
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('hair', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'eyes' ? (
                       <FiltroOlhos
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('eyes', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'breastSize' ? (
                       <FiltroPeito
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('breastSize', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'hairiness' ? (
                       <FiltroPelos
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('hairiness', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'tattoos' ? (
                       <FiltroTatuagem
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('tattoos', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : fieldName === 'sign' ? (
                       <FiltroSigno
+                        value={field.value || ''}
                         onChange={(value) => form.setValue('sign', value)}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />

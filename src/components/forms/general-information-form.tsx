@@ -175,17 +175,18 @@ export function GeneralInformationForm() {
 
   // Carrega os dados do perfil ao montar o componente
   useEffect(() => {
-    if (userUID) {
-      console.log('Carregando dados para userUID:', userUID);
-      dispatch(fetchProfileData());
-    } else {
-      console.error('userUID está indefinido - verifique a autenticação');
+    console.log('Estado inicial - isLoggedIn:', isLoggedIn, 'userUID:', userUID);
+    if (!isLoggedIn || !userUID) {
+      console.log('Aguardando autenticação ou userUID...');
+      return;
     }
-  }, [dispatch, userUID]);
+    console.log('Carregando dados para userUID:', userUID);
+    dispatch(fetchProfileData());
+  }, [dispatch, userUID, isLoggedIn]);
 
   // Sincroniza o formulário com o Redux em tempo real
   useEffect(() => {
-    console.log('Sincronizando formulário com Redux:', reduxProfile);
+    console.log('Estado do Redux:', reduxProfile);
     form.reset({
       name: reduxProfile.nome || '',
       age: reduxProfile.idade ? String(reduxProfile.idade) : '',
@@ -214,6 +215,7 @@ export function GeneralInformationForm() {
         hotels: reduxProfile.attends?.hotels || false,
       },
     });
+    console.log('Valores do formulário após reset:', form.getValues());
   }, [reduxProfile, form]);
 
   const fetchSuggestions = async (query: string) => {
@@ -379,10 +381,10 @@ export function GeneralInformationForm() {
           );
         }
         return null;
-      case 'origin':
-        return <FiltroOrigem value={field.value} onChange={field.onChange} />;
       case 'height':
         return <FiltroAltura value={field.value} onChange={field.onChange} />;
+      case 'origin':
+        return <FiltroOrigem value={field.value} onChange={field.onChange} />;
       case 'breasts':
         return <FiltroMamas value={field.value} onChange={field.onChange} />;
       case 'body':
@@ -446,10 +448,10 @@ export function GeneralInformationForm() {
     const category = categories.find((cat) => cat.id === activeTab);
     if (!category) return null;
 
-    // Define as classes de grid dinamicamente com base na aba ativa
-    const gridClass = activeTab === 'description'
-      ? 'grid grid-cols-1 md:grid-cols-1 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl'
-      : 'grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl';
+    const gridClass =
+      activeTab === 'description'
+        ? 'grid grid-cols-1 md:grid-cols-1 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl'
+        : 'grid grid-cols-1 md:grid-cols-2 gap-6 border border-1 border-pink-100 p-4 bg-pink-50 dark:bg-[#100007] dark:border-gray-900 bg-opacity-25 rounded-2xl';
 
     return (
       <div className="bg-opacity-40 rounded-3xl p-6">
@@ -461,9 +463,7 @@ export function GeneralInformationForm() {
               name={fieldName}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md font-medium text-gray-400">
-                    {t(`input.${fieldName}`) || fieldName}
-                  </FormLabel>
+              
                   <FormControl>{renderField(fieldName, field)}</FormControl>
                   <FormMessage className="text-red-500" />
                 </FormItem>
@@ -505,13 +505,15 @@ export function GeneralInformationForm() {
     onClick: () => void;
   }) => (
     <button
-      onClick={onClick}
-      className={`py-3 px-4 text-left transition-colors focus:outline-none border dark:border-b-gray-800 dark:border-opacity-50 ${
-        isActive ? 'text-darkpink border-l-2 border-l-darkpink font-medium' : 'text-gray-600 hover:text-darkpink'
-      }`}
-    >
-      {title}
-    </button>
+    onClick={onClick}
+    className={`py-3 px-4 text-left transition-colors focus:outline-none border-b-2 dark:border-b-gray-800 dark:border-opacity-50 dark:[#281a20] border-gray-200 ${
+      isActive
+        ? 'text-darkpink border-l-2 border-l-darkpink font-medium'
+        : 'text-gray-600 hover:text-darkpink'
+    }`}
+  >
+    {title}
+  </button>
   );
 
   if (loading) {
@@ -561,6 +563,7 @@ export function GeneralInformationForm() {
             <div className="flex-1">{getActiveCategoryContent()}</div>
           </div>
           <div className="md:hidden">
+            
             <div className="flex border-b bg-pink-400 overflow-x-auto">
               {categories.map((category) => (
                 <button

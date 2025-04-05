@@ -5,48 +5,44 @@
     "stories": "Stories",
     "filters": "Filters",
     "search": "Search...",
-    "searchBar": "Search...",
     "login": "Login",
-    "register": "Sign Up",
+    "searchBar": "Search...",
+    "register": "Register",
     "myAccount": "My Account",
     "settings": "Settings",
-    "logout": "Log out",
+    "logout": "Logout",
     "FR": "French",
     "EN": "English",
     "PT": "Portuguese"
   },
-  "Footer": {
-    "services_description": "Discover the best escort services in the main regions of Portugal.",
-    "quick_links_title": "QUICK LINKS",
-    "escort_lisboa": "Escort in Lisbon",
-    "escort_porto": "Escort in Oporto",
-    "escort_braga": "Escort in Braga",
-    "escort_faro": "Escort in Faro",
-    "escort_madeira": "Escort in Madeira",
-    "top_categories_title": "TOP CATEGORIES",
-    "vip_escorts": "VIP Escorts",
-    "bdsm": "BDSM",
-    "salons": "Salons",
+
+  "footer": {
+    "home": "Home",
+    "escorts": "Escorts",
     "stories": "Stories",
-    "erotic_massage": "Erotic Massage",
-    "about_title": "ABOUT",
-    "faq": "FAQ",
-    "dmca": "DMCA",
-    "report": "Report",
-    "terms_conditions": "Terms and Conditions",
-    "privacy_policy": "Privacy Policy",
-    "xgirl_history": "The Story of XGirl",
+    "createAd": "Create Ad",
+    "myAccount": "My Account",
+    "payments": "Payments",
     "contact": "Contact",
-    "join_us": "Join Us",
-    "disclaimer": "This website is an advertising and informational resource and, as such, has no connection or responsibility with the sites or individuals mentioned here. We only sell advertising spaces, we are not an escort agency and are in no way involved in escort or prostitution activities. We assume no responsibility for the content or actions of third-party websites or individuals that you may access through links, emails, or phone contacts on this portal.",
-    "copyright": "© 2025 XGirl. All rights reserved."
+    "about": "About Us",
+    "blog": "Blog",
+    "newsletter": "Get Updates",
+    "subscribe": "Subscribe",
+    "noSpam": "No spam, just updates!",
+    "explore": "Explore",
+    "advertisers": "Advertisers",
+    "support": "Support",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions",
+    "cookies": "Cookie Policy",
+    "manageCookies": "Manage Cookies"
   },
 
   "dashboard": {
-    "escort_title_en": "Escort Girls and Erotic Masseuses in Portugal",
-    "meta_description": "Discover the best escort girls and erotic masseuses in Portugal. Explore our featured ads and news.",
-    "meta_keywords": "escort girls, erotic masseuses, ads, Portugal, services",
-    "meta_og_description": "Find the best escort girls and erotic masseuses in Portugal. Check out our ads and updates.",
+    "escort_title_en": "Escorts and Erotic Masseuses in Portugal",
+    "meta_description": "Discover the best escorts and erotic masseuses in Portugal.",
+    "meta_keywords": "escorts, erotic masseuses, ads, Portugal, services",
+    "meta_og_description": "Find the best escorts and erotic masseuses in Portugal. Check out our ads and updates.",
     "featured_ads": "Featured Ads",
     "search_area": "Search in Your Area",
     "news": "News"
@@ -54,8 +50,8 @@
 
   "escort": {
     "title": "Luxury Escorts and Erotic Masseuses in Portugal",
-    "subtitle": "Discover the best professionals from all over the country",
-    "search_title": "Search for an Escort",
+    "subtitle": "Meet the best professionals across the country",
+    "search_title": "Search Escort",
     "select_district": "District",
     "search_placeholder": "Search by name or tag...",
     "previous_page": "Previous",
@@ -64,148 +60,161 @@
   },
 
   "storyPage": {
-    "titleStory": "Escort Girls, Erotic Masseuses and Luxury Companions in Portugal",
+    "titleStory": "Escorts, Erotic Masseuses, and Luxury Escorts in Portugal",
     "latest_stories": "Latest Stories"
   },
 
   "profile": {
     "previous": "Previous",
     "next": "Next",
-    "tariffs_starting_from": "Tariffs starting from",
+    "tariffs_starting_from": "Rates starting from ",
     "call_to": "Call {{nome}}",
-    "share_profile_of": "Share the Profile of {{nome}}",
+    "share_profile_of": "Share {{nome}}'s Profile",
     "share_by_email": "Share by Email",
     "copy_link": "Copy Link",
     "link_copied": "Link copied!",
     "certified_profile": "Certified Profile",
     "certified": "Certified",
-    "certified_description_1": "A certified profile means the photos were validated by a moderator from the {{team}} team and match reality.",
-    "certified_description_2": "Beyond human moderation, an automatic system analyzes all photos from certified profiles to ensure they do not belong to someone else on the internet.",
+    "certified_description_1": "A certified profile means the photos have been validated by a moderator from the {{team}} team and match reality.",
+    "certified_description_2": "In addition to human validation, an automated system analyzes all photos of certified profiles to ensure they don’t belong to someone else online.",
     "certified_satisfaction": "Certified profile = 100% satisfied encounter.",
     "time_elapsed": {
       "more_than_48_hours": "More than 48 hours ago",
       "minutes_ago": "{{minutes}} minute{{plural}} ago",
       "hours_and_minutes_ago": "{{hours}} hour{{hoursPlural}} {{minutes}} minute{{minutesPlural}} ago",
-      "indeterminate": "Time indeterminate"
+      "indeterminate": "Indeterminate time"
     },
     "call_me": "Call me",
-    "share_profile": "Share the Profile",
-    "stories_of": "Stories of {{name}}",
+    "share_profile": "Share Profile",
+    "stories_of": "{{name}}'s Stories",
     "description": "Description",
-    "photos_of": "Photos of {{name}}",
+    "photos_of": "{{name}}'s Photos",
     "loading": "Loading...",
-    "not_certified": "Not Certified",
+    "not_certified": "Not certified",
     "video_not_supported": "Your browser does not support the video element.",
     "about": "About {{name}}",
-    "rates": "Rates:",
-
     "services_provided": "Services Provided",
     "languages": "Languages",
     "accepts": "Accepts:",
     "no_payment_methods_selected": "No payment methods selected.",
+    "rates": "Rates:",
     "comments": "Comments",
     "no_comments_yet": "No comments yet.",
     "anonymous": "Anonymous",
     "leave_comment": "Leave your comment",
     "write_comment_placeholder": "Write your comment here...",
-    "send_comment": "Send Comment",
-
-    "linguas": {
-      "portuguese": "Português",
-      "english": "Inglês",
-      "french": "Francês",
-      "spanish": "Espanhol",
-      "german": "Alemão",
-      "italian": "Italiano",
-      "russian": "Russo",
-      "arabic": "Árabe"
-    },
-    "servico": {
-      "69": "69",
-      "Anulingus Activo": "Active Anulingus",
-      "Anulingus Passivo": "Passive Anulingus",
-      "Champagne Dourado Activo": "Golden Champagne Active",
-      "Champagne Dourado Passivo": "Golden Champagne Passive",
-      "Atende Casais": "Accepts Couples",
-      "Dedos Anal": "Anal Fingers",
-      "Dedos Vagina": "Vagina Fingers",
-      "Dominacao soft": "Soft Domination",
-      "Dupla Penetracao": "Double Penetration",
-      "Duo": "Duo",
-      "Ejaculacao Corporal": "Body Ejaculation",
-      "Ejacular na Facial": "Ejaculate on Face",
-      "Multipla Ejeculacao": "Multiple Ejaculations",
-      "Face Sitting": "Face Sitting",
-      "Fetichismo": "Fetishism",
-      "Beijo Portugals": "French Kiss",
-      "Garganta Profunda": "Deep Throat",
-      "Jogos Eroticos": "Erotic Games",
-      "Lingerie": "Lingerie",
-      "Massagem Erotica": "Erotic Massage",
-      "Masturbacao": "Masturbation",
-      "Experiencia Porn Star": "Porn Star Experience",
-      "Servico VIP": "VIP Service",
-      "Sexo em Grupo": "Group Sex (Orgies)",
-      "Sex Toys": "Sex Toys",
-      "Sodomia Activa": "Active Sodomy",
-      "Sodomia Passiva": "Passive Sodomy",
-      "Striptease": "Striptease"
-    }
+    "send_comment": "Send comment"
   },
 
+  "servico": {
+    "69": "69",
+    "AnulingusActivo": "Active Analingus",
+    "AnulingusPassivo": "Passive Analingus",
+    "ChampagneDouradoActivo": "Active Golden Shower",
+    "ChampagneDouradoPassivo": "Passive Golden Shower",
+    "AtendeCasais": "Attends Couples",
+    "DedosAnal": "Anal Fingering",
+    "DedosVagina": "Vaginal Fingering",
+    "DominacaoSoft": "Soft Domination",
+    "DuplaPenetracao": "Double Penetration",
+    "Duo": "Duo",
+    "EjaculacaoCorporal": "Body Ejaculation",
+    "EjacularNaFacial": "Facial Ejaculation",
+    "MultiplaEjaculacao": "Multiple Ejaculation",
+    "FaceSitting": "Face Sitting",
+    "Fetichismo": "Fetishism",
+    "BeijoFrances": "French Kiss",
+    "GargantaProfunda": "Deep Throat",
+    "JogosEroticos": "Erotic Games",
+    "Lingerie": "Lingerie",
+    "MassagemErotica": "Erotic Massage",
+    "Masturbacao": "Masturbation",
+    "ExperienciaPornStar": "Porn Star Experience",
+    "ServicoVIP": "VIP Service",
+    "SexoEmGrupo": "Group Sex",
+    "SexToys": "Sex Toys",
+    "SodomiaActiva": "Active Sodomy",
+    "SodomiaPassiva": "Passive Sodomy",
+    "Striptease": "Striptease",
+    "JogoDePapeis": "Roleplay",
+    "FetichePorPes": "Foot Fetish",
+    "MassagemTantrica": "Tantric Massage",
+    "BDSM": "BDSM",
+    "BanhoJuntos": "Shower Together",
+    "ExperienciaNamorada": "Girlfriend Experience",
+    "ServicoWebcam": "Webcam Service",
+    "Trio": "Threesome",
+    "DancaErotica": "Erotic Dance",
+    "MassagemProstatica": "Prostate Massage",
+    "Spanking": "Spanking",
+    "Cuckold": "Cuckold",
+    "Voyeurismo": "Voyeurism",
+    "SexoTelefonico": "Phone Sex",
+    "Fisting": "Fisting",
+    "Swing": "Swinging"
+  },
 
-    "loginPage": {
-      "title": "Login",
-      "subtitle": "Enter with your credentials",
-      "description": "Log in to X-Girl to discover unique and confidential experiences."
-    },
-    "login": {
-      "email": "Email",
-      "password": "Password",
-      "email_placeholder": "Enter your email",
-      "password_placeholder": "Enter your password",
-      "login_button": "Log In",
-      "register_link": "Don't have an account? Register here",
-      "email_label": "Email",
-      "password_label": "Password",
-      "success_message": "Login successful!",
-      "error_message": "Error logging in. Check your credentials.",
-      "forgot_password": "Forgot your password?"
-    },
+  "loginPage": {
+    "title": "Login",
+    "subtitle": "Enter with your credentials",
+    "description": "Log in to X-Girl to discover unique and confidential experiences."
+  },
 
-  "RegisterPage": {
-    "title": "XGirl.fr is the reference for exclusive escort listings in Portugal",
-    "description_1": "Discover thousands of escorts on XGirl.fr",
-    "description_2": "The registration process is simple and quick.",
-    "description_3": "Increase your income significantly! Attract between 30 and 450 clients every month.",
-    "description_4": "Enjoy featured listings every month at no additional cost.",
-    "advantages_link": "Click here to see all the benefits",
-    "create_account_title": "Create a New Account",
-    "email_label": "Email*",
+  "login": {
+    "email": "Email",
+    "password": "Password",
     "email_placeholder": "Enter your email",
-    "password_label": "Password*",
     "password_placeholder": "Enter your password",
-    "confirm_password_label": "Confirm your password*",
-    "confirm_password_placeholder": "Confirm your password",
-    "register_button": "Create your account",
+    "login_button": "Login",
+    "register_link": "Don’t have an account? Register here",
+    "email_label": "Email",
+    "password_label": "Password",
+    "success_message": "Login successful!",
+    "error_message": "Login error. Please check your credentials.",
+    "forgot_password": "Forgot your password?"
+  },
+
+  "register": {
+    "title": "Get Started Now",
+    "welcome": "Become a Star",
+    "subtitle": "Register on Portugal’s most modern erotic classifieds site and reach new heights.",
+    "email_label": "Email",
+    "email_placeholder": "Enter your email",
+    "password_label": "Password",
+    "password_placeholder": "Create a secure password",
+    "confirm_password_label": "Confirm Password",
+    "confirm_password_placeholder": "Repeat your password",
+    "option_label": "Account Type",
+    "register_button": "Join the Game",
+    "benefit1": "More visibility with a dedicated and sexy profile page",
+    "benefit2": "Increase your contacts and attract more clients",
+    "benefit3": "Next.js technology: fast, modern, and ahead of the competition",
+    "benefit4": "Youthful, intuitive design that catches the eye",
+    "benefit5": "Premium benefits: stand out as a queen",
+    "benefit6": "Exclusive tools to manage and shine",
+    "benefit7": "Detailed statistics to maximize your earnings",
+    "passwordMismatch": "Passwords do not match",
+    "error": "Registration error",
     "viewPlans": "View Plans",
     "howItWorks": "How It Works"
   },
+
   "contact": {
     "title": "Contact",
-    "subtitle": "Have a question? Send us a message, and we will respond within 24 hours.",
+    "subtitle": "Have a question? Send us a message and we’ll reply within 24 hours.",
     "email_label": "Your email",
-    "email_placeholder": "youremail@example.com",
+    "email_placeholder": "yourname@example.com",
     "subject_label": "Subject",
     "subject_placeholder": "How can we help you?",
     "message_label": "Your message",
     "message_placeholder": "Leave your message...",
-    "send_button": "Send Message",
-    "thank_you_message": "Thank you for reaching out to XGirl.pt!"
+    "send_button": "Send message",
+    "thank_you_message": "Thank you for contacting XGirl.pt!"
   },
+
   "MyProfileBar": {
     "info": "Information",
-    "other_info": "Other Info",
+    "other_info": "Other Information",
     "change_photos": "Change Photos",
     "my_stories": "My Stories",
     "settings": "Settings",
@@ -215,29 +224,24 @@
   "filter": {
     "age": "Age",
     "select_age": "Select age",
-
     "height": "Height",
     "select_height": "Select height",
-
-    "hair_color": "Hair Color",
+    "hair_color": "Hair color",
     "select_hair_color": "Select hair color",
     "black": "Black",
     "blonde": "Blonde",
     "brown": "Brown",
     "red": "Red",
     "other": "Other",
-
     "body": "Body",
     "select_body": "Select body type",
-
     "normal": "Normal",
     "athletic": "Athletic",
     "slim": "Slim",
     "curvy": "Curvy",
     "xxl": "XXL",
-
     "filter": {
-      "eye_color": "Eye Color",
+      "eye_color": "Eye color",
       "select_eye_color": "Select eye color"
     },
     "eyes": {
@@ -248,89 +252,110 @@
     }
   },
 
-    "inputRegister": {
-      "name": "Name",
-      "age": "Age",
-      "phone": "Phone",
-      "city": "City"
-    },
+  "inputRegister": {
+    "name": "Name",
+    "age": "Age",
+    "phone": "Phone",
+    "city": "City"
+  },
 
   "filterB": {
     "breasts": "Breasts",
     "select_breasts": "Select breast type",
-    "breast_size": "Breast Size",
-    "select_breast_size": "Select a size"
+    "breast_size": "Breast size",
+    "select_breast_size": "Select size"
   },
+
   "breasts": {
     "natural": "Natural",
     "silicone": "Silicone"
   },
+
   "breast_size": {
     "small": "Small Breasts (A-B)",
     "large": "Large Breasts (C-D)",
     "xxl": "XXL Breasts (E+)"
   },
 
-  "filterP": {
-    "hair_removal": "Body Hair",
-    "select_hair_removal": "Select hair preference"
+  "filterPelos": {
+    "hair_removal": "Hair Removal",
+    "select_hair_removal": "Select preference"
   },
-  "hair_removal": {
-    "smooth": "Smooth",
-    "partially_smooth": "Partially Smooth",
+
+  "hair_removalPelos": {
+    "smooth": "Fully Shaved",
+    "partially_smooth": "Partially Shaved",
     "natural": "Natural"
+  },
+
+  "messagesPelos": {
+    "pelosUpdated": "Body hair updated successfully!",
+    "pelosUpdateError": "Error updating body hair."
   },
 
   "filterT": {
     "tattoos": "Tattoos",
     "select_tattoos": "Select tattoo preference"
   },
+
   "tattoos": {
     "with_tattoos": "With Tattoos",
     "without_tattoos": "Without Tattoos"
   },
 
- "filterTa": {
-  "signo": "Sign"
-},
-"zodiac": {
-  "aries": "Aries",
-  "taurus": "Taurus",
-  "gemini": "Gemini",
-  "cancer": "Cancer",
-  "leo": "Leo",
-  "virgo": "Virgo",
-  "libra": "Libra",
-  "scorpio": "Scorpio",
-  "sagittarius": "Sagittarius",
-  "capricorn": "Capricorn",
-  "aquarius": "Aquarius",
-  "pisces": "Pisces"
-},
-"messages": {
-  "signoUpdated": "Sign updated successfully!",
-  "signoUpdateError": "Error updating the sign."
-},
+  "filterS": {
+    "zodiac": "Zodiac Sign",
+    "select_zodiac": "Select zodiac sign"
+  },
 
+  "filterTa": {
+    "signo": "Sign"
+  },
 
+  "zodiac": {
+    "aries": "Aries",
+    "taurus": "Taurus",
+    "gemini": "Gemini",
+    "cancer": "Cancer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Scorpio",
+    "sagittarius": "Sagittarius",
+    "capricorn": "Capricorn",
+    "aquarius": "Aquarius",
+    "pisces": "Pisces"
+  },
+
+  "messages": {
+    "signoUpdated": "Sign updated successfully!",
+    "signoUpdateError": "Error updating sign."
+  },
 
   "filterTarifa": {
     "tarifa": "Rate",
     "select_tarifa": "Select a rate"
   },
+
   "tarifa": {
-    "50": "Starting from 50€",
-    "100": "Starting from 100€",
-    "200": "Starting from 200€",
-    "500": "Starting from 500€",
-    "more_than_500": "+ 500€"
+    "50": "From €50",
+    "100": "From €100",
+    "200": "From €200",
+    "500": "From €500",
+    "more_than_500": "+ €500"
   },
 
+  "messagesTarifa": {
+    "tarifaUpdated": "Rate updated successfully!",
+    "tarifaUpdateError": "Error updating rate."
+  },
 
   "filter.origin": "Origin",
-  "filterTa.signo": "Zoodiac",
+  "filter.select_origin": "Select an Origin",
+  "filterTa.signo": "Sign",
+  "filterTa.tarifa": "Rate",
 
-"filterCorpo": {
+  "filterCorpo": {
     "body": "Body",
     "select_body": "Select body type",
     "normal": "Normal",
@@ -339,62 +364,67 @@
     "curvy": "Curvy",
     "xxl": "XXL"
   },
+
   "messagesCorpo": {
     "corpoUpdated": "Body updated successfully!",
-    "corpoUpdateError": "Error updating the body."
+    "corpoUpdateError": "Error updating body."
   },
-  
-    "filterO": {
-      "origin": "Origin",
-      "select_origin": "Select origin"
-    },
-    "origin": {
-      "portuguese": "Portuguese",
-      "brazilian": "Brazilian",
-      "spanish": "Spanish",
-      "african": "African",
-      "latin": "Latin",
-      "oriental": "Oriental"
-    },
-    "messagesOrigin": {
-      "origemUpdated": "Origin updated successfully!",
-      "origemUpdateError": "Error updating the origin."
-    },
 
+  "filterO": {
+    "origin": "Origin",
+    "select_origin": "Select origin"
+  },
 
-    
-      "filterAltura": {
-        "height": "Height",
-        "select_height": "Select height"
-      },
-      "height": {
-        "less_than_160": "Less than 1.60m",
-        "around_165": "Around 1.65m",
-        "more_than_170": "More than 1.70m"
-      },
-      "messagesAltura": {
-        "alturaUpdated": "Height updated successfully!",
-        "alturaUpdateError": "Error updating the height."
-      },
+  "origin": {
+    "portuguese": "Portuguese",
+    "brazilian": "Brazilian",
+    "spanish": "Spanish",
+    "african": "African",
+    "latin": "Latin",
+    "oriental": "Oriental"
+  },
 
-      
-        "filterBreast": {
-          "breasts": "Breasts",
-          "select_breasts": "Select breasts"
-        },
-        "breastsFiltro": {
-          "natural": "Natural",
-          "silicone": "Silicone"
-        },
-        "messagesbreast": {
-          "mamasUpdated": "Breasts updated successfully!",
-          "mamasUpdateError": "Error updating the breasts."
-        },
+  "messagesOrigin": {
+    "origemUpdated": "Origin updated successfully!",
+    "origemUpdateError": "Error updating origin."
+  },
 
-"filterCabelo": {
+  "filterAltura": {
+    "height": "Height",
+    "select_height": "Select height"
+  },
+
+  "height": {
+    "less_than_160": "Less than 1.60m",
+    "around_165": "Around 1.65m",
+    "more_than_170": "More than 1.70m"
+  },
+
+  "messagesAltura": {
+    "alturaUpdated": "Height updated successfully!",
+    "alturaUpdateError": "Error updating height."
+  },
+
+  "filterBreast": {
+    "breasts": "Breasts",
+    "select_breasts": "Select breasts"
+  },
+
+  "breastsFiltro": {
+    "natural": "Natural",
+    "silicone": "Silicone"
+  },
+
+  "messagesbreast": {
+    "mamasUpdated": "Breasts updated successfully!",
+    "mamasUpdateError": "Error updating breasts."
+  },
+
+  "filterCabelo": {
     "hair_color": "Hair color",
     "select_hair_color": "Select hair color"
   },
+
   "hair": {
     "black": "Black",
     "blonde": "Blonde",
@@ -402,146 +432,137 @@
     "red": "Red",
     "other": "Other"
   },
+
   "messagesCabelo": {
     "cabeloUpdated": "Hair color updated successfully!",
-    "cabeloUpdateError": "Error updating the hair color."
+    "cabeloUpdateError": "Error updating hair color."
   },
-
 
   "filterOlhos": {
     "eye_color": "Eye color",
     "select_eye_color": "Select eye color"
   },
+
   "eyes": {
     "brown": "Brown",
     "black": "Black",
     "blue": "Blue",
     "green": "Green"
   },
+
   "messagesOlhos": {
     "olhosUpdated": "Eye color updated successfully!",
-    "olhosUpdateError": "Error updating the eye color."
+    "olhosUpdateError": "Error updating eye color."
   },
 
-  
-    "filterBreastsize": {
-      "breasts": "Breasts",
-      "select_breasts": "Select breast type",
-      "breast_size": "Breast Size",
-      "select_breast_size": "Select breast size"
-    },
-    "Breast_size": {
-      "small": "Small Breasts (A-B)",
-      "large": "Large Breasts (C-D)",
-      "xxl": "XXL Breasts (E+)"
-    },
-    "messagesBreastSize": {
-      "seiosUpdated": "Breast size updated successfully!",
-      "seiosUpdateError": "Error updating the breast size."
-    },
+  "filterBreastsize": {
+    "breasts": "Breasts",
+    "select_breasts": "Select breast type",
+    "breast_size": "Breast size",
+    "select_breast_size": "Select breast size"
+  },
 
+  "Breast_size": {
+    "small": "Small (A-B)",
+    "large": "Large (C-D)",
+    "xxl": "XXL (E+)"
+  },
 
-      "filterPelos": {
-        "hair_removal": "Body Hair",
-        "select_hair_removal": "Select hair preference"
-      },
-      "hair_removalPelos": {
-        "smooth": "Smooth",
-        "partially_smooth": "Partially Smooth",
-        "natural": "Natural"
-      },
-      "messagesPelos": {
-        "pelosUpdated": "Body hair updated successfully!",
-        "pelosUpdateError": "Error updating the body hair."
-      },
+  "messagesBreastSize": {
+    "seiosUpdated": "Breast size updated successfully!",
+    "seiosUpdateError": "Error updating breast size."
+  },
 
-
-      "photos": {
+  "photos": {
     "title": "Photos",
     "profilePhotos": "Profile Photos",
     "socialMediaPhotos": "Social Media Photos",
     "uploadPhoto": "Upload Your Photo",
-    "socialMediaMessage": "Add your Instagram/Twitter photo to show them the real you.",
+    "socialMediaMessage": "Add your Instagram/Twitter photo to show the real you.",
     "locked": "Locked",
-    "lockedMessage": "Buy subscription now to add up to 10 photos of yours.",
+    "lockedMessage": "Purchase a subscription now to add up to 10 photos of yourself.",
     "buyNow": "Buy Now",
     "verifyTitle": "Get Verified Today",
     "verifyMessage": "Verification helps build trust with other users. To get verified, please upload a clear photo of yourself holding a government-issued ID.",
     "verifyNow": "Verify Now"
   },
+
   "buttonSave": {
     "discard": "Discard",
     "saveChanges": "Save Changes"
   },
+
   "messagesPhoto": {
     "photoUploaded": "Photo uploaded successfully!",
     "photoDeleted": "Photo deleted successfully!",
-    "uploadError": "Error uploading the photo.",
-    "deleteError": "Error deleting the photo.",
+    "uploadError": "Error uploading photo.",
+    "deleteError": "Error deleting photo.",
     "changesSaved": "Changes saved successfully!",
     "changesDiscarded": "Changes discarded."
   },
-
 
   "stories": {
     "title": "Stories",
     "profileStories": "Profile Stories",
     "addStory": "Add Your Story",
     "locked": "Locked",
-    "lockedMessage": "Buy subscription now to add up to 10 stories of yours.",
+    "lockedMessage": "Purchase a subscription now to add up to 10 stories of yourself.",
     "buyNow": "Buy Now"
   },
+
   "buttonSaveStories": {
     "discard": "Discard",
     "saveChanges": "Save Changes"
   },
+
   "messagesStories": {
     "storyUploaded": "Story uploaded successfully!",
     "storyDeleted": "Story deleted successfully!",
-    "uploadError": "Error uploading the story.",
-    "deleteError": "Error deleting the story.",
-    "fetchError": "Error fetching the stories.",
+    "uploadError": "Error uploading story.",
+    "deleteError": "Error deleting story.",
+    "fetchError": "Error fetching stories.",
     "changesSaved": "Changes saved successfully!",
     "changesDiscarded": "Changes discarded."
   },
-
 
   "accountSettings": {
     "title": "Account Settings",
     "emailAddress": "Email Address",
     "currentEmail": "Current email address",
     "verification": "Verification",
-    "verificationMessage": "If you did not receive the verification email, you can request a new one",
+    "verificationMessage": "If you haven’t received the verification email, you can request a new one",
     "notifications": "Notifications",
     "notifyMessages": "Receive notifications about new messages and updates",
     "notifyOffers": "Receive special offers and promotions",
     "notifyReminders": "Receive reminders about your subscription and payment",
     "passwordSettings": "Password Settings",
     "accountStatus": "Account Status",
-    "suspendAccount": "Suspend Account Temporarily",
+    "suspendAccount": "Temporarily Suspend Account",
     "suspendMessage": "You can reactivate your account at any time",
-    "suspendConfirmMessage": "Are you sure you want to suspend your account? You can reactivate it at any time",
+    "suspendConfirmMessage": "Are you sure you want to suspend your account? You can reactivate it anytime",
     "reactivateAccount": "Reactivate Account",
     "reactivateMessage": "Your account is suspended. Click to reactivate",
     "reactivateConfirmMessage": "Are you sure you want to reactivate your account?",
-    "deleteAccount": "Delete Account Definitely",
+    "deleteAccount": "Permanently Delete Account",
     "deleteMessage": "This action is irreversible. All data will be permanently removed",
     "deleteConfirmTitle": "Are you sure you want to delete your account?",
     "deleteConfirmMessage": "All your data will be permanently removed"
   },
+
   "password": {
     "current": "Current Password",
     "new": "New Password",
     "confirm": "Confirm New Password",
     "currentRequired": "Current password is required",
-    "minLength": "Password must be at least 8 characters",
+    "minLength": "Password must be at least 8 characters long",
     "confirmRequired": "Please confirm your password",
-    "matchError": "Passwords don't match",
+    "matchError": "Passwords do not match",
     "tipsTitle": "Tips for creating a strong password:",
     "tip1": "Use at least 8 characters",
     "tip2": "Include uppercase and lowercase letters",
     "tip3": "Add numbers and symbols"
   },
+
   "buttonSettings": {
     "update": "Update",
     "resendVerification": "Resend Verification",
@@ -550,12 +571,13 @@
     "reactivate": "Reactivate",
     "deleteAccount": "Delete Account"
   },
+
   "messagesSettings": {
     "passwordChanged": "Password changed successfully!",
     "passwordChangeError": "Error changing password",
     "accountDeleted": "Your account has been permanently deleted successfully",
     "accountSuspended": "Your account has been temporarily suspended successfully",
-    "accountReactivated": "Your account has been successfully reactivated",
+    "accountReactivated": "Your account has been reactivated successfully",
     "fetchError": "Error fetching account status",
     "statusError": "Error updating status",
     "statusChangeError": "Error changing account status",
@@ -565,8 +587,9 @@
 
   "profileR2": {
     "createTitle": "Create Your Profile",
-    "createSubtitle": "Complete the information to start on"
+    "createSubtitle": "Fill in the information to get started on"
   },
+
   "input": {
     "name": "Name*",
     "namePlaceholder": "Enter your name",
@@ -575,35 +598,44 @@
     "phone": "Phone Number*",
     "phonePlaceholder": "Your phone",
     "chooseOption": "Choose an option",
-    "useFullAddress": "Use Full Address",
+    "useFullAddress": "Use full address",
     "fullAddress": "Full Address",
-    "fullAddressPlaceholder": "Enter full address",
+    "fullAddressPlaceholder": "Enter your full address",
     "city": "City",
     "cityPlaceholder": "Enter your city",
     "district": "District",
-    "districtPlaceholder": "Enter your district"
+    "districtPlaceholder": "Enter your region",
+    "address": "Full Address",
+    "useaddress": "Use Address"
   },
+
   "button": {
     "back": "Back",
-    "createAccount": "Create Account"
+    "next": "Next"
   },
+
   "contactData": {
-    "title": "General Data",
-    "subtitle": "Update your data anytime"
+    "title": "General Information",
+    "subtitle": "Edit your information at any time"
   },
+
   "paymentMethods": {
     "title": "Payment Methods"
   },
+
   "languages": {
     "title": "Languages"
   },
+
   "services": {
     "title": "Services"
   },
+
   "description": {
     "title": "Description",
-    "placeholder": "Write the description here..."
+    "placeholder": "Write your description here..."
   },
+
   "button2": {
     "back": "Back",
     "continue": "Continue"
@@ -614,58 +646,95 @@
     "next": "Next"
   },
 
-
-    
-      "TermosPage": {
-        "title": "Terms and Conditions",
-        "section1": {
-          "title": "1. Introduction",
-          "content": "Welcome to XGirl.fr, a platform for adult entertainment service listings. By accessing and using our website, you agree to these Terms and Conditions. If you do not agree with any of the terms, we ask that you do not use our services."
-        },
-        "section2": {
-          "title": "2. Age Requirements",
-          "content": "This website is strictly prohibited for individuals under the age of 18 or the legal age of majority in your country of residence. By using the site, you declare that you are of legal age and take full responsibility for accessing the content."
-        },
-        "section3": {
-          "title": "3. Permitted Use",
-          "content": "3.1. The site is intended exclusively for the publication of adult entertainment service advertisements that comply with the current legislation of the European Union and the advertiser's country.\n3.2. The publication of any advertisement involving illegal activities, sexual exploitation, human trafficking, child pornography, coercion, or any other practice contrary to the law is prohibited.\n3.3. The user is responsible for the content of the advertisements and must ensure that all information provided is true and does not infringe the rights of third parties."
-        },
-        "section4": {
-          "title": "4. Responsibility and Moderation",
-          "content": "4.1. XGirl.fr is not responsible for the content of advertisements published by users but reserves the right to remove or modify any advertisement that violates these Terms and Conditions.\n4.2. We have implemented moderation mechanisms to ensure that the advertisements published comply with the law and site policies."
-        },
-        "section5": {
-          "title": "5. Data Protection and Privacy",
-          "content": "5.1. The site adheres to the guidelines of the General Data Protection Regulation (GDPR) of the European Union.\n5.2. The personal information provided by users will be protected in accordance with our Privacy Policy and will not be shared with third parties without due consent."
-        },
-        "section6": {
-          "title": "6. Payments and Subscriptions",
-          "content": "6.1. Some site services may require payment. All financial transactions will be processed securely.\n6.2. In the event of subscription cancellation, no refunds will be issued for payments already made unless required by law."
-        },
-        "section7": {
-          "title": "7. Sanctions and Account Deletion",
-          "content": "7.1. XGirl.fr reserves the right to suspend or delete user accounts that violate these Terms and Conditions without prior notice.\n7.2. If you identify any illegal or irregular activity on the site, please contact our support team immediately."
-        },
-        "section8": {
-          "title": "8. Final Provisions",
-          "content": "8.1. These Terms and Conditions may be changed at any time. We recommend that users periodically review this document.\n8.2. Continued use of the site after changes to the Terms and Conditions constitutes acceptance of the modifications.",
-          "contact": "If you have any questions, please contact our support team at info@xgirl.fr."
-        }
-      },
-      "language": {
-        "es": "Spanish",
-        "pt": "Portuguese",
-        "ru": "Russian",
-        "en": "English",
-        "fr": "French",
-        "ar": "Arabic",
-        "de": "German",
-        "it": "Italian"
+  "terms": {
+    "title": "Terms and Conditions of Use",
+    "section1": {
+      "title": "1. Purpose",
+      "paragraph1": "This legal notice governs the use of the XGirl.pt website, owned by XGirl, LDA.",
+      "paragraph2": "Accessing and browsing the site automatically assigns the status of USER and implies full and unreserved acceptance of all conditions published in this legal notice.",
+      "paragraph3": "The SITE OWNER may modify these conditions without prior notice.",
+      "paragraph4": "It is recommended that the USER carefully read this content before using the services and information provided by the site.",
+      "paragraph5": "The USER agrees to use the site in accordance with the law and this legal notice."
     },
-    "MySettings": {
+    "section2": {
+      "title": "2. Identification",
+      "paragraph1": "Legal name: XGirl.pt, LDA.",
+      "paragraph2": "Tax ID: 123456789",
+      "paragraph3": "Address: Rua da Liberdade, 123, 1st floor, Lisbon, Portugal.",
+      "paragraph4": "Contact email: info@xgirl.pt"
+    },
+    "section3": {
+      "title": "3. Communications",
+      "paragraph1": "The means of contact are:",
+      "paragraph2": "Phone: +351 910253456",
+      "paragraph3": "Email: info@xgirl.pt"
+    },
+    "section4": {
+      "title": "4. Access and Use Conditions",
+      "paragraph1": "Access to the site and its services is free of charge.",
+      "paragraph2": "The USER declares that all provided information is true and authentic.",
+      "paragraph3": "The USER agrees to properly use the site’s contents and services.",
+      "listItem1": "Disseminate illegal or discriminatory content.",
+      "listItem2": "Introduce viruses or harmful programs.",
+      "listItem3": "Attempt to access restricted areas of the site or third-party systems and extract unauthorized data.",
+      "listItem4": "Violate intellectual or industrial property rights.",
+      "listItem5": "Impersonate other users.",
+      "listItem6": "Distribute, reproduce, or modify content without express authorization."
+    }
+  },
+
+  "TermosPage": {
+    "title": "Terms and Conditions",
+    "section1": {
+      "title": "1. Introduction",
+      "content": "Welcome to XGirl.pt, a platform dedicated to adult entertainment service ads. By accessing and using our site, you accept these Terms and Conditions. If you do not agree with these terms, please do not use our services."
+    },
+    "section2": {
+      "title": "2. Age Conditions",
+      "content": "This site is strictly prohibited for individuals under 18 years of age or the legal age of majority in your country of residence. By using this site, you declare that you are of legal age and assume full responsibility for accessing the content."
+    },
+    "section3": {
+      "title": "3. Authorized Use",
+      "content": "3.1. The site is exclusively intended for posting adult entertainment service ads in compliance with applicable European Union and advertiser country legislation.\n3.2. Posting any ad involving illegal activities, sexual exploitation, human trafficking, child pornography, coercion, or any practice contrary to the law is prohibited.\n3.3. The user is responsible for the ad content and must ensure all provided information is truthful and does not infringe on third-party rights."
+    },
+    "section4": {
+      "title": "4. Liability and Moderation",
+      "content": "4.1. XGirl.pt is not responsible for the content of ads posted by users but reserves the right to remove or modify any ad that violates these Terms and Conditions.\n4.2. We implement moderation mechanisms to ensure posted ads comply with legislation and site policies."
+    },
+    "section5": {
+      "title": "5. Data Protection and Privacy",
+      "content": "5.1. The site follows the guidelines of the European Union General Data Protection Regulation (GDPR).\n5.2. Personal information provided by users will be protected according to our Privacy Policy and will not be shared with third parties without prior consent."
+    },
+    "section6": {
+      "title": "6. Payments and Subscriptions",
+      "content": "6.1. Some site services may be paid. All financial transactions will be processed securely.\n6.2. In case of subscription cancellation, no refunds will be issued for payments already made, except as required by law."
+    },
+    "section7": {
+      "title": "7. Sanctions and Account Removal",
+      "content": "7.1. XGirl.pt reserves the right to suspend or remove user accounts that violate these Terms and Conditions without prior notice.\n7.2. If you identify any illegal or irregular activity on the site, please contact our support team immediately."
+    },
+    "section8": {
+      "title": "8. Final Provisions",
+      "content": "8.1. These Terms and Conditions may be changed at any time. We recommend users review this document periodically.\n8.2. Continued use of the site after changes to the Terms and Conditions constitutes acceptance of the changes.",
+      "contact": "If you have any questions, contact our support team at info@xgirl.pt."
+    }
+  },
+
+  "language": {
+    "es": "Spanish",
+    "pt": "Portuguese",
+    "ru": "Russian",
+    "en": "English",
+    "fr": "French",
+    "ar": "Arabic",
+    "de": "German",
+    "it": "Italian"
+  },
+
+  "MySettings": {
     "home": "Home",
     "myAccount": "My Account",
-    "title": "My Account Settings",
+    "title": "My Account",
     "generalInformation": "General Information",
     "servicePreferences": "Service Preferences",
     "photos": "Photos",
@@ -673,30 +742,69 @@
     "myCard": "My Card",
     "myProfile": "My Profile"
   },
+
   "myCard": {
     "title": "My Card",
-    "stateInfo": "My current Tag",
+    "stateInfo": "My Current Tag",
     "currentTag": "My current tag",
-    "updateTag": "Update my Tag"
+    "updateTag": "Update My Tag"
   },
-"cookieConsent": {
-    "title": "We use cookies",
-    "message": "We use essential cookies for site functionality and optional analytics cookies (e.g., Google Analytics: _ga, _gid) to understand how you use our site. Choose which cookies to allow:",
+
+  "cookieConsent": {
+    "title": "Manage Your Cookie Preferences",
+    "message": "We use essential cookies for the operation of XGirl.pt and optional analytics cookies (e.g., Google Analytics: _ga, _gid) to improve your experience and understand how you use the site. Choose your preferences:",
     "essential": "Essential Cookies (always required)",
     "analytics": "Analytics Cookies (e.g., Google Analytics)",
     "decline": "Decline All",
-    "save": "Save",
-    "learnMore": "Learn more about our Privacy Policy"
+    "save": "Save Preferences",
+    "accept": "Accept All",
+    "learnMorePrivacy": "Privacy Policy",
+    "learnMoreCookies": "Cookie Policy"
   },
+
   "notFound": {
     "title": "Page Not Found",
-    "description": "Sorry, the page you are looking for does not exist.",
-    "backButton": "Back to Home"
+    "description": "Sorry, the page you’re looking for doesn’t exist.",
+    "backButton": "Back to homepage"
+  },
+
+  "time_elapsed": {
+    "more_than_48_hours": "More than 48 hours ago",
+    "ago": "Ago",
+    "hour": "hour",
+    "hours": "hours",
+    "minute": "minute",
+    "minutes": "minutes"
+  },
+
+  "publishAdBanner": {
+    "title": "Publish Your Ad Now!",
+    "description": "Post your ad for free on Your Desire. Portugal’s #1 erotic site",
+    "button": "Register Now"
+  },
+
+  "newestAdds": {
+    "title": "New Ads"
+  },
+
+  "mapSection": {
+    "title": "Looking for Company Nearby?",
+    "description": "Explore a range of options to find someone who matches your preferences and interests."
+  },
+
+  "featuredAds": {
+    "title": "Featured Ads"
+  },
+
+  "StoriesComponent": {
+    "title": "Latest Stories"
+  },
+
+  "heroSection": {
+    "badge": "The Best in Pleasure",
+    "title": {
+      "line1": "Sensual Encounters",
+      "line2": "in Portugal"
+    }
   }
-
-
-  }
-    
-  
-
-
+}

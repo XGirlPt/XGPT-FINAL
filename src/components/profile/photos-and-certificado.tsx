@@ -61,7 +61,7 @@ const PhotosAndCertificado: React.FC<PhotosAndCertificadoProps> = ({
   };
 
   return (
-    <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
+    <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none z-10">
       {hasStories && (
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">

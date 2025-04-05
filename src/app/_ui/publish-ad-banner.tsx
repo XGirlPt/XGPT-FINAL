@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/backend/lib/utils';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -70,6 +71,7 @@ const glowVariants = {
 
 export function PublishAdBanner() {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Hook para acessar traduções
 
   return (
     <motion.div
@@ -95,14 +97,14 @@ export function PublishAdBanner() {
           variants={childVariants}
           className="text-5xl text-white mb-4"
         >
-          Publish Your Ad Now!
+          {t('publishAdBanner.title')}
         </motion.h2>
 
         <motion.p
           variants={childVariants}
           className="text-white/90 text-lg mb-8 font-body"
         >
-          Post your ad for free on Seu Desire. Erotic site n1 in Portugal
+          {t('publishAdBanner.description')}
         </motion.p>
 
         <motion.div variants={buttonVariants}>
@@ -112,7 +114,7 @@ export function PublishAdBanner() {
               'bg-white text-gray-600 hover:bg-gray-100 dark:bg-pink-600 dark:text-white'
             )}
           >
-            Register Now
+            {t('publishAdBanner.button')}
           </Button>
         </motion.div>
       </motion.div>

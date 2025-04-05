@@ -9,6 +9,8 @@ import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt, FaPen } from 
 import { MdFiberManualRecord, MdVerified } from "react-icons/md";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "@/backend/database/supabase";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/backend/context/LanguageContext";
 
 interface Profile {
   nome: string;
@@ -100,6 +102,8 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
     [profiles]
   );
 
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   // Memoizar displayedProfiles (limite de 15 perfis)
   const displayedProfiles = useMemo(() => sortedProfiles.slice(0, 15), [sortedProfiles]);
 
@@ -137,8 +141,8 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
       variants={containerVariants}
     >
       <motion.div className="flex items-center justify-between mb-4" variants={titleVariants}>
-        <h2 className="lg:text-5xl text-3xl">Newest Adds</h2>
-      </motion.div>
+      <h2 className="lg:text-5xl text-3xl">{t("newestAdds.title")}</h2>
+            </motion.div>
 
       {/* Grid com 3 linhas e 5 colunas */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 py-4">

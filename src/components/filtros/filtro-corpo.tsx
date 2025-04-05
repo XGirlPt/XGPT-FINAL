@@ -1,4 +1,3 @@
-// components/filtros/filtro-corpo.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CommonFilter from './common-filter';
@@ -42,22 +41,28 @@ const FiltroCorpo: React.FC<FiltroCorpoProps> = ({ value, onChange, bgColor }) =
 
   const handleCorpoChange = (selectedId: string) => {
     console.log('Corpo selecionado:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (body):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux (apenas para depuração)
   const displayedValue = value
     ? corposTraduzidos[
         Object.keys(corposEmPortugues).find(
           (key) => corposEmPortugues[key as CorpoKey] === value
         ) as CorpoKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
+  console.log('Valor exibido (displayedValue):', displayedValue);
 
   return (
     <CommonFilter
       label={t('filter.body')}
       options={corpoOptions}
-      value={displayedValue}
+      value={value} // Passa o valor bruto do Redux diretamente
       onChange={handleCorpoChange}
       bgColor={bgColor}
       placeholder={t('filter.select_body')}

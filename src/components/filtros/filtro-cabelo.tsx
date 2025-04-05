@@ -1,4 +1,3 @@
-// components/filtros/filtro-cabelo.tsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CommonFilter from './common-filter';
@@ -42,25 +41,30 @@ const FiltroCabelo: React.FC<FiltroCabeloProps> = ({ value, onChange, bgColor })
 
   const handleCabeloChange = (selectedId: string) => {
     console.log('Cabelo selecionado:', selectedId);
-    onChange(selectedId); // Apenas atualiza o estado do formulário
+    onChange(selectedId);
   };
 
+  // Depuração: logar o valor recebido do Redux
+  console.log('Valor recebido do Redux (hair):', value);
+
+  // Encontra o valor traduzido correspondente ao value recebido do Redux (apenas para depuração)
   const displayedValue = value
     ? cabelosTraduzidos[
         Object.keys(cabelosEmPortugues).find(
           (key) => cabelosEmPortugues[key as CabeloKey] === value
         ) as CabeloKey
-      ]
-    : null;
+      ] || value // Fallback para o valor bruto se não encontrar tradução
+    : ''; // Valor vazio se não houver valor
+
 
   return (
     <CommonFilter
-      label={t('filter.hair')}
+      label={t('filterCabelo.hair_color')}
       options={cabeloOptions}
-      value={displayedValue}
+      value={value} // Passa o valor bruto do Redux diretamente
       onChange={handleCabeloChange}
       bgColor={bgColor}
-      placeholder={t('filter.select_hair')}
+      placeholder={t('filterCabelo.select_hair_color')}
     />
   );
 };
