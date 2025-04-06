@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/backend/store';
-import { fetchChatRooms } from '@/backend/actions/ChatActions';
-import { setCurrentChatRoom } from '@/backend/reducers/profileSlice'; // Importar a ação
+import { setCurrentChatRoom } from '@/backend/reducers/profileSlice';
 import ChatWindow from './profile/ChatWindow';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,16 +36,123 @@ const ChatFloatingButton: React.FC = () => {
   const currentChatRoomId = useSelector((state: RootState) => state.profile.currentChatRoomId);
 
   useEffect(() => {
-    if (userUID) {
-      dispatch(fetchChatRooms(userUID))
-        .unwrap()
-        .then((rooms) => {
-          console.log('[DEBUG] ChatRooms carregados:', rooms);
-          setChatRooms(rooms);
-        })
-        .catch((error) => console.error('[DEBUG] Erro ao carregar salas de chat:', error));
-    }
-  }, [userUID, dispatch]);
+    if (!userUID) return;
+
+    const fetchChatRooms = async () => {
+      const { data, error } = await supabase
+        .from('chat_rooms')
+        .select('id, user_id, advertiser_id, last_activity_at, unread_count')
+        .or(`user_id.eq.${userUID},advertiser_id.eq.${userUID}`);
+
+      if (error) {
+        console.error('[DEBUG] Erro ao carregar salas de chat:', JSON.stringify(error, null, 2));
+      } else {
+        console.log('[DEBUG] ChatRooms carregados:', data);
+        setChatRooms(data || []);
+      }
+    };
+
+    fetchChatRooms();
+
+    const channel = supabase.channel('chat_rooms_changes');
+
+    const setupSubscriptions = () => {
+      channel
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'chat_rooms',
+            filter: `user_id=eq.${userUID}`,
+          },
+          (payload) => {
+            console.log('[DEBUG] Nova sala de chat (user):', payload);
+            setChatRooms((prev) => {
+              if (!prev.some((room) => room.id === payload.new.id)) {
+                return [...prev, payload.new].sort(
+                  (a, b) => new Date(b.last_activity_at || 0).getTime() - new Date(a.last_activity_at || 0).getTime()
+                );
+              }
+              return prev;
+            });
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'chat_rooms',
+            filter: `advertiser_id=eq.${userUID}`,
+          },
+          (payload) => {
+            console.log('[DEBUG] Nova sala de chat (advertiser):', payload);
+            setChatRooms((prev) => {
+              if (!prev.some((room) => room.id === payload.new.id)) {
+                return [...prev, payload.new].sort(
+                  (a, b) => new Date(b.last_activity_at || 0).getTime() - new Date(a.last_activity_at || 0).getTime()
+                );
+              }
+              return prev;
+            });
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'chat_rooms',
+            filter: `user_id=eq.${userUID}`,
+          },
+          (payload) => {
+            console.log('[DEBUG] Atualização em chat_rooms (user):', payload);
+            setChatRooms((prev) =>
+              prev
+                .map((room) => (room.id === payload.new.id ? payload.new : room))
+                .sort((a, b) => new Date(b.last_activity_at || 0).getTime() - new Date(a.last_activity_at || 0).getTime())
+            );
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'chat_rooms',
+            filter: `advertiser_id=eq.${userUID}`,
+          },
+          (payload) => {
+            console.log('[DEBUG] Atualização em chat_rooms (advertiser):', payload);
+            setChatRooms((prev) =>
+              prev
+                .map((room) => (room.id === payload.new.id ? payload.new : room))
+                .sort((a, b) => new Date(b.last_activity_at || 0).getTime() - new Date(a.last_activity_at || 0).getTime())
+            );
+          }
+        )
+     .subscribe((status, err) => {
+  console.log('[DEBUG] Status da subscrição de chat_rooms:', status);
+  if (status === 'CHANNEL_ERROR') {
+    console.error('[DEBUG] Erro no canal de chat_rooms:', err?.message || 'Detalhes indisponíveis');
+    setTimeout(() => {
+      console.log('[DEBUG] Tentando reconectar ao canal chat_rooms_changes');
+      channel.subscribe();
+    }, 1000); // Reconectar após 1 segundo
+  } else if (status === 'SUBSCRIBED') {
+    console.log('[DEBUG] Subscrição de chat_rooms ativa');
+  }
+});
+    };
+
+    setupSubscriptions();
+
+    return () => {
+      console.log('[DEBUG] Removendo canal chat_rooms_changes');
+      supabase.removeChannel(channel);
+    };
+  }, [userUID]);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -76,7 +182,7 @@ const ChatFloatingButton: React.FC = () => {
             photoUrl = photoData.imageurl;
             console.log('[DEBUG] Foto encontrada para', otherUserId, photoUrl);
           } else if (photoError) {
-            console.error('[DEBUG] Erro ao buscar foto:', photoError.message);
+            console.error('[DEBUG] Erro ao buscar foto:', photoError);
           }
 
           newProfiles[otherUserId] = {
@@ -95,16 +201,29 @@ const ChatFloatingButton: React.FC = () => {
     if (chatRooms.length > 0) {
       fetchProfiles();
     }
-  }, [chatRooms, userUID, profiles]); 
-  
-  // Adicionado 'profiles' às dependências
+  }, [chatRooms, userUID, profiles]);
+
   const totalUnread = chatRooms.reduce((sum, room) => sum + (room.unread_count || 0), 0);
 
   const handleOpenChat = (chatRoomId: string) => {
     console.log('[DEBUG] Tentando abrir chat com ID:', chatRoomId);
     console.log('[DEBUG] currentChatRoomId antes:', currentChatRoomId);
-    dispatch(setCurrentChatRoom(chatRoomId)); // Usar a ação diretamente
+    dispatch(setCurrentChatRoom(chatRoomId));
     setShowAvatars(false);
+
+    supabase
+      .from('chat_rooms')
+      .update({ unread_count: 0 })
+      .eq('id', chatRoomId)
+      .then(() => console.log('[DEBUG] unread_count zerado'))
+      .catch((error) => console.error('[DEBUG] Erro ao zerar unread_count:', error));
+
+    supabase
+      .from('messages')
+      .update({ is_read: true })
+      .eq('chat_room_id', chatRoomId)
+      .then(() => console.log('[DEBUG] Mensagens marcadas como lidas'))
+      .catch((error) => console.error('[DEBUG] Erro ao marcar mensagens como lidas:', error));
   };
 
   const handleCloseChat = (chatRoomId: string) => {

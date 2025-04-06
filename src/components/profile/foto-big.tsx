@@ -1,10 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
+import { motion } from "framer-motion";
+import Image from "next/image";
 import { ImCross } from 'react-icons/im';
-import Image from 'next/image';
 
 interface FotoBigProps {
-  selectedProfile: { photos: string[] }; // Ajustado para 'photos'
+  selectedProfile: { 
+    photos: string[];
+    nome?: string; // Opcional para consistência com outros modais
+    cidade?: string; // Opcional
+  };
   onClose: () => void;
   currentIndex: number;
 }
@@ -15,17 +20,18 @@ const FotoBig: React.FC<FotoBigProps> = ({
   currentIndex,
 }) => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(currentIndex);
-  const totalPhotos = selectedProfile?.photos.length;
+  const totalPhotos = selectedProfile?.photos?.length || 0;
+
   console.log('[FotoBig] totalPhotos:', totalPhotos);
-  console.log('[FotoBig] selectedProfile.photos:', selectedProfile?.photos);
+  console.log('[FotoBig] selectedProfile.photos:', selectedProfile.photos);
   console.log('[FotoBig] currentPhotoIndex:', currentPhotoIndex);
 
   const nextPhoto = () => {
-    setCurrentPhotoIndex((currentPhotoIndex + 1) % totalPhotos);
+    setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % totalPhotos);
   };
 
   const prevPhoto = () => {
-    setCurrentPhotoIndex((currentPhotoIndex - 1 + totalPhotos) % totalPhotos);
+    setCurrentPhotoIndex((prevIndex) => (prevIndex - 1 + totalPhotos) % totalPhotos);
   };
 
   const isVideo = (url: string) => {
@@ -34,53 +40,89 @@ const FotoBig: React.FC<FotoBigProps> = ({
 
   const currentMedia = selectedProfile?.photos[currentPhotoIndex];
 
+  if (!currentMedia) {
+    console.error('[FotoBig] Nenhuma mídia disponível para o índice:', currentPhotoIndex);
+    return (
+      <motion.div
+        className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="text-white">Erro: Nenhuma foto ou vídeo disponível</div>
+        <button
+          onClick={onClose}
+          className="absolute top-4 left-4 text-white z-50 p-2 bg-black/50 rounded-full hover:bg-black/70"
+        >
+          <ImCross size={16} />
+        </button>
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 z-50 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl h-[80vh]">
+    <motion.div
+      className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="relative w-full max-w-[90%] max-h-[90vh] flex items-center justify-center">
         {isVideo(currentMedia) ? (
-          <video
+          <motion.video
             src={currentMedia}
-            className="w-full h-full object-contain rounded-2xl"
+            className="max-w-full max-h-[90vh] rounded-lg object-contain"
             controls
             autoPlay
             muted
             loop
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
           />
         ) : (
-          <Image
-            src={currentMedia || '/logo.webp'}
-            alt="Large Photo"
-            className="w-full h-full object-contain rounded-2xl"
-            width={900}
-            height={600}
-            layout="responsive"
-            loading="lazy"
-          />
+          <motion.div
+            className="relative w-full h-full flex items-center justify-center"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Image
+              src={currentMedia || '/logo.webp'}
+              alt="Large Photo"
+              width={1200} // Aumentado para maior qualidade
+              height={800}
+              className="max-w-full max-h-[90vh] rounded-lg object-contain"
+              priority={true} // Carrega mais rápido no modal
+            />
+          </motion.div>
         )}
       </div>
-      <button className="text-bold font-bold" onClick={onClose}>
-        <ImCross
-          size={16}
-          className="absolute top-0 right-10 mt-24 text-white text-xl hover:text-pink-700"
-        />
+
+      <button
+        onClick={onClose}
+        className="absolute top-4 left-4 text-white z-50 p-2 bg-black/50 rounded-full hover:bg-black/70"
+      >
+        <ImCross size={16} />
       </button>
+
       {totalPhotos > 1 && (
         <>
           <button
             onClick={prevPhoto}
-            className="absolute top-1/2 px-4 py-2 rounded-full bg-zinc-500 left-0 ml-4 text-white hover:text-zinc-700 text-xxl transform -translate-y-1/2 opacity-65 hover:bg-zinc-300"
+            className="absolute top-1/2 left-4 px-4 py-2 rounded-full bg-zinc-500 text-white hover:bg-zinc-300 hover:text-zinc-700 transform -translate-y-1/2 opacity-75 transition-all duration-200"
           >
             {'<'}
           </button>
           <button
             onClick={nextPhoto}
-            className="absolute top-1/2 px-4 py-2 rounded-full bg-zinc-500 right-16 ml-4 text-white hover:text-zinc-700 text-xxl transform -translate-y-1/2 opacity-65 hover:bg-zinc-300"
+            className="absolute top-1/2 right-4 px-4 py-2 rounded-full bg-zinc-500 text-white hover:bg-zinc-300 hover:text-zinc-700 transform -translate-y-1/2 opacity-75 transition-all duration-200"
           >
             {'>'}
           </button>
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 

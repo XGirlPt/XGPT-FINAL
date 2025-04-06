@@ -18,10 +18,10 @@ import { MdFiberManualRecord, MdVerified } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../backend/context/LanguageContext";
 import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt, FaPen } from "react-icons/fa";
-import { X } from "lucide-react";
 import { supabase } from "@/backend/database/supabase";
+import StoryBig from '@/components/profile/story-big';
 
-// Variantes de animação (mantidas iguais)
+// Variantes de animação
 const fadeInUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5 } };
 const staggerChildren = { animate: { transition: { staggerChildren: 0.1 } } };
 const storyCircleVariants = {
@@ -87,7 +87,7 @@ const checkAuthorBadge = async (userUID: string): Promise<boolean> => {
 export function HeroSection({ profiles }: { profiles: Profile[] }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const [selectedStory, setSelectedStory] = useState<{ story: string; profile: Profile } | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [authorBadges, setAuthorBadges] = useState<Record<string, boolean>>({});
 
@@ -138,24 +138,28 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
     return sliced;
   }, [profilesWithStories, currentIndex]);
 
-  const openStory = (story: string, profile: Profile) => setSelectedStory({ story, profile });
-  const closeStory = () => setSelectedStory(null);
+  const openStory = (profile: Profile, storyIndex: number) => {
+    setSelectedProfile({ ...profile, storyURL: profile.stories });
+    setCurrentIndex(storyIndex);
+  };
+
+  const closeStory = () => setSelectedProfile(null);
 
   return (
-    <section className="relative md:px-4 ">
+    <section className="relative md:px-4">
       <motion.div className="text-center" initial="initial" animate="animate" variants={staggerChildren}>
         <div className="relative">
-        <motion.div className="mb-8" variants={fadeInUp}>
-        <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
-          {t('heroSection.badge')}
-        </span>
-      </motion.div>
+          <motion.div className="mb-8" variants={fadeInUp}>
+            <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
+              {t('heroSection.badge')}
+            </span>
+          </motion.div>
 
-      <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
-        {t('heroSection.title.line1')}
-        <br />
-        {t('heroSection.title.line2')}
-      </motion.h1>
+          <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
+            {t('heroSection.title.line1')}
+            <br />
+            {t('heroSection.title.line2')}
+          </motion.h1>
 
           <motion.p className="text-xl font-body text-gray-600 dark:text-gray-300 mb-12" variants={fadeInUp}>
             {t("dashboard.meta_description")}
@@ -170,7 +174,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
               variants={storyCircleVariants}
               whileHover="hover"
               className={`absolute ${storyPositions[index]} cursor-pointer group`}
-              onClick={() => openStory(profile.stories[0], profile)}
+              onClick={() => openStory(profile, 0)} // Abre o primeiro story do perfil
             >
               <div className="relative rounded-full overflow-hidden w-full h-full">
                 <motion.div
@@ -266,7 +270,7 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
                           <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-1 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
                             <div className="flex items-start justify-between gap-2">
                               <span className="block break-words italic text-xs md:text-sm max-h-[70px] overflow-hidden font-arial animate-flash">
-                              &quot;{profile.tag}&quot;
+                                "{profile.tag}"
                               </span>
                               <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                             </div>
@@ -290,55 +294,17 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
         </motion.div>
       </motion.div>
 
-      {selectedStory && (
-        <motion.div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <video
-            src={selectedStory.story}
-            className="max-w-[90%] max-h-[90%] rounded-lg z-0"
-            autoPlay
-            controls
-          />
-          <motion.div
-            className="absolute top-4 right-4 flex items-center gap-3 z-50"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Link href={`/escort/${selectedStory.profile.nome}`} passHref>
-              <motion.div
-                className="w-12 h-12 rounded-full overflow-hidden cursor-pointer border-2 border-pink-500 bg-black"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Image
-                  src={selectedStory.profile.photos[0]}
-                  alt={selectedStory.profile.nome}
-                  width={48}
-                  height={48}
-                  className="object-cover rounded-full"
-                />
-              </motion.div>
-            </Link>
-            <div className="text-white">
-              <p className="font-semibold text-lg">{selectedStory.profile.nome}</p>
-              <p className="text-sm text-gray-300 flex items-center gap-1">
-                <FaMapMarkerAlt className="text-pink-600" />
-                {selectedStory.profile.cidade}
-              </p>
-            </div>
-          </motion.div>
-          <button
-            onClick={closeStory}
-            className="absolute top-4 left-4 text-white z-50 p-2 bg-black/50 rounded-full"
-          >
-            <X size={32} />
-          </button>
-        </motion.div>
+      {selectedProfile && (
+        <StoryBig
+          selectedProfile={{
+            storyURL: selectedProfile.stories,
+            nome: selectedProfile.nome,
+            cidade: selectedProfile.cidade,
+            photos: selectedProfile.photos,
+          }}
+          onClose={closeStory}
+          currentIndex={currentIndex}
+        />
       )}
     </section>
   );

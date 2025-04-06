@@ -1,10 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { FiPhone } from 'react-icons/fi';
 import { FaWhatsapp, FaMoneyBillWave } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 interface LigaProps {
   selectedProfile: {
@@ -17,148 +20,157 @@ interface LigaProps {
 }
 
 const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
-  const [mostrarLiga, setMostrarLiga] = useState(true);
-  const modalRef = useRef<HTMLDivElement>(null); // Ref para o modal
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  const fecharLiga = useCallback(() => {
-    setMostrarLiga(false);
-    setShowLiga(false); // Resetar o estado showLiga no componente Profile
+  // Função para fechar o modal
+  const handleClose = useCallback(() => {
+    setShowLiga(false);
   }, [setShowLiga]);
 
+  // Dados do Redux
+  const telefoneRedux = useSelector((state: any) => state.profile?.profile?.telefone || selectedProfile?.telefone);
+  const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || selectedProfile?.lingua);
+
+  // Função para obter a bandeira com base na língua
   const obterBandeira = (lingua: string): string => {
     switch (lingua) {
-      case 'Russo':
-        return '/Flags/ru.svg';
-      case 'Alemão':
-        return '/Flags/ale.svg';
-      case 'Português':
-        return '/Flags/pt.svg';
-      case 'Francês':
-        return '/Flags/fr.svg';
-      case 'Inglês':
-        return '/Flags/ing.svg';
-      case 'Italiano':
-        return '/Flags/it.svg';
-      case 'Espanhol':
-        return '/Flags/es.svg';
-      case 'Árabe':
-        return '/Flags/ar.png';
-      default:
-        return ''; // Retorna uma imagem padrão caso não tenha bandeira específica
+      case 'Russo': return '/Flags/ru.svg';
+      case 'Alemão': return '/Flags/ale.svg';
+      case 'Português': return '/Flags/pt.svg';
+      case 'Francês': return '/Flags/fr.svg';
+      case 'Inglês': return '/Flags/ing.svg';
+      case 'Italiano': return '/Flags/it.svg';
+      case 'Espanhol': return '/Flags/es.svg';
+      case 'Árabe': return '/Flags/ar.png';
+      default: return '/logo.webp';
     }
   };
 
-  const telefoneRedux = useSelector(
-    (state: any) => state.profile?.profile?.telefone
-  );
-  const linguaRedux = useSelector(
-    (state: any) => state.profile?.profile?.lingua
-  );
+  // Variantes de animação
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 },
+  };
 
-  // Função para detectar clique fora do modal
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        fecharLiga(); // Fecha o modal se clicar fora
-      }
-    },
-    [fecharLiga]
-  ); // No dependencies needed, as the function doesn't depend on any other state
-
-  // Usando useEffect para adicionar o listener do clique fora
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [handleClickOutside]);
+  const staggerChildren = {
+    animate: { transition: { staggerChildren: 0.1 } },
+  };
 
   return (
-    <>
-      {mostrarLiga && (
-        <Dialog
-          open={mostrarLiga}
-          onOpenChange={(open) => !open && fecharLiga()}
+    <Dialog open={true} onOpenChange={handleClose}>
+      <DialogContent className="max-w-sm w-full bg-white dark:bg-[#1a0a10] rounded-2xl shadow-xl p-6 border-none">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="relative"
         >
-          <DialogContent className="max-w-md w-full bg-white dark:bg-[#1a0a10] ">
-            {/* Header */}
-            <div className="flex justify-between items-center text-2xl mb-6">
-              <DialogTitle>
-                {t('profile.call_to', { nome: selectedProfile?.nome })}{' '}
-              </DialogTitle>
-            </div>
+          {/* Botão de fechar */}
+       
 
-            {/* Separator */}
-            <div className="border-t border-gray-700 mb-6"></div>
+          {/* Cabeçalho */}
+          <motion.div variants={fadeInUp} className="mb-6 text-center">
+            <h2 className="text-2xl font-semibold text-pink-600 dark:text-pink-400">
+              {selectedProfile?.nome}
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              {t('liga.contact_now')}
+            </p>
+          </motion.div>
 
-            {/* Contact Options */}
-            <div className="flex flex-col gap-4">
-              {/* Phone */}
-              <div className="bg-pink-600 hover:bg-pink-700 py-3 rounded-lg flex items-center justify-center transition-colors">
-                <FiPhone size={22} className="mr-2 text-gray-200 " />
-                <span className="text-gray-200 text-lg">
-                  {selectedProfile?.telefone}
-                </span>
-              </div>
-
-              {/* WhatsApp */}
-              <div
-                className="bg-green-600 hover:bg-green-700 py-3 rounded-lg flex items-center justify-center cursor-pointer transition-colors"
-                onClick={() =>
-                  window.open(
-                    `https://api.whatsapp.com/send?phone=41${selectedProfile?.telefone}`,
-                    '_blank'
-                  )
-                }
+          {/* Opções de Contato */}
+          <motion.div
+            variants={staggerChildren}
+            initial="initial"
+            animate="animate"
+            className="space-y-3 mb-6"
+          >
+            {/* Telefone */}
+            <motion.div variants={fadeInUp}>
+              <Button
+                className="w-full rounded-full bg-gradient-to-r from-pink-50 to-rose-50 dark:from-[#2b1a21] dark:to-[#3b2a31] text-pink-600 dark:text-pink-400 font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:shadow-md transition-all duration-300 shadow-sm"
               >
-                <FaWhatsapp size={22} className="mr-2  text-gray-200" />
-                <span className="text-gray-200 text-lg">WhatsApp</span>
-              </div>
+                <div className="flex items-center gap-2">
+                  <FiPhone size={18} />
+                  <span className="text-xs">{telefoneRedux || 'N/A'}</span>
+                </div>
+              </Button>
+            </motion.div>
+
+            {/* WhatsApp */}
+            <motion.div variants={fadeInUp}>
+              <Button
+                onClick={() => window.open(`https://api.whatsapp.com/send?phone=${telefoneRedux}`, '_blank')}
+                className="w-full rounded-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:from-green-700 hover:to-green-800 hover:shadow-md transition-all duration-300 shadow-sm relative overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-sweep w-1/3" />
+                <div className="flex items-center gap-2">
+                  <FaWhatsapp size={18} />
+                  <span className="text-xs">{t('liga.whatsapp')}</span>
+                </div>
+              </Button>
+            </motion.div>
+          </motion.div>
+
+          {/* Tarifas */}
+          <motion.div variants={fadeInUp} className="mb-6">
+            <div className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-[#2b1a21] rounded-full py-2 px-4 shadow-sm">
+              <FaMoneyBillWave size={18} className="text-rose-500 dark:text-rose-400" />
+              <span className="text-xs text-gray-700 dark:text-gray-200 font-medium">
+                {t('liga.tariff_info', { tarifa: selectedProfile?.tarifa || 'Consultar' })}
+              </span>
             </div>
+          </motion.div>
 
-            {/* Separator */}
-            <div className="border-t border-gray-700 my-6"></div>
-
-            {/* Tarifas */}
-            <div className="flex items-center justify-center mb-6">
-              <FaMoneyBillWave size={28} className="text-pink-600 mr-3" />
-              <p className="text-gray-300 text-2xl font-medium">
-                {t('profile.tariffs_starting_from', {
-                  tarifa: selectedProfile?.tarifa,
-                })}
+          {/* Línguas */}
+          {linguaRedux?.length > 0 && (
+            <motion.div
+              variants={staggerChildren}
+              initial="initial"
+              animate="animate"
+            >
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-3">
+                {t('liga.speaks')}
               </p>
-            </div>
-
-            {/* Separator */}
-            <div className="border-t border-gray-700 mb-6"></div>
-
-            {/* Bandeiras */}
-            <div className="grid grid-cols-3 gap-4">
-              {linguaRedux &&
-                linguaRedux.map((lingua: string, index: number) => (
-                  <div
+              <div className="flex flex-wrap justify-center gap-2">
+                {linguaRedux.map((lingua: string, index: number) => (
+                  <motion.div
                     key={index}
-                    className="flex items-center justify-center space-x-3"
+                    variants={fadeInUp}
+                    className="flex items-center gap-2 bg-gray-100 dark:bg-[#2b1a21] rounded-full px-3 py-1 shadow-sm"
                   >
                     <Image
-                      src={obterBandeira(lingua) || '/logo.webp'}
+                      src={obterBandeira(lingua)}
                       alt={`${lingua} flag`}
-                      width={36}
-                      height={36}
-                      className="rounded-full object-cover border border-gray-600"
+                      width={20}
+                      height={20}
+                      className="rounded-full object-cover"
                     />
-                    <span className="text-sm text-white">{lingua}</span>
-                  </div>
+                    <span className="text-xs text-gray-700 dark:text-gray-200">{lingua}</span>
+                  </motion.div>
                 ))}
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* Estilo para o efeito de movimento */}
+        <style jsx global>{`
+          @keyframes sweep {
+            0% {
+              transform: translateX(-100%);
+            }
+            100% {
+              transform: translateX(300%);
+            }
+          }
+          .animate-sweep {
+            animation: sweep 1.5s infinite linear;
+          }
+        `}</style>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/backend/store';
-import { sendMessage, fetchChatMessages } from '@/backend/actions/ChatActions';
 import supabase from '@/backend/database/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +14,6 @@ import { useTheme } from 'next-themes';
 import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale';
 
-// Definição explícita do tipo UserProfile
 interface UserProfile {
   userUID: string;
   nome?: string;
@@ -23,15 +21,12 @@ interface UserProfile {
   photoUrl?: string | null;
 }
 
-// Supondo que Profile vem de algum lugar (ajuste conforme sua definição real)
-interface Profile {
+interface Message {
   id: string;
-  userUID: string;
-  nome: string;
-  email?: string;
-  photos?: string[];
-  vphotos?: string[];
-  // Adicione outras propriedades conforme necessário
+  chat_room_id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
 }
 
 const fadeInUp = {
@@ -55,13 +50,13 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { theme } = useTheme();
   const userUID = useSelector((state: RootState) => state.profile.userUID);
-  const messages = useSelector((state: RootState) => state.profile.messages[chatRoomId] || []);
   const chatRooms = useSelector((state: RootState) => state.profile.chatRooms || []);
   const profiles = useSelector((state: RootState) => state.profile.profiles || []);
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserProfile, setOtherUserProfile] = useState<UserProfile | null>(null);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevOtherUserIdRef = useRef<string | undefined>();
   const subscriptionRef = useRef<{ messageChannel: any; typingChannel: any } | null>(null);
@@ -74,7 +69,7 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
       if (otherUserProfile || prevOtherUserIdRef.current === otherUserId || !otherUserId) return;
 
       console.log('[DEBUG] Buscando perfil para otherUserId:', otherUserId);
-      let profile: Profile | UserProfile | undefined = profiles.find((p) => p.userUID === otherUserId);
+      let profile: UserProfile | undefined = profiles.find((p) => p.userUID === otherUserId);
 
       if (!profile) {
         const { data: profileData, error: profileError } = await supabase
@@ -85,7 +80,7 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
           .maybeSingle();
 
         if (profileError) {
-          console.error('[DEBUG] Erro ao buscar perfil em ProfilesData:', profileError.message);
+          console.error('[DEBUG] Erro ao buscar perfil em ProfilesData:', profileError);
           profile = { userUID: otherUserId };
         } else if (profileData) {
           profile = profileData as UserProfile;
@@ -99,8 +94,8 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
           .eq('userUID', otherUserId)
           .maybeSingle();
 
-        if (photoError) {
-          console.error('[DEBUG] Erro ao buscar foto em profilephoto:', photoError.message);
+        if (photoError && photoError.code !== 'PGRST116') {
+          console.error('[DEBUG] Erro ao buscar foto em profilephoto:', JSON.stringify(photoError, null, 2));
         } else if (photoData) {
           profile = { ...profile, photoUrl: photoData.imageurl };
         }
@@ -134,48 +129,57 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
   };
 
   useEffect(() => {
+    if (!chatRoomId || !userUID) {
+      console.log('[DEBUG] chatRoomId ou userUID ausente, subscrição não iniciada:', { chatRoomId, userUID });
+      return;
+    }
+
     console.log('[DEBUG] Iniciando subscrição para chatRoomId:', chatRoomId);
-    dispatch(fetchChatMessages(chatRoomId))
-      .unwrap()
-      .then(() => scrollToBottom())
-      .catch((error) => console.error('[DEBUG] Erro ao carregar mensagens:', error));
 
-    // Cria os canais apenas uma vez
-    const messageChannel = supabase.channel(`chat:${chatRoomId}`, { selfBroadcast: false });
-    const typingChannel = supabase.channel(`typing:${chatRoomId}`, { selfBroadcast: false });
-
-    // Configura os listeners antes de subscrever
+    const messageChannel = supabase.channel(`chat:${chatRoomId}`);
     messageChannel
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages', filter: `chat_room_id=eq.${chatRoomId}` },
-        (payload) => {
-          dispatch({
-            type: 'profile/sendMessage/fulfilled',
-            payload: payload.new,
-            meta: { arg: { chatRoomId } },
-          });
-          scrollToBottom();
-        }
-      )
-      .subscribe((status) => {
+      .on('broadcast', { event: 'message' }, (payload) => {
+        console.log('[DEBUG] Nova mensagem recebida via broadcast:', payload.payload);
+        const newMessage: Message = payload.payload;
+        setMessages((prev) => {
+          const isDuplicate = prev.some((msg) => msg.id === newMessage.id);
+          if (!isDuplicate) {
+            return [...prev, newMessage];
+          }
+          return prev;
+        });
+        scrollToBottom();
+      })
+      .subscribe((status, err) => {
         console.log('[DEBUG] Status da subscrição de mensagens:', status);
-        if (status === 'CLOSED') {
-          console.warn('[DEBUG] Subscrição de mensagens fechada:', chatRoomId);
+        if (status === 'SUBSCRIBED') {
+          console.log('[DEBUG] Subscrição de mensagens ativa para chatRoomId:', chatRoomId);
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('[DEBUG] Erro no canal de mensagens:', err?.message || 'Detalhes indisponíveis');
+          setTimeout(() => {
+            console.log('[DEBUG] Tentando reconectar ao canal de mensagens');
+            messageChannel.subscribe();
+          }, 1000);
         }
       });
 
+    const typingChannel = supabase.channel(`typing:${chatRoomId}`);
     typingChannel
       .on('broadcast', { event: 'typing' }, (payload) => {
         if (payload.payload.userId !== userUID) {
+          console.log('[DEBUG] Usuário está digitando:', payload.payload.userId);
           setIsTyping(true);
           setTimeout(() => setIsTyping(false), 2000);
         }
       })
-      .subscribe((status) => {
+      .subscribe((status, err) => {
         console.log('[DEBUG] Status da subscrição de typing:', status);
-        if (status === 'CLOSED') {
-          console.warn('[DEBUG] Subscrição de typing fechada:', chatRoomId);
+        if (status === 'CHANNEL_ERROR') {
+          console.error('[DEBUG] Erro no canal de typing:', err?.message || 'Detalhes indisponíveis');
+          setTimeout(() => {
+            console.log('[DEBUG] Tentando reconectar ao canal de typing');
+            typingChannel.subscribe();
+          }, 1000);
         }
       });
 
@@ -189,7 +193,7 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
         subscriptionRef.current = null;
       }
     };
-  }, [chatRoomId, dispatch, userUID]);
+  }, [chatRoomId, userUID]);
 
   useEffect(() => {
     if (newMessage.trim() && subscriptionRef.current) {
@@ -199,33 +203,30 @@ export function ChatWindow({ chatRoomId, onClose }: ChatWindowProps) {
         payload: { userId: userUID },
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newMessage, chatRoomId, userUID]); // 'otherUserProfile' não é necessário aqui
+  }, [newMessage, chatRoomId, userUID]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!newMessage.trim() || !userUID) return;
 
-    const tempMessage = {
-      id: `temp-${Date.now()}`,
+    const message: Message = {
+      id: `msg-${Date.now()}-${Math.random()}`,
       chat_room_id: chatRoomId,
       sender_id: userUID,
       content: newMessage,
       created_at: new Date().toISOString(),
-      is_read: false,
     };
 
-    dispatch({
-      type: 'profile/sendMessage/fulfilled',
-      payload: tempMessage,
-      meta: { arg: { chatRoomId } },
-    });
+    setMessages((prev) => [...prev, message]);
     setNewMessage('');
     scrollToBottom();
 
-    try {
-      await dispatch(sendMessage({ chatRoomId, senderId: userUID, content: newMessage })).unwrap();
-    } catch (error) {
-      console.error('[DEBUG] Erro ao enviar mensagem:', error);
+    if (subscriptionRef.current) {
+      subscriptionRef.current.messageChannel.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: message,
+      });
+      console.log('[DEBUG] Mensagem enviada via broadcast:', message);
     }
   };
 

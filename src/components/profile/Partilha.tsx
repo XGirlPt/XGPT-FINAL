@@ -1,9 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { MdEmail, MdContentCopy } from 'react-icons/md';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 interface PartilhaProps {
   selectedProfile: {
@@ -14,123 +17,147 @@ interface PartilhaProps {
   setShowPartilha: (show: boolean) => void;
 }
 
-const Partilha: React.FC<PartilhaProps> = ({
-  selectedProfile,
-  setShowPartilha,
-}) => {
-  const [mostrarPartilha, setMostrarPartilha] = useState(true);
-  const modalRef = useRef<HTMLDivElement>(null); // Referência para o modal
-  const [copySuccess, setCopySuccess] = useState(false); // Estado para verificar se o link foi copiado com sucesso
-  const { t, i18n } = useTranslation();
+const Partilha: React.FC<PartilhaProps> = ({ selectedProfile, setShowPartilha }) => {
+  const { t } = useTranslation();
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // Função para fechar o modal
-  const fecharPartilha = useCallback(() => {
-    setMostrarPartilha(false);
-    setShowPartilha(false); // Resetar o estado showPartilha no componente Profile
+  const handleClose = useCallback(() => {
+    setShowPartilha(false);
   }, [setShowPartilha]);
 
   // Função para copiar o link
   const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
-    setCopySuccess(true); // Definir como verdadeiro quando o link for copiado
-    toast.success('O link foi copiado com sucesso!', {
+    setCopySuccess(true);
+    toast.success(t('partilha.link_copied'), {
       position: 'top-right',
-      autoClose: 3000, // Tempo em milissegundos para o toast desaparecer
+      autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
     });
+    setTimeout(() => setCopySuccess(false), 3000);
   };
 
-  // Fechar o modal se clicar fora dele
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        fecharPartilha();
-      }
-    },
-    [fecharPartilha]
-  );
+  // Variantes de animação
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 },
+  };
 
-  // Usando useEffect para adicionar o evento de clique fora do modal
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside); // Adiciona o ouvinte de evento
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside); // Remove o ouvinte quando o componente desmontar
-    };
-  }, [handleClickOutside]);
+  const staggerChildren = {
+    animate: { transition: { staggerChildren: 0.1 } },
+  };
 
   return (
     <>
       <ToastContainer />
-      {mostrarPartilha && (
-        <Dialog
-          open={mostrarPartilha}
-          onOpenChange={(open) => !open && fecharPartilha()}
-        >
-          <DialogContent className="max-w-md w-full">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-              <DialogTitle>
-                {t('profile.share_profile_of', { nome: selectedProfile?.nome })}
-              </DialogTitle>
-            </div>
+      <Dialog open={true} onOpenChange={handleClose}>
+        <DialogContent className="max-w-sm w-full bg-white dark:bg-[#1a0a10] rounded-2xl shadow-xl p-6 border-none">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="relative"
+          >
+            {/* Botão de fechar */}
+          
 
-            {/* Separator */}
-            <div className="border-t border-gray-700 mb-6"></div>
+            {/* Cabeçalho */}
+            <motion.div variants={fadeInUp} className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold text-pink-600 dark:text-pink-400">
+                {selectedProfile?.nome}
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                {t('partilha.share_now')}
+              </p>
+            </motion.div>
 
             {/* URL Display */}
-            <div className="flex justify-center my-6">
-              <p className="text-white text-sm break-words">
-                {window.location.href}
-              </p>
-            </div>
-
-            {/* Separator */}
-            <div className="border-t border-gray-700 my-6"></div>
-
-            {/* Share Options */}
-            <div className="flex flex-col gap-4">
-              {/* Email Sharing */}
-              <div className="bg-blue-600 hover:bg-blue-500 py-3 rounded-lg flex items-center justify-center cursor-pointer transition-colors">
-                <a
-                  href={`mailto:${selectedProfile?.email}?subject=Assunto do Email&body=Corpo do Email`}
-                  className="flex items-center"
-                >
-                  <MdEmail size={22} className="mr-2 text-white" />
-                  <span className="text-white font-medium">
-                    {t('profile.share_by_email')}
-                  </span>
-                </a>
-              </div>
-
-              {/* Copy Link */}
-              <div
-                className="bg-pink-700 hover:bg-pink-600 py-3 rounded-lg flex items-center justify-center cursor-pointer transition-colors"
-                onClick={copyToClipboard}
-              >
-                <MdContentCopy size={22} className="mr-2 text-white" />
-                <span className="text-white font-medium">
-                  {t('profile.copy_link')}
+            <motion.div variants={fadeInUp} className="mb-6">
+              <div className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-[#2b1a21] rounded-full py-2 px-4 shadow-sm">
+                <span className="text-xs text-gray-700 dark:text-gray-200 break-all">
+                  {window.location.href}
                 </span>
               </div>
+            </motion.div>
 
-              {/* Copy Success Message */}
+            {/* Opções de Compartilhamento */}
+            <motion.div
+              variants={staggerChildren}
+              initial="initial"
+              animate="animate"
+              className="space-y-3"
+            >
+              {/* Email */}
+              <motion.div variants={fadeInUp}>
+                <Button
+                  asChild
+                  className="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:from-blue-700 hover:to-blue-800 hover:shadow-md transition-all duration-300 shadow-sm relative overflow-hidden"
+                >
+                  <a
+                    href={`mailto:${selectedProfile?.email}?subject=${encodeURIComponent(
+                      t('partilha.email_subject')
+                    )}&body=${encodeURIComponent(
+                      t('partilha.email_body', { url: window.location.href })
+                    )}`}
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-sweep w-1/3" />
+                    <div className="flex items-center gap-2">
+                      <MdEmail size={18} />
+                      <span className="text-xs">{t('partilha.share_by_email')}</span>
+                    </div>
+                  </a>
+                </Button>
+              </motion.div>
+
+              {/* Copiar Link */}
+              <motion.div variants={fadeInUp}>
+                <Button
+                  onClick={copyToClipboard}
+                  className="w-full rounded-full bg-gradient-to-r from-pink-600 to-rose-500 text-white font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:from-pink-700 hover:to-rose-600 hover:shadow-md transition-all duration-300 shadow-sm relative overflow-hidden"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-sweep w-1/3" />
+                  <div className="flex items-center gap-2">
+                    <MdContentCopy size={18} />
+                    <span className="text-xs">{t('partilha.copy_link')}</span>
+                  </div>
+                </Button>
+              </motion.div>
+
+              {/* Mensagem de Sucesso */}
               {copySuccess && (
-                <div className="flex justify-center mt-2">
-                  <span className="text-green-500 text-sm">
-                    {t('profile.link_copied')}
+                <motion.div
+                  variants={fadeInUp}
+                  className="text-center mt-2"
+                >
+                  <span className="text-xs text-green-500">
+                    {t('partilha.link_copied')}
                   </span>
-                </div>
+                </motion.div>
               )}
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+            </motion.div>
+          </motion.div>
+
+          {/* Estilo para o efeito de movimento */}
+          <style jsx global>{`
+            @keyframes sweep {
+              0% {
+                transform: translateX(-100%);
+              }
+              100% {
+                transform: translateX(300%);
+              }
+            }
+            .animate-sweep {
+              animation: sweep 1.5s infinite linear;
+            }
+          `}</style>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

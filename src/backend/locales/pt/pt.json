@@ -786,8 +786,36 @@
       "line1": "Encontros Sensuais",
       "line2": "em Portugal"
     }
+  },
+
+  "liga": {
+    "certified_profile": "Perfil Certificado",
+    "certified_subtitle": "Descubra por que {name} se destaca",
+    "certified": "Certificado",
+    "certified_benefit": "Por que isso importa:",
+    "contact_now": "Contactar Agora",
+    "whatsapp": "WhatsApp",
+    "tariff_info": "A partir de",
+    "speaks": "Fala"
+  },
+  "partilha": {
+    "share_profile_of": "Partilhar Perfil de {nome}",
+    "share_now": "Divulgue agora",
+    "share_by_email": "Partilhar por Email",
+    "email_subject": "Veja este perfil!",
+    "email_body": "Olá, dá uma olhada neste perfil: {url}",
+    "copy_link": "Copiar Link",
+    "link_copied": "Link copiado com sucesso!"
+  },
+"certificado": {
+    "certified_profile": "Perfil Certificado",
+    "certified_subtitle": "Descubra por que {name} se destaca",
+    "certified": "Certificado",
+    "authenticity_text": "No {platform}, a certificação é um selo de autenticidade e confiança. O perfil de {name} passou por uma verificação rigorosa da nossa equipe, garantindo que todas as fotos e informações são genuínas.",
+    "trust_text": "Isso significa que você pode confiar plenamente na experiência oferecida. A certificação destaca {escorts} que priorizam qualidade e transparência, trazendo segurança para clientes e valorizando o compromisso da anunciante.",
+    "certified_benefit": "Por que isso importa:",
+    "visibility_text": "Um perfil certificado aparece com o badge {badge}, aumentando sua visibilidade e credibilidade no {platform}.",
+    "understood": "Entendido"
   }
-
-
 
 }

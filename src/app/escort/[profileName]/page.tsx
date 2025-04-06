@@ -137,8 +137,8 @@ function UserProfile() {
     <>
       <div className="sticky top-24 z-10 mt-1 pt-1 backdrop-blur-sm border-b border-gray-700">
         <div className="container mx-auto px-4 py-3">
-          <div className="hidden md:flex items-center justify-between z-40">
-            <h1 className="text-4xl">Profile Details</h1>
+        <div className="hidden md:flex items-center justify-between z-80">
+        <h1 className="text-4xl">Profile Details</h1>
             <HeaderG
               currentProfileIndex={currentProfileIndex}
               setCurrentProfileIndex={setCurrentProfileIndex}

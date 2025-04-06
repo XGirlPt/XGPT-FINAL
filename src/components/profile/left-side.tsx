@@ -133,7 +133,6 @@ const LeftSide: React.FC<LeftSideProps> = ({ selectedProfile }) => {
               <FiPhone className="relative z-10" />
               <span className="relative z-10">{t('profile.call_me')}</span>
             </Button>
-            {/* Removido o botão de chat daqui */}
             <Button
               variant="outline"
               className="w-full rounded-full border-gray-200 dark:border-gray-800 font-body flex items-center justify-center gap-2"

@@ -105,7 +105,7 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
   const { t } = useTranslation();
   const { language } = useLanguage();
   // Memoizar displayedProfiles (limite de 15 perfis)
-  const displayedProfiles = useMemo(() => sortedProfiles.slice(0, 15), [sortedProfiles]);
+  const displayedProfiles = useMemo(() => sortedProfiles.slice(0, 30), [sortedProfiles]);
 
   // Função para formatar o tempo decorrido
   const timeAgo = useCallback((timestamp: string) => {

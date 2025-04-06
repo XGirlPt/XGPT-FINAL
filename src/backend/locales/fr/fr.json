@@ -806,5 +806,34 @@
       "line1": "Rencontres Sensuelles",
       "line2": "au Portugal"
     }
+  },
+  "liga": {
+    "certified_profile": "Profil Certifié",
+    "certified_subtitle": "Découvrez pourquoi {name} se démarque",
+    "certified": "Certifié",
+    "certified_benefit": "Pourquoi cela compte :",
+    "contact_now": "Contacter Maintenant",
+    "whatsapp": "WhatsApp",
+    "tariff_info": "À partir de {tarifa}€",
+    "speaks": "Parle"
+  },
+  "partilha": {
+    "share_profile_of": "Partager le Profil de {nome}",
+    "share_now": "Partagez maintenant",
+    "share_by_email": "Partager par Email",
+    "email_subject": "Regarde ce profil !",
+    "email_body": "Salut, jette un œil à ce profil : {url}",
+    "copy_link": "Copier le Lien",
+    "link_copied": "Lien copié avec succès !"
+  },
+  "certificado": {
+    "certified_profile": "Profil Certifié",
+    "certified_subtitle": "Découvrez pourquoi {name} se démarque",
+    "certified": "Certifié",
+    "authenticity_text": "Sur {platform}, la certification est un gage d'authenticité et de confiance. Le profil de {name} a fait l'objet d'une vérification rigoureuse par notre équipe, garantissant que toutes les photos et informations sont authentiques.",
+    "trust_text": "Cela signifie que vous pouvez pleinement faire confiance à l'expérience proposée. La certification met en avant {escorts} qui privilégient la qualité et la transparence, offrant sécurité aux clients et valorisant l'engagement de l'annonceuse.",
+    "certified_benefit": "Pourquoi cela compte :",
+    "visibility_text": "Un profil certifié apparaît avec le badge {badge}, augmentant sa visibilité et sa crédibilité sur {platform}.",
+    "understood": "Compris"
   }
 }

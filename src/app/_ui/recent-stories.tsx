@@ -6,12 +6,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { fetchProfiles } from "@/backend/services/profileService";
 import { FaMapMarkerAlt, FaPlayCircle, FaFireAlt, FaClock, FaPauseCircle } from "react-icons/fa";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/backend/context/LanguageContext";
+import StoryBig from '@/components/profile/story-big';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -39,10 +39,14 @@ interface Profile {
 
 export function RecentStories() {
   const [stories, setStories] = useState<{ profile: Profile; story: string }[]>([]);
-  const [selectedStory, setSelectedStory] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState<number>(0);
   const [playing, setPlaying] = useState<Record<number, boolean>>({});
 
   const videoRefs = useRef<HTMLVideoElement[]>([]);
+
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     async function fetchData() {
@@ -77,10 +81,14 @@ export function RecentStories() {
     }
   };
 
-  const openStory = (story: string) => setSelectedStory(story);
-  const closeStory = () => setSelectedStory(null);
-  const { t } = useTranslation();
-  const { language } = useLanguage();
+  const openStory = (story: string, profile: Profile) => {
+    const storyIndex = profile.stories?.indexOf(story) || 0; // Encontra o índice do story clicado
+    setSelectedProfile({ ...profile, stories: profile.stories });
+    setCurrentStoryIndex(storyIndex);
+  };
+
+  const closeStory = () => setSelectedProfile(null);
+
   const timeAgo = (timestamp: string) => {
     return formatDistanceToNow(new Date(timestamp), { addSuffix: true, locale: pt });
   };
@@ -93,7 +101,7 @@ export function RecentStories() {
             className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white flex items-center gap-2"
             variants={fadeInUp}
           >
-           {t("StoriesComponent.title")}
+            {t("StoriesComponent.title")}
             <FaFireAlt className="text-yellow-500" />
           </motion.h2>
           <Link href="/stories" passHref>
@@ -111,6 +119,7 @@ export function RecentStories() {
                 variants={cardVariants}
                 whileHover="hover"
                 className="relative bg-white dark:bg-[#300d1b] rounded-3xl shadow-lg overflow-hidden cursor-pointer"
+                onClick={() => openStory(story, profile)} // Clique na card abre o StoryBig
               >
                 <div className="relative aspect-[4/4] overflow-hidden">
                   <video
@@ -151,7 +160,7 @@ export function RecentStories() {
                     </p>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                    <button onClick={() => togglePlay(index)}>
+                    <button onClick={(e) => { e.stopPropagation(); togglePlay(index); }}>
                       {playing[index] ? (
                         <FaPauseCircle className="text-white/80" size={60} />
                       ) : (
@@ -160,12 +169,6 @@ export function RecentStories() {
                     </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => openStory(story)}
-                  className="absolute top-2 right-2 bg-pink-600 text-white text-xs py-1 px-2 rounded-full z-10 hover:bg-pink-700"
-                >
-                  Ver Story
-                </button>
               </motion.div>
             ))
           ) : (
@@ -176,26 +179,17 @@ export function RecentStories() {
         </motion.div>
       </motion.div>
 
-      {selectedStory && (
-        <motion.div
-          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <video
-            src={selectedStory}
-            className="max-w-[90%] max-h-[90%] rounded-3xl shadow-lg"
-            autoPlay
-            controls
-          />
-          <button
-            onClick={closeStory}
-            className="absolute top-4 right-4 text-white p-2 bg-black/50 rounded-full hover:bg-black/70"
-          >
-            <X size={32} />
-          </button>
-        </motion.div>
+      {selectedProfile && (
+        <StoryBig
+          selectedProfile={{
+            storyURL: selectedProfile.stories || [],
+            nome: selectedProfile.nome,
+            cidade: selectedProfile.cidade,
+            photos: selectedProfile.photos,
+          }}
+          onClose={closeStory}
+          currentIndex={currentStoryIndex}
+        />
       )}
     </section>
   );

@@ -806,5 +806,36 @@
       "line1": "Sensual Encounters",
       "line2": "in Portugal"
     }
+  },
+
+  "liga": {
+    "certified_profile": "Certified Profile",
+    "certified_subtitle": "Discover why {name} stands out",
+    "certified": "Certified",
+    "certified_benefit": "Why it matters:",
+    "contact_now": "Contact Now",
+    "whatsapp": "WhatsApp",
+    "tariff_info": "Starting at {tarifa}€",
+    "speaks": "Speaks"
+  },
+  "partilha": {
+    "share_profile_of": "Share {nome}'s Profile",
+    "share_now": "Spread the word",
+    "share_by_email": "Share by Email",
+    "email_subject": "Check out this profile!",
+    "email_body": "Hey, take a look at this profile: {url}",
+    "copy_link": "Copy Link",
+    "link_copied": "Link copied successfully!"
+  },
+
+"certificado": {
+    "certified_profile": "Certified Profile",
+    "certified_subtitle": "Discover why {name} stands out",
+    "certified": "Certified",
+    "authenticity_text": "At {platform}, certification is a seal of authenticity and trust. The profile of {name} has undergone rigorous verification by our team, ensuring all photos and information are genuine.",
+    "trust_text": "This means you can fully trust the experience offered. Certification highlights {escorts} who prioritize quality and transparency, providing security for clients and valuing the advertiser's commitment.",
+    "certified_benefit": "Why it matters:",
+    "visibility_text": "A certified profile appears with the badge {badge}, increasing its visibility and credibility on {platform}.",
+    "understood": "Understood"
   }
 }
