@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -13,21 +13,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import FiltroAltura from '@/components/filtros/filtro-altura';
-import FiltroCorpo from '@/components/filtros/filtro-corpo';
-import FiltroMamas from '@/components/filtros/filtro-mamas';
-import FiltroOlhos from '@/components/filtros/filtro-olhos';
-import FiltroPeito from '@/components/filtros/filtro-peito';
-import FiltroPelos from '@/components/filtros/filtro-pelos';
-import FiltroTatuagem from '@/components/filtros/filtro-tatuagem';
-import FiltroSigno from '@/components/filtros/filtro-signo';
-import FiltroCabelo from '@/components/filtros/filtro-cabelo';
-import FiltroDistrito from '@/components/filtros/filtro-distrito';
-import { toast } from 'react-toastify';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import FiltroAltura from "@/components/filtros/filtro-altura";
+import FiltroCorpo from "@/components/filtros/filtro-corpo";
+import FiltroMamas from "@/components/filtros/filtro-mamas";
+import FiltroOlhos from "@/components/filtros/filtro-olhos";
+import FiltroPeito from "@/components/filtros/filtro-peito";
+import FiltroPelos from "@/components/filtros/filtro-pelos";
+import FiltroTatuagem from "@/components/filtros/filtro-tatuagem";
+import FiltroSigno from "@/components/filtros/filtro-signo";
+import FiltroCabelo from "@/components/filtros/filtro-cabelo";
+import FiltroDistrito from "@/components/filtros/filtro-distrito";
+import FiltroOrigem from "@/components/filtros/filtro-origem";
+import { toast } from "react-toastify";
 import {
   updateNome,
   updateIdade,
@@ -37,16 +38,26 @@ import {
   updateAddress,
   updateLatitude,
   updateLongitude,
-} from '@/backend/reducers/profileSlice';
-import { Switch } from '@/components/ui/switch';
-import supabase from '@/backend/database/supabase';
-import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
+  updateAltura,
+  updateCorpo,
+  updateMamas,
+  updateOlhos,
+  updateSeios,
+  updatePelos,
+  updateTatuagem,
+  updateSigno,
+  updateCabelo,
+  updateOrigem
+} from "@/backend/reducers/profileSlice";
+import { Switch } from "@/components/ui/switch";
+import supabase from "@/backend/database/supabase";
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  age: z.string().min(1, { message: 'Age is required' }),
-  phone: z.string().min(1, { message: 'Phone is required' }),
+  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  age: z.string().min(1, { message: "Age is required" }),
+  phone: z.string().min(1, { message: "Phone is required" }),
   city: z.string().optional(),
   district: z.string().optional(),
   address: z.string().optional(),
@@ -60,6 +71,7 @@ const formSchema = z.object({
   tattoos: z.string().optional(),
   sign: z.string().optional(),
   useaddress: z.boolean().default(false),
+  origin: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -76,68 +88,69 @@ export function RegistoEntrada() {
   const { t } = useTranslation();
   const [useAddress, setUseAddress] = useState(false);
   const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [addressInput, setAddressInput] = useState('');
-  const [activeTab, setActiveTab] = useState('basicInfo');
+  const [addressInput, setAddressInput] = useState("");
+  const [activeTab, setActiveTab] = useState("basicInfo");
 
-  const profile = useSelector((state: any) => state.profile?.profile || {});
+  const profile = useSelector((state: any) => state.profile || {});
 
   const categories: Category[] = [
     {
-      id: 'basicInfo',
-      title: 'Informação Básica',
-      fields: ['name', 'age', 'phone', 'city', 'district', 'address', 'useaddress'],
+      id: "basicInfo",
+      title: "Informação Básica",
+      fields: ["name", "age", "phone", "city", "district", "address", "useaddress"],
     },
     {
-      id: 'profileInfo',
-      title: 'Informação de Perfil',
-      fields: ['height', 'breasts', 'body', 'hair', 'eyes', 'breastSize', 'hairiness', 'tattoos', 'sign'],
+      id: "profileInfo",
+      title: "Informação de Perfil",
+      fields: ["height", "breasts", "body", "hair", "eyes", "breastSize", "hairiness","origin", "tattoos", "sign"],
     },
   ];
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: profile.nome || '',
-      age: profile.idade?.toString() || '', // Convertido para string
-      phone: profile.telefone || '',
-      city: profile.cidade || '',
-      district: profile.distrito || '',
-      address: profile.address || '',
-      height: profile.height || '',
-      breasts: profile.breasts || '',
-      body: profile.body || '',
-      hair: profile.hair || '',
-      eyes: profile.eyes || '',
-      breastSize: profile.breastSize || '',
-      hairiness: profile.hairiness || '',
-      tattoos: profile.tattoos || '',
-      sign: profile.sign || '',
+      name: profile.nome || "",
+      age: profile.idade?.toString() || "",
+      phone: profile.telefone || "",
+      city: profile.cidade || "",
+      district: profile.distrito || "",
+      address: profile.address || "",
+      height: profile.altura || "",
+      breasts: profile.mamas || "",
+      body: profile.corpo || "",
+      hair: profile.cabelo || "",
+      eyes: profile.olhos || "",
+      breastSize: profile.seios || "",
+      hairiness: profile.pelos || "",
+      tattoos: profile.tatuagem || "",
+      sign: profile.signo || "",
+      origin: profile.origem  || "",
       useaddress: profile.useaddress || false,
     },
   });
 
-  // Sincronização inicial apenas na montagem
   useEffect(() => {
     const getSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       if (error || !data.session) {
-        console.log('Erro ao verificar sessão:', error);
+        console.log("Erro ao verificar sessão:", error);
+        router.push("/registo"); // Redireciona se não houver sessão
       } else {
-        console.log('Sessão iniciada:', data.session);
+        console.log("Sessão iniciada:", data.session);
       }
     };
     getSession();
 
-    setUseAddress(form.getValues('useaddress'));
-    setAddressInput(form.getValues('address') || ''); // Valor padrão para evitar undefined
-  }, [form]); // Adicionado 'form' como dependência
+    setUseAddress(form.getValues("useaddress"));
+    setAddressInput(form.getValues("address") || "");
+  }, [form, router]);
 
   const fetchSuggestions = async (query: string) => {
     if (!query || query.length < 3) {
       setSuggestions([]);
       return;
     }
-    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || '';
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       query
     )}.json?access_token=${accessToken}&types=address,place&limit=5&country=PT`;
@@ -146,20 +159,20 @@ export function RegistoEntrada() {
       const data = await response.json();
       setSuggestions(data.features || []);
     } catch (error) {
-      console.error('Erro ao buscar sugestões do Mapbox:', error);
-      toast.error('Erro ao buscar sugestões de endereço.');
+      console.error("Erro ao buscar sugestões do Mapbox:", error);
+      toast.error("Erro ao buscar sugestões de endereço.");
     }
   };
 
   const handleSuggestionSelect = (suggestion: any) => {
-    const city = suggestion.context.find((c: any) => c.id.includes('place'))?.text || '';
-    const district = suggestion.context.find((c: any) => c.id.includes('region'))?.text || '';
-    const address = suggestion.place_name || '';
-    const [longitude, latitude] = suggestion.center || [0, 0]; // Já são números do Mapbox
+    const city = suggestion.context.find((c: any) => c.id.includes("place"))?.text || "";
+    const district = suggestion.context.find((c: any) => c.id.includes("region"))?.text || "";
+    const address = suggestion.place_name || "";
+    const [longitude, latitude] = suggestion.center || [0, 0];
 
-    form.setValue('city', city);
-    form.setValue('district', district);
-    form.setValue('address', address);
+    form.setValue("city", city);
+    form.setValue("district", district);
+    form.setValue("address", address);
     dispatch(updateCidade(city || null));
     dispatch(updateDistrito(district || null));
     dispatch(updateAddress(address || null));
@@ -171,18 +184,18 @@ export function RegistoEntrada() {
 
   const toggleAddressOption = (checked: boolean) => {
     setUseAddress(checked);
-    form.setValue('useaddress', checked);
+    form.setValue("useaddress", checked);
     if (checked) {
-      form.setValue('city', '');
-      form.setValue('district', '');
+      form.setValue("city", "");
+      form.setValue("district", "");
       dispatch(updateCidade(null));
       dispatch(updateDistrito(null));
     } else {
-      form.setValue('address', '');
+      form.setValue("address", "");
       dispatch(updateAddress(null));
       dispatch(updateLatitude(0));
       dispatch(updateLongitude(0));
-      setAddressInput(''); // Garantir que seja string
+      setAddressInput("");
       setSuggestions([]);
     }
   };
@@ -192,8 +205,8 @@ export function RegistoEntrada() {
     if (!category) return null;
 
     const commonInputClass =
-      'relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200';
-    const readOnlyClass = 'text-gray-400 dark:text-gray-500 cursor-not-allowed';
+      "relative w-full bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 text-sm py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200";
+    const readOnlyClass = "text-gray-400 dark:text-gray-500 cursor-not-allowed";
 
     return (
       <div className="bg-opacity-40 rounded-3xl p-6">
@@ -205,100 +218,105 @@ export function RegistoEntrada() {
               name={fieldName}
               render={({ field }) => (
                 <FormItem>
-                  {fieldName === 'name' && (
+                  {fieldName === "name" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.name') || 'Nome'}
+                      {t("input.name") || "Nome"}
                     </FormLabel>
                   )}
-                  {fieldName === 'age' && (
+                  {fieldName === "age" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.age') || 'Idade'}
+                      {t("input.age") || "Idade"}
                     </FormLabel>
                   )}
-                  {fieldName === 'phone' && (
+                  {fieldName === "phone" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.phone') || 'Telefone'}
+                      {t("input.phone") || "Telefone"}
                     </FormLabel>
                   )}
-                  {fieldName === 'city' && (
+                  {fieldName === "city" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.city') || 'Cidade'}
+                      {t("input.city") || "Cidade"}
                     </FormLabel>
                   )}
-                  {fieldName === 'district' && (
+                  {fieldName === "district" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.district') || 'Distrito'}
+                      {t("input.district") || "Distrito"}
                     </FormLabel>
                   )}
-                  {fieldName === 'address' && (
+                  {fieldName === "address" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.address') || 'Morada Completa'}
+                      {t("input.address") || "Morada Completa"}
                     </FormLabel>
                   )}
-                  {fieldName === 'height' && (
+                  {fieldName === "height" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.height') || 'Altura'}
+                      {t("input.height") || "Altura"}
                     </FormLabel>
                   )}
-                  {fieldName === 'breasts' && (
+                  {fieldName === "breasts" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.breasts') || 'Mamas'}
+                      {t("input.breasts") || "Mamas"}
                     </FormLabel>
                   )}
-                  {fieldName === 'body' && (
+                  {fieldName === "origin" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.body') || 'Corpo'}
+                      {t("input.origem") || "Origem"}
                     </FormLabel>
                   )}
-                  {fieldName === 'hair' && (
+                  {fieldName === "body" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.hair') || 'Cabelo'}
+                      {t("input.body") || "Corpo"}
                     </FormLabel>
                   )}
-                  {fieldName === 'eyes' && (
+                  {fieldName === "hair" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.eyes') || 'Olhos'}
+                      {t("input.hair") || "Cabelo"}
                     </FormLabel>
                   )}
-                  {fieldName === 'breastSize' && (
+                  {fieldName === "eyes" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.breastSize') || 'Tamanho do Peito'}
+                      {t("input.eyes") || "Olhos"}
                     </FormLabel>
                   )}
-                  {fieldName === 'hairiness' && (
+                  {fieldName === "breastSize" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.hairiness') || 'Pelos'}
+                      {t("input.breastSize") || "Tamanho do Peito"}
                     </FormLabel>
                   )}
-                  {fieldName === 'tattoos' && (
+                  {fieldName === "hairiness" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.tattoos') || 'Tatuagens'}
+                      {t("input.hairiness") || "Pelos"}
                     </FormLabel>
                   )}
-                  {fieldName === 'sign' && (
+                  {fieldName === "tattoos" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t('input.sign') || 'Signo'}
+                      {t("input.tattoos") || "Tatuagens"}
+                    </FormLabel>
+                  )}
+                  {fieldName === "sign" && (
+                    <FormLabel className="text-md font-medium text-gray-400">
+                      {t("input.sign") || "Signo"}
                     </FormLabel>
                   )}
                   <FormControl>
-                    {fieldName === 'name' || fieldName === 'age' || fieldName === 'phone' ? (
+                    {fieldName === "name" || fieldName === "age" || fieldName === "phone" ? (
                       <Input
                         {...field}
                         className={commonInputClass}
                         onChange={(e) => {
                           field.onChange(e);
-                          if (fieldName === 'name') dispatch(updateNome(e.target.value));
-                          if (fieldName === 'age') dispatch(updateIdade(parseInt(e.target.value) || 0));
-                          if (fieldName === 'phone') dispatch(updateTelefone(e.target.value));
+                          if (fieldName === "name") dispatch(updateNome(e.target.value || null));
+                          if (fieldName === "age") dispatch(updateIdade(parseInt(e.target.value) || 0));
+                          if (fieldName === "phone") dispatch(updateTelefone(e.target.value || null));
                         }}
                       />
-                    ) : fieldName === 'city' && useAddress ? (
+                    ) : fieldName === "city" && useAddress ? (
                       <Input
-                        value={field.value || ''}
+                        value={field.value || ""}
                         readOnly
                         className={`${commonInputClass} ${readOnlyClass}`}
                       />
-                    ) : fieldName === 'city' ? (
+                    ) : fieldName === "city" ? (
                       <Input
                         {...field}
                         className={commonInputClass}
@@ -307,23 +325,23 @@ export function RegistoEntrada() {
                           dispatch(updateCidade(e.target.value || null));
                         }}
                       />
-                    ) : fieldName === 'district' && useAddress ? (
+                    ) : fieldName === "district" && useAddress ? (
                       <Input
-                        value={field.value || ''}
+                        value={field.value || ""}
                         readOnly
                         className={`${commonInputClass} ${readOnlyClass}`}
                       />
-                    ) : fieldName === 'district' ? (
+                    ) : fieldName === "district" ? (
                       <FiltroDistrito
-                        value={field.value || ''}
+                        value={field.value || ""}
                         onChange={(value) => {
-                          form.setValue('district', value);
+                          form.setValue("district", value);
                           dispatch(updateDistrito(value || null));
                         }}
                         disabled={useAddress}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'address' ? (
+                    ) : fieldName === "address" ? (
                       <div className="flex flex-col gap-2">
                         <Input
                           value={addressInput}
@@ -337,17 +355,16 @@ export function RegistoEntrada() {
                           }}
                           disabled={!useAddress}
                           placeholder={
-                            useAddress ? 'Digite o endereço completo (apenas Portugal)' : 'Ative para inserir endereço'
+                            useAddress
+                              ? "Digite o endereço completo (apenas Portugal)"
+                              : "Ative para inserir endereço"
                           }
                           className={commonInputClass}
                         />
                         <div className="flex items-center gap-2">
-                          <Switch
-                            checked={useAddress}
-                            onCheckedChange={toggleAddressOption}
-                          />
+                          <Switch checked={useAddress} onCheckedChange={toggleAddressOption} />
                           <span className="text-sm text-gray-600 dark:text-gray-400">
-                            {t('input.useaddress') || 'Morada Completa'}
+                            {t("input.useaddress") || "Morada Completa"}
                           </span>
                         </div>
                         {suggestions.length > 0 && useAddress && (
@@ -364,58 +381,100 @@ export function RegistoEntrada() {
                           </ul>
                         )}
                       </div>
-                    ) : fieldName === 'height' ? (
+                    ) : fieldName === "height" ? (
                       <FiltroAltura
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('height', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("height", value);
+                          dispatch(updateAltura(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'breasts' ? (
+                    ) : fieldName === "breasts" ? (
                       <FiltroMamas
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('breasts', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("breasts", value);
+                          dispatch(updateMamas(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'body' ? (
+                    ) : fieldName === "origin" ? (
+                      <FiltroOrigem
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("origin", value);
+                          dispatch(updateOrigem(value || null));
+                        }}
+                        bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
+                      />
+
+
+
+                    ) : fieldName === "body" ? (
                       <FiltroCorpo
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('body', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("body", value);
+                          dispatch(updateCorpo(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'hair' ? (
+                    ) : fieldName === "hair" ? (
                       <FiltroCabelo
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('hair', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("hair", value);
+                          dispatch(updateCabelo(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'eyes' ? (
+                    ) : fieldName === "eyes" ? (
                       <FiltroOlhos
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('eyes', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("eyes", value);
+                          dispatch(updateOlhos(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'breastSize' ? (
+                    ) : fieldName === "breastSize" ? (
                       <FiltroPeito
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('breastSize', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("breastSize", value);
+                          dispatch(updateSeios(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'hairiness' ? (
+                    ) : fieldName === "hairiness" ? (
                       <FiltroPelos
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('hairiness', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("hairiness", value);
+                          dispatch(updatePelos(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'tattoos' ? (
+
+                    ) : fieldName === "tattoos" ? (
                       <FiltroTatuagem
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('tattoos', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("tattoos", value);
+                          dispatch(updateTatuagem(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
-                    ) : fieldName === 'sign' ? (
+
+
+                    ) : fieldName === "sign" ? (
                       <FiltroSigno
-                        value={field.value || ''}
-                        onChange={(value) => form.setValue('sign', value)}
+                        value={field.value || ""}
+                        onChange={(value) => {
+                          form.setValue("sign", value);
+                          dispatch(updateSigno(value || null));
+                        }}
                         bgColor="bg-[#FFF5F8] dark:bg-[#27191f]"
                       />
                     ) : null}
@@ -444,7 +503,7 @@ export function RegistoEntrada() {
     <button
       onClick={onClick}
       className={`py-3 px-4 text-left transition-colors focus:outline-none border dark:border-b-gray-800 dark:border-opacity-50 ${
-        isActive ? 'text-darkpink border-l-2 border-l-darkpink font-medium' : 'text-gray-600 hover:text-darkpink'
+        isActive ? "text-darkpink border-l-2 border-l-darkpink font-medium" : "text-gray-600 hover:text-darkpink"
       }`}
     >
       {title}
@@ -454,20 +513,98 @@ export function RegistoEntrada() {
   const handleSubmit = async () => {
     const data = form.getValues();
     try {
-      dispatch(updateNome(data.name));
-      dispatch(updateIdade(parseInt(data.age) || 0)); // Conversão para número
-      dispatch(updateTelefone(data.phone));
+      // Pegar o userUID da sessão atual
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session) {
+        throw new Error("Usuário não autenticado. Por favor, faça login novamente.");
+      }
+      const userUID = sessionData.session.user.id;
+
+      // Dados a serem enviados ao Supabase
+      const profileData = {
+        userUID,
+        nome: data.name || null,
+        idade: parseInt(data.age) || 0,
+        telefone: data.phone || null,
+        cidade: !data.useaddress ? data.city || null : null,
+        distrito: !data.useaddress ? data.district || null : null,
+        address: data.useaddress ? data.address || null : null,
+        latitude: data.useaddress ? profile.latitude || 0 : 0,
+        longitude: data.useaddress ? profile.longitude || 0 : 0,
+        altura: data.height || null,
+        mamas: data.breasts || null,
+        origem: data.origin || null,
+        corpo: data.body || null,
+        cabelo: data.hair || null,
+        olhos: data.eyes || null,
+        seios: data.breastSize || null,
+        pelos: data.hairiness || null,
+        tatuagem: data.tattoos || null,
+        signo: data.sign || null,
+        status: false, // Perfil inativo até aprovação
+        approval_status: 'pending', // Estado temporário
+        premium: false, // Padrão para novos perfis
+      };
+
+      // Verificar se o perfil já existe no Supabase
+      const { data: existingProfile, error: fetchError } = await supabase
+        .from('ProfilesData')
+        .select('*')
+        .eq('userUID', userUID)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows found
+        throw new Error(`Erro ao verificar perfil existente: ${fetchError.message}`);
+      }
+
+      if (existingProfile) {
+        // Atualizar perfil existente
+        const { error: updateError } = await supabase
+          .from('ProfilesData')
+          .update(profileData)
+          .eq('userUID', userUID);
+        if (updateError) {
+          throw new Error(`Erro ao atualizar perfil: ${updateError.message}`);
+        }
+      } else {
+        // Inserir novo perfil
+        const { error: insertError } = await supabase
+          .from('ProfilesData')
+          .insert(profileData);
+        if (insertError) {
+          throw new Error(`Erro ao criar perfil: ${insertError.message}`);
+        }
+      }
+
+      // Atualizar o estado no Redux
+      dispatch(updateNome(data.name || null));
+      dispatch(updateIdade(parseInt(data.age) || 0));
+      dispatch(updateTelefone(data.phone || null));
       if (!data.useaddress) {
         dispatch(updateCidade(data.city || null));
         dispatch(updateDistrito(data.district || null));
       } else {
         dispatch(updateAddress(data.address || null));
+        dispatch(updateLatitude(profile.latitude || 0));
+        dispatch(updateLongitude(profile.longitude || 0));
       }
-      toast.success('Dados salvos localmente com sucesso!');
-      router.push('/registo/registo-contacto');
-    } catch (error) {
-      console.error('Erro ao processar o registro:', error);
-      toast.error('Erro ao salvar os dados.');
+      dispatch(updateAltura(data.height || null));
+      dispatch(updateMamas(data.breasts || null));
+      dispatch(updateCorpo(data.body || null));
+      dispatch(updateOrigem(data.origin || null));
+
+      dispatch(updateCabelo(data.hair || null));
+      dispatch(updateOlhos(data.eyes || null));
+      dispatch(updateSeios(data.breastSize || null));
+      dispatch(updatePelos(data.hairiness || null));
+      dispatch(updateTatuagem(data.tattoos || null));
+      dispatch(updateSigno(data.sign || null));
+
+      toast.success("Dados salvos com sucesso!");
+      router.push("/registo/registo-contacto");
+    } catch (error: any) {
+      console.error("Erro ao processar o registro:", error);
+      toast.error(`Erro ao salvar os dados: ${error.message}`);
     }
   };
 
@@ -475,23 +612,23 @@ export function RegistoEntrada() {
     <div className="p-8 bg-white dark:bg-[#100007] dark:border-gray-800 border dark:border-opacity-20 dark:border rounded-3xl">
       <div className="flex flex-col md:flex-row justify-between items-start mb-6">
         <div className="w-full md:w-auto">
-          <h1 className="text-2xl font-bold">{t('profileR2.createTitle')}</h1>
+          <h1 className="text-2xl font-bold">{t("profileR2.createTitle")}</h1>
           <p className="text-sm text-gray-500">
-            {t('profileR2.createSubtitle')} <strong>Xgirl.pt</strong>
+            {t("profileR2.createSubtitle")} <strong>Xgirl.pt</strong>
           </p>
           <Separator className="my-3 md:my-6 h-0.5 bg-gray-200 dark:bg-gray-800 dark:opacity-50 md:hidden" />
         </div>
         <div className="w-full md:w-auto flex justify-between md:justify-end space-x-4 mt-3 md:mt-0">
           <Link href="/">
             <Button className="rounded-full dark:bg-transparent dark:text-white" variant="outline">
-              {t('button.back')}
+              {t("button.back")}
             </Button>
           </Link>
           <Button
             onClick={form.handleSubmit(handleSubmit)}
             className="bg-darkpink hover:bg-darkpinkhover text-white rounded-full"
           >
-            {t('button.createAccount')}
+            {t("button.next")}
           </Button>
         </div>
       </div>
@@ -521,8 +658,8 @@ export function RegistoEntrada() {
                   onClick={() => setActiveTab(category.id)}
                   className={`py-2 px-4 flex-shrink-0 transition-colors ${
                     activeTab === category.id
-                      ? 'text-darkpink border-b-2 dark:border-b-gray-800 dark:border-opacity-50 border-darkpink font-medium'
-                      : 'text-gray-600'
+                      ? "text-darkpink border-b-2 dark:border-b-gray-800 dark:border-opacity-50 border-darkpink font-medium"
+                      : "text-gray-600"
                   }`}
                 >
                   {category.title}

@@ -74,6 +74,7 @@ export interface ProfileState {
     pelos?: boolean;
     tatuagem?: boolean;
     certificado?: boolean;
+    accountType: "Anunciante" | "Membro" | "Estabelecimento" | null; // Novo campo
   };
   chatRooms: ChatRoom[] | null;
   currentChatRoomId: string | null;
@@ -132,6 +133,7 @@ const initialState: ProfileState = {
   chatRooms: null,
   currentChatRoomId: null,
   messages: {},
+  accountType: null,
 };
 
 // Criação do slice
@@ -301,6 +303,9 @@ const profileSlice = createSlice({
     },
     setCurrentChatRoom: (state, action: PayloadAction<string | null>) => {
       state.currentChatRoomId = action.payload;
+    },
+    setAccountType: (state, action: PayloadAction<"Anunciante" | "Membro" | "Estabelecimento" | null>) => {
+      state.accountType = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -509,6 +514,7 @@ export const {
   updateArticleAuthorBadge,
   updateFeaturedUntil,
   setCurrentChatRoom,
+  setAccountType,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

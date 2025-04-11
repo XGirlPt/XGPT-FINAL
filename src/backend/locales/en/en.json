@@ -611,7 +611,8 @@
 
   "button": {
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "createAccount": "Create Account"
   },
 
   "contactData": {

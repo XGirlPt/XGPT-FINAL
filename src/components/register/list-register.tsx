@@ -31,10 +31,10 @@ const ListRegister: React.FC<ListRegisterProps> = ({ handleOptionSelect }) => {
   return (
     <CommonFilter
       label=""
-      options={TipoConta}
+      options={TipoConta.map(opt => ({ id: opt.id.toString(), name: opt.name, unavailable: opt.unavailable }))}
       value={selectedOption?.name || null}
       onChange={handleChange}
-      placeholder="------"
+      placeholder="Selecione o tipo de conta"
     />
   );
 };

@@ -4,22 +4,18 @@ import { Fragment } from 'react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 export interface FilterOption {
-  id: string; // Valor fixo em português
-  name: string; // Valor traduzido
+  id: string;
+  name: string;
   unavailable?: boolean;
-  value?: number | string;
 }
 
 export interface CommonFilterProps {
   label: string;
   options: FilterOption[];
-  value: string | null; // O value agora será o id (valor fixo em português)
+  value: string | null;
   onChange: (value: string) => void;
   placeholder?: string;
   bgColor?: string;
-  buttonPadding?: string;
-  rounded?: string;
-  iconColor?: string;
 }
 
 const CommonFilter: React.FC<CommonFilterProps> = ({
@@ -30,15 +26,14 @@ const CommonFilter: React.FC<CommonFilterProps> = ({
   placeholder,
   bgColor = 'bg-[#FFF5F8] dark:bg-[#27191f]',
 }) => {
-  // Encontra a opção selecionada com base no id
-  const selectedOption = options.find((opt) => opt.id === value) || null;
+  const selectedOption = options.find((opt) => opt.name === value) || null;
   const displayValue = selectedOption ? selectedOption.name : (placeholder || label);
 
   return (
     <div className="w-full">
       <Listbox
-        value={selectedOption} // Usa o objeto completo da opção selecionada
-        onChange={(selectedOption: FilterOption | null) => onChange(selectedOption ? selectedOption.id : '')} // Passa o id
+        value={selectedOption}
+        onChange={(option: FilterOption | null) => onChange(option ? option.name : '')}
       >
         {({ open }) => (
           <div>
@@ -47,9 +42,7 @@ const CommonFilter: React.FC<CommonFilterProps> = ({
               <Listbox.Button
                 className={`relative w-full ${bgColor} text-gray-600 dark:text-gray-200 text-sm cursor-pointer py-2.5 pl-3 pr-10 text-left rounded-full focus:outline-none border border-pink-200 hover:border-pink-300 dark:border-[#2D3748] dark:hover:border-[#4A5568] transition-colors duration-200`}
               >
-                <span className="block truncate">
-                  {displayValue} {/* Exibe o name traduzido ou placeholder */}
-                </span>
+                <span className="block truncate">{displayValue}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon className="h-5 w-5 text-[#E84393]" aria-hidden="true" />
                 </span>
@@ -64,10 +57,10 @@ const CommonFilter: React.FC<CommonFilterProps> = ({
                 <Listbox.Options className="absolute z-20 w-full mt-1 overflow-auto text-sm bg-[#FFF5F8] dark:bg-[#27191f] text-gray-600 dark:text-gray-200 rounded-md shadow-lg max-h-60 ring-1 ring-gray-400 dark:ring-1 dark:ring-[#2D3748] focus:outline-none">
                   {options.map((option) => (
                     <Listbox.Option
-                      key={option.id} // O id é único, então isso está correto
+                      key={option.id}
                       className={({ active }) =>
                         `relative py-2.5 pl-3 pr-9 cursor-pointer select-none ${
-                          active ? 'bg-pink-500 text-white' : 'text-gray-200 hover:bg-[#2D3748]'
+                          active ? 'bg-pink-500 text-white' : 'text-gray-600 dark:text-gray-200 hover:bg-[#2D3748]'
                         }`
                       }
                       value={option}
@@ -76,11 +69,9 @@ const CommonFilter: React.FC<CommonFilterProps> = ({
                       {({ selected, active }) => (
                         <>
                           <span
-                            className={`block truncate ${
-                              selected ? 'font-medium' : 'font-normal'
-                            }`}
+                            className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
                           >
-                            {option.name} {/* Exibe o valor traduzido */}
+                            {option.name}
                           </span>
                           {selected && (
                             <span

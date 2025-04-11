@@ -601,10 +601,11 @@
     "useaddress": "Usar Morada"
 
   },
-  "button": {
-    "back": "Voltar",
-    "next": "Seguinte"
-  },
+ "button": {
+  "back": "Voltar",
+  "next": "Próximo",
+  "createAccount": "Criar Conta"
+},
 
   "contactData": {
     "title": "Dados Gerais",

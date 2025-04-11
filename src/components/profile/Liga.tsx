@@ -5,7 +5,7 @@ import { FaWhatsapp, FaMoneyBillWave } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent , DialogTitle,DialogHeader  } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
@@ -68,7 +68,9 @@ const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
         >
           {/* Botão de fechar */}
        
-
+          <DialogHeader>
+      <DialogTitle>Informações de Contato</DialogTitle> {/* Adicione um título relevante */}
+      </DialogHeader>
           {/* Cabeçalho */}
           <motion.div variants={fadeInUp} className="mb-6 text-center">
             <h2 className="text-2xl font-semibold text-pink-600 dark:text-pink-400">

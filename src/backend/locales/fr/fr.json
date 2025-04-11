@@ -609,10 +609,7 @@
     "useaddress": "Utiliser l’Adresse"
   },
 
-  "button": {
-    "back": "Retour",
-    "next": "Suivant"
-  },
+ 
 
   "contactData": {
     "title": "Informations Générales",
@@ -635,6 +632,12 @@
     "title": "Description",
     "placeholder": "Écrivez votre description ici..."
   },
+
+  "button": {
+  "back": "Retour",
+  "next": "Suivant",
+  "createAccount": "Créer un compte"
+},
 
   "button2": {
     "back": "Retour",
