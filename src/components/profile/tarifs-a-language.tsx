@@ -45,8 +45,18 @@ export function TarifsAndLanguage({ selectedProfile }: TarifsAndLanguageProps) {
   };
 
   // Função para buscar bandeiras de idiomas
-  const obterBandeira = (codigo: string): string => {
-    return `/Flags/${codigo}.svg`; // Diretório das bandeiras
+  const obterBandeira = (lingua: string): string => {
+    switch (lingua) {
+      case 'rs': return '/Flags/ru.svg';
+      case 'de': return '/Flags/de.svg';
+      case 'pt': return '/Flags/pt.svg';
+      case 'fr': return '/Flags/fr.svg';
+      case 'en': return '/Flags/ing.svg';
+      case 'it': return '/Flags/it.svg';
+      case 'es': return '/Flags/es.svg';
+      case 'ar': return '/Flags/ar.png';
+      default: return '/logo.webp';
+    }
   };
 
   // Função para traduzir o nome do idioma baseado na língua da interface

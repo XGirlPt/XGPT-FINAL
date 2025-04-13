@@ -101,6 +101,45 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
     [profiles]
   );
 
+
+
+
+  const fadeInUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5 } };
+  const staggerChildren = { animate: { transition: { staggerChildren: 0.1 } } };
+  const storyCircleVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: [0, -10, 0],
+      scale: 1,
+      transition: {
+        y: { repeat: Infinity, repeatType: "loop", duration: 3, ease: "easeInOut" },
+        opacity: { duration: 0.6 },
+      },
+    },
+    hover: { scale: 1.1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, y: -30, scale: 0.9, transition: { duration: 0.5 } },
+  };
+  
+  // Posições ajustadas para círculos maiores
+  const storyPositions = [
+    "-top-14 lg:top-2 left-4 lg:left-28 w-24 h-24 sm:w-20 sm:h-20",
+    "-top-14 lg:top-2 right-4 lg:right-28 w-24 h-24 sm:w-20 sm:h-20",
+    "-bottom-28 lg:bottom-4 left-4 lg:-left-16 w-34 h-34 sm:w-28 sm:h-28",
+    "-bottom-28 lg:bottom-4 right-4 lg:-right-16 w-29 h-29 sm:w-24 sm:h-24",
+  ];
+
+
+
+
+
+
+
+
+
+
+
+
   // Memoizar checkAuthorBadge
   const memoizedCheckAuthorBadge = useCallback(checkAuthorBadge, []);
 
@@ -148,68 +187,79 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
   return (
     <section className="relative md:px-4">
       <motion.div className="text-center" initial="initial" animate="animate" variants={staggerChildren}>
-        <div className="relative">
-          <motion.div className="mb-8" variants={fadeInUp}>
-            <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
-              {t('heroSection.badge')}
-            </span>
-          </motion.div>
+      <div className="relative">
+  <motion.div className="mb-8" variants={fadeInUp}>
+    <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
+      {t('heroSection.badge')}
+    </span>
+  </motion.div>
 
-          <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
-            {t('heroSection.title.line1')}
-            <br />
-            {t('heroSection.title.line2')}
-          </motion.h1>
+  <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
+    {t('heroSection.title.line1')}
+    <br />
+    {t('heroSection.title.line2')}
+  </motion.h1>
 
-          <motion.p className="text-xl font-body text-gray-600 dark:text-gray-300 mb-12" variants={fadeInUp}>
-            {t("dashboard.meta_description")}
-          </motion.p>
+  <motion.p className="text-xl font-body text-gray-600 dark:text-gray-300 mb-12" variants={fadeInUp}>
+    {t("dashboard.meta_description")}
+  </motion.p>
 
-          {displayedStories.map((profile, index) => (
-            <motion.div
-              key={`${profile.nome}-${index}`}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={storyCircleVariants}
-              whileHover="hover"
-              className={`absolute ${storyPositions[index]} cursor-pointer group`}
-              onClick={() => openStory(profile, 0)} // Abre o primeiro story do perfil
-            >
-              <div className="relative rounded-full overflow-hidden w-full h-full">
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-[3px]"
-                  animate={{ scale: [1, 1.1, 1], opacity: [0.8, 1, 0.8] }}
-                  transition={{
-                    scale: { repeat: Infinity, duration: 1.5, ease: "easeInOut" },
-                    opacity: { repeat: Infinity, duration: 1.5, ease: "easeInOut" },
-                  }}
-                >
-                  <div className="bg-white dark:bg-gray-900 rounded-full w-full h-full" />
-                </motion.div>
-                <video
-                  src={profile.stories[0]}
-                  className="relative object-cover w-full h-full rounded-full z-10"
-                  autoPlay
-                  loop
-                  muted
-                />
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100"
-                  animate={{ opacity: [0, 0.5, 0] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                />
-              </div>
-              <div className="mt-3 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/70 rounded-lg py-1 px-2 shadow-md">
-                <p className="text-pink-300">{profile.nome}</p>
-                <p className="text-gray-300 flex items-center justify-center gap-1">
-                  <FaMapMarkerAlt className="text-pink-500" />
-                  {profile.cidade}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+  {displayedStories.map((profile, index) => (
+    <motion.div
+      key={`${profile.nome}-${index}`}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={storyCircleVariants}
+      whileHover="hover"
+      className={`absolute ${storyPositions[index]} cursor-pointer group`}
+      onClick={() => openStory(profile, 0)} // Abre o primeiro story do perfil
+    >
+      <div className="relative rounded-full overflow-hidden w-full h-full">
+        {/* Borda estilizada */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-[2px]"
+          animate={{ opacity: [0.85, 1, 0.85] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <div className="bg-white dark:bg-gray-900 rounded-full w-full h-full" />
+        </motion.div>
+        {/* Vídeo */}
+        <video
+          src={profile.stories[0]}
+          className="relative object-cover w-full h-full rounded-full z-10"
+          autoPlay
+          loop
+          muted
+        />
+        {/* Avatar, nome e cidade dentro do círculo */}
+        <div className="absolute bottom-2 left-0 right-0 p-1.5 text-center z-20  rounded-b-full">
+          <div className="flex items-center justify-center gap-1">
+            <div className="w-3 h-3 rounded-full overflow-hidden flex-shrink-0">
+              <Image
+                src={profile.photos[0] || "/fallback-avatar.png"}
+                alt={`${profile.nome}'s avatar`}
+                width={12}
+                height={12}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <p className="text-white text-[9px] font-semibold truncate max-w-[70px]">{profile.nome}</p>
+          </div>
+          <p className="text-gray-200 text-[8px] flex items-center justify-center gap-1 mt-0.5">
+            <FaMapMarkerAlt className="text-pink-400 w-3 h-3" />
+            <span className="truncate">{profile.cidade}</span>
+          </p>
         </div>
+        {/* Overlay de hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100"
+          transition={{ duration: 0.3 }}
+        />
+      </div>
+    </motion.div>
+  ))}
+</div>
 
         <motion.div variants={fadeInUp} className="w-full pt-20 lg:pt-0">
           <div className="-mx-4 sm:-mx-4 lg:-mx-16 xl:-mx-36">

@@ -11,6 +11,8 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "@/backend/database/supabase";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/backend/context/LanguageContext";
+import Link from "next/link";
+
 
 interface Profile {
   nome: string;
@@ -147,6 +149,8 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
       {/* Grid com 3 linhas e 5 colunas */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 py-4">
         {displayedProfiles.map((profile, index) => (
+                      <Link href={`/escort/${profile.nome}`} passHref key={index}>
+          
           <motion.div
             key={index}
             variants={cardVariants}
@@ -229,6 +233,8 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
               </div>
             </motion.div>
           </motion.div>
+          </Link>
+
         ))}
       </div>
 

@@ -235,67 +235,67 @@ export function RegistoEntrada() {
                   )}
                   {fieldName === "city" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.city") || "Cidade"}
+                                                                    {t("input.city") || "Cidade"}
+
                     </FormLabel>
                   )}
+
                   {fieldName === "district" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.district") || "Distrito"}
+                        {t("input.district") || "Distrito"}
                     </FormLabel>
                   )}
+
+
                   {fieldName === "address" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.address") || "Morada Completa"}
+                                              {t("input.address") || "Morada"}
+
                     </FormLabel>
                   )}
                   {fieldName === "height" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.height") || "Altura"}
+                   
                     </FormLabel>
                   )}
                   {fieldName === "breasts" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.breasts") || "Mamas"}
+
                     </FormLabel>
                   )}
                   {fieldName === "origin" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.origem") || "Origem"}
+                     
                     </FormLabel>
                   )}
                   {fieldName === "body" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.body") || "Corpo"}
+                 
                     </FormLabel>
                   )}
                   {fieldName === "hair" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.hair") || "Cabelo"}
                     </FormLabel>
                   )}
                   {fieldName === "eyes" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.eyes") || "Olhos"}
+                 
                     </FormLabel>
                   )}
                   {fieldName === "breastSize" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.breastSize") || "Tamanho do Peito"}
                     </FormLabel>
                   )}
                   {fieldName === "hairiness" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.hairiness") || "Pelos"}
                     </FormLabel>
                   )}
                   {fieldName === "tattoos" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.tattoos") || "Tatuagens"}
                     </FormLabel>
                   )}
                   {fieldName === "sign" && (
                     <FormLabel className="text-md font-medium text-gray-400">
-                      {t("input.sign") || "Signo"}
                     </FormLabel>
                   )}
                   <FormControl>

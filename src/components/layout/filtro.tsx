@@ -128,13 +128,13 @@ const Filtro: React.FC<FiltroProps> = ({ open, onOpenChange, onApplyFilters }) =
             <DialogTitle className="text-3xl md:text-4xl font-semibold font-body text-gray-900 dark:text-white">
               Filtros
             </DialogTitle>
-            <Button
+            {/* <Button
               variant="ghost"
               className="absolute top-0 right-0 p-2 hover:bg-pink-100 dark:hover:bg-[#2b1a21]"
               onClick={() => onOpenChange(false)}
             >
               <FaTimes className="text-gray-600 dark:text-gray-300" size={20} />
-            </Button>
+            </Button> */}
           </DialogHeader>
 
           <div className="border-t border-gray-200 dark:border-gray-800 my-6" />

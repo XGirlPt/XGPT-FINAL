@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { shallowEqual } from "react-redux";
+import Image from 'next/image';
 
 // Função para adicionar watermark centralizada, maior e mais transparente
 const addWatermark = async (file: File): Promise<File> => {
@@ -336,11 +337,14 @@ export function RegistoFotos() {
             className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 cursor-pointer text-white bg-red-600 rounded-full p-1 transition-opacity duration-300"
             onClick={() => handleDeletePhoto(index)}
           />
-          <img
-            src={photoURL}
-            alt={`Foto ${index}`}
-            className="w-full h-full object-cover rounded-3xl border border-gray-600"
-          />
+         <Image
+              src={photoURL}
+              alt={`Foto de Verificação ${index}`}
+              fill
+              className="object-cover rounded-3xl border border-gray-600"
+              sizes="(max-width: 640px) 100vw, 50vw" // Opcional: ajusta o tamanho da imagem
+            />
+          
         </div>
       );
     });
@@ -405,10 +409,12 @@ export function RegistoFotos() {
               className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 cursor-pointer text-white bg-red-600 rounded-full p-1 transition-opacity duration-300"
               onClick={() => handleDeleteVerificationPhoto(index)}
             />
-            <img
+            <Image
               src={photoURL}
               alt={`Foto de Verificação ${index}`}
-              className="w-full h-full object-cover rounded-3xl border border-gray-600"
+              fill
+              className="object-cover rounded-3xl border border-gray-600"
+              sizes="(max-width: 640px) 100vw, 50vw" // Opcional: ajusta o tamanho da imagem
             />
           </div>
         );

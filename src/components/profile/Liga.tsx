@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { FiPhone } from 'react-icons/fi';
 import { FaWhatsapp, FaMoneyBillWave } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent , DialogTitle,DialogHeader  } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
@@ -15,6 +15,7 @@ interface LigaProps {
     tarifa: number;
     lingua: string[];
     telefone: string;
+    photos?: string[];
   };
   setShowLiga: (show: boolean) => void;
 }
@@ -22,155 +23,139 @@ interface LigaProps {
 const Liga: React.FC<LigaProps> = ({ selectedProfile, setShowLiga }) => {
   const { t } = useTranslation();
 
-  // Função para fechar o modal
-  const handleClose = useCallback(() => {
-    setShowLiga(false);
-  }, [setShowLiga]);
+  // Função para fechar o diálogo
+  const handleClose = useCallback(() => setShowLiga(false), [setShowLiga]);
 
-  // Dados do Redux
-  const telefoneRedux = useSelector((state: any) => state.profile?.profile?.telefone || selectedProfile?.telefone);
-  const linguaRedux = useSelector((state: any) => state.profile?.profile?.lingua || selectedProfile?.lingua);
+  // Dados do Redux com fallback para selectedProfile
+  const telefone = useSelector((state: any) => state.profile?.profile?.telefone || selectedProfile?.telefone);
+  const lingua = useSelector((state: any) => state.profile?.profile?.lingua || selectedProfile?.lingua);
+  const tarifa = useSelector((state: any) => state.profile?.profile?.tarifa || selectedProfile?.tarifa);
 
-  // Função para obter a bandeira com base na língua
+  // Função para obter bandeiras com base na língua
   const obterBandeira = (lingua: string): string => {
-    switch (lingua) {
-      case 'Russo': return '/Flags/ru.svg';
-      case 'Alemão': return '/Flags/ale.svg';
-      case 'Português': return '/Flags/pt.svg';
-      case 'Francês': return '/Flags/fr.svg';
-      case 'Inglês': return '/Flags/ing.svg';
-      case 'Italiano': return '/Flags/it.svg';
-      case 'Espanhol': return '/Flags/es.svg';
-      case 'Árabe': return '/Flags/ar.png';
-      default: return '/logo.webp';
-    }
+    const bandeiras: { [key: string]: string } = {
+      rs: '/Flags/ru.svg',
+      de: '/Flags/de.svg',
+      pt: '/Flags/pt.svg',
+      fr: '/Flags/fr.svg',
+      en: '/Flags/ing.svg',
+      it: '/Flags/it.svg',
+      es: '/Flags/es.svg',
+      ar: '/Flags/ar.png',
+    };
+    return bandeiras[lingua] || '/logo.webp';
   };
 
-  // Variantes de animação
+  // Animações com Framer Motion
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 },
+    transition: { duration: 0.5, ease: 'easeOut' },
   };
 
-  const staggerChildren = {
-    animate: { transition: { staggerChildren: 0.1 } },
+  const staggerContainer = {
+    animate: { transition: { staggerChildren: 0.15 } },
   };
 
   return (
     <Dialog open={true} onOpenChange={handleClose}>
-      <DialogContent className="max-w-sm w-full bg-white dark:bg-[#1a0a10] rounded-2xl shadow-xl p-6 border-none">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="relative"
-        >
-          {/* Botão de fechar */}
-       
-          <DialogHeader>
-      <DialogTitle>Informações de Contato</DialogTitle> {/* Adicione um título relevante */}
-      </DialogHeader>
-          {/* Cabeçalho */}
-          <motion.div variants={fadeInUp} className="mb-6 text-center">
-            <h2 className="text-2xl font-semibold text-pink-600 dark:text-pink-400">
-              {selectedProfile?.nome}
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              {t('liga.contact_now')}
-            </p>
-          </motion.div>
-
-          {/* Opções de Contato */}
-          <motion.div
-            variants={staggerChildren}
-            initial="initial"
-            animate="animate"
-            className="space-y-3 mb-6"
+      <DialogContent className="max-w-md w-full bg-white dark:bg-[#1a0a10] rounded-2xl shadow-2xl p-6 border-none">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative">
+          {/* Botão de Fechar */}
+          {/* <Button
+            onClick={handleClose}
+            className="absolute top-2 right-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 w-8 h-8 flex items-center justify-center transition-colors duration-200"
+            aria-label="Fechar diálogo"
           >
-            {/* Telefone */}
+            <X size={16} />
+          </Button> */}
+
+          {/* Cabeçalho: Foto e Nome */}
+          <DialogHeader className="flex flex-col items-center mb-6">
+            <motion.div variants={fadeInUp} className="relative w-20 h-20 rounded-full overflow-hidden ring-4 ring-pink-500 dark:ring-pink-400 shadow-lg">
+              <Image
+                alt={selectedProfile?.nome || 'Imagem do perfil'}
+                src={selectedProfile?.photos?.[0] || '/logo.webp'}
+                fill
+                className="object-cover"
+                sizes="(max-width: 80px) 100vw, 80px"
+              />
+            </motion.div>
+            <DialogTitle className="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+              {selectedProfile?.nome || 'Nome indisponível'}
+            </DialogTitle>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('liga.subtitle', { defaultValue: 'Entre em contato agora' })}</p>
+          </DialogHeader>
+
+          {/* Botões de Contato */}
+          <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-4 mb-6">
             <motion.div variants={fadeInUp}>
               <Button
-                className="w-full rounded-full bg-gradient-to-r from-pink-50 to-rose-50 dark:from-[#2b1a21] dark:to-[#3b2a31] text-pink-600 dark:text-pink-400 font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:shadow-md transition-all duration-300 shadow-sm"
+                onClick={() => window.open(`tel:${telefone}`, '_self')}
+                aria-label={t('liga.call_aria', { defaultValue: 'Ligar para o número de telefone' })}
+                className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium py-3 px-4 flex items-center gap-3 hover:from-pink-600 hover:to-rose-600 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <div className="flex items-center gap-2">
-                  <FiPhone size={18} />
-                  <span className="text-xs">{telefoneRedux || 'N/A'}</span>
-                </div>
+                <FiPhone size={20} />
+                <span>{t('liga.call_button', { defaultValue: 'Ligar Agora' })}</span>
               </Button>
             </motion.div>
-
-            {/* WhatsApp */}
             <motion.div variants={fadeInUp}>
               <Button
-                onClick={() => window.open(`https://api.whatsapp.com/send?phone=${telefoneRedux}`, '_blank')}
-                className="w-full rounded-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-2 px-4 flex items-center justify-between gap-2 hover:from-green-700 hover:to-green-800 hover:shadow-md transition-all duration-300 shadow-sm relative overflow-hidden"
+                onClick={() => window.open(`https://api.whatsapp.com/send?phone=${telefone}`, '_blank')}
+                aria-label={t('liga.whatsapp_aria', { defaultValue: 'Enviar mensagem no WhatsApp' })}
+                className="w-full rounded-lg bg-gradient-to-r from-green-600 to-green-700 text-white font-medium py-3 px-4 flex items-center gap-3 hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-sweep w-1/3" />
-                <div className="flex items-center gap-2">
-                  <FaWhatsapp size={18} />
-                  <span className="text-xs">{t('liga.whatsapp')}</span>
-                </div>
+                <FaWhatsapp size={20} />
+                <span>{t('liga.whatsapp_button', { defaultValue: 'Mensagem no WhatsApp' })}</span>
               </Button>
             </motion.div>
           </motion.div>
 
-          {/* Tarifas */}
-          <motion.div variants={fadeInUp} className="mb-6">
-            <div className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-[#2b1a21] rounded-full py-2 px-4 shadow-sm">
-              <FaMoneyBillWave size={18} className="text-rose-500 dark:text-rose-400" />
-              <span className="text-xs text-gray-700 dark:text-gray-200 font-medium">
-                {t('liga.tariff_info', { tarifa: selectedProfile?.tarifa || 'Consultar' })}
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Línguas */}
-          {linguaRedux?.length > 0 && (
-            <motion.div
-              variants={staggerChildren}
-              initial="initial"
-              animate="animate"
-            >
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-3">
-                {t('liga.speaks')}
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {linguaRedux.map((lingua: string, index: number) => (
-                  <motion.div
-                    key={index}
-                    variants={fadeInUp}
-                    className="flex items-center gap-2 bg-gray-100 dark:bg-[#2b1a21] rounded-full px-3 py-1 shadow-sm"
-                  >
-                    <Image
-                      src={obterBandeira(lingua)}
-                      alt={`${lingua} flag`}
-                      width={20}
-                      height={20}
-                      className="rounded-full object-cover"
-                    />
-                    <span className="text-xs text-gray-700 dark:text-gray-200">{lingua}</span>
-                  </motion.div>
-                ))}
+          {/* Detalhes: Tarifa e Línguas */}
+          <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-6">
+            {/* Tarifa Melhorada */}
+            <motion.div variants={fadeInUp} className="bg-gray-100 dark:bg-[#2b1a21] rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <FaMoneyBillWave size={28} className="text-rose-500 dark:text-rose-400" />
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    {t('liga.tariff_label', { defaultValue: 'Tarifa por Serviço' })}
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {tarifa ? `${tarifa} €` : t('liga.tariff_unavailable', { defaultValue: 'Não informada' })}
+                  </p>
+                </div>
               </div>
             </motion.div>
-          )}
-        </motion.div>
 
-        {/* Estilo para o efeito de movimento */}
-        <style jsx global>{`
-          @keyframes sweep {
-            0% {
-              transform: translateX(-100%);
-            }
-            100% {
-              transform: translateX(300%);
-            }
-          }
-          .animate-sweep {
-            animation: sweep 1.5s infinite linear;
-          }
-        `}</style>
+            {/* Línguas Faladas */}
+            {lingua?.length > 0 && (
+              <motion.div variants={fadeInUp}>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">
+                  {t('liga.languages_label', { defaultValue: 'Idiomas Falados' })}
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {lingua.map((lang: string, index: number) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeInUp}
+                      className="flex items-center gap-2 bg-white dark:bg-[#2b1a21] rounded-lg p-2 shadow-sm border border-gray-200 dark:border-gray-700"
+                    >
+                      <Image
+                        src={obterBandeira(lang)}
+                        alt={`Bandeira de ${lang}`}
+                        width={28}
+                        height={28}
+                        className="rounded-full object-cover"
+                      />
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{lang.toUpperCase()}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );

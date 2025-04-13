@@ -258,7 +258,7 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
               icon: <FaCheck className="text-pink-500" />,
             },
             {
-              label: t('filterT.body'),
+              label: t('filterCorpo.body'),
               value: isValidValue(selectedProfile.corpo) ? translateValue('corpo', selectedProfile.corpo) : null,
               icon: <FaCheck className="text-pink-500" />,
             },
@@ -315,7 +315,7 @@ export function AboutProfile({ selectedProfile }: AboutProfileProps) {
   return (
     <Card className="p-6 bg-[#faf3f6] dark:bg-[#13040b] backdrop-blur-xl rounded-3xl border-none">
       <h2 className="text-3xl md:text-4xl mb-6">
-        {t('aboutProfile.title', { name: selectedProfile.nome })}
+        {t('profile.about', { name: selectedProfile.nome })}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-10">

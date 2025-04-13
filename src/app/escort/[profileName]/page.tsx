@@ -22,7 +22,7 @@ import { fetchProfiles } from '@/backend/services/profileService';
 import { startChat } from '@/backend/actions/ChatActions';
 import ChatWindow from '@/components/profile/ChatWindow';
 import { AppDispatch, RootState } from '@/backend/store';
-import { RiMessage2Fill } from 'react-icons/ri'; // Importar o ícone correto
+import { RiMessage2Fill } from 'react-icons/ri';
 
 function UserProfile() {
   const dispatch = useDispatch<AppDispatch>();
@@ -135,31 +135,45 @@ function UserProfile() {
 
   return (
     <>
-      <div className="sticky top-24 z-10 mt-1 pt-1 backdrop-blur-sm border-b border-gray-700">
+      {/* HeaderG fixo */}
+      <div className="fixed top-24 left-0 right-0 z-50  backdrop-blur-md border-b border-gray-700">
         <div className="container mx-auto px-4 py-3">
-        <div className="hidden md:flex items-center justify-between z-80">
-        <h1 className="text-4xl">Profile Details</h1>
+          <div className="hidden md:flex items-center justify-between">
+            <h1 className="text-4xl ">Profile Details</h1>
             <HeaderG
               currentProfileIndex={currentProfileIndex}
               setCurrentProfileIndex={setCurrentProfileIndex}
               profiles={profiles}
             />
           </div>
-          <div className="md:hidden">
-            <h1 className="text-3xl text-center mb-3">Profile Details</h1>
-            <div className="flex gap-2 justify-between">
-              <Button variant="outline" className="flex-1 px-4 py-1 rounded-full border text-sm bg-transparent font-body">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previous
-              </Button>
-              <Button variant="outline" className="flex-1 px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body">
-                Next <ArrowRightIcon className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+          <div className="md:hidden flex justify-between gap-2">
+            <Button
+              variant="outline"
+              className="flex-1 px-4 py-1 rounded-full border text-sm bg-transparent font-body text-gray-900 dark:text-white"
+              onClick={() => {
+                const prevIndex = (currentProfileIndex - 1 + profiles.length) % profiles.length;
+                setCurrentProfileIndex(prevIndex);
+                router.push(`/escort/${profiles[prevIndex].nome}`);
+              }}
+            >
+              <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previous
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1 px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body"
+              onClick={() => {
+                const nextIndex = (currentProfileIndex + 1) % profiles.length;
+                setCurrentProfileIndex(nextIndex);
+                router.push(`/escort/${profiles[nextIndex].nome}`);
+              }}
+            >
+              Next <ArrowRightIcon className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 relative">
+      <div className="container mx-auto px-4 pt-24 pb-8 relative">
         <div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415] hidden lg:block"
           style={{
@@ -203,7 +217,7 @@ function UserProfile() {
             />
           )}
 
-          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-40 relative">
+          <div className="flex-1 space-y-8 bg-white dark:bg-[#1a0a10] backdrop-blur-xl rounded-3xl p-6 z-20 relative">
             <PhotosAndCertificado
               selectedProfile={selectedProfile}
               isCertified={selectedProfile.isCertified}
@@ -232,15 +246,13 @@ function UserProfile() {
           />
         </div>
 
-        {/* Botão de mensagem fixo no canto inferior esquerdo */}
+        {/* Botão de mensagem fixo no canto inferior direito */}
         <Button
           onClick={handleChatClick}
-          className="fixed bottom-6 right-6 rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-body flex items-center justify-center w-14 h-14 shadow-lg z-50 animate-pulse"
+          className="fixed bottom-6 right-6 rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-body flex items-center justify-center w-14 h-14 shadow-lg z-60 animate-pulse"
         >
           <RiMessage2Fill size={28} />
-        
         </Button>
-        
 
         {renderChatWindow()}
       </div>
