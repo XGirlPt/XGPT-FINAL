@@ -5,6 +5,7 @@ import { cn } from '@/backend/lib/utils';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link'; // Import Link
 
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -108,6 +109,7 @@ export function PublishAdBanner() {
         </motion.p>
 
         <motion.div variants={buttonVariants}>
+        <Link href="/registo">
           <Button
             className={cn(
               'rounded-full px-8 py-6 text-lg font-medium',
@@ -116,6 +118,7 @@ export function PublishAdBanner() {
           >
             {t('publishAdBanner.button')}
           </Button>
+          </Link>
         </motion.div>
       </motion.div>
     </motion.div>

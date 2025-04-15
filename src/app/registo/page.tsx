@@ -175,19 +175,19 @@ const RegisterPage: React.FC = () => {
             ))}
           </div>
           <div className="mt-10 flex gap-4">
-            <Button
-              onClick={() => setShowSubscriptionPlan(true)}
-              className="rounded-full bg-transparent border border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white hover:scale-105 transition-transform dark:border-pink-400 dark:text-pink-400 dark:hover:bg-pink-400 px-6 py-2"
-            >
-              {t('register.view_plans')}
-            </Button>
-            <Button
-              onClick={() => setShowHowItWorks(true)}
-              className="rounded-full bg-transparent border border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white hover:scale-105 transition-transform dark:border-rose-400 dark:text-rose-400 dark:hover:bg-rose-400 px-6 py-2"
-            >
-              {t('register.how_it_works')}
-            </Button>
-          </div>
+  <Button
+    onClick={() => setShowSubscriptionPlan(true)}
+    className="rounded-full bg-transparent border border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white hover:scale-105 transition-transform dark:border-pink-400 dark:text-pink-400 dark:hover:bg-pink-400 dark:hover:text-white px-6 py-2"
+  >
+    {t('register.view_plans')}
+  </Button>
+  <Button
+    onClick={() => setShowHowItWorks(true)}
+    className="rounded-full bg-transparent border border-rose-500 text-rose-500 hover:bg-rose-500 hover:text-white hover:scale-105 transition-transform dark:border-rose-400 dark:text-rose-400 dark:hover:bg-rose-400 dark:hover:text-white px-6 py-2"
+  >
+    {t('register.how_it_works')}
+  </Button>
+</div>
         </motion.div>
 
         <motion.div
