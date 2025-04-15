@@ -146,7 +146,7 @@ function UserProfile() {
               profiles={profiles}
             />
           </div>
-          <div className="md:hidden flex justify-between gap-2">
+          {/* <div className="md:hidden flex justify-between gap-2">
             <Button
               variant="outline"
               className="flex-1 px-4 py-1 rounded-full border text-sm bg-transparent font-body text-gray-900 dark:text-white"
@@ -156,7 +156,7 @@ function UserProfile() {
                 router.push(`/escort/${profiles[prevIndex].nome}`);
               }}
             >
-              <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previous
+              <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previouswwww
             </Button>
             <Button
               variant="outline"
@@ -169,7 +169,7 @@ function UserProfile() {
             >
               Next <ArrowRightIcon className="w-4 h-4 ml-2" />
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -189,12 +189,12 @@ export function HeroSection({ profiles }: { profiles: Profile[] }) {
       <motion.div className="text-center" initial="initial" animate="animate" variants={staggerChildren}>
       <div className="relative">
   <motion.div className="mb-8" variants={fadeInUp}>
-    <span className="bg-[#f1c0d3] text-pink-600 lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs font-medium">
+    <span className="bg-[#f1c0d3] text-pink-600 border border-pink-400 font-bold lg:px-4 lg:py-1 px-2 py-1 rounded-full text-xs ">
       {t('heroSection.badge')}
     </span>
   </motion.div>
 
-  <motion.h1 className="text-5xl md:text-5xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
+  <motion.h1 className="font-mofugu text-7xl md:text-7xl mb-2 text-gray-900 dark:text-white" variants={fadeInUp}>
     {t('heroSection.title.line1')}
     <br />
     {t('heroSection.title.line2')}

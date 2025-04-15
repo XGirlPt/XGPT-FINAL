@@ -1,6 +1,7 @@
+// src/app/layout.tsx
 "use client";
 
-import { Inter } from 'next/font/google';
+import { inter, mofugu } from '@/backend/lib/fonts'; // Adicione mofugu
 import ReduxProvider from '@/provider/ReduxProvider';
 import { NextUIProvider } from '@nextui-org/react';
 import 'normalize.css';
@@ -8,14 +9,11 @@ import './globals.css';
 import { LanguageProvider } from '@/backend/context/LanguageContext';
 import { MainProvider } from '@/provider/MainProvider';
 import { ThemeProvider } from 'next-themes';
-import { interTight, mofugu } from '@/backend/lib/fonts';
 import Script from 'next/script';
 import "../backend/context/i18n/i18n";
 import CookieConsent from '@/components/ui/CookieConsent';
 import Maiores from '@/components/ui/maiores';
 import { useState, useEffect } from 'react';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export default function RootLayout({
   children,
@@ -51,7 +49,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="pt" className={inter.variable}>
+    <html lang="pt" className={`${inter.variable} ${mofugu.variable}`}>
       <head>
         <title>XGirl - Anúncios Eróticos, Escorts e Acompanhantes em Portugal</title>
         <meta

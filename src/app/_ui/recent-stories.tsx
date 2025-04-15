@@ -98,7 +98,7 @@ export function RecentStories() {
       <motion.div className="container mx-auto" initial="initial" animate="animate" variants={staggerChildren}>
         <div className="flex justify-between items-center mb-8">
           <motion.h2
-            className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white flex items-center gap-2"
+            className="text-6xl md:text-6xl font-semibold text-gray-900 dark:text-white flex items-center gap-2"
             variants={fadeInUp}
           >
             {t("StoriesComponent.title")}

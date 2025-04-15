@@ -13,7 +13,15 @@ src
 │   │   ├── statistics.tsx
 │   │   └── theme-toggle.tsx
 │   ├── admin
+│   │   ├── AdminLayout.tsx
 │   │   ├── _ui
+│   │   │   ├── AdminPagination.tsx
+│   │   │   ├── BlogCard.tsx
+│   │   │   ├── BlogManagement.tsx
+│   │   │   ├── ProfileCard.tsx
+│   │   │   ├── ProfileManagement.tsx
+│   │   │   ├── StatsCards.tsx
+│   │   │   └── page.tsx
 │   │   └── page.tsx
 │   ├── api
 │   │   ├── add-watermark
@@ -55,6 +63,8 @@ src
 │   │   ├── _ui
 │   │   │   └── InputWithIcon.tsx
 │   │   └── page.tsx
+│   ├── messages
+│   │   └── page.tsx
 │   ├── my-account
 │   │   ├── page.tsx
 │   │   └── submit-post
@@ -68,10 +78,7 @@ src
 │   ├── registo
 │   │   ├── confirmar-email
 │   │   │   └── page.tsx
-│   │   ├── regista2
-│   │   │   ├── _ui
-│   │   │   │   └── FeaturedList.tsx
-│   │   │   └── page.tsx
+│   │   ├── page.tsx
 │   │   ├── registo-contacto
 │   │   │   └── page.tsx
 │   │   ├── registo-entrada
@@ -105,6 +112,7 @@ src
 │           └── page.tsx
 ├── backend
 │   ├── actions
+│   │   ├── ChatActions.ts
 │   │   ├── ClubsActions.ts
 │   │   ├── ProfileActions.ts
 │   │   └── userAndClubActions.ts
@@ -138,6 +146,7 @@ src
 │   │   └── userAndClubReducer.ts
 │   ├── services
 │   │   ├── authService.ts
+│   │   ├── chatService.ts
 │   │   ├── geocodeService.tsx
 │   │   ├── profileDataService.ts
 │   │   ├── profileService.ts
@@ -147,17 +156,12 @@ src
 │   └── types
 │       └── index.ts
 ├── components
+│   ├── ChatFloatingButton.tsx
+│   ├── HowItWorksModal.tsx
 │   ├── MobileModal.tsx
 │   ├── ProfileCard.tsx
 │   ├── ThemeSwitcher.tsx
 │   ├── admin
-│   │   ├── AdminLayout.tsx
-│   │   ├── BlogCard.tsx
-│   │   ├── BlogManagement.tsx
-│   │   ├── Pagination.tsx
-│   │   ├── ProfileCard.tsx
-│   │   ├── ProfileManagement.tsx
-│   │   └── StatsCards.tsx
 │   ├── filtros
 │   │   ├── common-filter.tsx
 │   │   ├── filtro-age.tsx
@@ -197,7 +201,10 @@ src
 │   │   ├── header-mobile.tsx
 │   │   ├── header.tsx
 │   │   └── modal-atualizar-tag.tsx
+│   ├── messages
+│   │   └── messages.tsx
 │   ├── profile
+│   │   ├── ChatWindow.tsx
 │   │   ├── Liga.tsx
 │   │   ├── Partilha.tsx
 │   │   ├── ProfileStories.tsx
@@ -213,6 +220,12 @@ src
 │   │   ├── story-big.tsx
 │   │   └── tarifs-a-language.tsx
 │   ├── register
+│   │   ├── BenefitsSection.tsx
+│   │   ├── HowItWorksModal.tsx
+│   │   ├── RegisterForm.tsx
+│   │   ├── RegisterHeader.tsx
+│   │   ├── SubscriptionPlanModal.tsx
+│   │   ├── animationVariants.ts
 │   │   ├── check-contacto.tsx
 │   │   ├── check-deslocacoes.tsx
 │   │   ├── check-linguas.tsx
@@ -273,4 +286,4 @@ src
     ├── globals.css
     └── globals.min.css
 
-71 directories, 203 files
+71 directories, 216 files

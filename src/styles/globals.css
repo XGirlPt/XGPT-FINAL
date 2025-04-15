@@ -1,3 +1,5 @@
+/* src/styles/globals.css */
+
 @keyframes slide {
   0% {
     transform: translateX(-100%);
@@ -23,4 +25,8 @@
 
 .animate-slide {
   animation: slide 2s linear infinite;
+}
+
+h1 {
+  font-family: var(--font-mofugu), sans-serif;
 }

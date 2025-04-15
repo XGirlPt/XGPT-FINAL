@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/components/ui/button';
 import { Profile } from '@/backend/types';
+import { useTranslation } from "react-i18next";
 
 interface HeaderGProps {
   currentProfileIndex: number;
@@ -36,6 +37,8 @@ const HeaderG: React.FC<HeaderGProps> = ({
     }
   };
 
+  const { t } = useTranslation();
+
   return (
     <div className="flex gap-2">
       <Button
@@ -43,14 +46,14 @@ const HeaderG: React.FC<HeaderGProps> = ({
         className="px-4 py-1 rounded-full border border-gray-300 text-sm bg-transparent font-body"
         onClick={handlePrevProfile}
       >
-        <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previous
+        <ArrowLeftIcon className="w-4 h-4 mr-2" /> {t('escort.previous_page')}
       </Button>
       <Button
         variant="outline"
-        className="px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body"
+        className="px-4 py-1 rounded-full bg-pink-600 hover:bg-pink-700 text-sm font-body"
         onClick={handleNextProfile}
       >
-        Next <ArrowRightIcon className="w-4 h-4 ml-2" />
+      {t('escort.next_page')} <ArrowRightIcon className="w-4 h-4 ml-2" />
       </Button>
     </div>
   );

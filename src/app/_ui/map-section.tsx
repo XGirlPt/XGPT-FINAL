@@ -11,7 +11,7 @@ function MapSection({ profiles }: { profiles: Profile[] }) {
   return (
     <div className="flex items-center justify-between py-16 px-4 relative z-10 flex-col md:flex-row">
       <div className="max-w-xl">
-        <h1 className="text-3xl md:text-5xl mb-4 text-gray-900 dark:text-white">
+        <h1 className="text-6xl md:text-6xl mb-4 text-gray-900 dark:text-white">
           {t('mapSection.title')}
         </h1>
         <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-md font-body">

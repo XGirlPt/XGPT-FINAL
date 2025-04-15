@@ -143,7 +143,7 @@ const NewestAdds: React.FC<NewestAddsProps> = ({
       variants={containerVariants}
     >
       <motion.div className="flex items-center justify-between mb-4" variants={titleVariants}>
-      <h2 className="lg:text-5xl text-3xl">{t("newestAdds.title")}</h2>
+      <h2 className="text-6xl md:text-6xl">{t("newestAdds.title")}</h2>
             </motion.div>
 
       {/* Grid com 3 linhas e 5 colunas */}

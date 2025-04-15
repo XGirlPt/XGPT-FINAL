@@ -194,7 +194,7 @@ export function FeaturedAds({ profiles, currentPage }: { profiles: Profile[]; cu
         variants={containerVariants}
       >
         <motion.div className="flex items-center justify-between mb-4" variants={itemVariants}>
-          <h2 className="lg:text-5xl text-3xl">{t('featuredAds.title')}</h2>
+          <h2 className="text-6xl md:text-6xl">{t('featuredAds.title')}</h2>
           <Link href="/ads" className="text-sm text-white px-4 py-2 rounded-full bg-pink-600 font-body hidden md:block">
             View All
           </Link>
