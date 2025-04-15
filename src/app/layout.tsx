@@ -110,12 +110,10 @@ export default function RootLayout({
               id="google-analytics"
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
+                __html: `window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', 'G-FGCZWRX0E3', { 'cookie_flags': 'SameSite=None;Secure' });
-                `,
+                  gtag('config', 'G-FGCZWRX0E3', { 'cookie_flags': 'SameSite=None;Secure' });`,
               }}
             />
           </>

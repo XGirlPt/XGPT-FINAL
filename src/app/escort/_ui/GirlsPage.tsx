@@ -2,27 +2,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { fetchProfiles } from '@/backend/services/profileService';
 import { formatDistanceToNow } from 'date-fns';
 import { pt } from 'date-fns/locale';
-import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt, FaFilter } from 'react-icons/fa';
-import { MdVerified } from 'react-icons/md';
+import { FaVideo, FaCrown, FaClock, FaCommentDots, FaMapMarkerAlt, FaFilter, FaPen, FaSearch } from 'react-icons/fa';
+import { MdVerified, MdFiberManualRecord } from 'react-icons/md';
 import { Profile } from '@/backend/types';
 import { Button } from '@/components/ui/button';
 import FiltroDistrito from '@/components/filtros/filtro-distrito';
 import Filtro from '@/components/layout/filtro';
 import StoryBig from '@/components/profile/story-big';
 import { setAppliedFilters } from '@/backend/reducers/profileSlice';
+import { supabase } from '@/backend/database/supabase';
+import { useTranslation } from 'react-i18next';
 
 export const metadata = {
   title: 'XGirl - Acompanhantes em Portugal',
   description: 'Encontre as melhores acompanhantes e massagistas eróticas em Portugal. Filtre por localização, idade, tarifa e mais.',
-  keywords:
-    'Acompanhantes, Escort Portugal, Escort Lisboa, Escort Porto, Massagistas Eróticas, Anúncios Eróticos, Portugal',
+  keywords: 'Acompanhantes, Escort Portugal, Escort Lisboa, Escort Porto, Massagistas Eróticas, Anúncios Eróticos, Portugal',
   openGraph: {
     title: 'XGirl - Acompanhantes e Escort em Portugal',
     description: 'Descubra acompanhantes de luxo em Lisboa, Porto, Faro e mais. Filtre e encontre o perfil ideal.',
@@ -32,23 +33,30 @@ export const metadata = {
   },
 };
 
-const avatarVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: 'easeOut' },
+    transition: { staggerChildren: 0.2 },
   },
-  hover: {
-    scale: 1.15,
-    transition: { duration: 0.3 },
-  },
+};
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
+const avatarVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+  hover: { scale: 1.15, transition: { duration: 0.3 } },
 };
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
-  hover: { scale: 1.03, boxShadow: '0 8px 16px rgba(0,0,0,0.15)', transition: { duration: 0.2 } },
+  hover: { scale: 1.05, boxShadow: '0 8px 16px rgba(0,0,0,0.15)', transition: { duration: 0.2 } },
 };
 
 const timeAgo = (timestamp: string | Date) => {
@@ -56,16 +64,32 @@ const timeAgo = (timestamp: string | Date) => {
   return formatDistanceToNow(date, { addSuffix: true, locale: pt });
 };
 
+// Função para verificar badge de autora
+const checkAuthorBadge = async (userUID: string): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('status')
+    .eq('author_id', userUID)
+    .eq('status', 'approved')
+    .limit(1);
+
+  if (error) {
+    console.error('Erro ao verificar artigo aprovado:', error.message);
+    return false;
+  }
+  return data && data.length > 0;
+};
+
 export default function EscortPage() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [selectedStory, setSelectedStory] = useState<{ profile: Profile; index: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const appliedFilters = useSelector((state: any) => state.profile.appliedFilters || {});
-  const [filters, setFilters] = useState({
-    distrito: '',
-  });
+  const [filters, setFilters] = useState({ distrito: '' });
+  const [authorBadges, setAuthorBadges] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -82,6 +106,14 @@ export default function EscortPage() {
             return new Date(b.tagtimestamp ?? 0).getTime() - new Date(a.tagtimestamp ?? 0).getTime();
           });
         setProfiles(sortedProfiles);
+
+        // Verificar badges de autora
+        const badges: Record<string, boolean> = {};
+        for (const profile of sortedProfiles) {
+          const hasApprovedArticle = await checkAuthorBadge(profile.userUID);
+          badges[profile.userUID] = hasApprovedArticle;
+        }
+        setAuthorBadges(badges);
       } catch (error) {
         console.error('[EscortPage] Erro ao carregar perfis:', error);
       } finally {
@@ -100,7 +132,7 @@ export default function EscortPage() {
       if (filters.altura && profile.altura !== filters.altura) return false;
       if (filters.origem && filters.origem !== profile.origem) return false;
       if (filters.olhos && filters.olhos !== profile.olhos) return false;
-      if (filters.seIos && filters.seios !== profile.seios) return false;
+      if (filters.seios && filters.seios !== profile.seios) return false;
       if (filters.mamas && filters.mamas !== profile.mamas) return false;
       if (filters.pelos !== undefined && filters.pelos !== (profile.pelos === 'Sim')) return false;
       if (filters.tatuagem !== undefined && filters.tatuagem !== (profile.tatuagem === 'Sim')) return false;
@@ -112,6 +144,10 @@ export default function EscortPage() {
   const handleApplyFilters = (newFilters: any) => {
     dispatch(setAppliedFilters(newFilters));
     setShowMoreFilters(false);
+  };
+
+  const handleSearchByDistrict = () => {
+    dispatch(setAppliedFilters({ ...appliedFilters, distrito: filters.distrito }));
   };
 
   const handleResetFilters = () => {
@@ -131,54 +167,62 @@ export default function EscortPage() {
     return (
       <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
         <section className="container mx-auto px-4 py-8 relative">
-          <p className="text-center text-gray-900 dark:text-white text-2xl">Carregando...</p>
+          <p className="text-center text-gray-900 dark:text-white text-2xl">{t('common.loading', { defaultValue: 'Carregando...' })}</p>
         </section>
       </main>
     );
   }
 
   return (
-    <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen">
-      <section className="container mx-auto px-4 pt-12 pb-8 relative">
-        {/* Gradiente Decorativo */}
-        <div
+    <main className="bg-[#f2ebee] dark:bg-[#100007] min-h-screen overflow-x-hidden">
+      <section className="container mx-auto px-4 pt-12 pb-16 relative">
+        {/* Gradiente Decorativo Superior */}
+        <motion.div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.7 }}
           style={{
             height: '300px',
             width: '300px',
-            borderRadius: '150px',
             top: '-60px',
             left: '-60px',
-            filter: 'blur(50px)',
+            filter: 'blur(80px)',
             zIndex: 0,
           }}
         />
 
-        {/* Hero Section: Avatares */}
+        {/* Título */}
         <motion.div
-          className="relative z-10 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          className="relative z-10 text-center mb-12"
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Acompanhantes e Massagistas Eróticas
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            {t('escort.title', { defaultValue: 'Acompanhantes e Massagistas Eróticas' })}
           </h1>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-6">
-            Encontre as melhores acompanhantes em Portugal
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300">
+            {t('escort.subtitle', { defaultValue: 'Encontre as melhores acompanhantes em Portugal' })}
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+        </motion.div>
+
+        {/* Avatares */}
+        <motion.div
+          className="relative z-10 mb-12"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {profiles
               .filter((p) => p.premium || p.stories?.length > 0)
-              .slice(0, 10)
-              .map((profile, index) => (
+              .slice(0, 8)
+              .map((profile) => (
                 <Link key={profile.nome} href={`/escort/${profile.nome}`} passHref>
                   <motion.div
                     variants={avatarVariants}
-                    initial="hidden"
-                    animate="visible"
                     whileHover="hover"
-                    className="relative w-16 h-16 rounded-full overflow-hidden cursor-pointer group"
+                    className="relative w-20 h-20 rounded-full overflow-hidden cursor-pointer group"
                   >
                     <motion.div
                       className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 p-[2px]"
@@ -208,102 +252,112 @@ export default function EscortPage() {
 
         {/* Filtros */}
         <motion.div
-          className="relative z-10 bg-white dark:bg-[#1a0a10] rounded-2xl p-4 mb-6 shadow-md"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          className="relative z-10 bg-white dark:bg-[#1a0a10] rounded-2xl p-6 mb-12 shadow-lg"
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="flex-1 w-full">
-              <FiltroDistrito
-                value={filters.distrito}
-                onChange={(value: string) => setFilters({ ...filters, distrito: value })}
-                bgColor="bg-white dark:bg-[#1a0a10]"
-                className="rounded-xl border border-gray-300 dark:border-gray-700 focus:ring-pink-600"
-              />
-            </div>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <FiltroDistrito
+              value={filters.distrito}
+              onChange={(value: string) => setFilters({ ...filters, distrito: value })}
+            />
             <Button
-              className="bg-pink-600 hover:bg-pink-700 text-white rounded-full px-4 py-2 flex items-center gap-2"
+              className="w-full sm:w-auto rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white py-2 px-6 flex items-center gap-2 shadow-md transition-all duration-300 text-sm"
+              onClick={handleSearchByDistrict}
+            >
+              <FaSearch size={16} />
+              {t('filters.search', { defaultValue: 'Procurar' })}
+            </Button>
+            <Button
+              className="w-full sm:w-auto rounded-full bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 text-white py-2 px-6 flex items-center gap-2 shadow-md transition-all duration-300 text-sm"
               onClick={() => setShowMoreFilters(true)}
             >
               <FaFilter size={16} />
-              Mais Filtros
+              {t('filters.more_filters', { defaultValue: 'Mais Filtros' })}
             </Button>
           </div>
         </motion.div>
 
-        {/* Grade de Perfis */}
+        {/* Grade de Cards */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10"
+          className="grid grid-cols-2 md:grid-cols-5 gap-6 relative z-10"
+          variants={containerVariants}
           initial="hidden"
           animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
-          {profiles.map((profile) =>
-            Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0] ? (
-              <Link key={profile.nome} href={`/escort/${profile.nome}`} passHref>
-                <motion.div
-                  variants={cardVariants}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="relative bg-pink-100 dark:bg-[#300d1b] rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl w-[220px] h-[340px] flex flex-col"
-                >
-                  <div className="relative w-full h-[65%] rounded-t-2xl overflow-hidden">
-                    <Image
-                      src={profile.photos[0]}
-                      alt={profile.nome}
-                      fill
-                      className="object-cover w-full h-full"
-                    />
-                    {profile.premium && (
-                      <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
-                        <FaCrown className="mr-1" />
-                        Premium
-                      </div>
-                    )}
-                    {profile.live && (
-                      <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
-                        <span>Live Cam</span>
-                      </div>
-                    )}
-                    {Array.isArray(profile.stories) && profile.stories.length > 0 && (
-                      <div
-                        className="absolute top-10 right-2 bg-pink-800 text-white text-xs font-semibold py-1 px-2 rounded-full z-50 flex items-center cursor-pointer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openStory(profile, 0);
-                        }}
-                      >
-                        <FaVideo className="mr-1" />
-                        Stories
-                      </div>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-                      <h3 className="text-base font-semibold text-white flex items-center gap-1">
-                        {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
-                      </h3>
-                      <div className="flex items-center gap-1 text-white text-sm">
-                        <FaMapMarkerAlt className="text-pink-600" />
-                        {profile.cidade}
-                      </div>
+          {profiles.map((profile, index) => (
+            <Link key={profile.nome} href={`/escort/${profile.nome}`} passHref>
+              <motion.div
+                variants={cardVariants}
+                whileHover="hover"
+                whileTap={{ scale: 0.95 }}
+                className="relative rounded-3xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-2xl flex flex-col max-w-[220px]"
+              >
+                {/* Imagem */}
+                <div className="relative aspect-[4/4] rounded-t-2xl overflow-hidden">
+                  <Image
+                    src={profile.photos[0] || '/logo.webp'}
+                    alt={profile.nome}
+                    fill
+                    className="object-cover"
+                  />
+                  {profile.premium && (
+                    <div className="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 flex items-center shadow-md">
+                      <FaCrown className="mr-1" />
+                      Premium
+                    </div>
+                  )}
+                  {profile.live && (
+                    <div className="absolute top-2 left-2 bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded-full z-10 animate-pulse flex items-center">
+                      <MdFiberManualRecord className="mr-1" />
+                      Live Cam
+                    </div>
+                  )}
+                  {Array.isArray(profile.stories) && profile.stories.length > 0 && (
+                    <div
+                      className="absolute top-10 right-2 bg-pink-800 text-white text-xs font-semibold py-1 px-2 rounded-full z-50 flex items-center cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openStory(profile, 0);
+                      }}
+                    >
+                      <FaVideo className="mr-1" />
+                      Stories
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                    <h3 className="text-base font-semibold text-white flex items-center gap-1">
+                      {profile.nome} {profile.certificado && <MdVerified className="text-green-500" />}
+                      {authorBadges[profile.userUID] && (
+                        <span className="ml-2 bg-yellow-200 text-yellow-800 text-xs font-semibold py-0.5 px-1.5 rounded-full flex items-center">
+                          <FaPen className="mr-1" size={10} />
+                          Autora em Blog
+                        </span>
+                      )}
+                    </h3>
+                    <div className="flex items-center gap-1 text-white text-sm">
+                      <FaMapMarkerAlt className="text-pink-600" />
+                      {profile.cidade}
                     </div>
                   </div>
-                  <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-1 rounded-b-2xl flex flex-col justify-between flex-1 min-h-[70px]">
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="block break-words italic text-sm max-h-[70px] overflow-hidden font-arial">
-                      &quot;{profile.tag}&quot;
-                      </span>
-                      <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
-                    </div>
-                    <div className="text-xs font-arial text-black dark:text-gray-200 flex items-center gap-1 mt-1 mb-1">
-                      <FaClock className="text-yellow-500 h-4 w-4" />
-                      {timeAgo(profile.tagtimestamp ?? new Date())}
-                    </div>
+                </div>
+                {/* Conteúdo */}
+                <div className="flex flex-col justify-between flex-1 p-4 bg-white dark:bg-[#300d1b] rounded-b-2xl">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="block break-words italic text-sm max-h-[70px] overflow-hidden">
+                    &quot;{profile.tag}&quot;
+                    </span>
+                    <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
                   </div>
-                </motion.div>
-              </Link>
-            ) : null
-          )}
+                  <div className="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1 mt-2">
+                    <FaClock className="text-yellow-500 h-4 w-4" />
+                    {timeAgo(profile.tagtimestamp ?? new Date())}
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
         </motion.div>
 
         {/* Modal de Mais Filtros */}
@@ -327,16 +381,17 @@ export default function EscortPage() {
           />
         )}
 
-        {/* Gradiente Inferior */}
-        <div
+        {/* Gradiente Decorativo Inferior */}
+        <motion.div
           className="absolute rounded-full bg-[#f2cadb] dark:bg-[#2e0415]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.7 }}
           style={{
             height: '300px',
             width: '300px',
-            borderRadius: '150px',
             bottom: '-60px',
             right: '-60px',
-            filter: 'blur(50px)',
+            filter: 'blur(80px)',
             zIndex: 0,
           }}
         />
