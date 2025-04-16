@@ -136,40 +136,18 @@ function UserProfile() {
   return (
     <>
       {/* HeaderG fixo */}
-      <div className="fixed top-24 left-0 right-0 z-50  backdrop-blur-md border-b border-gray-700">
-        <div className="container mx-auto px-4 py-3">
+      <div className="fixed top-26 left-0 right-0 z-50  backdrop-blur-md border-b border-gray-700">
+        <div className="container mx-auto px-4 py-2">
           <div className="hidden md:flex items-center justify-between">
-            <h1 className="text-4xl ">Profile Details</h1>
+            {/* <h1 className="text-4xl ">Profile Details</h1> */}
             <HeaderG
               currentProfileIndex={currentProfileIndex}
               setCurrentProfileIndex={setCurrentProfileIndex}
               profiles={profiles}
+              selectedProfile={selectedProfile}
             />
           </div>
-          {/* <div className="md:hidden flex justify-between gap-2">
-            <Button
-              variant="outline"
-              className="flex-1 px-4 py-1 rounded-full border text-sm bg-transparent font-body text-gray-900 dark:text-white"
-              onClick={() => {
-                const prevIndex = (currentProfileIndex - 1 + profiles.length) % profiles.length;
-                setCurrentProfileIndex(prevIndex);
-                router.push(`/escort/${profiles[prevIndex].nome}`);
-              }}
-            >
-              <ArrowLeftIcon className="w-4 h-4 mr-2" /> Previouswwww
-            </Button>
-            <Button
-              variant="outline"
-              className="flex-1 px-4 py-1 rounded-full bg-pink-600 text-white text-sm font-body"
-              onClick={() => {
-                const nextIndex = (currentProfileIndex + 1) % profiles.length;
-                setCurrentProfileIndex(nextIndex);
-                router.push(`/escort/${profiles[nextIndex].nome}`);
-              }}
-            >
-              Next <ArrowRightIcon className="w-4 h-4 ml-2" />
-            </Button>
-          </div> */}
+     
         </div>
       </div>
 

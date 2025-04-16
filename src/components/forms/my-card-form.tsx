@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -75,7 +76,7 @@ export const MyCardForm = () => {
   // Estado local para a tag, timestamp e currentTag
   const [newTag, setNewTag] = useState<string>(initialTag);
   const [newTagTimestamp, setNewTagTimestamp] = useState<string>(initialTagTimestamp);
-  const [currentTag, setCurrentTag] = useState<string>(initialTag); // Novo estado para currentTag
+  const [currentTag, setCurrentTag] = useState<string>(initialTag);
 
   // Carregar dados do perfil ao montar o componente
   useEffect(() => {
@@ -89,7 +90,7 @@ export const MyCardForm = () => {
 
   // Função para salvar as alterações
   const handleSave = async () => {
-    if (newTag.length > 60) {
+    if (newTag.length > 48) {
       toast.error(t('messages.tagTooLong'));
       return;
     }
@@ -99,7 +100,7 @@ export const MyCardForm = () => {
 
       // Atualiza o estado local imediatamente
       setNewTagTimestamp(currentTimestamp);
-      setCurrentTag(newTag); // Atualiza o currentTag localmente
+      setCurrentTag(newTag);
 
       // Dispara as ações assíncronas para o Redux
       await Promise.all([
@@ -119,14 +120,14 @@ export const MyCardForm = () => {
     console.log('Descartando alterações. Restaurando para:', initialTag);
     setNewTag(initialTag);
     setNewTagTimestamp(initialTagTimestamp);
-    setCurrentTag(initialTag); // Restaura o currentTag também
+    setCurrentTag(initialTag);
     toast.info(t('messages.changesDiscarded'));
   };
 
-  // Handler para limitar o input a 60 caracteres
+  // Handler para limitar o input a 48 caracteres
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 60) {
+    if (value.length <= 70) {
       setNewTag(value);
     } else {
       toast.warn(t('messages.tagLimitReached'));
@@ -206,9 +207,9 @@ export const MyCardForm = () => {
                       </div>
                     </div>
                   </motion.div>
-                  <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between flex-1 min-h-[70px] relative">
+                  <div className="bg-pink-100 dark:bg-[#300d1b] text-gray-800 dark:text-gray-300 px-3 py-3 rounded-xl shadow-md mt-2 flex flex-col justify-between min-h-[70px] relative">
                     <div className="flex items-start justify-between gap-2">
-                      <span className="block break-words italic text-xs md:text-base max-h-[70px] overflow-hidden font-arial animate-flash">
+                      <span className="block break-words italic text-xs md:text-sm font-arial line-clamp-2">
                       &quot;{newTag}&quot;
                       </span>
                       <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
@@ -230,7 +231,7 @@ export const MyCardForm = () => {
               <div>
                 <p className="text-gray-500 dark:text-gray-400 mb-2">{t('myCard.currentTag')}</p>
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-3 mb-6 text-sm opacity-60 cursor-not-allowed select-none w-[70%]">
-                  <p className="text-gray-600 dark:text-gray-400">&quot;{currentTag}&quot;</p> {/* Usar currentTag */}
+                  <p className="text-gray-600 dark:text-gray-400">&quot;{currentTag}&quot;</p>
                 </div>
               </div>
 
@@ -241,7 +242,7 @@ export const MyCardForm = () => {
                   <Input
                     value={newTag}
                     onChange={handleTagChange}
-                    maxLength={60}
+                    maxLength={48}
                     className="flex-1 bg-transparent border-none rounded-full text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-gray-500"
                     placeholder={t('myCard.enterTag')}
                   />

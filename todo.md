@@ -18,6 +18,7 @@ Landing page:
 [] - mapas a funcionar
 [] - verificar todos os filtros com base de dados
 [] - eliminar perfil -- ao eliminar conta, perfil deve ser eliminado
+[] -  adicionar breadcrumb em perfil e conta
 
 
 

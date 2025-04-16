@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -504,9 +505,9 @@ export default function EscortPage() {
                   </div>
                 </div>
                 {/* Conteúdo */}
-                <div className="flex flex-col justify-between flex-1 p-4 rounded-b-3xl">
+                <div className="flex flex-col justify-between h-28 p-4 rounded-b-3xl">
                   <div className="flex items-start justify-between gap-2">
-                    <span className="block break-words italic text-sm max-h-[70px] overflow-hidden font-body">
+                    <span className="block break-words italic text-sm font-body line-clamp-2">
                     &quot;{profile.tag}&quot;
                     </span>
                     <FaCommentDots className="text-yellow-600 text-md min-w-[18px] min-h-[18px] flex-shrink-0" />
@@ -529,18 +530,7 @@ export default function EscortPage() {
         />
 
         {/* Modal de Story */}
-        {/* {selectedStory && (
-          <StoryBig
-            selectedProfile={{
-              storyURL: selectedStory.profile.stories,
-              nome: selectedStory.profile.nome,
-              cidade: selectedStory.profile.cidade,
-              photos: selectedStory.profile.photos,
-            }}
-            onClose={closeStory}
-            currentIndex={selectedStory.index}
-          />
-        )} */}
+       
 
         {/* Gradiente Decorativo Inferior */}
         <motion.div
