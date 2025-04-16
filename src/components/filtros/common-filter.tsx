@@ -30,7 +30,7 @@ const CommonFilter: React.FC<CommonFilterProps> = ({
   const displayValue = selectedOption ? selectedOption.name : (placeholder || label);
 
   return (
-    <div className="w-full">
+    <div className="w-full z-50">
       <Listbox
         value={selectedOption}
         onChange={(option: FilterOption | null) => onChange(option ? option.name : '')}
